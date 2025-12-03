@@ -1,6 +1,6 @@
 # ZEDX-AI Assistant: The AI Interview Copilot
 
-![ZEDX-AI Hero](public/hero-banner.png)
+![ZEDX-AI Hero](public/zedx-cyberpunk-banner.png)
 
 <div align="center">
 
