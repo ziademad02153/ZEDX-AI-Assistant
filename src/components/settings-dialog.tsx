@@ -15,6 +15,32 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
     const [groqKey, setGroqKey] = useState("");
     const [provider, setProvider] = useState("google");
     const [customModel, setCustomModel] = useState("");
+    const [availableModels, setAvailableModels] = useState<string[]>([]);
+    const [isLoadingModels, setIsLoadingModels] = useState(false);
+
+    const fetchModels = async () => {
+        if (!apiKey || provider !== "google") return;
+        setIsLoadingModels(true);
+        try {
+            const res = await fetch("/api/list-models", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ apiKey })
+            });
+            const data = await res.json();
+            if (data.models) {
+                setAvailableModels(data.models);
+                alert(`Found ${data.models.length} models!`);
+            } else {
+                alert("Could not fetch models: " + (data.error?.message || "Unknown error"));
+            }
+        } catch (e) {
+            console.error("Fetch models failed", e);
+            alert("Fetch failed. See console.");
+        } finally {
+            setIsLoadingModels(false);
+        }
+    };
 
     const [voiceSpeed, setVoiceSpeed] = useState(1.1);
 
@@ -87,8 +113,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                                     placeholder={
                                         provider === "google" ? "AIzaSy..." :
                                             provider === "openai" ? "sk-..." :
-                                                provider === "grok" ? "xai-..." :
-                                                    "sk-or-..."
+                                                "sk-or-..."
                                     }
                                     className={cn("w-2/3 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 font-mono text-sm bg-white border-gray-300")}
                                     onChange={(e) => setApiKey(e.target.value)}
@@ -96,22 +121,48 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                                 />
                             </div>
 
-                            {provider !== "google" && (
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xs font-medium opacity-70 whitespace-nowrap">Model ID:</span>
+                            <div className="flex items-center gap-2">
+                                <span className="text-xs font-medium opacity-70 whitespace-nowrap">Model:</span>
+                                {provider === "google" ? (
+                                    <div className="w-full flex gap-2">
+                                        <select
+                                            className={cn("w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-mono bg-white border-gray-300")}
+                                            value={customModel}
+                                            onChange={(e) => setCustomModel(e.target.value)}
+                                        >
+                                            <option value="">Default (Auto-Fallback)</option>
+                                            {availableModels.length > 0 ? (
+                                                availableModels.map(m => (
+                                                    <option key={m} value={m}>{m}</option>
+                                                ))
+                                            ) : (
+                                                <>
+                                                    <option value="gemini-1.5-flash-001">Gemini 1.5 Flash (v1beta)</option>
+                                                    <option value="gemini-1.0-pro">Gemini 1.0 Pro</option>
+                                                    <option value="gemini-pro">Gemini Pro (Legacy)</option>
+                                                </>
+                                            )}
+                                        </select>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={fetchModels}
+                                            disabled={!apiKey || isLoadingModels}
+                                            title="Check available models"
+                                        >
+                                            {isLoadingModels ? <span className="animate-spin">↻</span> : <RefreshCw size={14} />}
+                                        </Button>
+                                    </div>
+                                ) : (
                                     <input
                                         type="text"
                                         className={cn("w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-mono bg-white border-gray-300")}
-                                        placeholder={
-                                            provider === "openrouter" ? "e.g. anthropic/claude-3-opus" :
-                                                provider === "grok" ? "e.g. grok-beta" :
-                                                    "e.g. gpt-4-turbo"
-                                        }
+                                        placeholder="e.g. gpt-4-turbo"
                                         value={customModel}
                                         onChange={(e) => setCustomModel(e.target.value)}
                                     />
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                         <p className="text-xs opacity-50">
                             {provider === "google" && <span>Get free key from <a href="https://aistudio.google.com/app/apikey" target="_blank" className="text-blue-500 hover:underline">Google AI Studio</a></span>}

@@ -2,7 +2,7 @@
 
 import { Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Video, FileText, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Video, FileText, Settings, LogOut, Clock } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { SettingsDialog } from "@/components/settings-dialog";
@@ -40,6 +40,12 @@ export default function DashboardLayout({
                                 <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600 dark:text-gray-300 hover:text-green-700 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20">
                                     <FileText size={20} />
                                     My Resumes
+                                </Button>
+                            </Link>
+                            <Link href="/dashboard/history">
+                                <Button variant="ghost" className="w-full justify-start gap-3 text-gray-600 dark:text-gray-300 hover:text-green-700 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20">
+                                    <Clock size={20} />
+                                    Interview History
                                 </Button>
                             </Link>
                             <Button

@@ -7,6 +7,7 @@ import { ArrowLeft, Briefcase, FileText, Sparkles, Upload, AlertCircle } from "l
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { SUPPORTED_LANGUAGES } from "@/lib/languages";
+import { resumeService, Resume } from "@/lib/resume-service";
 
 export default function NewInterviewPage() {
     const router = useRouter();
@@ -22,7 +23,7 @@ export default function NewInterviewPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const [savedResumes, setSavedResumes] = useState<any[]>([]);
+    const [savedResumes, setSavedResumes] = useState<Resume[]>([]);
 
     // Load saved API key and provider on mount
     useEffect(() => {
@@ -32,11 +33,21 @@ export default function NewInterviewPage() {
         const savedProvider = localStorage.getItem("gemini_api_provider");
         if (savedProvider) setProvider(savedProvider);
 
-        // Load saved resumes
-        try {
-            const resumes = JSON.parse(localStorage.getItem("zedx_resumes") || "[]");
-            setSavedResumes(resumes);
-        } catch (e) { }
+        // Load saved resumes from Supabase
+        const loadResumes = async () => {
+            try {
+                const data = await resumeService.getUserResumes();
+                setSavedResumes(data);
+            } catch (e: any) {
+                if (e.message.includes("User not authenticated")) {
+                    console.warn("Session expired, redirecting to login.");
+                    router.push("/login");
+                } else {
+                    console.error("Failed to load resumes", e);
+                }
+            }
+        };
+        loadResumes();
     }, []);
 
     // Validation State
@@ -46,13 +57,25 @@ export default function NewInterviewPage() {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        if (file.type === "text/plain") {
-            const text = await file.text();
-            setResume(text);
-        } else {
-            // Alert user that PDF parsing is not supported client-side
-            alert("Please COPY & PASTE the text from your PDF/Word document.\n\nDirect file upload is currently limited to .txt files only to ensure the AI reads your resume correctly.");
-            e.target.value = ""; // Clear the input
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            // Optional: You could add a specific smaller loading state here if desired
+            const res = await fetch("/api/parse-resume", {
+                method: "POST",
+                body: formData,
+            });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || "Failed to parse PDF");
+
+            setResume(data.text);
+            setError(null);
+            alert("Resume Uploaded & Parsed Successfully! 📄");
+        } catch (err: any) {
+            console.error(err);
+            alert("Error: " + (err.message || "Upload Failed"));
         }
     };
 
@@ -135,81 +158,33 @@ export default function NewInterviewPage() {
             localStorage.setItem("gemini_api_key", apiKey);
             localStorage.setItem("gemini_api_provider", provider);
 
-            if (provider === "google") {
-                // Dynamic import to avoid SSR issues with some libs if any
-                const { GoogleGenerativeAI } = await import("@google/generative-ai");
-                const genAI = new GoogleGenerativeAI(apiKey);
+            console.log(`[TestConnection] Sending request to /api/test-connection for provider: ${provider}`);
 
-                const modelsToTry = [
-                    "gemini-2.0-flash-lite-preview-02-05",
-                    "gemini-2.0-flash-lite",
-                    "gemini-1.5-flash",
-                    "gemini-1.5-flash-8b",
-                    "gemini-1.5-flash-001",
-                    "gemini-1.5-flash-latest",
-                    "gemini-1.5-pro",
-                    "gemini-1.0-pro",
-                    "gemini-pro"
-                ];
-                let success = false;
-                let lastError;
+            // Use the centralized REST API for ALL providers (including Google) to avoid client-side SDK issues
+            const response = await fetch("/api/test-connection", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    provider,
+                    apiKey,
+                    model: customModel || undefined // Send user's selected model, or let backend use default
+                })
+            });
 
-                for (const modelName of modelsToTry) {
-                    try {
-                        console.log(`Testing model: ${modelName}`);
-                        const model = genAI.getGenerativeModel({ model: modelName });
-                        const result = await model.generateContent("Hello, are you online?");
-                        const response = await result.response;
-                        const text = response.text();
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                console.error(`[TestConnection] Error:`, errData);
+                throw new Error(errData.error?.message || `API Error: ${response.status}`);
+            }
 
-                        if (text) {
-                            alert(`Connection Successful! Connected using model: ${modelName}`);
-                            // Save the working model to localStorage for other pages to use
-                            localStorage.setItem("gemini_working_model", modelName);
-                            success = true;
-                            break;
-                        }
-                    } catch (e: any) {
-                        console.warn(`Model ${modelName} failed:`, e.message);
-                        lastError = e;
-                    }
-                }
-
-                if (!success) {
-                    throw lastError || new Error("All models failed to connect.");
+            const data = await response.json();
+            if (data.success || (data.choices && data.choices.length > 0)) {
+                alert(`Connection Successful! Connected to ${provider.toUpperCase()}.`);
+                if (provider === "google") {
+                    localStorage.setItem("gemini_working_model", "gemini-1.5-flash-001");
                 }
             } else {
-                // OpenAI-compatible providers (OpenRouter, Grok, etc.) handled via server proxy
-                // to avoid CORS and cookie issues.
-
-                console.log(`[TestConnection] Sending request to /api/test-connection for provider: ${provider}`);
-
-                const response = await fetch("/api/test-connection", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        provider,
-                        apiKey,
-                        model: provider === "grok" ? "grok-beta" : (provider === "openrouter" ? "meta-llama/llama-3-8b-instruct:free" : "gpt-3.5-turbo")
-                    })
-                });
-
-                console.log(`[TestConnection] Proxy Response Status: ${response.status}`);
-
-                if (!response.ok) {
-                    const errData = await response.json().catch(() => ({}));
-                    console.error(`[TestConnection] Proxy Error:`, errData);
-                    throw new Error(errData.error?.message || `API Error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                if (data.choices && data.choices.length > 0) {
-                    alert(`Connection Successful! Connected to ${provider.toUpperCase()}.`);
-                } else {
-                    throw new Error("No response from API.");
-                }
+                throw new Error("No response from API.");
             }
 
         } catch (err: any) {
@@ -272,15 +247,11 @@ export default function NewInterviewPage() {
                                     onChange={(e) => {
                                         const selectedId = e.target.value;
                                         if (!selectedId) return;
-                                        // Dynamic import or use local storage directly if store not available in client component easily without hook
-                                        // We can just read from localStorage for simplicity here or use the store
-                                        try {
-                                            const resumes = JSON.parse(localStorage.getItem("zedx_resumes") || "[]");
-                                            const resume = resumes.find((r: any) => r.id === selectedId);
-                                            if (resume) {
-                                                setResume(resume.content);
-                                            }
-                                        } catch (e) { }
+
+                                        const selectedResume = savedResumes.find(r => r.id === selectedId);
+                                        if (selectedResume) {
+                                            setResume(selectedResume.content);
+                                        }
                                     }}
                                     defaultValue=""
                                 >
@@ -309,9 +280,9 @@ export default function NewInterviewPage() {
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 p-3 rounded-lg text-xs flex gap-2 items-start">
+                        <div className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 p-3 rounded-lg text-xs flex gap-2 items-start hidden">
                             <AlertCircle size={14} className="mt-0.5 shrink-0" />
-                            <p><strong>Tip:</strong> For the best AI accuracy, please <strong>copy and paste your resume text</strong> below. PDF upload may not extract all details correctly.</p>
+                            <p><strong>Tip:</strong> You can now upload PDF resumes directly.</p>
                         </div>
                         <textarea
                             className="w-full h-40 p-4 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
@@ -359,26 +330,33 @@ export default function NewInterviewPage() {
                                     <div className="flex items-center gap-2">
                                         <span className="text-xs font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">Model ID:</span>
                                         <div className="relative w-full">
-                                            <input
-                                                type="text"
-                                                list="models-list"
-                                                className="w-full p-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-mono dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                                                placeholder={
-                                                    provider === "openrouter" ? "e.g. anthropic/claude-3-opus" :
-                                                        provider === "grok" ? "e.g. grok-beta" :
-                                                            "e.g. gpt-4-turbo"
-                                                }
-                                                value={customModel}
-                                                onChange={(e) => setCustomModel(e.target.value)}
-                                            />
-                                            <datalist id="models-list">
-                                                {availableModels.map(m => (
-                                                    <option key={m.id} value={m.id}>
-                                                        {/* @ts-ignore */}
-                                                        {m.isFree ? "✨ FREE - " : ""}{m.name}
-                                                    </option>
-                                                ))}
-                                            </datalist>
+                                            {availableModels.length > 0 ? (
+                                                <select
+                                                    className="w-full p-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-mono dark:text-white transition-colors"
+                                                    value={customModel}
+                                                    onChange={(e) => setCustomModel(e.target.value)}
+                                                >
+                                                    <option value="">-- Select a Model --</option>
+                                                    {availableModels.map(m => (
+                                                        <option key={m.id} value={m.id}>
+                                                            {/* @ts-ignore */}
+                                                            {m.isFree ? "✨ FREE - " : ""}{m.name} ({m.id})
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    className="w-full p-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-mono dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                                                    placeholder={
+                                                        provider === "openrouter" ? "e.g. google/gemini-2.0-flash-exp:free" :
+                                                            provider === "grok" ? "e.g. grok-beta" :
+                                                                "e.g. gpt-4-turbo"
+                                                    }
+                                                    value={customModel}
+                                                    onChange={(e) => setCustomModel(e.target.value)}
+                                                />
+                                            )}
                                         </div>
                                     </div>
                                     {provider === "openrouter" && (

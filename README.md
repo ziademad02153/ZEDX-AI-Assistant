@@ -75,19 +75,24 @@ sequenceDiagram
 | :--- | :--- |
 | **Real-Time Transcription** | Uses the Web Speech API for instant, zero-latency speech-to-text. |
 | **Context-Aware AI** | Upload your Resume and Job Description. The AI *knows* who you are and what you're applying for. |
-| **Multi-Model Intelligence** | Automatically falls back between `gemini-2.0-flash-lite`, `gemini-1.5-flash`, and `gemini-pro` to ensure 100% uptime. |
+| **Multi-Provider AI** | Supports **Google Gemini**, **OpenRouter**, and **OpenAI** with automatic model fallback. |
+| **Google Sign-In** | One-click authentication with Google OAuth via Supabase. |
+| **Interview History** | All your interview sessions are saved to the cloud and accessible from any device. |
+| **PDF Resume Upload** | Upload PDF resumes that are parsed and stored securely in Supabase. |
 | **Auto-Answer Mode** | Detects when you stop speaking and generates an answer automatically. |
-| **Privacy First** | No database. No server. Your API keys and transcripts are stored in your browser's LocalStorage. |
+| **Privacy First** | Your API keys are stored locally. Interview data is protected by Row Level Security. |
 | **Multi-Language Support** | Fluent in English, Arabic, Spanish, and French. |
-| **Stealth Mode** | Toggle the camera and UI to keep the assistant invisible during screen shares. |
+| **Error Boundary** | Graceful error handling prevents crashes and provides user-friendly messages. |
 
 ## Tech Stack
 
-*   **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+*   **Framework**: [Next.js 16](https://nextjs.org/) (App Router + Turbopack)
 *   **Language**: [TypeScript](https://www.typescriptlang.org/)
 *   **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [Lucide Icons](https://lucide.dev/)
-*   **AI**: [Google Generative AI SDK](https://www.npmjs.com/package/@google/generative-ai)
+*   **Database & Auth**: [Supabase](https://supabase.com/) (PostgreSQL + Auth + RLS)
+*   **AI Providers**: Google Gemini, OpenRouter, OpenAI
 *   **Speech**: Native Web Speech API (SpeechRecognition & SpeechSynthesis)
+*   **PDF Parsing**: [pdf2json](https://www.npmjs.com/package/pdf2json)
 
 ## Screenshots
 

@@ -2,40 +2,104 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, FileText, Calendar, ArrowRight } from "lucide-react";
-import { resumeStore, Resume } from "@/lib/resume-store";
+import { Plus, Trash2, FileText, Calendar, ArrowRight, RefreshCw } from "lucide-react";
+import { resumeService, Resume } from "@/lib/resume-service";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
 
 export default function MyResumesPage() {
     const router = useRouter();
     const [resumes, setResumes] = useState<Resume[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isAdding, setIsAdding] = useState(false);
     const [newResumeName, setNewResumeName] = useState("");
     const [newResumeContent, setNewResumeContent] = useState("");
+    const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
-        setResumes(resumeStore.getResumes());
+        loadResumes();
     }, []);
 
-    const handleAddResume = () => {
-        if (!newResumeName.trim() || !newResumeContent.trim()) return;
-        resumeStore.addResume(newResumeName, newResumeContent);
-        setResumes(resumeStore.getResumes());
-        setIsAdding(false);
-        setNewResumeName("");
-        setNewResumeContent("");
+    const loadResumes = async () => {
+        try {
+            setIsLoading(true);
+            const data = await resumeService.getUserResumes();
+            setResumes(data);
+        } catch (error: any) {
+            if (error.message.includes("User not authenticated")) {
+                router.push("/login");
+            } else {
+                console.error("Failed to load resumes:", error);
+            }
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    const handleDeleteResume = (id: string) => {
+    const handleAddResume = async () => {
+        if (!newResumeName.trim() || !newResumeContent.trim()) return;
+
+        try {
+            setIsAdding(false); // Close modal first
+            setIsLoading(true);
+            await resumeService.createResume(newResumeName, newResumeContent);
+            await loadResumes();
+
+            // Reset form
+            setNewResumeName("");
+            setNewResumeContent("");
+        } catch (error) {
+            console.error("Failed to add resume:", error);
+            alert("Failed to save resume. Please try again.");
+            setIsAdding(true); // Re-open modal on error
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (!newResumeName) {
+            setNewResumeName(file.name.replace(".pdf", ""));
+        }
+
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await fetch("/api/parse-resume", {
+                method: "POST",
+                body: formData,
+            });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || "Failed to parse PDF");
+
+            setNewResumeContent(data.text);
+        } catch (err) {
+            console.error((err as Error).message);
+            alert("Failed to upload/parse resume. Please check console.");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const handleDeleteResume = async (id: string) => {
         if (confirm("Are you sure you want to delete this resume?")) {
-            resumeStore.deleteResume(id);
-            setResumes(resumeStore.getResumes());
+            try {
+                await resumeService.deleteResume(id);
+                setResumes((prev) => prev.filter(r => r.id !== id));
+            } catch (error) {
+                console.error("Failed to delete resume:", error);
+                alert("Failed to delete resume.");
+            }
         }
     };
 
     const handleUseResume = (resume: Resume) => {
-        // Save to the key used by the interview setup page
+        // Keep this in localStorage as it's just passing context to the next page
         localStorage.setItem("interview_context_resume", resume.content);
         router.push("/dashboard/new");
     };
@@ -55,6 +119,38 @@ export default function MyResumesPage() {
             {isAdding && (
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4 animate-in fade-in slide-in-from-top-4">
                     <h3 className="font-semibold text-lg">Add New Resume</h3>
+
+                    {/* File Upload Section */}
+                    <div className="p-4 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 text-center hover:bg-gray-100 transition-colors">
+                        <label className="cursor-pointer">
+                            <span className="flex flex-col items-center gap-2">
+                                <span className="p-2 bg-white rounded-full shadow-sm text-green-600">
+                                    <FileText size={24} />
+                                </span>
+                                <span className="font-medium text-sm text-gray-700">
+                                    {isUploading ? "Extracting Text..." : "Upload PDF Resume (Auto-Extract)"}
+                                </span>
+                                <span className="text-xs text-gray-400">Click to browse</span>
+                            </span>
+                            <input
+                                type="file"
+                                accept=".pdf"
+                                className="hidden"
+                                onChange={handleFileUpload}
+                                disabled={isUploading}
+                            />
+                        </label>
+                    </div>
+
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <span className="w-full border-t border-gray-200" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-white px-2 text-gray-400">Or paste manually</span>
+                        </div>
+                    </div>
+
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Resume Name</label>
                         <input
@@ -76,15 +172,19 @@ export default function MyResumesPage() {
                     </div>
                     <div className="flex justify-end gap-2">
                         <Button variant="ghost" onClick={() => setIsAdding(false)}>Cancel</Button>
-                        <Button variant="gradient" onClick={handleAddResume} disabled={!newResumeName.trim() || !newResumeContent.trim()}>
-                            Save Resume
+                        <Button variant="gradient" onClick={handleAddResume} disabled={!newResumeName.trim() || !newResumeContent.trim() || isUploading}>
+                            {isUploading ? "Processing..." : "Save Resume"}
                         </Button>
                     </div>
                 </div>
             )}
 
             <div className="grid md:grid-cols-2 gap-4">
-                {resumes.length === 0 && !isAdding ? (
+                {isLoading ? (
+                    <div className="col-span-2 flex justify-center py-12">
+                        <RefreshCw className="animate-spin text-gray-400" size={32} />
+                    </div>
+                ) : resumes.length === 0 && !isAdding ? (
                     <div className="col-span-2 text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                         <FileText className="mx-auto text-gray-300 mb-3" size={48} />
                         <h3 className="text-lg font-medium text-gray-900">No resumes yet</h3>
@@ -103,7 +203,7 @@ export default function MyResumesPage() {
                                         <h3 className="font-semibold text-gray-900">{resume.name}</h3>
                                         <div className="flex items-center gap-1 text-xs text-gray-500">
                                             <Calendar size={12} />
-                                            {new Date(resume.createdAt).toLocaleDateString()}
+                                            {new Date(resume.created_at).toLocaleDateString()}
                                         </div>
                                     </div>
                                 </div>

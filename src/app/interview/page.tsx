@@ -134,28 +134,36 @@ export default function InterviewPage() {
             recognitionRef.current?.stop();
         } else {
             try {
-                // Ensure it's stopped before starting to prevent InvalidStateError
-                try {
-                    recognitionRef.current?.stop();
-                } catch (e) { /* Ignore stop error */ }
-
-                // Small delay to allow stop to process
-                setTimeout(() => {
+                // Abort any existing recognition first (more reliable than stop)
+                if (recognitionRef.current) {
                     try {
+                        recognitionRef.current.abort();
+                    } catch (e) { /* Ignore abort error */ }
+                }
+
+                // Small delay to allow abort to process
+                setTimeout(() => {
+                    if (!recognitionRef.current) return;
+
+                    try {
+                        recognitionRef.current.start();
                         setIsRecording(true);
-                        recognitionRef.current?.start();
                         setError(null);
                     } catch (err: any) {
                         console.error("Error starting recognition:", err);
                         if (err.name === 'InvalidStateError') {
-                            console.warn("Recognition already started. Syncing state.");
+                            // Already running, just sync state
+                            console.warn("Recognition already running. Syncing state.");
                             setIsRecording(true);
+                        } else if (err.name === 'NotAllowedError') {
+                            setError("Microphone access denied. Please allow microphone permissions.");
+                            setIsRecording(false);
                         } else {
                             setError("Could not start recording. Please refresh.");
                             setIsRecording(false);
                         }
                     }
-                }, 100);
+                }, 150);
             } catch (err) {
                 console.error("Error in toggleRecording:", err);
                 setIsRecording(false);
@@ -304,6 +312,9 @@ export default function InterviewPage() {
             let errorMessage = "Could not generate response.";
             if (error.message.includes("429")) {
                 errorMessage = "AI is busy (Rate Limit). Please try again.";
+            } else if (error.message.includes("API key expired") || error.message.includes("API_KEY_INVALID")) {
+                errorMessage = "API Key Expired. Please update it in Settings.";
+                setShowSettings(true); // Auto-open settings
             } else {
                 errorMessage = error.message;
             }
@@ -503,16 +514,34 @@ export default function InterviewPage() {
                             <Button
                                 variant="destructive"
                                 size="sm"
-                                onClick={() => {
-                                    import("@/lib/history").then(({ history }) => {
+                                onClick={async () => {
+                                    try {
+                                        const { interviewService } = await import("@/lib/interview-service");
+                                        await interviewService.saveInterview(
+                                            `${interviewContext.type} Interview - ${new Date().toLocaleDateString()}`,
+                                            transcript,
+                                            {
+                                                job_description: interviewContext.jd,
+                                                resume_name: "Resume",
+                                                interview_type: interviewContext.type,
+                                                language: interviewContext.lang,
+                                                ai_responses: [aiResponse]
+                                            }
+                                        );
+                                        alert("Interview saved successfully!");
+                                        window.location.href = "/dashboard";
+                                    } catch (e: any) {
+                                        console.error("Failed to save interview:", e);
+                                        // Fallback to local storage if DB fails
+                                        const { history } = await import("@/lib/history");
                                         history.saveSession({
                                             jobDescription: interviewContext.jd,
                                             type: interviewContext.type,
                                             transcript: transcript,
-                                            durationSeconds: 300, // Mock duration for now, or track real time
+                                            durationSeconds: 300,
                                         });
                                         window.location.href = "/dashboard";
-                                    });
+                                    }
                                 }}
                             >
                                 End Interview
