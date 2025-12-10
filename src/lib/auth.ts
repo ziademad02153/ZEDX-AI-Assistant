@@ -1,62 +1,98 @@
-export interface User {
-    email: string;
-    passwordHash: string;
-    name: string;
+import { create } from 'zustand';
+import { supabase } from './supabase';
+import { User } from '@supabase/supabase-js';
+
+interface AuthState {
+  user: User | null;
+  loading: boolean;
+  signIn: (email?: string, password?: string) => Promise<any>;
+  signInWithGoogle: () => Promise<void>;
+  signUp: (email: string, password?: string, fullName?: string) => Promise<any>;
+  verifyOtp: (email: string, token: string, type?: 'signup' | 'recovery' | 'magiclink') => Promise<any>;
+  signOut: () => Promise<void>;
+  checkSession: () => Promise<void>;
 }
 
-const USERS_KEY = "zedx_users";
+export const useAuth = create<AuthState>((set) => ({
+  user: null,
+  loading: true,
 
-// Secure SHA-256 hashing
-const hashPassword = async (password: string): Promise<string> => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-};
+  checkSession: async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      set({ user: session?.user || null, loading: false });
 
-export const auth = {
-    signUp: async (email: string, password: string, name: string): Promise<{ success: boolean; message: string }> => {
-        const usersJson = localStorage.getItem(USERS_KEY);
-        const users: User[] = usersJson ? JSON.parse(usersJson) : [];
+      // Store unsubscribe function to prevent memory leaks
+      // Only subscribe once by checking if already subscribed
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        set({ user: session?.user || null, loading: false });
+      });
 
-        if (users.find(u => u.email === email)) {
-            return { success: false, message: "User already exists" };
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return { success: false, message: "Please enter a valid email address." };
-        }
-
-        const passwordHash = await hashPassword(password);
-        const newUser: User = {
-            email,
-            passwordHash,
-            name
-        };
-
-        users.push(newUser);
-        localStorage.setItem(USERS_KEY, JSON.stringify(users));
-        return { success: true, message: "Account created successfully" };
-    },
-
-    signIn: async (email: string, password: string): Promise<{ success: boolean; message: string; user?: User }> => {
-        const usersJson = localStorage.getItem(USERS_KEY);
-        const users: User[] = usersJson ? JSON.parse(usersJson) : [];
-
-        const user = users.find(u => u.email === email);
-
-        if (!user) {
-            return { success: false, message: "User not found" };
-        }
-
-        const inputHash = await hashPassword(password);
-        if (user.passwordHash !== inputHash) {
-            return { success: false, message: "Invalid password" };
-        }
-
-        return { success: true, message: "Login successful", user };
+      // Clean up on window unload to prevent memory leaks
+      if (typeof window !== 'undefined') {
+        window.addEventListener('beforeunload', () => {
+          subscription?.unsubscribe();
+        });
+      }
+    } catch (error) {
+      console.error('Session check failed', error);
+      set({ loading: false });
     }
-};
+  },
+
+  signIn: async (email, password) => {
+    if (!email || !password) throw new Error("Email and password required");
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) throw error;
+    return data;
+  },
+
+  signInWithGoogle: async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) throw error;
+  },
+
+  signUp: async (email, password, fullName) => {
+    if (!email || !password) throw new Error("Email and password required");
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fullName,
+        },
+      },
+    });
+
+    if (error) throw error;
+    return data;
+  },
+
+  verifyOtp: async (email, token, type = 'signup') => {
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type,
+    });
+    if (error) throw error;
+    return data;
+  },
+
+  signOut: async () => {
+    await supabase.auth.signOut();
+    set({ user: null });
+  },
+}));
+
+if (typeof window !== 'undefined') {
+  useAuth.getState().checkSession();
+}

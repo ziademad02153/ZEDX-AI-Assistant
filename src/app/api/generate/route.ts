@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(request: Request) {
     try {
@@ -10,38 +9,96 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: { message: "Missing API Key" } }, { status: 400 });
         }
 
-        console.log(`[API Generate] Provider: ${provider}, Model: ${model}`);
+        const isDev = process.env.NODE_ENV === 'development';
+        if (isDev) console.log(`[API Generate] Provider: ${provider}, Model: ${model}`);
 
-        // --- Google Gemini Logic ---
+        // --- Google Gemini Logic (Using Direct REST API to avoid SDK version issues) ---
         if (provider === "google") {
-            const genAI = new GoogleGenerativeAI(apiKey);
-            const targetModel = model || "gemini-1.5-flash";
-            const geminiModel = genAI.getGenerativeModel({ model: targetModel });
+            const candidateModels = [
+                model, // User's manual selection
+                "gemini-2.5-flash-lite", // LITE: May have separate quota!
+                "gemini-2.0-flash-lite", // LITE: May have separate quota!
+                "gemini-2.5-flash",
+                "gemini-2.5-pro",
+                "gemini-flash-latest",
+                "gemini-2.0-flash",
+                "gemini-2.0-flash-001",
+                "gemini-2.0-flash-exp",
+                "gemini-exp-1206",
+            ].filter(Boolean);
 
-            // Convert standard messages to Gemini format if needed, 
-            // but for this app we mostly send a constructed prompt.
-            // If 'messages' is passed, we might need to format it.
-            // However, the frontend currently constructs a big 'prompt' string for Google.
-            // Let's support both 'prompt' (raw text) and 'messages'.
+            const uniqueModels = [...new Set(candidateModels)];
+            let lastError: any = null;
 
-            let finalPrompt = body.prompt;
-            if (!finalPrompt && messages) {
-                // Simple conversion for now: System + User
-                finalPrompt = `${systemPrompt}\n\n${messages[messages.length - 1].content}`;
+            // Construct Prompt for Gemini
+            // If messages are provided (chat format), convert to Gemini 'contents' format
+            // If prompt is provided (legacy), use it directly
+            let geminiBody: any = {};
+
+            if (messages) {
+                // Convert OpenAI messages to Gemini
+                const contents = messages.map((m: any) => ({
+                    role: m.role === "assistant" ? "model" : "user",
+                    parts: [{ text: m.content }]
+                }));
+                // Inject System Instruction if available (Gemini API supports system_instruction)
+                if (systemPrompt) {
+                    geminiBody.system_instruction = { parts: [{ text: systemPrompt }] };
+                }
+                geminiBody.contents = contents;
+            } else {
+                // Legacy Prompt mode
+                geminiBody = {
+                    contents: [{
+                        role: "user",
+                        parts: [{ text: body.prompt }]
+                    }]
+                };
             }
 
-            try {
-                const result = await geminiModel.generateContent(finalPrompt);
-                const response = await result.response;
-                const text = response.text();
-                return NextResponse.json({ content: text });
-            } catch (error: any) {
-                console.error("[API Generate] Google Error:", error);
-                return NextResponse.json({ error: { message: error.message || "Google AI Error" } }, { status: 500 });
+            // Try models sequentially via FETCH
+            for (const targetModel of uniqueModels) {
+                try {
+                    if (isDev) console.log(`[API Generate] Trying ${targetModel}...`);
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(geminiBody)
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        // Throw error to trigger catch block and retry next model
+                        throw new Error(data.error?.message || `HTTP ${response.status}: ${data.error?.status || "Unknown Error"}`);
+                    }
+
+                    // Extract text
+                    const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (!content) throw new Error("Empty response content from Google");
+
+                    if (isDev) console.log(`[API Generate] Success: ${targetModel}`);
+                    return NextResponse.json({ content, modelUsed: targetModel });
+
+                } catch (error: any) {
+                    console.warn(`[API Generate] Failed with ${targetModel}:`, error.message);
+                    lastError = error;
+                    if (error.message.includes("API_KEY_INVALID") || error.message.includes("key expired")) {
+                        return NextResponse.json({ error: { message: "API Key Invalid or Expired" } }, { status: 401 });
+                    }
+                }
             }
+
+            return NextResponse.json({
+                error: {
+                    message: `All Gemini models failed (REST). Last error: ${lastError?.message || "Unknown Error"}. Please check your API Key.`
+                }
+            }, { status: 500 });
         }
 
-        // --- OpenAI / OpenRouter / Grok Logic ---
+        // --- OpenAI / OpenRouter / Grok Logic (Unchanged) ---
         let baseUrl = "https://api.openai.com/v1";
         let targetModel = model || "gpt-3.5-turbo";
 
@@ -50,7 +107,7 @@ export async function POST(request: Request) {
             targetModel = model || "grok-beta";
         } else if (provider === "openrouter") {
             baseUrl = "https://openrouter.ai/api/v1";
-            targetModel = model || "meta-llama/llama-3-8b-instruct:free";
+            targetModel = model || "google/gemini-2.0-flash-exp:free"; // Updated default
         }
 
         const fetchOptions: any = {
@@ -67,7 +124,6 @@ export async function POST(request: Request) {
             })
         };
 
-        // Add OpenRouter specific headers
         if (provider === "openrouter") {
             fetchOptions.headers["HTTP-Referer"] = "https://zedx-ai.com";
             fetchOptions.headers["X-Title"] = "ZEDX-AI";
@@ -77,7 +133,6 @@ export async function POST(request: Request) {
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error(`[API Generate] Upstream Error (${provider}):`, errorText);
             try {
                 const errorJson = JSON.parse(errorText);
                 return NextResponse.json(errorJson, { status: response.status });
