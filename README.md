@@ -12,6 +12,8 @@
 
 **Ace your next job interview with a real-time, privacy-first AI assistant.**
 
+🌐 **Live Demo:** [zedx-ai-assistant-1.vercel.app](https://zedx-ai-assistant-1.vercel.app)
+
 </div>
 
 ---
