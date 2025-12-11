@@ -7,7 +7,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.0-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Gemini AI](https://img.shields.io/badge/Google%20Gemini-2.0-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
+[![Gemini AI](https://img.shields.io/badge/Google%20Gemini-2.5-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 **Ace your next job interview with a real-time, privacy-first AI assistant.**
@@ -142,6 +142,8 @@ We believe in **Local-First Software**.
 *   **API Keys**: Stored in `localStorage`. Never sent to our servers.
 *   **Transcripts**: Processed in memory.
 *   **Resumes**: Parsed client-side.
+
+📄 [Read Full Privacy Policy](https://zedx-ai-assistant-1.vercel.app/privacy) | 📋 [Terms of Service](https://zedx-ai-assistant-1.vercel.app/terms)
 
 ## Contributing
 
