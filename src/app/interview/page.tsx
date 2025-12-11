@@ -6,7 +6,6 @@ import { Mic, MicOff, Video, VideoOff, Send, Loader2, AlertCircle, CheckCircle, 
 import { cn } from "@/lib/utils";
 
 import { SettingsDialog } from "@/components/settings-dialog";
-import { AiCopilot } from "@/components/ai-copilot";
 
 export default function InterviewPage() {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -575,9 +574,6 @@ export default function InterviewPage() {
                 </div>
             </div>
 
-
-            {/* AI Copilot Floating Widget */}
-            <AiCopilot />
         </div>
     );
 }
