@@ -31,7 +31,7 @@ export function Navbar() {
                 <Link href="/" className="flex items-center gap-2 group">
                     <div className="relative w-10 h-10 overflow-hidden rounded-full shadow-sm">
                         <Image
-                            src="/zedx-logo-hq.jpg"
+                            src="/android-chrome-192x192.png"
                             alt="ZEDX-AI Logo"
                             fill
                             className="object-cover"
