@@ -101,18 +101,51 @@ export function Navbar() {
 
 function AuthButtons() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userName, setUserName] = useState<string | null>(null);
 
     useEffect(() => {
-        // Simple check for auth_token cookie
-        const checkAuth = () => {
+        const checkAuth = async () => {
+            // First check cookie
             const hasToken = document.cookie.split(';').some((item) => item.trim().startsWith('auth_token='));
-            setIsLoggedIn(hasToken);
+
+            if (hasToken) {
+                setIsLoggedIn(true);
+            }
+
+            // Also check Supabase session
+            try {
+                const { supabase } = await import("@/lib/supabase");
+                const { data } = await supabase.auth.getSession();
+
+                if (data.session) {
+                    setIsLoggedIn(true);
+                    setUserName(data.session.user.user_metadata?.full_name || data.session.user.email?.split('@')[0] || null);
+
+                    // Ensure cookie is set
+                    if (!hasToken) {
+                        const sessionId = data.session.access_token.slice(0, 32);
+                        document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax`;
+                    }
+                }
+            } catch (e) {
+                console.error("Auth check error:", e);
+            }
         };
 
         checkAuth();
+
+        // Re-check periodically
+        const interval = setInterval(checkAuth, 5000);
+        return () => clearInterval(interval);
     }, []);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        try {
+            const { supabase } = await import("@/lib/supabase");
+            await supabase.auth.signOut();
+        } catch (e) {
+            console.error("Logout error:", e);
+        }
         document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
         setIsLoggedIn(false);
         window.location.href = "/login";
@@ -120,7 +153,12 @@ function AuthButtons() {
 
     if (isLoggedIn) {
         return (
-            <>
+            <div className="flex items-center gap-3">
+                {userName && (
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                        👋 {userName}
+                    </span>
+                )}
                 <Link href="/dashboard">
                     <Button variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">
                         Dashboard
@@ -129,7 +167,7 @@ function AuthButtons() {
                 <Button variant="outline" onClick={handleLogout} className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border-red-200 dark:border-red-800">
                     Sign Out
                 </Button>
-            </>
+            </div>
         );
     }
 
