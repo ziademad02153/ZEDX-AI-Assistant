@@ -22,13 +22,16 @@ export const useAuth = create<AuthState>((set) => ({
       const { data: { session } } = await supabase.auth.getSession();
       set({ user: session?.user || null, loading: false });
 
-      // Store unsubscribe function to prevent memory leaks
-      // Only subscribe once by checking if already subscribed
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
         set({ user: session?.user || null, loading: false });
+
+        // Auto-set cookie when session changes
+        if (session) {
+          const sessionId = session.access_token.slice(0, 32);
+          document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax`;
+        }
       });
 
-      // Clean up on window unload to prevent memory leaks
       if (typeof window !== 'undefined') {
         window.addEventListener('beforeunload', () => {
           subscription?.unsubscribe();
@@ -51,10 +54,14 @@ export const useAuth = create<AuthState>((set) => ({
   },
 
   signInWithGoogle: async () => {
+    // Use the Site URL from Supabase config, don't override with redirectTo
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
       },
     });
     if (error) throw error;
@@ -89,6 +96,7 @@ export const useAuth = create<AuthState>((set) => ({
 
   signOut: async () => {
     await supabase.auth.signOut();
+    document.cookie = 'auth_token=; path=/; max-age=0';
     set({ user: null });
   },
 }));

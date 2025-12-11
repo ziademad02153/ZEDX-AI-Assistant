@@ -34,6 +34,25 @@ export default function LoginPage() {
         setSuccess(null);
     }, [mode]);
 
+    // Check if user is already authenticated (for OAuth redirect)
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const { supabase } = await import("@/lib/supabase");
+                const { data } = await supabase.auth.getSession();
+                if (data.session) {
+                    // User is already logged in, set cookie and redirect
+                    const sessionId = data.session.access_token.slice(0, 32);
+                    document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax`;
+                    window.location.href = "/dashboard";
+                }
+            } catch (e) {
+                console.error("Auth check error:", e);
+            }
+        };
+        checkAuth();
+    }, []);
+
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
