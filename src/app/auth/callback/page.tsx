@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 export default function AuthCallbackPage() {
-    const [status, setStatus] = useState("جاري معالجة تسجيل الدخول...");
+    const [status, setStatus] = useState("Processing login...");
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -45,7 +45,7 @@ export default function AuthCallbackPage() {
                     if (data.session) {
                         const sessionId = data.session.access_token.slice(0, 32);
                         document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax`;
-                        setStatus("تم تسجيل الدخول بنجاح!");
+                        setStatus("Login successful!");
                         window.location.href = "/dashboard";
                         return;
                     }
@@ -67,7 +67,7 @@ export default function AuthCallbackPage() {
                     if (data.session) {
                         const sessionId = data.session.access_token.slice(0, 32);
                         document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax`;
-                        setStatus("تم تسجيل الدخول بنجاح!");
+                        setStatus("Login successful!");
                         window.location.href = "/dashboard";
                         return;
                     }
@@ -79,17 +79,17 @@ export default function AuthCallbackPage() {
                 if (sessionData.session) {
                     const sessionId = sessionData.session.access_token.slice(0, 32);
                     document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax`;
-                    setStatus("جلسة موجودة! جاري التحويل...");
+                    setStatus("Session found! Redirecting...");
                     window.location.href = "/dashboard";
                 } else {
-                    setError("لم يتم العثور على جلسة أو رمز مصادقة");
+                    setError("No session or auth code found");
                     setTimeout(() => {
                         window.location.href = "/login";
                     }, 3000);
                 }
             } catch (e: any) {
                 console.error("Auth callback error:", e);
-                setError(e.message || "حدث خطأ غير متوقع");
+                setError(e.message || "An unexpected error occurred");
                 setTimeout(() => {
                     window.location.href = "/login?error=unknown";
                 }, 3000);
@@ -107,15 +107,15 @@ export default function AuthCallbackPage() {
                         <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
                             <span className="text-red-500 text-3xl">✕</span>
                         </div>
-                        <p className="text-red-600 text-lg font-medium mb-2">فشل تسجيل الدخول</p>
+                        <p className="text-red-600 text-lg font-medium mb-2">Login Failed</p>
                         <p className="text-gray-500 text-sm">{error}</p>
-                        <p className="text-gray-400 text-xs mt-4">جاري التحويل لصفحة تسجيل الدخول...</p>
+                        <p className="text-gray-400 text-xs mt-4">Redirecting to login page...</p>
                     </>
                 ) : (
                     <>
                         <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
                         <p className="text-gray-700 text-lg font-medium">{status}</p>
-                        <p className="text-gray-400 text-sm mt-2">يرجى الانتظار...</p>
+                        <p className="text-gray-400 text-sm mt-2">Please wait...</p>
                     </>
                 )}
             </div>
