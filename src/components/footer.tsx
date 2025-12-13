@@ -13,7 +13,16 @@ export function Footer() {
                     </div>
                 </div>
 
-                <div className="mt-12 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
+                <div className="mt-8 flex justify-center gap-6 text-sm">
+                    <Link href="/privacy" className="text-gray-600 hover:text-teal-600 transition-colors">
+                        Privacy Policy
+                    </Link>
+                    <Link href="/terms" className="text-gray-600 hover:text-teal-600 transition-colors">
+                        Terms of Service
+                    </Link>
+                </div>
+
+                <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
                     © {new Date().getFullYear()} ZEDX-AI. All rights reserved.
                 </div>
             </div>
