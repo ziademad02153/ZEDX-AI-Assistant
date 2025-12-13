@@ -57,10 +57,14 @@ export const interviewService = {
 
     // Delete an interview
     deleteInterview: async (id: string): Promise<void> => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error("User not authenticated");
+
         const { error } = await supabase
             .from('interviews')
             .delete()
-            .eq('id', id);
+            .eq('id', id)
+            .eq('user_id', user.id); // Ensure user owns this interview
 
         if (error) throw error;
     }
