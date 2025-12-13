@@ -36,8 +36,8 @@ export default function TermsOfServicePage() {
                     </section>
 
                     <section>
-                        <h2 className="text-xl font-semibold text-gray-900 mb-3">4. API Keys</h2>
-                        <p>You are responsible for providing and managing your own AI API keys. We do not store your API keys on our servers - they are kept locally in your browser.</p>
+                        <h2 className="text-xl font-semibold text-gray-900 mb-3">4. AI Service</h2>
+                        <p>ZEDX-AI Assistant uses server-side AI processing powered by Groq. The AI service is provided free of charge and is subject to availability and rate limits.</p>
                     </section>
 
                     <section>

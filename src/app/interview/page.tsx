@@ -13,12 +13,12 @@ export default function InterviewPage() {
     const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
     const isAiSpeakingRef = useRef(false);
 
-    const [apiKey, setApiKey] = useState("");
+    // API Key no longer needed - using server-side Groq
     const [showSettings, setShowSettings] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [transcript, setTranscript] = useState("");
     const [interimTranscript, setInterimTranscript] = useState("");
-    const [aiResponse, setAiResponse] = useState("## Ready to Interview\n\nI am your AI Copilot. I will listen to your interview and provide real-time answers.\n\n**Instructions:**\n1. Enter your Gemini API Key.\n2. Click the microphone to start listening.\n3. When you need an answer, click **Get Answer**.");
+    const [aiResponse, setAiResponse] = useState("## Ready to Interview\n\nI am your AI Copilot. I will listen to your interview and provide real-time answers.\n\n**Instructions:**\n1. Click the microphone to start listening.\n2. Speak your interview question.\n3. When you need an answer, click **Get Answer**.");
     const [isCameraOn, setIsCameraOn] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -30,26 +30,23 @@ export default function InterviewPage() {
 
     // Settings State
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const [voiceSpeed, setVoiceSpeed] = useState(1.1); // Default slightly faster for fluency
+    const voiceSpeed = 2.0; // Fixed fastest speed
 
     const addDebugLog = (msg: string) => {
         setDebugLog(prev => [msg, ...prev].slice(0, 5)); // Keep last 5 logs
         console.log(`[Debug]: ${msg}`);
     };
 
-    // Load API Key & Settings
+    // Load Settings
     useEffect(() => {
         const loadSettings = () => {
-            const key = localStorage.getItem("gemini_api_key");
-            if (key) setApiKey(key);
-            else setShowSettings(true);
+            // No API key needed - server has Groq configuration
 
             const savedTheme = localStorage.getItem("theme");
             if (savedTheme === "dark") setIsDarkMode(true);
             else setIsDarkMode(false);
 
-            const savedSpeed = localStorage.getItem("tts_speed");
-            if (savedSpeed) setVoiceSpeed(parseFloat(savedSpeed));
+            // Voice speed is fixed at max (2.0)
         };
 
         loadSettings();
@@ -178,21 +175,31 @@ export default function InterviewPage() {
             recognitionRef.current.continuous = true;
             recognitionRef.current.interimResults = true;
             recognitionRef.current.lang = interviewContext.lang;
+            recognitionRef.current.maxAlternatives = 3; // Get more alternatives for better accuracy
 
             recognitionRef.current.onstart = () => {
                 setSystemStatus(prev => ({ ...prev, mic: true }));
                 setError(null);
+                console.log("[Speech] Recognition started");
             };
 
             recognitionRef.current.onend = () => {
+                console.log("[Speech] Recognition ended, isRecording:", isRecording, "isAiSpeaking:", isAiSpeakingRef.current);
                 // Auto-restart ONLY if we are supposed to be recording AND AI is NOT speaking
                 if (isRecording && !isAiSpeakingRef.current) {
-                    console.log("Recognition ended, restarting...");
-                    try {
-                        recognitionRef.current.start();
-                    } catch (e) {
-                        console.error("Failed to restart recognition:", e);
-                    }
+                    console.log("[Speech] Auto-restarting...");
+                    // Use a small delay to prevent rapid restart loops
+                    setTimeout(() => {
+                        if (recognitionRef.current && isRecording && !isAiSpeakingRef.current) {
+                            try {
+                                recognitionRef.current.start();
+                            } catch (e: any) {
+                                if (e.name !== 'InvalidStateError') {
+                                    console.error("[Speech] Failed to restart:", e);
+                                }
+                            }
+                        }
+                    }, 100);
                 }
             };
 
@@ -202,7 +209,18 @@ export default function InterviewPage() {
 
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
-                        final += event.results[i][0].transcript;
+                        // Get the best transcript (highest confidence)
+                        const result = event.results[i];
+                        let bestTranscript = result[0].transcript;
+                        let bestConfidence = result[0].confidence || 0;
+
+                        for (let j = 1; j < result.length; j++) {
+                            if (result[j].confidence > bestConfidence) {
+                                bestConfidence = result[j].confidence;
+                                bestTranscript = result[j].transcript;
+                            }
+                        }
+                        final += bestTranscript;
                     } else {
                         interim += event.results[i][0].transcript;
                     }
@@ -217,10 +235,37 @@ export default function InterviewPage() {
             };
 
             recognitionRef.current.onerror = (event: any) => {
+                console.log("[Speech] Error:", event.error);
+
+                // Ignore these non-critical errors and auto-restart
                 if (event.error === 'no-speech' || event.error === 'aborted') {
+                    // Still try to restart after no-speech error
+                    if (event.error === 'no-speech' && isRecording && !isAiSpeakingRef.current) {
+                        setTimeout(() => {
+                            if (recognitionRef.current && isRecording) {
+                                try {
+                                    recognitionRef.current.start();
+                                } catch (e) { /* ignore */ }
+                            }
+                        }, 200);
+                    }
                     return;
                 }
-                console.error("Speech recognition error", event.error);
+
+                // Handle network errors with auto-retry
+                if (event.error === 'network') {
+                    console.log("[Speech] Network error, will retry...");
+                    setTimeout(() => {
+                        if (recognitionRef.current && isRecording) {
+                            try {
+                                recognitionRef.current.start();
+                            } catch (e) { /* ignore */ }
+                        }
+                    }, 1000);
+                    return;
+                }
+
+                console.error("[Speech] Recognition error:", event.error);
                 if (event.error === 'not-allowed') {
                     setIsRecording(false);
                     setError("Microphone access denied. Please allow microphone permissions.");
@@ -231,10 +276,7 @@ export default function InterviewPage() {
     }, [interviewContext.lang, isRecording]);
 
     const getAiAnswer = async () => {
-        if (!apiKey) {
-            setShowSettings(true);
-            return;
-        }
+        // No API key check needed - server has Groq configuration
         if (!transcript.trim()) {
             if (!isAutoMode) setError("No transcript to analyze. Please speak first.");
             return;
@@ -254,8 +296,8 @@ export default function InterviewPage() {
         }
 
         try {
-            const provider = localStorage.getItem("gemini_api_provider") || "google";
-            const savedModel = localStorage.getItem("gemini_working_model") || localStorage.getItem("gemini_custom_model");
+            // Get user's selected model
+            const selectedModel = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
 
             // Construct the prompt (Unified for all providers)
             const systemPrompt = `
@@ -278,17 +320,14 @@ export default function InterviewPage() {
 
             const fullPrompt = `${systemPrompt}\n\nTRANSCRIPT (Interviewer):\n"${currentTranscript}"\n\nYOUR RESPONSE (Candidate):`;
 
-            // Call Server-Side API
+            // Call Server-Side API (Groq powered - no API key needed)
             const response = await fetch("/api/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    provider,
-                    apiKey,
-                    model: savedModel,
-                    prompt: fullPrompt, // For Google
-                    messages: [ // For OpenAI/Others
-                        { role: "system", content: systemPrompt },
+                    model: selectedModel,
+                    systemPrompt: systemPrompt,
+                    messages: [
                         { role: "user", content: currentTranscript }
                     ]
                 })
@@ -311,9 +350,8 @@ export default function InterviewPage() {
             let errorMessage = "Could not generate response.";
             if (error.message.includes("429")) {
                 errorMessage = "AI is busy (Rate Limit). Please try again.";
-            } else if (error.message.includes("API key expired") || error.message.includes("API_KEY_INVALID")) {
-                errorMessage = "API Key Expired. Please update it in Settings.";
-                setShowSettings(true); // Auto-open settings
+            } else if (error.message.includes("configuration missing")) {
+                errorMessage = "Server AI configuration error. Please contact support.";
             } else {
                 errorMessage = error.message;
             }

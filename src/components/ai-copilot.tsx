@@ -29,25 +29,17 @@ export function AiCopilot() {
         setIsLoading(true);
 
         try {
-            const apiKey = localStorage.getItem("gemini_api_key");
-            const provider = localStorage.getItem("gemini_api_provider") || "google";
+            // Use server-side Groq API (no API key needed from client)
+            const selectedModel = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
 
-            if (!apiKey) {
-                setMessages(prev => [...prev, { role: "ai", content: "Please set your API Key in the settings first." }]);
-                return;
-            }
-
-            // Use the unified server-side API
             const response = await fetch("/api/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    provider,
-                    apiKey,
-                    model: provider === "google" ? "gemini-1.5-flash" : undefined, // Default fast model for chat
+                    model: selectedModel,
                     messages: [
                         { role: "system", content: "You are a helpful interview assistant. Keep answers short, direct, and helpful." },
-                        ...messages, // Include history for context
+                        ...messages.map(m => ({ role: m.role === "ai" ? "assistant" : "user", content: m.content })),
                         { role: "user", content: userMsg }
                     ]
                 })

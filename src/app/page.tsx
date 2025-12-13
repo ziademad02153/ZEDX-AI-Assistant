@@ -2,6 +2,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { Check, Zap, FileText, Globe, Brain, Sparkles, MessageSquare, BarChart3, UploadCloud } from "lucide-react";
 
 export default function Home() {
@@ -84,7 +85,9 @@ export default function Home() {
                         <p className="font-medium text-green-700 mb-1 text-xs uppercase tracking-wide">AI Suggestion</p>
                         "In my previous role, I identified a bottleneck in a PostgreSQL query. I analyzed the execution plan, added a composite index, and refactored the join logic, reducing execution time by 85%..."
                       </div>
-                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-xl">🤖</div>
+                      <div className="w-10 h-10 rounded-full overflow-hidden bg-green-100 flex items-center justify-center">
+                        <Image src="/AI.jpg" alt="AI" width={40} height={40} className="object-cover" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -165,7 +168,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-gray-500 leading-relaxed">
-                  Parakeet automatically detects questions and generates answers instantly.
+                  ZEDX-AI automatically detects questions and generates answers instantly.
                 </p>
               </div>
 

@@ -7,7 +7,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.0-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Gemini AI](https://img.shields.io/badge/Google%20Gemini-2.5-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
+[![Groq](https://img.shields.io/badge/Groq-LPU_Inference-orange?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=)](https://groq.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 **Ace your next job interview with a real-time, privacy-first AI assistant.**
@@ -20,9 +20,9 @@
 
 ## Overview
 
-**ZEDX-AI Assistant** is a cutting-edge AI Interview Assistant designed to help you land your dream job. It listens to your interview in real-time, understands the context from your **Resume** and the **Job Description**, and generates the perfect answer instantly using **Google Gemini 2.0**.
+**ZEDX-AI Assistant** is a cutting-edge AI Interview Assistant designed to help you land your dream job. It listens to your interview in real-time, understands the context from your **Resume** and the **Job Description**, and generates the perfect answer instantly using **Groq's ultra-fast LPU inference**.
 
-Unlike other tools, ZEDX-AI Assistant runs **entirely in your browser** (Client-Side), ensuring your data never leaves your device except to talk to the AI API.
+**No API keys required!** Just sign in, select your AI model, and start practicing.
 
 ## System Architecture
 
@@ -41,8 +41,8 @@ graph TD
         TTS -->|Audio| Speaker[Speaker Output]
     end
     
-    subgraph "Google Cloud"
-        API_Call <-->|Encrypted| Gemini[Gemini 2.0 Flash]
+    subgraph "Server"
+        API_Call <-->|Groq API| Groq[Groq LPU]
     end
     
     style Mic fill:#f9f,stroke:#333,stroke-width:2px
@@ -56,7 +56,7 @@ graph TD
 sequenceDiagram
     participant User
     participant App as ZEDX-AI Assistant
-    participant AI as Google Gemini
+    participant AI as Groq AI
     
     User->>App: Upload Resume & Job Description
     App->>App: Store Context Locally
@@ -77,14 +77,14 @@ sequenceDiagram
 | :--- | :--- |
 | **Real-Time Transcription** | Uses the Web Speech API for instant, zero-latency speech-to-text. |
 | **Context-Aware AI** | Upload your Resume and Job Description. The AI *knows* who you are and what you're applying for. |
-| **Multi-Provider AI** | Supports **Google Gemini**, **OpenRouter**, and **OpenAI** with automatic model fallback. |
+| **No API Key Needed** | Just select your AI model and start - all powered by server-side Groq. |
+| **Multiple AI Models** | Choose from Llama 3.3 70B, Llama 3.1 8B, Qwen 32B, or GPT-OSS 120B. |
 | **Google Sign-In** | One-click authentication with Google OAuth via Supabase. |
 | **Interview History** | All your interview sessions are saved to the cloud and accessible from any device. |
 | **PDF Resume Upload** | Upload PDF resumes that are parsed and stored securely in Supabase. |
 | **Auto-Answer Mode** | Detects when you stop speaking and generates an answer automatically. |
-| **Privacy First** | Your API keys are stored locally. Interview data is protected by Row Level Security. |
+| **Privacy First** | Interview data is protected by Row Level Security. |
 | **Multi-Language Support** | Fluent in English, Arabic, Spanish, and French. |
-| **Error Boundary** | Graceful error handling prevents crashes and provides user-friendly messages. |
 
 ## Tech Stack
 
@@ -92,7 +92,7 @@ sequenceDiagram
 *   **Language**: [TypeScript](https://www.typescriptlang.org/)
 *   **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [Lucide Icons](https://lucide.dev/)
 *   **Database & Auth**: [Supabase](https://supabase.com/) (PostgreSQL + Auth + RLS)
-*   **AI Providers**: Google Gemini, OpenRouter, OpenAI
+*   **AI Provider**: [Groq](https://groq.com/) (Llama 3.3, Llama 3.1, Qwen, GPT-OSS)
 *   **Speech**: Native Web Speech API (SpeechRecognition & SpeechSynthesis)
 *   **PDF Parsing**: [pdf2json](https://www.npmjs.com/package/pdf2json)
 
@@ -109,7 +109,8 @@ sequenceDiagram
 ### Prerequisites
 
 *   Node.js 18+ installed.
-*   A free [Google Gemini API Key](https://aistudio.google.com/app/apikey).
+*   A [Supabase](https://supabase.com/) project (for auth and database).
+*   A [Groq API Key](https://console.groq.com/keys) (for server-side AI).
 
 ### Installation
 

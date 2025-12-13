@@ -38,7 +38,7 @@ export function Navbar() {
                             priority
                         />
                     </div>
-                    <span className="font-bold text-xl tracking-tight text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                    <span className="font-bold text-xl tracking-tight text-green-600 dark:text-green-400 transition-colors">
                         ZEDX-AI
                     </span>
                 </Link>

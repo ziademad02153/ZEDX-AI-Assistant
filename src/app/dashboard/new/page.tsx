@@ -3,11 +3,92 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Briefcase, FileText, Sparkles, Upload, AlertCircle } from "lucide-react";
+import { ArrowLeft, Upload, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { SUPPORTED_LANGUAGES } from "@/lib/languages";
 import { resumeService, Resume } from "@/lib/resume-service";
+
+// Custom SVG Icons
+const BriefcaseIcon = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+    </svg>
+);
+
+const ResumeIcon = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+    </svg>
+);
+
+const RobotIcon = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="11" width="18" height="10" rx="2" />
+        <circle cx="12" cy="5" r="2" />
+        <path d="M12 7v4" />
+        <line x1="8" y1="16" x2="8" y2="16" />
+        <line x1="16" y1="16" x2="16" y2="16" />
+    </svg>
+);
+
+const SparklesIcon = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z" />
+        <path d="M5 19l.5 1.5L7 21l-1.5.5L5 23l-.5-1.5L3 21l1.5-.5L5 19z" />
+        <path d="M19 12l.5 1.5L21 14l-1.5.5L19 16l-.5-1.5L17 14l1.5-.5L19 12z" />
+    </svg>
+);
+
+const GlobeIcon = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="2" y1="12" x2="22" y2="12" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
+);
+
+// Available AI Models with brand logo images
+const AI_MODELS = [
+    {
+        id: "llama-3.1-8b-instant",
+        name: "Llama 3.1 8B",
+        description: "Fast",
+        logo: "/meta.png",
+        borderColor: "border-blue-500",
+        bgColor: "bg-blue-50 dark:bg-blue-900/20"
+    },
+    {
+        id: "llama-3.3-70b-versatile",
+        name: "Llama 3.3 70B",
+        description: "Smart",
+        logo: "/meta.png",
+        borderColor: "border-purple-500",
+        bgColor: "bg-purple-50 dark:bg-purple-900/20"
+    },
+    {
+        id: "qwen/qwen3-32b",
+        name: "Qwen 32B",
+        description: "Multilingual",
+        logo: "/qwen.png",
+        borderColor: "border-indigo-500",
+        bgColor: "bg-indigo-50 dark:bg-indigo-900/20"
+    },
+    {
+        id: "openai/gpt-oss-120b",
+        name: "GPT-OSS 120B",
+        description: "Powerful",
+        logo: "/openai-logo.png",
+        borderColor: "border-emerald-500",
+        bgColor: "bg-emerald-50 dark:bg-emerald-900/20"
+    },
+];
 
 export default function NewInterviewPage() {
     const router = useRouter();
@@ -15,25 +96,13 @@ export default function NewInterviewPage() {
     const [resume, setResume] = useState("");
     const [interviewType, setInterviewType] = useState("Behavioral");
     const [language, setLanguage] = useState("en-US");
-    const [apiKey, setApiKey] = useState("");
-    const [provider, setProvider] = useState("google"); // Default to Google
-    const [customModel, setCustomModel] = useState("");
-    const [availableModels, setAvailableModels] = useState<{ id: string, name: string }[]>([]);
-    const [isLoadingModels, setIsLoadingModels] = useState(false);
+    const [selectedModel, setSelectedModel] = useState("llama-3.1-8b-instant");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
     const [savedResumes, setSavedResumes] = useState<Resume[]>([]);
 
-    // Load saved API key and provider on mount
+    // Load saved resumes from Supabase
     useEffect(() => {
-        const savedKey = localStorage.getItem("gemini_api_key");
-        if (savedKey) setApiKey(savedKey);
-
-        const savedProvider = localStorage.getItem("gemini_api_provider");
-        if (savedProvider) setProvider(savedProvider);
-
-        // Load saved resumes from Supabase
         const loadResumes = async () => {
             try {
                 const data = await resumeService.getUserResumes();
@@ -48,10 +117,14 @@ export default function NewInterviewPage() {
             }
         };
         loadResumes();
+
+        // Load saved model preference
+        const savedModel = localStorage.getItem("selected_ai_model");
+        if (savedModel) setSelectedModel(savedModel);
     }, []);
 
-    // Validation State
-    const isValid = jobDescription.trim().length > 10 && resume.trim().length > 10 && apiKey.trim().length > 10;
+    // Validation - only need job description and resume now (no API key!)
+    const isValid = jobDescription.trim().length > 10 && resume.trim().length > 10;
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -61,7 +134,6 @@ export default function NewInterviewPage() {
         formData.append("file", file);
 
         try {
-            // Optional: You could add a specific smaller loading state here if desired
             const res = await fetch("/api/parse-resume", {
                 method: "POST",
                 body: formData,
@@ -79,120 +151,24 @@ export default function NewInterviewPage() {
         }
     };
 
-    const fetchOpenRouterModels = async () => {
-        // Sanitize key: remove whitespace and non-ASCII chars to prevent header errors
-        const cleanKey = apiKey.trim().replace(/[^\x00-\x7F]/g, "");
-
-        if (!cleanKey) {
-            alert("Please enter a valid OpenRouter API Key first.");
-            return;
-        }
-        setIsLoadingModels(true);
-        try {
-            const response = await fetch("https://openrouter.ai/api/v1/models", {
-                headers: {
-                    "Authorization": `Bearer ${cleanKey}`,
-                    "HTTP-Referer": window.location.origin,
-                    "X-Title": "ZEDX-AI Assistant"
-                }
-            });
-            if (!response.ok) throw new Error("Failed to fetch models");
-            const data = await response.json();
-
-            const models = data.data.map((m: any) => {
-                const isFree = m.pricing?.prompt === "0" && m.pricing?.completion === "0";
-                return {
-                    id: m.id,
-                    name: m.name || m.id,
-                    isFree: isFree
-                };
-            }).sort((a: any, b: any) => {
-                // Sort free models first, then alphabetical
-                if (a.isFree && !b.isFree) return -1;
-                if (!a.isFree && b.isFree) return 1;
-                return a.name.localeCompare(b.name);
-            });
-
-            setAvailableModels(models);
-            alert(`Loaded ${models.length} models! Free models are listed first.`);
-        } catch (e: any) {
-            console.error("Error fetching models:", e);
-            alert("Could not load models. Please check your API Key.");
-        } finally {
-            setIsLoadingModels(false);
-        }
-    };
-
     const handleStart = () => {
         if (!isValid) {
-            setError("Please fill in Job Description, Resume, and API Key to proceed.");
+            setError("Please fill in Job Description and Resume to proceed.");
             return;
         }
 
         setIsLoading(true);
-        // Save context and API key to localStorage
+        // Save context to localStorage
         localStorage.setItem("interview_context_jd", jobDescription);
         localStorage.setItem("interview_context_resume", resume);
         localStorage.setItem("interview_context_type", interviewType);
         localStorage.setItem("interview_context_lang", language);
-        localStorage.setItem("gemini_api_key", apiKey);
-        localStorage.setItem("gemini_api_provider", provider);
+        localStorage.setItem("selected_ai_model", selectedModel);
 
-        // Simulate a small delay for better UX
+        // Navigate to interview
         setTimeout(() => {
             router.push("/interview");
         }, 500);
-    };
-
-    const handleTestConnection = async () => {
-        if (!apiKey.trim()) {
-            setError("Please enter an API Key first.");
-            return;
-        }
-
-        setIsLoading(true);
-        setError(null);
-
-        try {
-            // Temporarily save key for testing
-            localStorage.setItem("gemini_api_key", apiKey);
-            localStorage.setItem("gemini_api_provider", provider);
-
-            console.log(`[TestConnection] Sending request to /api/test-connection for provider: ${provider}`);
-
-            // Use the centralized REST API for ALL providers (including Google) to avoid client-side SDK issues
-            const response = await fetch("/api/test-connection", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    provider,
-                    apiKey,
-                    model: customModel || undefined // Send user's selected model, or let backend use default
-                })
-            });
-
-            if (!response.ok) {
-                const errData = await response.json().catch(() => ({}));
-                console.error(`[TestConnection] Error:`, errData);
-                throw new Error(errData.error?.message || `API Error: ${response.status}`);
-            }
-
-            const data = await response.json();
-            if (data.success || (data.choices && data.choices.length > 0)) {
-                alert(`Connection Successful! Connected to ${provider.toUpperCase()}.`);
-                if (provider === "google") {
-                    localStorage.setItem("gemini_working_model", "gemini-1.5-flash-001");
-                }
-            } else {
-                throw new Error("No response from API.");
-            }
-
-        } catch (err: any) {
-            console.error("API Test Error:", err);
-            setError(`Connection Failed: ${err.message || "Unknown error"}`);
-        } finally {
-            setIsLoading(false);
-        }
     };
 
     return (
@@ -219,8 +195,10 @@ export default function NewInterviewPage() {
             <div className="grid md:grid-cols-2 gap-6">
                 {/* Job Description */}
                 <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
-                    <div className="flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-white">
-                        <Briefcase className="text-green-600 dark:text-green-400" size={20} />
+                    <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
+                            <BriefcaseIcon />
+                        </div>
                         <h3>Job Description <span className="text-red-500">*</span></h3>
                     </div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Paste the job description you are applying for.</p>
@@ -232,22 +210,24 @@ export default function NewInterviewPage() {
                     />
                 </div>
 
-                {/* Resume & Type */}
+                {/* Resume & Settings */}
                 <div className="space-y-6">
+                    {/* Resume Section */}
                     <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
-                        <div className="flex items-center justify-between text-lg font-semibold text-gray-800 dark:text-white">
-                            <div className="flex items-center gap-2">
-                                <FileText className="text-blue-600 dark:text-blue-400" size={20} />
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-lg font-semibold text-gray-800 dark:text-white">
+                            <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
+                                    <ResumeIcon />
+                                </div>
                                 <h3>Your Resume <span className="text-red-500">*</span></h3>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 flex-shrink-0">
                                 {/* Resume Selection Dropdown */}
                                 <select
                                     className="text-xs p-2 border rounded-lg bg-white dark:bg-zinc-800 dark:text-white border-gray-200 dark:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     onChange={(e) => {
                                         const selectedId = e.target.value;
                                         if (!selectedId) return;
-
                                         const selectedResume = savedResumes.find(r => r.id === selectedId);
                                         if (selectedResume) {
                                             setResume(selectedResume.content);
@@ -280,106 +260,61 @@ export default function NewInterviewPage() {
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 p-3 rounded-lg text-xs flex gap-2 items-start hidden">
-                            <AlertCircle size={14} className="mt-0.5 shrink-0" />
-                            <p><strong>Tip:</strong> You can now upload PDF resumes directly.</p>
-                        </div>
                         <textarea
-                            className="w-full h-40 p-4 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                            placeholder="Paste your full resume text here for the AI to learn your background..."
+                            className="w-full h-32 p-4 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                            placeholder="Paste your full resume text here..."
                             value={resume}
                             onChange={(e) => { setResume(e.target.value); setError(null); }}
                         />
                     </div>
 
+                    {/* AI Model Selection - with Brand Logo Images */}
                     <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
-                        <div className="flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-white">
-                            <span className="text-2xl">🔑</span>
-                            <h3>AI Provider & Key <span className="text-red-500">*</span></h3>
+                        <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
+                            <Image src="/AI.jpg" alt="AI Model" width={36} height={36} className="rounded-xl" />
+                            <h3>AI Model</h3>
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Choose your AI provider and enter the API Key.</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Choose the AI model for your interview.</p>
 
-                        <div className="space-y-3">
-                            <div className="flex gap-2">
-                                <select
-                                    className="w-1/3 p-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm dark:text-white transition-colors"
-                                    value={provider}
-                                    onChange={(e) => setProvider(e.target.value)}
+                        <div className="grid grid-cols-2 gap-3">
+                            {AI_MODELS.map((model) => (
+                                <button
+                                    key={model.id}
+                                    onClick={() => setSelectedModel(model.id)}
+                                    className={cn(
+                                        "p-4 rounded-xl border-2 text-left transition-all duration-200 group hover:scale-[1.02]",
+                                        selectedModel === model.id
+                                            ? `${model.borderColor} ${model.bgColor} shadow-lg`
+                                            : "border-gray-200 dark:border-zinc-700 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-md"
+                                    )}
                                 >
-                                    <option value="google">Google Gemini</option>
-                                    <option value="openai">OpenAI (GPT)</option>
-                                    <option value="grok">Grok (xAI)</option>
-                                    <option value="openrouter">OpenRouter (All)</option>
-                                </select>
-                                <input
-                                    type="password"
-                                    className="w-2/3 p-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500 font-mono text-sm dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                                    placeholder={
-                                        provider === "google" ? "AIzaSy..." :
-                                            provider === "openai" ? "sk-..." :
-                                                provider === "grok" ? "xai-..." :
-                                                    "sk-or-..."
-                                    }
-                                    value={apiKey}
-                                    onChange={(e) => { setApiKey(e.target.value); setError(null); }}
-                                />
-                            </div>
-
-                            {provider !== "google" && (
-                                <div className="space-y-2">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">Model ID:</span>
-                                        <div className="relative w-full">
-                                            {availableModels.length > 0 ? (
-                                                <select
-                                                    className="w-full p-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-mono dark:text-white transition-colors"
-                                                    value={customModel}
-                                                    onChange={(e) => setCustomModel(e.target.value)}
-                                                >
-                                                    <option value="">-- Select a Model --</option>
-                                                    {availableModels.map(m => (
-                                                        <option key={m.id} value={m.id}>
-                                                            {/* @ts-ignore */}
-                                                            {m.isFree ? "✨ FREE - " : ""}{m.name} ({m.id})
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            ) : (
-                                                <input
-                                                    type="text"
-                                                    className="w-full p-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-mono dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                                                    placeholder={
-                                                        provider === "openrouter" ? "e.g. google/gemini-2.0-flash-exp:free" :
-                                                            provider === "grok" ? "e.g. grok-beta" :
-                                                                "e.g. gpt-4-turbo"
-                                                    }
-                                                    value={customModel}
-                                                    onChange={(e) => setCustomModel(e.target.value)}
-                                                />
-                                            )}
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 flex items-center justify-center transition-transform group-hover:scale-110">
+                                            <Image
+                                                src={model.logo}
+                                                alt={model.name}
+                                                width={36}
+                                                height={36}
+                                                className="object-contain"
+                                            />
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-sm text-gray-800 dark:text-white">{model.name}</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">{model.description}</p>
                                         </div>
                                     </div>
-                                    {provider === "openrouter" && (
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={fetchOpenRouterModels}
-                                            disabled={isLoadingModels || !apiKey}
-                                            className="w-full text-xs h-7 dark:bg-zinc-800 dark:text-white dark:border-zinc-700 dark:hover:bg-zinc-700"
-                                        >
-                                            {isLoadingModels ? "Loading Models..." : "Load Available Models"}
-                                        </Button>
-                                    )}
-                                </div>
-                            )}
-                            {provider === "openrouter" && !customModel && <p className="text-[10px] text-gray-400">Leave blank to use default free model.</p>}
+                                </button>
+                            ))}
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    {/* Type & Language */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
-                            <div className="flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-white">
-                                <Sparkles className="text-purple-600 dark:text-purple-400" size={20} />
+                            <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
+                                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
+                                    <SparklesIcon />
+                                </div>
                                 <h3>Type</h3>
                             </div>
                             <select
@@ -394,12 +329,12 @@ export default function NewInterviewPage() {
                         </div>
 
                         <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
-                            <div className="flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-white">
-                                <span className="text-2xl">🌐</span>
+                            <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
+                                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
+                                    <GlobeIcon />
+                                </div>
                                 <h3>Language</h3>
                             </div>
-
-
                             <select
                                 className="w-full p-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 dark:text-white transition-colors"
                                 value={language}
@@ -407,7 +342,7 @@ export default function NewInterviewPage() {
                             >
                                 {SUPPORTED_LANGUAGES.map((lang) => (
                                     <option key={lang.code} value={lang.code}>
-                                        {lang.native} ({lang.name})
+                                        {lang.native}
                                     </option>
                                 ))}
                             </select>
@@ -416,16 +351,7 @@ export default function NewInterviewPage() {
                 </div>
             </div>
 
-            <div className="flex justify-end pt-4 gap-4">
-                <Button
-                    variant="outline"
-                    size="lg"
-                    onClick={handleTestConnection}
-                    disabled={isLoading}
-                    className="dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700"
-                >
-                    Test Connection
-                </Button>
+            <div className="flex justify-end pt-4">
                 <Button
                     variant="gradient"
                     size="lg"
