@@ -108,7 +108,7 @@ export default function MyResumesPage() {
         <div className="max-w-4xl mx-auto space-y-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">My Resumes</h1>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Resumes</h1>
                     <p className="text-gray-500">Manage your resumes for different job applications.</p>
                 </div>
                 <Button onClick={() => setIsAdding(!isAdding)} variant={isAdding ? "secondary" : "default"} className="gap-2">
@@ -187,7 +187,7 @@ export default function MyResumesPage() {
                 ) : resumes.length === 0 && !isAdding ? (
                     <div className="col-span-2 text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                         <FileText className="mx-auto text-gray-300 mb-3" size={48} />
-                        <h3 className="text-lg font-medium text-gray-900">No resumes yet</h3>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">No resumes yet</h3>
                         <p className="text-gray-500 mb-4">Add your first resume to get started.</p>
                         <Button onClick={() => setIsAdding(true)} variant="outline">Add Resume</Button>
                     </div>
@@ -200,7 +200,7 @@ export default function MyResumesPage() {
                                         <FileText size={24} />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-gray-900">{resume.name}</h3>
+                                        <h3 className="font-semibold text-gray-900 dark:text-white">{resume.name}</h3>
                                         <div className="flex items-center gap-1 text-xs text-gray-500">
                                             <Calendar size={12} />
                                             {new Date(resume.created_at).toLocaleDateString()}

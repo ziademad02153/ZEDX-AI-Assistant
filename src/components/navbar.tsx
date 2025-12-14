@@ -22,25 +22,23 @@ export function Navbar() {
     return (
         <nav
             className={cn(
-                "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
-                scrolled ? "bg-white/80 dark:bg-black/80 backdrop-blur-md border-gray-200 dark:border-gray-800 py-3" : "bg-transparent py-5"
+                "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+                scrolled
+                    ? "py-3 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm"
+                    : "py-4 bg-transparent"
             )}
         >
             <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
                 {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 group">
-                    <div className="relative w-10 h-10 overflow-hidden rounded-full shadow-sm">
-                        <Image
-                            src="/android-chrome-192x192.png"
-                            alt="ZEDX-AI Logo"
-                            fill
-                            className="object-cover"
-                            priority
-                        />
-                    </div>
-                    <span className="font-bold text-xl tracking-tight text-green-600 dark:text-green-400 transition-colors">
-                        ZEDX-AI
-                    </span>
+                <Link href="/" className="flex items-center group">
+                    <Image
+                        src="/zedx-logo.png"
+                        alt="ZEDX-AI Logo"
+                        width={87}
+                        height={87}
+                        className="object-contain w-14 h-14 md:w-16 md:h-16 lg:w-[87px] lg:h-[87px]"
+                        priority
+                    />
                 </Link>
 
                 {/* Desktop Navigation */}

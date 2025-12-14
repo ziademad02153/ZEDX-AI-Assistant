@@ -124,16 +124,14 @@ export default function LoginPage() {
 
                 <div className="relative z-10">
                     {/* Updated Logo Section */}
-                    <div className="flex items-center gap-3">
-                        <div className="relative w-10 h-10 overflow-hidden rounded-lg shadow-lg shadow-emerald-500/20">
-                            <Image
-                                src="/logo.png"
-                                alt="ZEDX-AI Logo"
-                                fill
-                                className="object-cover"
-                            />
-                        </div>
-                        <span className="font-bold text-2xl tracking-tight text-white">ZEDX-AI</span>
+                    <div className="flex items-center">
+                        <Image
+                            src="/zedx-logo.png"
+                            alt="ZEDX-AI Logo"
+                            width={87}
+                            height={87}
+                            className="object-contain w-16 h-16 md:w-[87px] md:h-[87px]"
+                        />
                     </div>
                 </div>
 
@@ -189,7 +187,7 @@ export default function LoginPage() {
                     <div className="lg:hidden text-center mb-8">
                         <div className="relative w-12 h-12 mx-auto mb-3 overflow-hidden rounded-lg">
                             <Image
-                                src="/logo.png"
+                                src="/zedx-logo.png"
                                 alt="ZEDX-AI Logo"
                                 fill
                                 className="object-cover"
