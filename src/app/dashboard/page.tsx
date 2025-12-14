@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Clock, CheckCircle, Calendar, ArrowRight, Trash2 } from "lucide-react";
+import { Plus, Clock, CheckCircle, Calendar, ArrowRight, Trash2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { interviewService, Interview } from "@/lib/interview-service";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ export default function DashboardPage() {
     const [stats, setStats] = useState({ totalInterviews: 0, totalMinutes: 0 });
     const [recentSessions, setRecentSessions] = useState<Interview[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isAuthChecking, setIsAuthChecking] = useState(true);
 
     useEffect(() => {
         loadData();
@@ -21,6 +22,7 @@ export default function DashboardPage() {
         try {
             setIsLoading(true);
             const interviews = await interviewService.getUserInterviews();
+            setIsAuthChecking(false); // Auth passed
             setRecentSessions(interviews.slice(0, 3)); // Get top 3
             setStats({
                 totalInterviews: interviews.length,
@@ -29,7 +31,9 @@ export default function DashboardPage() {
         } catch (e: any) {
             if (e.message.includes("User not authenticated")) {
                 router.push("/login");
+                return;
             }
+            setIsAuthChecking(false);
             console.error(e);
         } finally {
             setIsLoading(false);
@@ -49,6 +53,15 @@ export default function DashboardPage() {
             console.error(e);
         }
     };
+
+    // Show loading while checking auth
+    if (isAuthChecking) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-8">
