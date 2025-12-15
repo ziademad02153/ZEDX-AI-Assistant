@@ -410,7 +410,7 @@ export default function InterviewPage() {
     };
 
     return (
-        <div className="h-[calc(100vh-80px)] flex flex-col md:flex-row gap-4 p-4 transition-colors duration-300 bg-gray-100 dark:bg-black">
+        <div className="min-h-screen flex flex-col lg:flex-row gap-4 p-2 sm:p-4 pt-20 transition-colors duration-300 bg-gray-100 dark:bg-black overflow-auto">
             {/* Error Banner */}
             {error && (
                 <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded z-50 flex items-center gap-2 shadow-lg">
@@ -426,7 +426,7 @@ export default function InterviewPage() {
             <SettingsDialog open={showSettings} onOpenChange={setShowSettings} />
 
             {/* Left Panel: Video & Transcript */}
-            <div className={cn("flex flex-col gap-4 transition-all duration-300", isCameraVisible ? "w-full md:w-1/2" : "w-full md:w-1/3")}>
+            <div className={cn("flex flex-col gap-4 transition-all duration-300 w-full", isCameraVisible ? "lg:w-1/2" : "lg:w-1/3")}>
                 {/* Video Feed */}
                 {isCameraVisible && (
                     <div className="flex-1 bg-black rounded-2xl overflow-hidden relative shadow-lg min-h-[300px]">
@@ -531,26 +531,28 @@ export default function InterviewPage() {
             </div>
 
             {/* Right Panel: AI Response */}
-            <div className="w-full md:w-1/2 flex flex-col gap-4">
+            <div className="w-full lg:w-1/2 flex flex-col gap-4">
                 <div className="p-6 rounded-2xl shadow-sm border flex-1 flex flex-col bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 transition-colors">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
                         <h3 className="font-bold flex items-center gap-2 text-lg text-gray-900 dark:text-white">
                             <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
                             AI Copilot
                         </h3>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                             <Button
                                 variant={isAutoMode ? "default" : "outline"}
                                 size="sm"
                                 onClick={() => setIsAutoMode(!isAutoMode)}
-                                className={cn("gap-2 dark:text-white dark:border-gray-700", isAutoMode && "bg-green-600 hover:bg-green-700")}
+                                className={cn("gap-2 dark:text-white dark:border-gray-700 text-xs sm:text-sm", isAutoMode && "bg-green-600 hover:bg-green-700")}
                             >
-                                <Sparkles size={16} />
-                                {isAutoMode ? "Auto Answer ON" : "Auto Answer OFF"}
+                                <Sparkles size={14} />
+                                <span className="hidden sm:inline">{isAutoMode ? "Auto Answer ON" : "Auto Answer OFF"}</span>
+                                <span className="sm:hidden">{isAutoMode ? "Auto ON" : "Auto OFF"}</span>
                             </Button>
                             <Button
                                 variant="destructive"
                                 size="sm"
+                                className="text-xs sm:text-sm"
                                 onClick={async () => {
                                     try {
                                         const { interviewService } = await import("@/lib/interview-service");
@@ -581,15 +583,16 @@ export default function InterviewPage() {
                                     }
                                 }}
                             >
-                                End Interview
+                                <span className="hidden sm:inline">End Interview</span>
+                                <span className="sm:hidden">End</span>
                             </Button>
                             <Button
                                 variant="gradient"
                                 onClick={getAiAnswer}
                                 disabled={isLoading || !transcript}
-                                className="shadow-green-900/20"
+                                className="shadow-green-900/20 text-xs sm:text-sm"
                             >
-                                {isLoading ? "Thinking..." : "Get Answer"}
+                                {isLoading ? "..." : "Get Answer"}
                             </Button>
                         </div>
                     </div>
