@@ -184,8 +184,8 @@ export default function LoginPage() {
                 <div className="w-full max-w-sm space-y-8">
 
                     {/* Header Mobile Brand (visible only on small) */}
-                    <div className="lg:hidden text-center mb-8">
-                        <div className="relative w-12 h-12 mx-auto mb-3 overflow-hidden rounded-lg">
+                    <div className="lg:hidden text-center mb-6">
+                        <div className="relative w-14 h-14 mx-auto mb-3 overflow-hidden rounded-lg">
                             <Image
                                 src="/zedx-logo.png"
                                 alt="ZEDX-AI Logo"
@@ -193,7 +193,20 @@ export default function LoginPage() {
                                 className="object-cover"
                             />
                         </div>
-                        <h2 className="text-2xl font-bold">ZEDX-AI</h2>
+                        <h2 className="text-xl font-bold text-gray-900">ZEDX-AI</h2>
+                        <p className="text-xs text-gray-500 mt-1">AI Interview Assistant</p>
+
+                        {/* Mobile Features */}
+                        <div className="flex justify-center gap-4 mt-4 text-xs">
+                            <div className="flex items-center gap-1 text-emerald-600">
+                                <Zap size={14} />
+                                <span>Real-Time AI</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-emerald-600">
+                                <Shield size={14} />
+                                <span>Secure</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="text-center">
