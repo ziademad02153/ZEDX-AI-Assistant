@@ -194,19 +194,6 @@ export default function LoginPage() {
                             />
                         </div>
                         <h2 className="text-xl font-bold text-gray-900">ZEDX-AI</h2>
-                        <p className="text-xs text-gray-500 mt-1">AI Interview Assistant</p>
-
-                        {/* Mobile Features */}
-                        <div className="flex justify-center gap-4 mt-4 text-xs">
-                            <div className="flex items-center gap-1 text-emerald-600">
-                                <Zap size={14} />
-                                <span>Real-Time AI</span>
-                            </div>
-                            <div className="flex items-center gap-1 text-emerald-600">
-                                <Shield size={14} />
-                                <span>Secure</span>
-                            </div>
-                        </div>
                     </div>
 
                     <div className="text-center">
