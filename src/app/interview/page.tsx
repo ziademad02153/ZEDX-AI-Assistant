@@ -212,40 +212,36 @@ export default function InterviewPage() {
 
             recognitionRef.current.onresult = (event: any) => {
                 let interim = '';
-                let final = '';
+                let finalText = '';
 
-                // Only process new results to avoid duplication
+                // Process only new results
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     const result = event.results[i];
-                    if (result.isFinal) {
-                        // Get the best transcript (highest confidence)
-                        let bestTranscript = result[0].transcript;
-                        let bestConfidence = result[0].confidence || 0;
+                    const transcript = result[0].transcript;
 
-                        for (let j = 1; j < result.length; j++) {
-                            if (result[j].confidence > bestConfidence) {
-                                bestConfidence = result[j].confidence;
-                                bestTranscript = result[j].transcript;
-                            }
-                        }
-                        final += bestTranscript.trim();
+                    if (result.isFinal) {
+                        finalText += transcript;
                     } else {
-                        interim += result[0].transcript;
+                        interim = transcript; // Only keep the latest interim
                     }
                 }
 
-                if (final) {
-                    // Avoid duplicate words by checking if the final text was just added
-                    setTranscript(prev => {
-                        const trimmedFinal = final.trim();
-                        if (prev.trim().endsWith(trimmedFinal)) {
-                            return prev; // Skip duplicate
-                        }
-                        return prev + (prev ? " " : "") + trimmedFinal;
-                    });
-                    setInterimTranscript("");
-                }
-                if (interim) {
+                // Add final text to transcript
+                if (finalText) {
+                    const cleanedFinal = finalText.trim();
+                    if (cleanedFinal) {
+                        setTranscript(prev => {
+                            // Prevent adding duplicate text
+                            const words = cleanedFinal.split(' ');
+                            const lastWord = words[words.length - 1];
+                            if (prev.trim().endsWith(lastWord) && words.length === 1) {
+                                return prev; // Skip single word that already exists
+                            }
+                            return prev + (prev ? ' ' : '') + cleanedFinal;
+                        });
+                    }
+                    setInterimTranscript('');
+                } else if (interim) {
                     setInterimTranscript(interim);
                 }
             };
