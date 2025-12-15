@@ -153,7 +153,7 @@ We believe in **Local-First Software**.
 *   **Transcripts**: Processed in memory.
 *   **Resumes**: Parsed client-side.
 
-📄 [Read Full Privacy Policy](https://zedx-ai-assistant-1.vercel.app/privacy) | 📋 [Terms of Service](https://zedx-ai-assistant-1.vercel.app/terms)
+[Read Full Privacy Policy](https://zedx-ai-assistant-1.vercel.app/privacy) | [Terms of Service](https://zedx-ai-assistant-1.vercel.app/terms)
 
 ## Contributing
 
