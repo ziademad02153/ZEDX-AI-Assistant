@@ -181,7 +181,7 @@ export default function NewInterviewPage() {
                 </Link>
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Setup New Interview</h1>
-                    <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">Provide context to get personalized AI coaching.</p>
+                    <p className="text-sm sm:text-base text-gray-500 dark:text-gray-300">Provide context to get personalized AI coaching.</p>
                 </div>
             </div>
 
