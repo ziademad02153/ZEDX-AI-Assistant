@@ -3,19 +3,18 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 
 interface UseAudioRecorderProps {
-    apiKey: string;
     onTranscript: (text: string) => void;
     language?: string;
 }
 
-export function useAudioRecorder({ apiKey, onTranscript, language = "en" }: UseAudioRecorderProps) {
+export function useAudioRecorder({ onTranscript, language = "en" }: UseAudioRecorderProps) {
     const [isRecording, setIsRecording] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const streamRef = useRef<MediaStream | null>(null);
     const chunksRef = useRef<Blob[]>([]);
-    const isRecordingRef = useRef(false); // Ref to track state inside callbacks
+    const isRecordingRef = useRef(false);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     const processAudio = useCallback(async (blob: Blob) => {
@@ -25,7 +24,6 @@ export function useAudioRecorder({ apiKey, onTranscript, language = "en" }: UseA
         formData.append("file", blob, "audio.webm");
         formData.append("model", "whisper-large-v3");
         formData.append("language", language.split("-")[0]);
-        formData.append("apiKey", apiKey);
 
         try {
             const response = await fetch("/api/transcribe", {
@@ -45,7 +43,7 @@ export function useAudioRecorder({ apiKey, onTranscript, language = "en" }: UseA
         } catch (err) {
             console.error("Transcription error:", err);
         }
-    }, [apiKey, language, onTranscript]);
+    }, [language, onTranscript]);
 
     const startSlice = useCallback(() => {
         if (!isRecordingRef.current || !mediaRecorderRef.current) return;
@@ -54,7 +52,6 @@ export function useAudioRecorder({ apiKey, onTranscript, language = "en" }: UseA
         try {
             mediaRecorderRef.current.start();
 
-            // Stop this slice after 6 seconds (Safe buffer for Groq's 20 RPM limit)
             timerRef.current = setTimeout(() => {
                 if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
                     mediaRecorderRef.current.stop();
@@ -82,19 +79,16 @@ export function useAudioRecorder({ apiKey, onTranscript, language = "en" }: UseA
             };
 
             recorder.onstop = () => {
-                // Process the completed slice
                 if (chunksRef.current.length > 0) {
                     const blob = new Blob(chunksRef.current, { type: "audio/webm" });
                     processAudio(blob);
                 }
 
-                // If still recording, start next slice immediately
                 if (isRecordingRef.current) {
                     startSlice();
                 }
             };
 
-            // Start the first slice
             startSlice();
 
         } catch (err: any) {
@@ -111,17 +105,15 @@ export function useAudioRecorder({ apiKey, onTranscript, language = "en" }: UseA
         if (timerRef.current) clearTimeout(timerRef.current);
 
         if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
-            mediaRecorderRef.current.stop(); // This will trigger onstop one last time
+            mediaRecorderRef.current.stop();
         }
 
-        // Stop all tracks
         if (streamRef.current) {
             streamRef.current.getTracks().forEach(track => track.stop());
             streamRef.current = null;
         }
     }, []);
 
-    // Cleanup on unmount
     useEffect(() => {
         return () => {
             if (isRecordingRef.current) stopRecording();

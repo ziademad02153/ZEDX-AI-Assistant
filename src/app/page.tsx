@@ -7,7 +7,7 @@ import { Check, Zap, FileText, Globe, Brain, Sparkles, MessageSquare, BarChart3,
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col bg-white font-sans text-gray-900 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-black font-sans text-gray-900 dark:text-gray-100 overflow-x-hidden">
       <Navbar />
 
       <main className="flex-grow pt-24 relative">
@@ -86,7 +86,7 @@ export default function Home() {
                         "In my previous role, I identified a bottleneck in a PostgreSQL query. I analyzed the execution plan, added a composite index, and refactored the join logic, reducing execution time by 85%..."
                       </div>
                       <div className="w-10 h-10 rounded-full overflow-hidden bg-green-100 flex items-center justify-center">
-                        <Image src="/AI.jpg" alt="AI" width={40} height={40} className="object-cover" />
+                        <Image src="/AI.jpg" alt="ZEDX AI Assistant providing interview coaching" width={40} height={40} className="object-cover" />
                       </div>
                     </div>
                   </div>

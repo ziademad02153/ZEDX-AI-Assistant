@@ -23,6 +23,12 @@ export function AiCopilot() {
     const handleSend = async () => {
         if (!input.trim() || isLoading) return;
 
+        // Limit input length to 500 characters
+        if (input.length > 500) {
+            setMessages(prev => [...prev, { role: "ai", content: "Please keep your message under 500 characters." }]);
+            return;
+        }
+
         const userMsg = input;
         setInput("");
         setMessages(prev => [...prev, { role: "user", content: userMsg }]);
@@ -30,7 +36,12 @@ export function AiCopilot() {
 
         try {
             // Use server-side Groq API (no API key needed from client)
-            const selectedModel = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
+            let selectedModel = "llama-3.1-8b-instant";
+            try {
+                selectedModel = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
+            } catch (e) {
+                // localStorage may be unavailable in some browsers
+            }
 
             const response = await fetch("/api/generate", {
                 method: "POST",

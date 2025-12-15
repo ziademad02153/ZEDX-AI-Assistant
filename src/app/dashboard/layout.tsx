@@ -74,7 +74,15 @@ export default function DashboardLayout({
                 Settings
             </Button>
             <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
-                <Button variant="ghost" className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20">
+                <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    onClick={async () => {
+                        await supabase.auth.signOut();
+                        document.cookie = "auth_token=; path=/; max-age=0";
+                        window.location.href = "/login";
+                    }}
+                >
                     <LogOut size={20} />
                     Sign Out
                 </Button>
