@@ -78,9 +78,9 @@ export default function InterviewHistoryPage() {
     };
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
-            <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <div className="p-3 sm:p-6 max-w-4xl mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                     <Clock className="text-teal-500" />
                     Interview History
                 </h1>
@@ -90,14 +90,16 @@ export default function InterviewHistoryPage() {
                             variant="destructive"
                             size="sm"
                             onClick={handleDeleteAll}
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 text-xs sm:text-sm"
                         >
-                            <Trash size={16} />
-                            Delete All
+                            <Trash size={14} />
+                            <span className="hidden sm:inline">Delete All</span>
+                            <span className="sm:hidden">Delete</span>
                         </Button>
                     )}
-                    <Button onClick={() => router.push("/dashboard/new")}>
-                        New Interview
+                    <Button onClick={() => router.push("/dashboard/new")} size="sm" className="text-xs sm:text-sm">
+                        <span className="hidden sm:inline">New Interview</span>
+                        <span className="sm:hidden">New</span>
                     </Button>
                 </div>
             </div>

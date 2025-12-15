@@ -172,27 +172,27 @@ export default function NewInterviewPage() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 pb-12">
-            <div className="flex items-center gap-4">
+        <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8 pb-12 px-2 sm:px-0">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
                 <Link href="/dashboard">
                     <Button variant="ghost" size="icon" className="dark:text-white dark:hover:bg-gray-800">
                         <ArrowLeft size={20} />
                     </Button>
                 </Link>
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Setup New Interview</h1>
-                    <p className="text-gray-500 dark:text-gray-400">Provide context to get personalized AI coaching.</p>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Setup New Interview</h1>
+                    <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">Provide context to get personalized AI coaching.</p>
                 </div>
             </div>
 
             {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 p-4 rounded-xl flex items-center gap-2">
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 p-4 rounded-xl flex items-center gap-2 text-sm">
                     <AlertCircle size={20} />
                     {error}
                 </div>
             )}
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {/* Job Description */}
                 <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
                     <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
