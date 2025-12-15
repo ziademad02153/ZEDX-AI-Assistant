@@ -343,7 +343,8 @@ export default function InterviewPage() {
             if (!text) throw new Error("Empty response from AI.");
 
             setAiResponse(text);
-            speakResponse(text);
+            // Text-to-speech disabled - text only mode
+            isAiSpeakingRef.current = false;
 
         } catch (error: any) {
             console.error("Error generating AI response:", error);
