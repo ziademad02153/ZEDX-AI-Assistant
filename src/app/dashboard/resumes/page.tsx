@@ -127,17 +127,17 @@ export default function MyResumesPage() {
             )}
 
             {isAdding && (
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4 animate-in fade-in slide-in-from-top-4">
-                    <h3 className="font-semibold text-lg">Add New Resume</h3>
+                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-700 space-y-4 animate-in fade-in slide-in-from-top-4">
+                    <h3 className="font-semibold text-lg dark:text-white">Add New Resume</h3>
 
                     {/* File Upload Section */}
-                    <div className="p-4 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 text-center hover:bg-gray-100 transition-colors">
+                    <div className="p-4 border-2 border-dashed border-gray-200 dark:border-zinc-600 rounded-xl bg-gray-50 dark:bg-zinc-800 text-center hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors">
                         <label className="cursor-pointer">
                             <span className="flex flex-col items-center gap-2">
                                 <span className="p-2 bg-white rounded-full shadow-sm text-green-600">
                                     <FileText size={24} />
                                 </span>
-                                <span className="font-medium text-sm text-gray-700">
+                                <span className="font-medium text-sm text-gray-700 dark:text-gray-300">
                                     {isUploading ? "Extracting Text..." : "Upload PDF Resume (Auto-Extract)"}
                                 </span>
                                 <span className="text-xs text-gray-400">Click to browse</span>
@@ -154,28 +154,28 @@ export default function MyResumesPage() {
 
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
-                            <span className="w-full border-t border-gray-200" />
+                            <span className="w-full border-t border-gray-200 dark:border-zinc-600" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-white px-2 text-gray-400">Or paste manually</span>
+                            <span className="bg-white dark:bg-zinc-900 px-2 text-gray-400">Or paste manually</span>
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">Resume Name</label>
+                        <label className="text-sm font-medium dark:text-white">Resume Name</label>
                         <input
                             type="text"
                             placeholder="e.g. Frontend Developer Resume"
-                            className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="w-full p-3 border border-gray-200 dark:border-zinc-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-zinc-800 dark:text-white"
                             value={newResumeName}
                             onChange={(e) => setNewResumeName(e.target.value)}
                         />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">Resume Content (Text)</label>
+                        <label className="text-sm font-medium dark:text-white">Resume Content (Text)</label>
                         <textarea
                             placeholder="Paste your resume text here..."
-                            className="w-full h-40 p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                            className="w-full h-40 p-3 border border-gray-200 dark:border-zinc-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 resize-none bg-white dark:bg-zinc-800 dark:text-white"
                             value={newResumeContent}
                             onChange={(e) => setNewResumeContent(e.target.value)}
                         />
@@ -195,7 +195,7 @@ export default function MyResumesPage() {
                         <RefreshCw className="animate-spin text-gray-400" size={32} />
                     </div>
                 ) : resumes.length === 0 && !isAdding ? (
-                    <div className="col-span-2 text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                    <div className="col-span-2 text-center py-12 bg-gray-50 dark:bg-zinc-800 rounded-2xl border border-dashed border-gray-200 dark:border-zinc-600">
                         <FileText className="mx-auto text-gray-300 mb-3" size={48} />
                         <h3 className="text-lg font-medium text-gray-900 dark:text-white">No resumes yet</h3>
                         <p className="text-gray-500 mb-4">Add your first resume to get started.</p>
@@ -203,7 +203,7 @@ export default function MyResumesPage() {
                     </div>
                 ) : (
                     resumes.map((resume) => (
-                        <div key={resume.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow group relative">
+                        <div key={resume.id} className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-700 hover:shadow-md transition-shadow group relative">
                             <div className="flex justify-between items-start mb-4">
                                 <div className="flex items-center gap-3">
                                     <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">

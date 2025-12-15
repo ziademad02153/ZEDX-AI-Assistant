@@ -60,26 +60,26 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
     return (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center backdrop-blur-sm">
-            <div className={cn("p-6 rounded-2xl shadow-xl w-full max-w-sm transition-colors border bg-white text-gray-900 border-gray-200")}>
+            <div className={cn("p-6 rounded-2xl shadow-xl w-full max-w-sm transition-colors border bg-white dark:bg-zinc-900 text-gray-900 dark:text-white border-gray-200 dark:border-zinc-700")}>
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="text-xl font-bold flex items-center gap-2">
-                        <Settings className="text-gray-500" size={20} /> Settings
+                        <Settings className="text-gray-500 dark:text-gray-400" size={20} /> Settings
                     </h3>
-                    <Button variant="ghost" size="sm" onClick={() => onOpenChange(false)}>X</Button>
+                    <Button variant="ghost" size="sm" onClick={() => onOpenChange(false)} className="dark:text-white dark:hover:bg-zinc-800">X</Button>
                 </div>
 
                 <div className="space-y-6">
                     {/* Account Section */}
                     <div className="space-y-4">
-                        <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                        <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-zinc-800 rounded-xl border border-gray-100 dark:border-zinc-700">
                             <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-green-500 rounded-full flex items-center justify-center">
                                 <User className="text-white" size={20} />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-900 truncate">
+                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                                     {userEmail || "Not signed in"}
                                 </p>
-                                <p className="text-xs text-gray-500">Account</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">Account</p>
                             </div>
                         </div>
 
@@ -95,7 +95,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     </div>
 
                     {/* Danger Zone */}
-                    <div className="pt-4 border-t border-gray-200">
+                    <div className="pt-4 border-t border-gray-200 dark:border-zinc-700">
                         <Button
                             variant="ghost"
                             className="w-full gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
