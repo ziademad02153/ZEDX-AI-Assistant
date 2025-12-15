@@ -2,11 +2,11 @@ import Link from "next/link";
 
 export function Footer() {
     return (
-        <footer className="bg-gray-50 border-t border-gray-200 py-12">
+        <footer className="bg-gray-50 dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-800 py-12">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="space-y-4 col-span-1 md:col-span-4 text-center">
-                        <h3 className="font-bold text-lg text-gray-900">ZEDX-AI</h3>
+                        <h3 className="font-bold text-lg text-gray-900 dark:text-white">ZEDX-AI</h3>
                         <p className="text-sm text-gray-600 max-w-md mx-auto">
                             Your real-time AI interview assistant. Ace your next interview with confidence.
                         </p>
@@ -22,7 +22,7 @@ export function Footer() {
                     </Link>
                 </div>
 
-                <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
+                <div className="mt-8 pt-8 border-t border-gray-200 dark:border-zinc-800 text-center text-sm text-gray-500 dark:text-gray-400">
                     © {new Date().getFullYear()} ZEDX-AI. All rights reserved.
                 </div>
             </div>

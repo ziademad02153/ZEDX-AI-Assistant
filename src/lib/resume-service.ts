@@ -25,10 +25,16 @@ export const resumeService = {
         return data as Resume[];
     },
 
-    // Create a new resume
+    // Create a new resume (max 10 per user)
     createResume: async (name: string, content: string): Promise<Resume> => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) throw new Error("User not authenticated");
+
+        // Check resume limit
+        const existingResumes = await resumeService.getUserResumes();
+        if (existingResumes.length >= 10) {
+            throw new Error("Maximum of 10 resumes allowed. Please delete an existing resume first.");
+        }
 
         const { data, error } = await supabase
             .from('resumes')
