@@ -10,12 +10,20 @@ export function middleware(request: NextRequest) {
         // Check for auth_token cookie
         const token = request.cookies.get('auth_token');
 
-        if (!token) {
+        if (!token || !token.value) {
             // Redirect to login if no token found
             const loginUrl = new URL('/login', request.url);
-            // Add a return URL to redirect back after login (optional enhancement)
             loginUrl.searchParams.set('from', request.nextUrl.pathname);
             return NextResponse.redirect(loginUrl);
+        }
+
+        // Basic token format validation (should be 32 chars)
+        // Full validation happens client-side with Supabase
+        if (token.value.length < 20) {
+            // Invalid token format, clear it and redirect
+            const response = NextResponse.redirect(new URL('/login', request.url));
+            response.cookies.delete('auth_token');
+            return response;
         }
     }
 

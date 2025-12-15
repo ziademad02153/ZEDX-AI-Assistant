@@ -16,13 +16,31 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "No file provided" }, { status: 400 });
         }
 
+        // Security: Validate file type
+        const allowedTypes = ['application/pdf'];
+        if (!allowedTypes.includes(file.type)) {
+            return NextResponse.json({ error: "Only PDF files are allowed" }, { status: 400 });
+        }
+
+        // Security: Limit file size to 5MB
+        const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+        if (file.size > MAX_SIZE) {
+            return NextResponse.json({ error: "File size must be less than 5MB" }, { status: 400 });
+        }
+
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
         const text = await parsePdfBuffer(buffer);
 
+        // Sanitize output - remove potentially harmful content
+        const sanitizedText = text
+            .replace(/<script[^>]*>.*?<\/script>/gi, '')
+            .replace(/<[^>]+>/g, '')
+            .trim();
+
         return NextResponse.json({
-            text: text,
+            text: sanitizedText,
             success: true
         });
 
