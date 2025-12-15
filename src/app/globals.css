@@ -20,6 +20,23 @@ body {
   font-family: var(--font-sans), sans-serif;
 }
 
+/* Utility classes for Tailwind */
+.bg-background {
+  background-color: var(--background);
+}
+
+.bg-card {
+  background-color: var(--card);
+}
+
+.text-foreground {
+  color: var(--foreground);
+}
+
+.text-card-foreground {
+  color: var(--card-foreground);
+}
+
 /* Custom Animations */
 @keyframes float {
 

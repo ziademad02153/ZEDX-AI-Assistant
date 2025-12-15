@@ -91,7 +91,7 @@ export default function DashboardLayout({
     );
 
     return (
-        <div className="min-h-screen bg-background flex flex-col transition-colors duration-300">
+        <div className="min-h-screen bg-white dark:bg-black flex flex-col transition-colors duration-300">
             <Navbar />
             <SettingsDialog open={showSettings} onOpenChange={setShowSettings} />
 
@@ -122,7 +122,7 @@ export default function DashboardLayout({
             <div className="flex flex-1 pt-20 container mx-auto px-4 gap-8">
                 {/* Desktop Sidebar */}
                 <aside className="w-64 hidden md:block py-8">
-                    <div className="bg-card rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-4 sticky top-24 transition-colors duration-300">
+                    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-4 sticky top-24 transition-colors duration-300">
                         <nav className="space-y-2">
                             <NavItems />
                         </nav>
