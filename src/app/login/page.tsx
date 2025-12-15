@@ -28,6 +28,25 @@ export default function LoginPage() {
         otp: ""
     });
 
+    // Password strength calculation
+    const getPasswordStrength = (password: string): { level: number; text: string; color: string } => {
+        if (!password) return { level: 0, text: "", color: "" };
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (password.length >= 12) score++;
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+        if (/\d/.test(password)) score++;
+        if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+
+        if (score <= 1) return { level: 1, text: "Weak", color: "bg-red-500" };
+        if (score <= 2) return { level: 2, text: "Fair", color: "bg-orange-500" };
+        if (score <= 3) return { level: 3, text: "Good", color: "bg-yellow-500" };
+        if (score <= 4) return { level: 4, text: "Strong", color: "bg-green-500" };
+        return { level: 5, text: "Very Strong", color: "bg-emerald-600" };
+    };
+
+    const passwordStrength = getPasswordStrength(formData.password);
+
     // Auto-clear success/error on mode switch
     useEffect(() => {
         setError(null);
@@ -53,11 +72,24 @@ export default function LoginPage() {
         checkAuth();
     }, []);
 
+
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
         setSuccess(null);
+
+        // Email validation
+        if (mode !== "verify" && !validateEmail(formData.email)) {
+            setError("Please enter a valid email address");
+            setIsLoading(false);
+            return;
+        }
 
         try {
             if (mode === "signup") {
@@ -84,6 +116,19 @@ export default function LoginPage() {
         } catch (err: any) {
             console.error("Auth error:", err);
             setError("An unexpected error occurred.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleResendCode = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            await signUp(formData.email, formData.password, formData.name);
+            setSuccess("Verification code resent! Check your email.");
+        } catch (err: any) {
+            setError(err.message || "Failed to resend code");
         } finally {
             setIsLoading(false);
         }
@@ -300,6 +345,24 @@ export default function LoginPage() {
                                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                     </button>
                                 </div>
+
+                                {/* Password Strength Indicator - only show on signup */}
+                                {mode === 'signup' && formData.password && (
+                                    <div className="space-y-1 mt-2">
+                                        <div className="flex gap-1">
+                                            {[1, 2, 3, 4, 5].map((i) => (
+                                                <div
+                                                    key={i}
+                                                    className={`h-1 flex-1 rounded-full transition-all ${i <= passwordStrength.level ? passwordStrength.color : 'bg-gray-200'
+                                                        }`}
+                                                />
+                                            ))}
+                                        </div>
+                                        <p className={`text-xs ${passwordStrength.color.replace('bg-', 'text-')}`}>
+                                            {passwordStrength.text}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         )}
 
@@ -321,6 +384,15 @@ export default function LoginPage() {
                                 <p className="text-xs text-center text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-100">
                                     We sent a code to <span className="font-medium text-gray-900">{formData.email}</span>. <br />Check your spam folder if it doesn't appear.
                                 </p>
+                                <button
+                                    type="button"
+                                    onClick={handleResendCode}
+                                    disabled={isLoading}
+                                    className="w-full text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center justify-center gap-2 py-2 hover:bg-emerald-50 rounded-lg transition-colors disabled:opacity-50"
+                                >
+                                    <RefreshCw size={14} className={isLoading ? "animate-spin" : ""} />
+                                    Resend Verification Code
+                                </button>
                             </div>
                         )}
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, FileText, Calendar, ArrowRight, RefreshCw } from "lucide-react";
+import { Plus, Trash2, FileText, Calendar, ArrowRight, RefreshCw, AlertCircle } from "lucide-react";
 import { resumeService, Resume } from "@/lib/resume-service";
 import { useRouter } from "next/navigation";
 
@@ -14,6 +14,7 @@ export default function MyResumesPage() {
     const [newResumeName, setNewResumeName] = useState("");
     const [newResumeContent, setNewResumeContent] = useState("");
     const [isUploading, setIsUploading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         loadResumes();
@@ -22,6 +23,7 @@ export default function MyResumesPage() {
     const loadResumes = async () => {
         try {
             setIsLoading(true);
+            setError(null);
             const data = await resumeService.getUserResumes();
             setResumes(data);
         } catch (error: any) {
@@ -29,6 +31,7 @@ export default function MyResumesPage() {
                 router.push("/login");
             } else {
                 console.error("Failed to load resumes:", error);
+                setError("Failed to load resumes. Please try again.");
             }
         } finally {
             setIsLoading(false);
@@ -115,6 +118,13 @@ export default function MyResumesPage() {
                     {isAdding ? "Cancel" : <><Plus size={20} /> Add New Resume</>}
                 </Button>
             </div>
+
+            {error && (
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 p-4 rounded-xl flex items-center gap-2">
+                    <AlertCircle size={20} />
+                    {error}
+                </div>
+            )}
 
             {isAdding && (
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 space-y-4 animate-in fade-in slide-in-from-top-4">

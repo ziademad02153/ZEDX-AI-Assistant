@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Clock, Trash2, FileText, AlertCircle, ChevronDown, ChevronUp, Trash } from "lucide-react";
+import { Clock, Trash2, FileText, AlertCircle, ChevronDown, ChevronUp, Trash, Loader2 } from "lucide-react";
 import { interviewService, Interview } from "@/lib/interview-service";
 import { cn } from "@/lib/utils";
 
@@ -53,13 +53,16 @@ export default function InterviewHistoryPage() {
         if (!confirm("Are you sure you want to delete ALL interviews? This cannot be undone!")) return;
 
         try {
-            for (const interview of interviews) {
-                await interviewService.deleteInterview(interview.id);
-            }
+            // Use Promise.all for faster parallel deletion
+            await Promise.all(
+                interviews.map(interview => interviewService.deleteInterview(interview.id))
+            );
             setInterviews([]);
         } catch (e) {
             console.error("Failed to delete all:", e);
             alert("Failed to delete some interviews");
+            // Reload to show actual state
+            loadInterviews();
         }
     };
 
@@ -112,8 +115,8 @@ export default function InterviewHistoryPage() {
             )}
 
             {isLoading ? (
-                <div className="text-center py-12 text-gray-500">
-                    Loading interviews...
+                <div className="flex items-center justify-center py-12">
+                    <Loader2 className="w-8 h-8 animate-spin text-green-600" />
                 </div>
             ) : interviews.length === 0 ? (
                 <div className="text-center py-12 bg-gray-50 dark:bg-zinc-800 rounded-2xl">
