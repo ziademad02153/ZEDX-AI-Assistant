@@ -194,7 +194,7 @@ export default function NewInterviewPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {/* Job Description */}
-                <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
+                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
                     <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
                         <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
                             <BriefcaseIcon />
@@ -213,7 +213,7 @@ export default function NewInterviewPage() {
                 {/* Resume & Settings */}
                 <div className="space-y-6">
                     {/* Resume Section */}
-                    <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
+                    <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
                         <div className="flex flex-wrap items-center justify-between gap-2 text-lg font-semibold text-gray-800 dark:text-white">
                             <div className="flex items-center gap-3">
                                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
@@ -269,7 +269,7 @@ export default function NewInterviewPage() {
                     </div>
 
                     {/* AI Model Selection - with Brand Logo Images */}
-                    <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
+                    <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
                         <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
                             <Image src="/AI.jpg" alt="AI Model" width={36} height={36} className="rounded-xl" />
                             <h3>AI Model</h3>
@@ -310,7 +310,7 @@ export default function NewInterviewPage() {
 
                     {/* Type & Language */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
+                        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
                             <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
                                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
                                     <SparklesIcon />
@@ -318,17 +318,17 @@ export default function NewInterviewPage() {
                                 <h3>Type</h3>
                             </div>
                             <select
-                                className="w-full p-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 dark:text-white transition-colors"
+                                className="w-full p-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900 dark:text-white transition-colors"
                                 value={interviewType}
                                 onChange={(e) => setInterviewType(e.target.value)}
                             >
-                                <option value="Behavioral">Behavioral</option>
-                                <option value="Technical">Technical</option>
-                                <option value="System Design">System Design</option>
+                                <option value="Behavioral" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white">Behavioral</option>
+                                <option value="Technical" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white">Technical</option>
+                                <option value="System Design" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white">System Design</option>
                             </select>
                         </div>
 
-                        <div className="bg-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
+                        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
                             <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
                                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
                                     <GlobeIcon />
@@ -336,12 +336,12 @@ export default function NewInterviewPage() {
                                 <h3>Language</h3>
                             </div>
                             <select
-                                className="w-full p-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 dark:text-white transition-colors"
+                                className="w-full p-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white transition-colors"
                                 value={language}
                                 onChange={(e) => setLanguage(e.target.value)}
                             >
                                 {SUPPORTED_LANGUAGES.map((lang) => (
-                                    <option key={lang.code} value={lang.code}>
+                                    <option key={lang.code} value={lang.code} className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white">
                                         {lang.native}
                                     </option>
                                 ))}
