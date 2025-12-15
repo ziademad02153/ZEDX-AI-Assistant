@@ -113,10 +113,10 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen w-full grid lg:grid-cols-2">
+        <div className="min-h-screen w-full grid md:grid-cols-2">
 
             {/* Left Side - Brand/Marketing Area (Green/Teal Theme) */}
-            <div className="hidden lg:flex flex-col justify-between bg-zinc-950 relative overflow-hidden p-12 text-white">
+            <div className="hidden md:flex flex-col justify-between bg-zinc-950 relative overflow-hidden p-8 lg:p-12 text-white">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-950 to-teal-950 z-0" />
                 {/* Decorative circles */}
                 <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl opacity-50" />
@@ -184,7 +184,7 @@ export default function LoginPage() {
                 <div className="w-full max-w-sm space-y-8">
 
                     {/* Header Mobile Brand (visible only on small) */}
-                    <div className="lg:hidden text-center mb-6">
+                    <div className="md:hidden text-center mb-6">
                         <div className="relative w-14 h-14 mx-auto mb-3 overflow-hidden rounded-lg">
                             <Image
                                 src="/zedx-logo.png"
