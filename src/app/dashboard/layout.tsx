@@ -2,18 +2,42 @@
 
 import { Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Video, FileText, Settings, LogOut, Clock, Menu, X } from "lucide-react";
+import { LayoutDashboard, Video, FileText, Settings, LogOut, Clock, Menu, X, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SettingsDialog } from "@/components/settings-dialog";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const router = useRouter();
     const [showSettings, setShowSettings] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const { data } = await supabase.auth.getSession();
+            if (!data.session) {
+                router.push("/login");
+                return;
+            }
+            setIsAuthChecking(false);
+        };
+        checkAuth();
+    }, [router]);
+
+    if (isAuthChecking) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader2 className="w-10 h-10 animate-spin text-green-600" />
+            </div>
+        );
+    }
 
     const NavItems = () => (
         <>
