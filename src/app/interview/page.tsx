@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, Video, VideoOff, Send, Loader2, AlertCircle, CheckCircle, Settings, Eye, EyeOff, Sparkles, Trash2, StopCircle, Moon, Sun, RefreshCw, Volume2 } from "lucide-react";
+import { Mic, MicOff, Video, VideoOff, Send, Loader2, AlertCircle, CheckCircle, Settings, Eye, EyeOff, Sparkles, Trash2, StopCircle, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { SettingsDialog } from "@/components/settings-dialog";
@@ -40,13 +40,14 @@ export default function InterviewPage() {
     // Load Settings
     useEffect(() => {
         const loadSettings = () => {
-            // No API key needed - server has Groq configuration
-
-            const savedTheme = localStorage.getItem("theme");
-            if (savedTheme === "dark") setIsDarkMode(true);
-            else setIsDarkMode(false);
-
-            // Voice speed is fixed at max (2.0)
+            try {
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme === "dark") setIsDarkMode(true);
+                else setIsDarkMode(false);
+            } catch (e) {
+                // localStorage unavailable
+                setIsDarkMode(false);
+            }
         };
 
         loadSettings();
@@ -64,11 +65,16 @@ export default function InterviewPage() {
 
     // Load context from local storage
     useEffect(() => {
-        const savedType = localStorage.getItem("interview_context_type") || "General";
-        const savedJD = localStorage.getItem("interview_context_jd") || "";
-        const savedResume = localStorage.getItem("interview_context_resume") || "";
-        const savedLang = localStorage.getItem("interview_context_lang") || "en-US";
-        setInterviewContext({ type: savedType, jd: savedJD, resume: savedResume, lang: savedLang });
+        try {
+            const savedType = localStorage.getItem("interview_context_type") || "General";
+            const savedJD = localStorage.getItem("interview_context_jd") || "";
+            const savedResume = localStorage.getItem("interview_context_resume") || "";
+            const savedLang = localStorage.getItem("interview_context_lang") || "en-US";
+            setInterviewContext({ type: savedType, jd: savedJD, resume: savedResume, lang: savedLang });
+        } catch (e) {
+            // localStorage unavailable (private mode)
+            setInterviewContext({ type: "General", jd: "", resume: "", lang: "en-US" });
+        }
     }, []);
 
     // Initialize Camera
@@ -309,7 +315,10 @@ export default function InterviewPage() {
 
         try {
             // Get user's selected model
-            const selectedModel = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
+            let selectedModel = "llama-3.1-8b-instant";
+            try {
+                selectedModel = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
+            } catch (e) { /* localStorage unavailable */ }
 
             // Construct the prompt (Unified for all providers)
             const systemPrompt = `
@@ -622,7 +631,19 @@ export default function InterviewPage() {
                         </div>
                     </div>
 
-                    <div className="flex-1 rounded-xl p-6 overflow-y-auto prose prose-lg max-w-none bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors">
+                    <div className="flex-1 rounded-xl p-6 overflow-y-auto prose prose-lg max-w-none bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors relative">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="absolute top-2 right-2 h-8 w-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                            onClick={() => {
+                                navigator.clipboard.writeText(aiResponse.replace(/\*\*/g, '').replace(/\*/g, ''));
+                                alert("Copied to clipboard!");
+                            }}
+                            title="Copy to clipboard"
+                        >
+                            <Copy size={16} />
+                        </Button>
                         <div className="whitespace-pre-wrap leading-loose text-lg">
                             {aiResponse}
                         </div>

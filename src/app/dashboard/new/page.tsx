@@ -119,8 +119,10 @@ export default function NewInterviewPage() {
         loadResumes();
 
         // Load saved model preference
-        const savedModel = localStorage.getItem("selected_ai_model");
-        if (savedModel) setSelectedModel(savedModel);
+        try {
+            const savedModel = localStorage.getItem("selected_ai_model");
+            if (savedModel) setSelectedModel(savedModel);
+        } catch (e) { /* localStorage unavailable */ }
     }, []);
 
     // Validation - only need job description and resume now (no API key!)
@@ -159,11 +161,15 @@ export default function NewInterviewPage() {
 
         setIsLoading(true);
         // Save context to localStorage
-        localStorage.setItem("interview_context_jd", jobDescription);
-        localStorage.setItem("interview_context_resume", resume);
-        localStorage.setItem("interview_context_type", interviewType);
-        localStorage.setItem("interview_context_lang", language);
-        localStorage.setItem("selected_ai_model", selectedModel);
+        try {
+            localStorage.setItem("interview_context_jd", jobDescription);
+            localStorage.setItem("interview_context_resume", resume);
+            localStorage.setItem("interview_context_type", interviewType);
+            localStorage.setItem("interview_context_lang", language);
+            localStorage.setItem("selected_ai_model", selectedModel);
+        } catch (e) {
+            console.warn("Could not save to localStorage");
+        }
 
         // Navigate to interview
         setTimeout(() => {
@@ -246,7 +252,7 @@ export default function NewInterviewPage() {
                                         type="file"
                                         id="resume-upload"
                                         className="hidden"
-                                        accept=".pdf,.txt,.doc,.docx"
+                                        accept=".pdf"
                                         onChange={handleFileUpload}
                                     />
                                     <label htmlFor="resume-upload">
