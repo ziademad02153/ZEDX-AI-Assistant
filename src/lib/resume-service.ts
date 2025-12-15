@@ -46,10 +46,14 @@ export const resumeService = {
 
     // Delete a resume
     deleteResume: async (id: string): Promise<void> => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error("User not authenticated");
+
         const { error } = await supabase
             .from('resumes')
             .delete()
-            .eq('id', id);
+            .eq('id', id)
+            .eq('user_id', user.id); // Security: ensure user owns this resume
 
         if (error) throw error;
     }

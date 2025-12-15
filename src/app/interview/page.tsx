@@ -73,20 +73,24 @@ export default function InterviewPage() {
 
     // Initialize Camera
     useEffect(() => {
-        let stream: MediaStream | null = null;
+        let currentStream: MediaStream | null = null;
 
         const startCamera = async () => {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                currentStream = await navigator.mediaDevices.getUserMedia({ video: true });
                 if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
+                    videoRef.current.srcObject = currentStream;
                 }
                 setSystemStatus(prev => ({ ...prev, camera: true }));
                 setError(null);
             } catch (err) {
                 console.error("Error accessing camera:", err);
                 setSystemStatus(prev => ({ ...prev, camera: false }));
-                // Don't show error if camera is just hidden or denied, unless user explicitly tried to turn it on
+                // Cleanup any partial stream on error
+                if (currentStream) {
+                    currentStream.getTracks().forEach(track => track.stop());
+                    currentStream = null;
+                }
             }
         };
 
@@ -97,8 +101,11 @@ export default function InterviewPage() {
         }
 
         return () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+            if (videoRef.current) {
+                videoRef.current.srcObject = null;
             }
         };
     }, [isCameraOn, isCameraVisible]);
@@ -207,10 +214,11 @@ export default function InterviewPage() {
                 let interim = '';
                 let final = '';
 
+                // Only process new results to avoid duplication
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
+                    const result = event.results[i];
+                    if (result.isFinal) {
                         // Get the best transcript (highest confidence)
-                        const result = event.results[i];
                         let bestTranscript = result[0].transcript;
                         let bestConfidence = result[0].confidence || 0;
 
@@ -220,16 +228,24 @@ export default function InterviewPage() {
                                 bestTranscript = result[j].transcript;
                             }
                         }
-                        final += bestTranscript;
+                        final += bestTranscript.trim();
                     } else {
-                        interim += event.results[i][0].transcript;
+                        interim += result[0].transcript;
                     }
                 }
 
                 if (final) {
-                    setTranscript(prev => prev + " " + final);
-                    setInterimTranscript(""); // Clear interim when final is added
-                } else {
+                    // Avoid duplicate words by checking if the final text was just added
+                    setTranscript(prev => {
+                        const trimmedFinal = final.trim();
+                        if (prev.trim().endsWith(trimmedFinal)) {
+                            return prev; // Skip duplicate
+                        }
+                        return prev + (prev ? " " : "") + trimmedFinal;
+                    });
+                    setInterimTranscript("");
+                }
+                if (interim) {
                     setInterimTranscript(interim);
                 }
             };
@@ -345,6 +361,18 @@ export default function InterviewPage() {
             setAiResponse(text);
             // Text-to-speech disabled - text only mode
             isAiSpeakingRef.current = false;
+
+            // Restart speech recognition after AI finishes
+            if (isRecording && recognitionRef.current) {
+                setTimeout(() => {
+                    try {
+                        recognitionRef.current?.start();
+                        console.log("[Speech] Restarted after AI response");
+                    } catch (e) {
+                        console.log("[Speech] Could not restart:", e);
+                    }
+                }, 300);
+            }
 
         } catch (error: any) {
             console.error("Error generating AI response:", error);

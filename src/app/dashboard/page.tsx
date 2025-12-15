@@ -67,8 +67,8 @@ export default function DashboardPage() {
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold" style={{ color: 'inherit' }}>Dashboard</h1>
-                    <p style={{ color: 'inherit', opacity: 0.7 }}>Welcome back! Ready for your next interview?</p>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+                    <p className="text-gray-600 dark:text-gray-300">Welcome back! Ready for your next interview?</p>
                 </div>
                 <Link href="/dashboard/new">
                     <Button variant="gradient" className="shadow-lg shadow-green-900/20">

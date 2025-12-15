@@ -32,9 +32,20 @@ export const useAuth = create<AuthState>((set) => ({
         }
       });
 
+      // Store cleanup function for proper unsubscribe
       if (typeof window !== 'undefined') {
-        window.addEventListener('beforeunload', () => {
+        // Use a named function so we can remove it properly
+        const cleanup = () => {
           subscription?.unsubscribe();
+          window.removeEventListener('beforeunload', cleanup);
+        };
+        window.addEventListener('beforeunload', cleanup);
+
+        // Also cleanup on page visibility change (for SPA navigation)
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'hidden') {
+            // Don't unsubscribe on visibility change, just on unload
+          }
         });
       }
     } catch (error) {
