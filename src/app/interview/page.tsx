@@ -518,7 +518,7 @@ export default function InterviewPage() {
                             <Trash2 size={16} />
                         </Button>
                     </div>
-                    <div className="flex-1 rounded-xl p-4 overflow-y-auto text-sm font-mono leading-relaxed bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors">
+                    <div className="flex-1 rounded-xl p-4 overflow-y-auto text-base font-sans leading-loose bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 transition-colors">
                         {transcript}
                         {interimTranscript && (
                             <span className="text-gray-500 dark:text-gray-400 italic">
@@ -598,8 +598,8 @@ export default function InterviewPage() {
                         </div>
                     </div>
 
-                    <div className="flex-1 rounded-xl p-6 overflow-y-auto prose prose-sm max-w-none bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-300 prose-invert transition-colors">
-                        <div className="whitespace-pre-wrap leading-relaxed">
+                    <div className="flex-1 rounded-xl p-6 overflow-y-auto prose prose-lg max-w-none bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors">
+                        <div className="whitespace-pre-wrap leading-loose text-lg">
                             {aiResponse}
                         </div>
                     </div>
