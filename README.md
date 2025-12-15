@@ -98,11 +98,20 @@ sequenceDiagram
 
 ## Screenshots
 
-| **Dashboard** | **Interview Interface** |
-|:---:|:---:|
-| ![Dashboard](public/dashboard-preview.png) | ![Interview](public/interview-preview.png) |
+### 🏠 Get Started Page
+![Get Started](/public/Get%20Started%20page.png)
 
-*(Note: Add your own screenshots to `public/` folder)*
+### 🔐 Sign In Page
+![Sign In](/public/sign%20in%20page.png)
+
+### 📊 Dashboard
+![Dashboard](/public/Dashboard.png)
+
+### ⚙️ Setup New Interview
+![Setup New Interview](/public/Setup%20New%20Interview.png)
+
+### 🎤 Interview Interface
+![Interview Interface](/public/Interview%20Interface.png)
 
 ## Getting Started
 
