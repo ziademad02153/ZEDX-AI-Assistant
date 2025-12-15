@@ -68,7 +68,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-                    <p className="text-gray-500 dark:text-gray-400">Welcome back! Ready for your next interview?</p>
+                    <p className="text-gray-500 dark:text-gray-200">Welcome back! Ready for your next interview?</p>
                 </div>
                 <Link href="/dashboard/new">
                     <Button variant="gradient" className="shadow-lg shadow-green-900/20">
