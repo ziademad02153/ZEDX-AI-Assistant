@@ -5,11 +5,23 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
 
-export function generateStrongPassword(length: number = 12): string {
+export function generateStrongPassword(length: number = 16): string {
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-    let retVal = "";
-    for (let i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
+    const randomValues = new Uint32Array(length);
+
+    // Use cryptographically secure random
+    if (typeof window !== 'undefined' && window.crypto) {
+        window.crypto.getRandomValues(randomValues);
+    } else {
+        // Fallback for server-side
+        for (let i = 0; i < length; i++) {
+            randomValues[i] = Math.floor(Math.random() * charset.length);
+        }
     }
-    return retVal;
+
+    let password = "";
+    for (let i = 0; i < length; i++) {
+        password += charset.charAt(randomValues[i] % charset.length);
+    }
+    return password;
 }

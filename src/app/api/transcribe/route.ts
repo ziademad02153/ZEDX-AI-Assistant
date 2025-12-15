@@ -4,16 +4,22 @@ export async function POST(request: Request) {
     try {
         const formData = await request.formData();
         const file = formData.get("file") as Blob;
-        const apiKey = formData.get("apiKey") as string;
 
-        if (!file || !apiKey) {
-            return NextResponse.json({ error: "Missing file or API key" }, { status: 400 });
+        if (!file) {
+            return NextResponse.json({ error: "Missing file" }, { status: 400 });
         }
 
-        // Create a new FormData for Groq, excluding the apiKey field
+        // Use server-side API key instead of client-provided one (more secure)
+        const apiKey = process.env.GROQ_API_KEY;
+
+        if (!apiKey) {
+            return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+        }
+
+        // Create a new FormData for Groq
         const groqFormData = new FormData();
         groqFormData.append("file", file);
-        groqFormData.append("model", formData.get("model") || "whisper-large-v3");
+        groqFormData.append("model", formData.get("model")?.toString() || "whisper-large-v3");
         if (formData.get("language")) {
             groqFormData.append("language", formData.get("language") as string);
         }
@@ -28,9 +34,11 @@ export async function POST(request: Request) {
         });
 
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error("[Transcribe API] Groq Error:", errorText);
-            return NextResponse.json({ error: `Groq Error: ${response.status} - ${errorText}` }, { status: response.status });
+            console.error("[Transcribe API] Groq Error:", response.status);
+            const isDev = process.env.NODE_ENV === 'development';
+            return NextResponse.json({
+                error: isDev ? `Groq Error: ${response.status}` : "Transcription failed. Please try again."
+            }, { status: response.status });
         }
 
         const data = await response.json();
@@ -38,6 +46,9 @@ export async function POST(request: Request) {
 
     } catch (error: any) {
         console.error("[Transcribe API] Internal Error:", error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        const isDev = process.env.NODE_ENV === 'development';
+        return NextResponse.json({
+            error: isDev ? error.message : "An error occurred. Please try again."
+        }, { status: 500 });
     }
 }

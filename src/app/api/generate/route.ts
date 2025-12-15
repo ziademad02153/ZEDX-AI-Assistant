@@ -45,6 +45,10 @@ export async function POST(request: Request) {
                     ? [{ role: "system", content: systemPrompt }, ...groqMessages]
                     : groqMessages;
 
+                // Add timeout of 30 seconds
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+
                 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
                     headers: {
@@ -56,8 +60,11 @@ export async function POST(request: Request) {
                         messages: finalMessages,
                         max_tokens: 1024,
                         temperature: 0.7
-                    })
+                    }),
+                    signal: controller.signal
                 });
+
+                clearTimeout(timeoutId);
 
                 const data = await response.json();
 
@@ -89,14 +96,17 @@ export async function POST(request: Request) {
         // All models failed
         return NextResponse.json({
             error: {
-                message: `AI temporarily unavailable. ${lastError?.message || "Please try again."}`
+                message: isDev
+                    ? `AI temporarily unavailable. ${lastError?.message || "Please try again."}`
+                    : "AI temporarily unavailable. Please try again later."
             }
         }, { status: 503 });
 
     } catch (error: any) {
         console.error("[API Generate] Internal Error:", error);
+        const isDevEnv = process.env.NODE_ENV === 'development';
         return NextResponse.json(
-            { error: { message: error.message || "Internal Server Error" } },
+            { error: { message: isDevEnv ? error.message : "An error occurred. Please try again." } },
             { status: 500 }
         );
     }

@@ -153,8 +153,8 @@ function AuthButtons() {
 
         checkAuth();
 
-        // Re-check periodically
-        const interval = setInterval(checkAuth, 5000);
+        // Re-check less frequently to reduce resource usage
+        const interval = setInterval(checkAuth, 60000);
         return () => clearInterval(interval);
     }, []);
 
