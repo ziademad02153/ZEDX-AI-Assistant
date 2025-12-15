@@ -79,6 +79,27 @@ export function Navbar() {
                             Dashboard
                         </Link>
                         <Link
+                            href="/dashboard/new"
+                            className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-green-600 dark:hover:text-green-400"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            New Interview
+                        </Link>
+                        <Link
+                            href="/dashboard/resumes"
+                            className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-green-600 dark:hover:text-green-400"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            My Resumes
+                        </Link>
+                        <Link
+                            href="/dashboard/history"
+                            className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-green-600 dark:hover:text-green-400"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Interview History
+                        </Link>
+                        <Link
                             href="/#features"
                             className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-green-600 dark:hover:text-green-400"
                             onClick={() => setIsMenuOpen(false)}
