@@ -98,19 +98,19 @@ sequenceDiagram
 
 ## Screenshots
 
-### 🏠 Get Started Page
+### Get Started Page
 ![Get Started](/public/Get%20Started%20page.png)
 
-### 🔐 Sign In Page
+### Sign In Page
 ![Sign In](/public/sign%20in%20page.png)
 
-### 📊 Dashboard
+### Dashboard
 ![Dashboard](/public/Dashboard.png)
 
-### ⚙️ Setup New Interview
+### Setup New Interview
 ![Setup New Interview](/public/Setup%20New%20Interview.png)
 
-### 🎤 Interview Interface
+### Interview Interface
 ![Interview Interface](/public/Interview%20Interface.png)
 
 ## Getting Started
