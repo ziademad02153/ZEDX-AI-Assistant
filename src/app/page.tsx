@@ -29,12 +29,12 @@ export default function Home() {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
-              <span className="text-gradient-fusion">ZEDX AI</span> - Ace Every Interview. <br />
-              <span className="text-gray-600 dark:text-gray-300 text-4xl md:text-5xl">Confidently. Discreetly.</span>
+              Ace Every Interview. <br />
+              <span className="text-gradient-fusion">Confidently. Discreetly.</span>
             </h1>
 
             <p className="text-xl text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-              ZEDX AI is your invisible AI assistant. Get real-time answers, tailored to your resume, directly on your screen during any video interview.
+              Your invisible AI assistant. Get real-time answers, tailored to your resume, directly on your screen during any video interview.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center mb-16">
