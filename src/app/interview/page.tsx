@@ -27,6 +27,10 @@ export default function InterviewPage() {
     const [interviewContext, setInterviewContext] = useState({ type: "", jd: "", resume: "", lang: "en-US" });
     const [isAutoMode, setIsAutoMode] = useState(false);
     const [debugLog, setDebugLog] = useState<string[]>([]);
+    const [lastTranscript, setLastTranscript] = useState<string>(""); // For retry functionality
+
+    // Constants
+    const MAX_TRANSCRIPT_LENGTH = 4000; // Limit transcript to prevent API issues
 
     // Settings State
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -243,7 +247,12 @@ export default function InterviewPage() {
                             if (prev.trim().endsWith(lastWord) && words.length === 1) {
                                 return prev; // Skip single word that already exists
                             }
-                            return prev + (prev ? ' ' : '') + cleanedFinal;
+                            const newTranscript = prev + (prev ? ' ' : '') + cleanedFinal;
+                            // Limit transcript length
+                            if (newTranscript.length > MAX_TRANSCRIPT_LENGTH) {
+                                return newTranscript.slice(-MAX_TRANSCRIPT_LENGTH); // Keep last 4000 chars
+                            }
+                            return newTranscript;
                         });
                     }
                     setInterimTranscript('');
@@ -293,14 +302,18 @@ export default function InterviewPage() {
         }
     }, [interviewContext.lang, isRecording]);
 
-    const getAiAnswer = async () => {
+    const getAiAnswer = async (retryTranscript?: string) => {
+        const transcriptToUse = retryTranscript || transcript;
+
         // No API key check needed - server has Groq configuration
-        if (!transcript.trim()) {
+        if (!transcriptToUse.trim()) {
             if (!isAutoMode) setError("No transcript to analyze. Please speak first.");
             return;
         }
 
-        const currentTranscript = transcript;
+        // Limit transcript length
+        const currentTranscript = transcriptToUse.slice(0, MAX_TRANSCRIPT_LENGTH);
+        setLastTranscript(currentTranscript); // Save for retry
         setTranscript("");
         setInterimTranscript(""); // Clear interim too
 
@@ -622,7 +635,7 @@ export default function InterviewPage() {
                             </Button>
                             <Button
                                 variant="gradient"
-                                onClick={getAiAnswer}
+                                onClick={() => getAiAnswer()}
                                 disabled={isLoading || !transcript}
                                 className="shadow-green-900/20 text-xs sm:text-sm"
                             >
@@ -632,18 +645,34 @@ export default function InterviewPage() {
                     </div>
 
                     <div className="flex-1 rounded-xl p-6 overflow-y-auto prose prose-lg max-w-none bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors relative">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="absolute top-2 right-2 h-8 w-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                            onClick={() => {
-                                navigator.clipboard.writeText(aiResponse.replace(/\*\*/g, '').replace(/\*/g, ''));
-                                alert("Copied to clipboard!");
-                            }}
-                            title="Copy to clipboard"
-                        >
-                            <Copy size={16} />
-                        </Button>
+                        <div className="absolute top-2 right-2 flex gap-1">
+                            {/* Retry Button - only shows when lastTranscript exists and there was an error */}
+                            {lastTranscript && error && (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 text-orange-500 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                                    onClick={() => getAiAnswer(lastTranscript)}
+                                    disabled={isLoading}
+                                    title="Retry last question"
+                                >
+                                    <AlertCircle size={16} />
+                                </Button>
+                            )}
+                            {/* Copy Button */}
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(aiResponse.replace(/\*\*/g, '').replace(/\*/g, ''));
+                                    alert("Copied to clipboard!");
+                                }}
+                                title="Copy to clipboard"
+                            >
+                                <Copy size={16} />
+                            </Button>
+                        </div>
                         <div className="whitespace-pre-wrap leading-loose text-lg">
                             {aiResponse}
                         </div>
