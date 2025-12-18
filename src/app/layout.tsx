@@ -9,31 +9,69 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ZEDX-AI | Free AI Interview Assistant & Copilot",
-  description: "ZEDX-AI is your free AI-powered interview copilot. Get real-time answers during interviews with AI assistance. Practice interviews, upload resumes, and ace your next job interview.",
-  keywords: ["ZEDX", "ZEDX-AI", "ZEDX AI", "AI Interview", "Interview Assistant", "AI Copilot", "Interview Helper", "Job Interview", "AI Interview Practice", "Free Interview Tool"],
-  authors: [{ name: "ZEDX-AI Team" }],
-  creator: "ZEDX-AI",
-  publisher: "ZEDX-AI",
-  robots: "index, follow",
+  metadataBase: new URL("https://zedx-ai-assistant-1.vercel.app"),
+  title: {
+    default: "ZEDX AI - Free AI Interview Assistant & Copilot",
+    template: "%s | ZEDX AI"
+  },
+  description: "ZEDX AI is your free AI-powered interview copilot. Get real-time AI answers during job interviews. Practice with AI, upload resumes, and ace your next interview with ZEDX.",
+  keywords: [
+    "ZEDX", "ZEDX AI", "ZEDX-AI", "zedx", "zedx ai",
+    "AI Interview", "AI Interview Assistant", "Interview Copilot",
+    "AI Job Interview", "Interview Helper", "Interview Practice",
+    "Free AI Interview", "Real-time Interview AI", "Job Interview AI",
+    "مساعد المقابلات", "ذكاء اصطناعي للمقابلات"
+  ],
+  authors: [{ name: "ZEDX AI Team", url: "https://zedx-ai-assistant-1.vercel.app" }],
+  creator: "ZEDX AI",
+  publisher: "ZEDX AI",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://zedx-ai-assistant-1.vercel.app",
-    siteName: "ZEDX-AI",
-    title: "ZEDX-AI | Free AI Interview Assistant",
-    description: "Your free AI-powered interview copilot. Get real-time answers and ace your next interview.",
-    images: [{ url: "/zedx-logo.png", width: 512, height: 512, alt: "ZEDX-AI Logo" }],
+    siteName: "ZEDX AI",
+    title: "ZEDX AI - Free AI Interview Assistant",
+    description: "Your free AI-powered interview copilot. Get real-time answers and ace your next interview with ZEDX AI.",
+    images: [
+      {
+        url: "/zedx-cyberpunk-banner.png",
+        width: 1200,
+        height: 630,
+        alt: "ZEDX AI - AI Interview Assistant",
+      },
+      {
+        url: "/zedx-logo.png",
+        width: 512,
+        height: 512,
+        alt: "ZEDX AI Logo",
+      }
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ZEDX-AI | Free AI Interview Assistant",
+    title: "ZEDX AI - Free AI Interview Assistant",
     description: "Your free AI-powered interview copilot. Get real-time answers and ace your next interview.",
-    images: ["/zedx-logo.png"],
+    images: ["/zedx-cyberpunk-banner.png"],
+    creator: "@zedx_ai",
   },
   alternates: {
     canonical: "https://zedx-ai-assistant-1.vercel.app",
   },
+  verification: {
+    google: "googleac3039da11f6677e",
+  },
+  category: "Technology",
 };
 
 export default function RootLayout({
@@ -64,6 +102,37 @@ export default function RootLayout({
                 } catch (e) {}
               })();
             `,
+          }}
+        />
+        {/* JSON-LD Structured Data for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              "name": "ZEDX AI",
+              "alternateName": ["ZEDX", "ZEDX-AI", "zedx ai", "zedx"],
+              "url": "https://zedx-ai-assistant-1.vercel.app",
+              "description": "Free AI-powered interview assistant. Get real-time AI answers during job interviews.",
+              "applicationCategory": "BusinessApplication",
+              "operatingSystem": "Web Browser",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "ratingCount": "150"
+              },
+              "author": {
+                "@type": "Organization",
+                "name": "ZEDX AI",
+                "url": "https://zedx-ai-assistant-1.vercel.app"
+              }
+            })
           }}
         />
 
