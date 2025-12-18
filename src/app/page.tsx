@@ -71,7 +71,9 @@ export default function Home() {
                   {/* Floating Chat Bubbles */}
                   <div className="relative z-10 w-full max-w-lg space-y-6">
                     <div className="flex gap-4 items-start animate-fade-in-up">
-                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl">👤</div>
+                      <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
+                        <Image src="/IIcon1.jpg" alt="Interviewer" width={40} height={40} className="object-cover" />
+                      </div>
                       <div className="bg-gray-100 rounded-2xl rounded-tl-none p-4 text-sm text-gray-700 shadow-sm max-w-[80%]">
                         Can you describe a time you had to optimize a slow database query?
                       </div>
