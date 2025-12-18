@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Instagram, Linkedin } from "lucide-react";
 
 export function Footer() {
     return (
@@ -6,24 +7,46 @@ export function Footer() {
             <div className="container mx-auto px-4 md:px-6">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="space-y-4 col-span-1 md:col-span-4 text-center">
-                        <h3 className="font-bold text-lg text-gray-900 dark:text-white">ZEDX-AI</h3>
-                        <p className="text-sm text-gray-600 max-w-md mx-auto">
+                        <h3 className="font-bold text-lg text-gray-900 dark:text-white">ZEDX AI</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 max-w-md mx-auto">
                             Your real-time AI interview assistant. Ace your next interview with confidence.
                         </p>
+
+                        {/* Social Media Links */}
+                        <div className="flex justify-center gap-4 pt-4">
+                            <a
+                                href="https://www.instagram.com/zedx.ai.assistant"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 text-white hover:scale-110 transition-transform"
+                                aria-label="Follow us on Instagram"
+                            >
+                                <Instagram size={20} />
+                            </a>
+                            <a
+                                href="https://www.linkedin.com/company/zedx-ai"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 rounded-full bg-[#0077B5] text-white hover:scale-110 transition-transform"
+                                aria-label="Follow us on LinkedIn"
+                            >
+                                <Linkedin size={20} />
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <div className="mt-8 flex justify-center gap-6 text-sm">
-                    <Link href="/privacy" className="text-gray-600 hover:text-teal-600 transition-colors">
+                    <Link href="/privacy" className="text-gray-600 dark:text-gray-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
                         Privacy Policy
                     </Link>
-                    <Link href="/terms" className="text-gray-600 hover:text-teal-600 transition-colors">
+                    <Link href="/terms" className="text-gray-600 dark:text-gray-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
                         Terms of Service
                     </Link>
                 </div>
 
                 <div className="mt-8 pt-8 border-t border-gray-200 dark:border-zinc-800 text-center text-sm text-gray-500 dark:text-gray-400">
-                    © {new Date().getFullYear()} ZEDX-AI. All rights reserved.
+                    © {new Date().getFullYear()} ZEDX AI. All rights reserved.
                 </div>
             </div>
         </footer>
