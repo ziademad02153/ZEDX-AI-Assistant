@@ -28,6 +28,21 @@ export default function Home() {
               AI Interview Copilot
             </div>
 
+            {/* Product Hunt Launch Badge */}
+            <a
+              href="https://www.producthunt.com/posts/zedx-ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium text-sm hover:scale-105 transition-transform shadow-lg animate-fade-in-up"
+              style={{ animationDelay: '0.2s' }}
+            >
+              <svg viewBox="0 0 26.245 26.256" className="w-5 h-5" fill="currentColor">
+                <path d="M26.245 13.128c0 7.253-5.875 13.128-13.128 13.128S0 20.381 0 13.128 5.875 0 13.117 0s13.128 5.875 13.128 13.128z" fill="#DA552F" />
+                <path d="M14.876 13.128h-3.72V9.2h3.72c1.083 0 1.97.886 1.97 1.97s-.886 1.958-1.97 1.958m0-6.603H8.53v13.22h2.626v-3.963h3.72c2.538 0 4.595-2.057 4.595-4.595s-2.057-4.663-4.595-4.663" fill="#fff" />
+              </svg>
+              Launching Dec 24 - Support Us!
+            </a>
+
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
               Ace Every Interview. <br />
               <span className="text-gradient-fusion">Confidently. Discreetly.</span>
