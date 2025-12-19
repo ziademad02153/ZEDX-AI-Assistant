@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Instagram, Linkedin } from "lucide-react";
+import { Instagram, Linkedin, Youtube } from "lucide-react";
 
 // X (Twitter) Logo SVG Component
 const XLogo = ({ size = 20 }: { size?: number }) => (
@@ -29,6 +29,15 @@ export function Footer() {
                                 aria-label="Follow us on Instagram"
                             >
                                 <Instagram size={20} />
+                            </a>
+                            <a
+                                href="https://www.youtube.com/@ZEDX-AI"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 rounded-full bg-[#FF0000] text-white hover:scale-110 transition-transform"
+                                aria-label="Subscribe on YouTube"
+                            >
+                                <Youtube size={20} />
                             </a>
                             <a
                                 href="https://www.linkedin.com/company/zedx-ai"
