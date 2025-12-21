@@ -225,7 +225,7 @@ export default function LoginPage() {
             </div>
 
             {/* Right Side - Clean Login Form (Light Theme) */}
-            <div className="flex items-center justify-center p-8 bg-white text-gray-900">
+            <div className="flex items-center justify-center p-8 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white">
                 <div className="w-full max-w-sm space-y-8">
 
                     {/* Header Mobile Brand (visible only on small) */}
@@ -238,11 +238,11 @@ export default function LoginPage() {
                                 className="object-cover"
                             />
                         </div>
-                        <h2 className="text-xl font-bold text-gray-900">ZEDX-AI</h2>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">ZEDX-AI</h2>
                     </div>
 
                     <div className="text-center">
-                        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+                        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
                             {mode === "signin" ? "Welcome back" : mode === "signup" ? "Get started free" : "Check your email"}
                         </h1>
                         <p className="text-sm text-gray-500 mt-3">
@@ -281,13 +281,13 @@ export default function LoginPage() {
 
                         {mode === 'signup' && (
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-gray-700">
+                                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                                     Full Name
                                 </label>
                                 <input
                                     type="text"
-                                    placeholder="John Doe"
-                                    className="flex h-11 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                                    placeholder="Mohamed Salah"
+                                    className="flex h-11 w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-4 py-3 text-sm text-gray-900 dark:text-white ring-offset-white dark:ring-offset-zinc-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     required
@@ -297,13 +297,13 @@ export default function LoginPage() {
 
                         {mode !== 'verify' && (
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-gray-700">
+                                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                                     Email
                                 </label>
                                 <input
                                     type="email"
-                                    placeholder="name@example.com"
-                                    className="flex h-11 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                                    placeholder="mohamed@example.com"
+                                    className="flex h-11 w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-4 py-3 text-sm text-gray-900 dark:text-white ring-offset-white dark:ring-offset-zinc-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     required
@@ -314,7 +314,7 @@ export default function LoginPage() {
                         {mode !== 'verify' && (
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <label className="text-sm font-semibold text-gray-700">
+                                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                                         Password
                                     </label>
                                     {mode === 'signup' && (
@@ -331,7 +331,7 @@ export default function LoginPage() {
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         placeholder="••••••••"
-                                        className="flex h-11 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10 font-mono transition-all"
+                                        className="flex h-11 w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-4 py-3 text-sm text-gray-900 dark:text-white ring-offset-white dark:ring-offset-zinc-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10 font-mono transition-all"
                                         value={formData.password}
                                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                         required
@@ -369,20 +369,20 @@ export default function LoginPage() {
                         {mode === 'verify' && (
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-gray-700">
+                                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                                         Verification Code
                                     </label>
                                     <input
                                         type="text"
                                         placeholder="123456"
-                                        className="flex h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-center tracking-[0.5em] font-mono text-xl transition-all"
+                                        className="flex h-12 w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-4 py-3 text-sm text-gray-900 dark:text-white ring-offset-white dark:ring-offset-zinc-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-center tracking-[0.5em] font-mono text-xl transition-all"
                                         value={formData.otp}
                                         onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
                                         required
                                     />
                                 </div>
                                 <p className="text-xs text-center text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                    We sent a code to <span className="font-medium text-gray-900">{formData.email}</span>. <br />Check your spam folder if it doesn't appear.
+                                    We sent a code to <span className="font-medium text-gray-900 dark:text-white">{formData.email}</span>. <br />Check your spam folder if it doesn't appear.
                                 </p>
                                 <button
                                     type="button"
@@ -414,7 +414,7 @@ export default function LoginPage() {
                                         <span className="w-full border-t border-gray-200" />
                                     </div>
                                     <div className="relative flex justify-center text-xs uppercase">
-                                        <span className="bg-white px-2 text-gray-400">Or continue with</span>
+                                        <span className="bg-white dark:bg-zinc-900 px-2 text-gray-400">Or continue with</span>
                                     </div>
                                 </div>
 
@@ -448,7 +448,7 @@ export default function LoginPage() {
                             <>
                                 Don't have an account?{" "}
                                 <button onClick={() => setMode('signup')} className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-all">
-                                    Sign up for free
+                                    Sign up
                                 </button>
                             </>
                         ) : mode === 'signup' ? (
@@ -465,20 +465,7 @@ export default function LoginPage() {
                         )}
                     </div>
 
-                    <div className="mt-8 text-center">
-                        <button
-                            onClick={() => {
-                                if (confirm("Reset local data?")) {
-                                    localStorage.clear();
-                                    document.cookie = "auth_token=; path=/; max-age=0";
-                                    window.location.reload();
-                                }
-                            }}
-                            className="text-[10px] text-gray-300 hover:text-red-400 transition-colors"
-                        >
-                            Reset
-                        </button>
-                    </div>
+
 
                 </div>
             </div>

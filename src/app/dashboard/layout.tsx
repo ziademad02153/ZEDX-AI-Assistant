@@ -29,6 +29,10 @@ export default function DashboardLayout({
             setIsAuthChecking(false);
         };
         checkAuth();
+
+        const handleOpenSettings = () => setShowSettings(true);
+        window.addEventListener('openSettings', handleOpenSettings);
+        return () => window.removeEventListener('openSettings', handleOpenSettings);
     }, [router]);
 
     if (isAuthChecking) {
@@ -65,14 +69,7 @@ export default function DashboardLayout({
                     Interview History
                 </Button>
             </Link>
-            <Button
-                variant="ghost"
-                className="w-full justify-start gap-3 text-gray-600 dark:text-gray-300 hover:text-green-700 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20"
-                onClick={() => { setShowSettings(true); setMobileMenuOpen(false); }}
-            >
-                <Settings size={20} />
-                Settings
-            </Button>
+
             <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
                 <Button
                     variant="ghost"

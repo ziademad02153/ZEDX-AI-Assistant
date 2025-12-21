@@ -94,11 +94,12 @@ export default function NewInterviewPage() {
     const router = useRouter();
     const [jobDescription, setJobDescription] = useState("");
     const [resume, setResume] = useState("");
-    const [interviewType, setInterviewType] = useState("Behavioral");
+    const [interviewType, setInterviewType] = useState("Technical");
     const [language, setLanguage] = useState("en-US");
     const [selectedModel, setSelectedModel] = useState("llama-3.1-8b-instant");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [savedResumes, setSavedResumes] = useState<Resume[]>([]);
 
     // Load saved resumes from Supabase
@@ -144,12 +145,28 @@ export default function NewInterviewPage() {
 
             if (!res.ok) throw new Error(data.error || "Failed to parse PDF");
 
+            console.log("API Response:", data); // DEBUG
+            console.log("Extracted Text Length:", data.text?.length); // DEBUG
+
             setResume(data.text);
             setError(null);
-            alert("Resume Uploaded & Parsed Successfully! 📄");
+            setSuccessMessage(`Resume "${file.name}" uploaded successfully!`); // Add success state if needed, or just let the filled textarea be the feedback
+
+            // Auto-save resume to Supabase
+            try {
+                const fileName = file.name.replace('.pdf', '').replace('.PDF', '');
+                await resumeService.createResume(fileName, data.text);
+
+                // Refresh saved resumes list
+                const updatedResumes = await resumeService.getUserResumes();
+                setSavedResumes(updatedResumes);
+            } catch (saveErr: any) {
+                // Silent fail or console warn for auto-save, don't nag user
+                console.warn("Could not auto-save resume:", saveErr);
+            }
         } catch (err: any) {
             console.error(err);
-            alert("Error: " + (err.message || "Upload Failed"));
+            setError(err.message || "Upload Failed. Please try converting to .txt");
         }
     };
 
@@ -192,9 +209,16 @@ export default function NewInterviewPage() {
             </div>
 
             {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 p-4 rounded-xl flex items-center gap-2 text-sm">
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 p-4 rounded-xl flex items-center gap-2 text-sm animate-fade-in-up">
                     <AlertCircle size={20} />
                     {error}
+                </div>
+            )}
+
+            {successMessage && (
+                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 p-4 rounded-xl flex items-center gap-2 text-sm animate-fade-in-up">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white text-xs">✓</div>
+                    {successMessage}
                 </div>
             )}
 
@@ -212,7 +236,7 @@ export default function NewInterviewPage() {
                         className="w-full h-64 p-4 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm resize-none dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
                         placeholder="e.g. Senior Frontend Engineer at Google..."
                         value={jobDescription}
-                        onChange={(e) => { setJobDescription(e.target.value); setError(null); }}
+                        onChange={(e) => { setJobDescription(e.target.value); setError(null); setSuccessMessage(null); }}
                     />
                 </div>
 
@@ -252,7 +276,7 @@ export default function NewInterviewPage() {
                                         type="file"
                                         id="resume-upload"
                                         className="hidden"
-                                        accept=".pdf"
+                                        accept=".pdf,.txt"
                                         onChange={handleFileUpload}
                                     />
                                     <label htmlFor="resume-upload">
@@ -270,14 +294,21 @@ export default function NewInterviewPage() {
                             className="w-full h-32 p-4 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
                             placeholder="Paste your full resume text here..."
                             value={resume}
-                            onChange={(e) => { setResume(e.target.value); setError(null); }}
+                            onChange={(e) => { setResume(e.target.value); setError(null); setSuccessMessage(null); }}
                         />
                     </div>
 
                     {/* AI Model Selection - with Brand Logo Images */}
                     <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
                         <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
-                            <Image src="/AI.jpg" alt="AI Model" width={36} height={36} className="rounded-xl" />
+                            <Image
+                                src="/AI.jpg"
+                                alt="AI Model"
+                                width={36}
+                                height={36}
+                                className="rounded-xl"
+                                style={{ width: 'auto', height: 'auto' }}
+                            />
                             <h3>AI Model</h3>
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400">Choose the AI model for your interview.</p>
@@ -302,6 +333,7 @@ export default function NewInterviewPage() {
                                                 width={36}
                                                 height={36}
                                                 className="object-contain"
+                                                style={{ width: "auto", height: "auto" }}
                                             />
                                         </div>
                                         <div>
@@ -328,7 +360,6 @@ export default function NewInterviewPage() {
                                 value={interviewType}
                                 onChange={(e) => setInterviewType(e.target.value)}
                             >
-                                <option value="Behavioral" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white">Behavioral</option>
                                 <option value="Technical" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white">Technical</option>
                                 <option value="System Design" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white">System Design</option>
                             </select>

@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-// @ts-ignore
-import PDFParser from "pdf2json";
+import { extractText } from "unpdf";
 
 // Force Node.js runtime
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-    console.log("PDF Parse Request (pdf2json) Received");
+    console.log("Resume Parse Request Received (unpdf)");
     try {
         const formData = await req.formData();
         const file = formData.get("file") as File;
@@ -17,13 +16,15 @@ export async function POST(req: NextRequest) {
         }
 
         // Security: Validate file type
-        const allowedTypes = ['application/pdf'];
-        if (!allowedTypes.includes(file.type)) {
-            return NextResponse.json({ error: "Only PDF files are allowed" }, { status: 400 });
+        const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+        const isTxt = file.type === 'text/plain' || file.name.toLowerCase().endsWith('.txt');
+
+        if (!isPdf && !isTxt) {
+            return NextResponse.json({ error: "Only PDF and TXT files are allowed." }, { status: 400 });
         }
 
         // Security: Limit file size to 5MB
-        const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+        const MAX_SIZE = 5 * 1024 * 1024;
         if (file.size > MAX_SIZE) {
             return NextResponse.json({ error: "File size must be less than 5MB" }, { status: 400 });
         }
@@ -31,13 +32,44 @@ export async function POST(req: NextRequest) {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        const text = await parsePdfBuffer(buffer);
+        let text = "";
 
-        // Sanitize output - remove potentially harmful content
-        const sanitizedText = text
+        // Handle PDF
+        if (isPdf) {
+            try {
+                // unpdf requires Uint8Array, not Buffer
+                const uint8Array = new Uint8Array(buffer);
+                const result = await extractText(uint8Array);
+                // result.text is an array of strings (one per page)
+                text = Array.isArray(result.text) ? result.text.join("\n") : (result.text || "");
+                console.log("PDF Parsed successfully with unpdf, length:", text?.length);
+            } catch (pdfError: any) {
+                console.error("PDF Parse Error:", pdfError);
+                return NextResponse.json({
+                    error: "Could not parse PDF: " + (pdfError.message || "Unknown error"),
+                    suggestion: "Please try copying your resume text and pasting it directly."
+                }, { status: 500 });
+            }
+        }
+        // Handle Text
+        else {
+            text = buffer.toString('utf-8');
+        }
+
+        // Sanitize and clean up text
+        const sanitizedText = (text || "")
             .replace(/<script[^>]*>.*?<\/script>/gi, '')
             .replace(/<[^>]+>/g, '')
+            .replace(/\s+/g, ' ')
+            .replace(/\n\s*\n/g, '\n\n')
             .trim();
+
+        if (sanitizedText.length < 10) {
+            return NextResponse.json({
+                error: "Could not extract readable text from the PDF.",
+                suggestion: "The PDF might be image-based. Please copy and paste text directly."
+            }, { status: 500 });
+        }
 
         return NextResponse.json({
             text: sanitizedText,
@@ -45,35 +77,10 @@ export async function POST(req: NextRequest) {
         });
 
     } catch (error: any) {
-        console.error("PDF Parsing Error:", error);
+        console.error("Parsing Error:", error);
         return NextResponse.json(
-            { error: "Failed to parse PDF: " + error.message },
+            { error: error.message || "Failed to parse file" },
             { status: 500 }
         );
     }
-}
-
-function parsePdfBuffer(buffer: Buffer): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const pdfParser = new (PDFParser as any)(null, 1); // 1 = text mode
-
-        pdfParser.on("pdfParser_dataError", (errData: any) => {
-            console.error(errData.parserError);
-            reject(new Error(errData.parserError));
-        });
-
-        pdfParser.on("pdfParser_dataReady", (pdfData: any) => {
-            // pdf2json returns raw text in URI encoded format sometimes, or just raw text depending on version.
-            // But with mode 1, it usually gives rawTextContent.
-            // Actually, the easiest way with pdf2json to get plain text is:
-            try {
-                const rawText = pdfParser.getRawTextContent();
-                resolve(rawText);
-            } catch (e) {
-                reject(e);
-            }
-        });
-
-        pdfParser.parseBuffer(buffer);
-    });
 }

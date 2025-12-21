@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff, Video, VideoOff, Send, Loader2, AlertCircle, CheckCircle, Settings, Eye, EyeOff, Sparkles, Trash2, StopCircle, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ReactMarkdown from 'react-markdown';
 
 import { SettingsDialog } from "@/components/settings-dialog";
 
@@ -19,13 +20,13 @@ export default function InterviewPage() {
     const [transcript, setTranscript] = useState("");
     const [interimTranscript, setInterimTranscript] = useState("");
     const [aiResponse, setAiResponse] = useState("## Ready to Interview\n\nI am your AI Copilot. I will listen to your interview and provide real-time answers.\n\n**Instructions:**\n1. Click the microphone to start listening.\n2. Speak your interview question.\n3. When you need an answer, click **Get Answer**.");
-    const [isCameraOn, setIsCameraOn] = useState(true);
+    const [isCameraOn, setIsCameraOn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isCameraVisible, setIsCameraVisible] = useState(false);
     const [systemStatus, setSystemStatus] = useState({ browser: true, camera: false, mic: false });
     const [interviewContext, setInterviewContext] = useState({ type: "", jd: "", resume: "", lang: "en-US" });
-    const [isAutoMode, setIsAutoMode] = useState(false);
+    const [isAutoMode, setIsAutoMode] = useState(true); // Auto Answer ON by default
     const [debugLog, setDebugLog] = useState<string[]>([]);
     const [lastTranscript, setLastTranscript] = useState<string>(""); // For retry functionality
 
@@ -191,7 +192,8 @@ export default function InterviewPage() {
             recognitionRef.current = new SpeechRecognition();
             recognitionRef.current.continuous = true;
             recognitionRef.current.interimResults = true;
-            recognitionRef.current.lang = interviewContext.lang;
+            // Force ar-EG for better Egyptian recognition if generic Arabic is selected
+            recognitionRef.current.lang = interviewContext.lang.startsWith('ar') ? 'ar-EG' : interviewContext.lang;
             recognitionRef.current.maxAlternatives = 3; // Get more alternatives for better accuracy
 
             recognitionRef.current.onstart = () => {
@@ -344,7 +346,16 @@ export default function InterviewPage() {
           2. USE THE RESUME DATA. Do not use placeholders like "[insert date]" or "[mention project]". If the specific date or detail is missing in the resume, estimate it reasonably or speak generally about the experience, but NEVER output bracketed placeholders.
           3. If the resume is empty or missing, say: "I apologize, I don't have my resume details in front of me. Could you ask me about a specific technology?"
           4. Keep answers concise (2-3 sentences max) and conversational.
-          5. LANGUAGE INSTRUCTION: Answer in the language: ${interviewContext.lang}. If the language is 'ar-SA' or 'ar', answer in Arabic. If 'en-US', answer in English. Match the language of the interviewer if unsure.
+          5. LANGUAGE INSTRUCTION: Answer in the language: ${interviewContext.lang}. 
+          - If the language is 'ar-EG', **YOU MUST ANSWER IN EGYPTIAN ARABIC DIALECT (اللهجة المصرية العامية فقط)**.
+          - **FORBIDDEN**: Do NOT speak Standard Arabic (Fusha). Do NOT use words like "حسناً", "لماذا", "أريد", "سوف".
+          - **REQUIRED**: Speak like a local Egyptian in Cairo. Use words like: "يا فندم", "يا باشا", "حضرتك", "عايز", "عشان", "إيه", "كده", "طب".
+          - Example: "أقدر اساعد حضرتك إزاي؟", "هعمل كده".
+          
+          - If the language is 'ar-SA', **YOU MUST ANSWER IN STANDARD ARABIC (اللغة العربية الفصحى)**.
+          - Speak professionally and formally. Use words like "حسناً", "كيف يمكنني مساعدتك", "سوف نقوم".
+          
+          - If 'en-US', answer in English.
           
           CONTEXT:
           - Interview Type: ${interviewContext.type}
@@ -486,70 +497,79 @@ export default function InterviewPage() {
                         )}
 
                         <div className="absolute top-4 right-4 flex gap-2">
-                            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20" onClick={() => setIsCameraVisible(false)}>
-                                <EyeOff size={20} />
-                            </Button>
-                            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20" onClick={() => setShowSettings(true)}>
-                                <Settings size={20} />
-                            </Button>
-                        </div>
-
-                        {/* System Status Indicators */}
-                        <div className="absolute top-4 left-4 flex gap-2">
-                            <div className={cn("px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1", systemStatus.browser ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400")}>
-                                {systemStatus.browser ? <CheckCircle size={12} /> : <AlertCircle size={12} />} Browser
-                            </div>
-                            <div className={cn("px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1", systemStatus.camera ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400")}>
-                                {systemStatus.camera ? <CheckCircle size={12} /> : <AlertCircle size={12} />} Camera
-                            </div>
-                        </div>
-
-                        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-4 bg-black/50 backdrop-blur-md p-3 rounded-full">
                             <Button
-                                variant={isCameraOn ? "default" : "destructive"}
+                                variant="ghost"
                                 size="icon"
-                                className="rounded-full"
-                                onClick={() => setIsCameraOn(!isCameraOn)}
+                                className="text-white hover:bg-white/20"
+                                onClick={() => setIsCameraVisible(!isCameraVisible)}
+                                title={isCameraVisible ? "Hide Camera" : "Show Camera"}
                             >
-                                {isCameraOn ? <Video size={20} /> : <VideoOff size={20} />}
+                                {isCameraVisible ? <VideoOff size={20} /> : <Video size={20} />}
                             </Button>
-                            <Button
-                                variant={isRecording ? "destructive" : "default"}
-                                size="lg"
-                                className={cn("rounded-full w-16 h-16 transition-all", isRecording && "animate-pulse ring-4 ring-red-500/30")}
+                        </div>
+
+                        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-6">
+                            {/* Microphone Button */}
+                            <button
                                 onClick={toggleRecording}
-                                disabled={!systemStatus.browser}
+                                className={cn(
+                                    "w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm",
+                                    isRecording
+                                        ? "bg-[#00D95A] text-white scale-110 shadow-green-500/40"
+                                        : "bg-black/40 text-white hover:bg-black/60 border border-white/10"
+                                )}
+                                title={isRecording ? "Stop Recording" : "Start Recording"}
                             >
-                                {isRecording ? <StopCircle size={32} /> : <Mic size={32} />}
-                            </Button>
+                                <Mic size={26} strokeWidth={isRecording ? 2.5 : 2} />
+                            </button>
+
+                            {/* Camera Toggle Button */}
+                            <button
+                                onClick={() => setIsCameraOn(!isCameraOn)}
+                                className={cn(
+                                    "w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm",
+                                    isCameraOn
+                                        ? "bg-[#00D95A] text-white scale-110 shadow-green-500/40"
+                                        : "bg-black/40 text-white hover:bg-black/60 border border-white/10"
+                                )}
+                                title={isCameraOn ? "Turn Camera Off" : "Turn Camera On"}
+                            >
+                                {isCameraOn ? <Video size={26} strokeWidth={2.5} /> : <VideoOff size={26} strokeWidth={2} />}
+                            </button>
                         </div>
                     </div>
                 )}
 
                 {/* Hidden Camera State Controls */}
                 {!isCameraVisible && (
-                    <div className="p-4 rounded-2xl shadow-sm border flex items-center justify-between bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 transition-colors">
-                        <div className="flex items-center gap-3">
-                            <div className={cn("p-2 rounded-full", isRecording ? "bg-red-100 text-red-600 animate-pulse" : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400")}>
-                                {isRecording ? <Mic size={20} /> : <MicOff size={20} />}
-                            </div>
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Camera Hidden</span>
-                        </div>
-                        <div className="flex gap-2">
-                            <Button
-                                variant={isRecording ? "destructive" : "default"}
-                                size="sm"
-                                onClick={toggleRecording}
-                            >
-                                {isRecording ? "Stop" : "Record"}
-                            </Button>
-                            <Button variant="outline" size="sm" onClick={() => setIsCameraVisible(true)} className="dark:bg-gray-800 dark:text-white dark:border-gray-700">
-                                <Eye size={16} className="mr-2" /> Show Camera
-                            </Button>
-                            <Button variant="ghost" size="icon" onClick={() => setShowSettings(true)} className="dark:text-white">
-                                <Settings size={20} />
-                            </Button>
-                        </div>
+                    <div className="flex justify-center gap-8 my-6">
+                        {/* Microphone Icon Button */}
+                        <button
+                            onClick={toggleRecording}
+                            className={cn(
+                                "w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
+                                isRecording
+                                    ? "bg-[#00D95A] text-white scale-110 shadow-green-500/30 ring-4 ring-green-100 dark:ring-green-900/30"
+                                    : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                            )}
+                            title={isRecording ? "Stop Recording" : "Start Recording"}
+                        >
+                            <Mic size={30} strokeWidth={isRecording ? 2.5 : 2} />
+                        </button>
+
+                        {/* Camera Icon Button */}
+                        <button
+                            onClick={() => setIsCameraVisible(true)}
+                            className={cn(
+                                "w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
+                                isCameraOn
+                                    ? "bg-[#00D95A] text-white scale-110 shadow-green-500/30 ring-4 ring-green-100 dark:ring-green-900/30"
+                                    : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                            )}
+                            title={isCameraOn ? "Camera On - Show" : "Camera Off - Show"}
+                        >
+                            {isCameraOn ? <Video size={30} strokeWidth={2.5} /> : <VideoOff size={30} strokeWidth={2} />}
+                        </button>
                     </div>
                 )}
 
@@ -596,51 +616,6 @@ export default function InterviewPage() {
                                 <span className="hidden sm:inline">{isAutoMode ? "Auto Answer ON" : "Auto Answer OFF"}</span>
                                 <span className="sm:hidden">{isAutoMode ? "Auto ON" : "Auto OFF"}</span>
                             </Button>
-                            <Button
-                                variant="destructive"
-                                size="sm"
-                                className="text-xs sm:text-sm"
-                                onClick={async () => {
-                                    try {
-                                        const { interviewService } = await import("@/lib/interview-service");
-                                        await interviewService.saveInterview(
-                                            `${interviewContext.type} Interview - ${new Date().toLocaleDateString()}`,
-                                            transcript,
-                                            {
-                                                job_description: interviewContext.jd,
-                                                resume_name: "Resume",
-                                                interview_type: interviewContext.type,
-                                                language: interviewContext.lang,
-                                                ai_responses: [aiResponse]
-                                            }
-                                        );
-                                        alert("Interview saved successfully!");
-                                        window.location.href = "/dashboard";
-                                    } catch (e: any) {
-                                        console.error("Failed to save interview:", e);
-                                        // Fallback to local storage if DB fails
-                                        const { history } = await import("@/lib/history");
-                                        history.saveSession({
-                                            jobDescription: interviewContext.jd,
-                                            type: interviewContext.type,
-                                            transcript: transcript,
-                                            durationSeconds: 300,
-                                        });
-                                        window.location.href = "/dashboard";
-                                    }
-                                }}
-                            >
-                                <span className="hidden sm:inline">End Interview</span>
-                                <span className="sm:hidden">End</span>
-                            </Button>
-                            <Button
-                                variant="gradient"
-                                onClick={() => getAiAnswer()}
-                                disabled={isLoading || !transcript}
-                                className="shadow-green-900/20 text-xs sm:text-sm"
-                            >
-                                {isLoading ? "..." : "Get Answer"}
-                            </Button>
                         </div>
                     </div>
 
@@ -673,11 +648,12 @@ export default function InterviewPage() {
                                 <Copy size={16} />
                             </Button>
                         </div>
-                        <div className="whitespace-pre-wrap leading-loose text-lg">
-                            {aiResponse}
+                        <div className="leading-loose text-lg">
+                            <ReactMarkdown>{aiResponse}</ReactMarkdown>
                         </div>
                     </div>
 
+                    {/* Debug Info */}
                     <div className="mt-4 text-xs text-center text-gray-400">
                         {isAutoMode ? "AI will answer automatically after you stop speaking." : "Press Space to generate answer"}
                     </div>
