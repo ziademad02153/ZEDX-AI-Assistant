@@ -100,21 +100,21 @@ export default function AuthCallbackPage() {
     }, []);
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-gray-100">
-            <div className="bg-white p-8 rounded-2xl shadow-lg text-center max-w-md">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-gray-100 dark:from-zinc-900 dark:to-black">
+            <div className="bg-white dark:bg-zinc-800 p-8 rounded-2xl shadow-lg text-center max-w-md">
                 {error ? (
                     <>
-                        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                             <span className="text-red-500 text-3xl">✕</span>
                         </div>
-                        <p className="text-red-600 text-lg font-medium mb-2">Login Failed</p>
-                        <p className="text-gray-500 text-sm">{error}</p>
+                        <p className="text-red-600 dark:text-red-400 text-lg font-medium mb-2">Login Failed</p>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm">{error}</p>
                         <p className="text-gray-400 text-xs mt-4">Redirecting to login page...</p>
                     </>
                 ) : (
                     <>
                         <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-                        <p className="text-gray-700 text-lg font-medium">{status}</p>
+                        <p className="text-gray-700 dark:text-gray-200 text-lg font-medium">{status}</p>
                         <p className="text-gray-400 text-sm mt-2">Please wait...</p>
                     </>
                 )}
