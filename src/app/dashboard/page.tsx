@@ -122,10 +122,7 @@ export default function DashboardPage() {
                 ) : recentSessions.length === 0 ? (
                     <div className="text-center py-8">
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">No interviews yet</h3>
-                        <p className="text-gray-500 dark:text-gray-400 mb-6">Start your first mock interview to see your history and analytics here.</p>
-                        <Link href="/dashboard/new">
-                            <Button variant="outline" className="dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700">Start Interview</Button>
-                        </Link>
+                        <p className="text-gray-500 dark:text-gray-400">Start your first mock interview to see your history and analytics here.</p>
                     </div>
                 ) : (
                     <div className="space-y-4">
