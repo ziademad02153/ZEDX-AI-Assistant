@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Bird, Menu, X, Settings } from "lucide-react";
+import { Bird, Menu, X, Settings, Sparkles, Info } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -46,7 +46,7 @@ export function Navbar() {
 
                     <Link
                         href="/#features"
-                        className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                        className="flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                         onClick={(e) => {
                             // If already on home page, scroll to features
                             if (window.location.pathname === '/') {
@@ -56,7 +56,17 @@ export function Navbar() {
                             // Otherwise, let the link navigate to /#features
                         }}
                     >
-                        How it Works
+                        <span className="px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 transition-all">
+                            How it Works
+                        </span>
+                    </Link>
+                    <Link
+                        href="/about"
+                        className="text-sm font-medium transition-colors"
+                    >
+                        <span className="px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 transition-all">
+                            About ZEDX AI
+                        </span>
                     </Link>
 
                     <div className="pl-4 border-l border-gray-200 dark:border-gray-700">
@@ -110,10 +120,21 @@ export function Navbar() {
                         </Link>
                         <Link
                             href="/#features"
-                            className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-green-600 dark:hover:text-green-400"
+                            className="block"
                             onClick={() => setIsMenuOpen(false)}
                         >
-                            How it Works
+                            <span className="block px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 text-center">
+                                How it Works
+                            </span>
+                        </Link>
+                        <Link
+                            href="/about"
+                            className="block"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            <span className="block px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 text-center">
+                                About ZEDX AI
+                            </span>
                         </Link>
                         <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
                             <AuthButtons />

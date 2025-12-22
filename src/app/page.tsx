@@ -44,7 +44,7 @@ export default function Home() {
                 </Button>
               </Link>
               <Link href="#features" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full sm:w-auto text-lg px-8 py-6 rounded-full border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300">
+                <Button variant="outline" className="w-full sm:w-auto text-lg px-8 py-6 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 text-gray-900 dark:text-white font-medium">
                   How it Works
                 </Button>
               </Link>

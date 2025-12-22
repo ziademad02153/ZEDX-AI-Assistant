@@ -113,9 +113,9 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebApplication",
               "name": "ZEDX AI",
-              "alternateName": ["ZEDX", "ZEDX-AI", "zedx ai", "zedx"],
+              "alternateName": ["ZEDX", "ZEDX-AI", "zedx ai", "zedx", "ZedX AI", "Zedx", "zed x ai"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
-              "description": "Free AI-powered interview assistant. Get real-time AI answers during job interviews.",
+              "description": "ZEDX AI is your free AI-powered interview copilot. Get real-time AI answers during job interviews, practice with AI, and ace your next interview.",
               "applicationCategory": "BusinessApplication",
               "operatingSystem": "Web Browser",
               "offers": {
@@ -131,8 +131,35 @@ export default function RootLayout({
               "author": {
                 "@type": "Organization",
                 "name": "ZEDX AI",
-                "url": "https://zedx-ai-assistant-1.vercel.app"
-              }
+                "url": "https://zedx-ai-assistant-1.vercel.app",
+                "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png"
+              },
+              "brand": {
+                "@type": "Brand",
+                "name": "ZEDX AI",
+                "alternateName": ["ZEDX", "zedx", "zedx ai"]
+              },
+              "sameAs": [
+                "https://www.producthunt.com/posts/zedx-ai"
+              ]
+            })
+          }}
+        />
+        {/* Organization Schema for Brand Recognition */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "ZEDX AI",
+              "alternateName": ["ZEDX", "zedx", "zedx ai", "ZedX"],
+              "url": "https://zedx-ai-assistant-1.vercel.app",
+              "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
+              "description": "ZEDX AI - Free AI Interview Assistant & Copilot. Get real-time answers during job interviews.",
+              "sameAs": [
+                "https://www.producthunt.com/posts/zedx-ai"
+              ]
             })
           }}
         />
