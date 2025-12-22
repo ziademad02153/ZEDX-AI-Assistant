@@ -34,8 +34,9 @@ export default function InterviewPage() {
     const [isAutoMode, setIsAutoMode] = useState(true); // Auto Answer ON by default
     const [debugLog, setDebugLog] = useState<string[]>([]);
     const [lastTranscript, setLastTranscript] = useState<string>(""); // For retry functionality
-    const [allAiResponses, setAllAiResponses] = useState<string[]>([]); // Track all AI responses for saving
+    const [allQAPairs, setAllQAPairs] = useState<{ question: string, answer: string }[]>([]); // Track Q&A pairs
     const [isSaving, setIsSaving] = useState(false);
+    const [interviewStartTime] = useState<Date>(new Date()); // Track when interview started
 
     // Constants
     const MAX_TRANSCRIPT_LENGTH = 4000; // Limit transcript to prevent API issues
@@ -395,8 +396,8 @@ export default function InterviewPage() {
             if (!text) throw new Error("Empty response from AI.");
 
             setAiResponse(text);
-            // Track AI responses for saving to history
-            setAllAiResponses(prev => [...prev, text]);
+            // Track Q&A pairs for saving to history - save question and answer together
+            setAllQAPairs(prev => [...prev, { question: currentTranscript.trim(), answer: text }]);
             // Text-to-speech disabled - text only mode
             isAiSpeakingRef.current = false;
 
@@ -479,7 +480,7 @@ export default function InterviewPage() {
     // Handle End Interview - Save to history and navigate
     const handleEndInterview = async () => {
         // Only save if there's meaningful content
-        if (transcript.length < 10 && allAiResponses.length === 0) {
+        if (transcript.length < 10 && allQAPairs.length === 0) {
             router.push("/dashboard");
             return;
         }
@@ -490,14 +491,24 @@ export default function InterviewPage() {
                 ? `${interviewContext.type} Interview`
                 : "Interview Session";
 
+            // Calculate interview duration in minutes
+            const durationMinutes = Math.round((new Date().getTime() - interviewStartTime.getTime()) / 60000);
+
+            // Format transcript with Q&A pairs for better history display
+            const formattedTranscript = allQAPairs.length > 0
+                ? allQAPairs.map((qa, idx) => `Q${idx + 1}: ${qa.question}\n\nA${idx + 1}: ${qa.answer}`).join('\n\n---\n\n')
+                : transcript;
+
             await interviewService.saveInterview(
                 title,
-                transcript,
+                formattedTranscript,
                 {
                     job_description: interviewContext.jd,
                     interview_type: interviewContext.type,
                     language: interviewContext.lang,
-                    ai_responses: allAiResponses
+                    ai_responses: allQAPairs.map(qa => qa.answer),
+                    duration_minutes: durationMinutes,
+                    questions: allQAPairs.map(qa => qa.question)
                 }
             );
             showToast("Interview saved to history", "success");

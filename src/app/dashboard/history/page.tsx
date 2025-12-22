@@ -14,34 +14,53 @@ interface QAPair {
 }
 
 // Helper function to parse transcript into Q&A pairs
-function parseTranscriptToQA(transcript: string | null, aiResponses: string[] | undefined): QAPair[] {
+function parseTranscriptToQA(transcript: string | null, aiResponses: string[] | undefined, storedQuestions?: string[]): QAPair[] {
     if (!transcript && (!aiResponses || aiResponses.length === 0)) return [];
 
     const pairs: QAPair[] = [];
 
+    // If we have stored questions, use them directly
+    if (storedQuestions && storedQuestions.length > 0 && aiResponses && aiResponses.length > 0) {
+        storedQuestions.forEach((question, idx) => {
+            if (aiResponses[idx]) {
+                pairs.push({
+                    question: question,
+                    answer: aiResponses[idx]
+                });
+            }
+        });
+        return pairs;
+    }
+
     // If we have AI responses, pair them with questions from transcript
     if (aiResponses && aiResponses.length > 0) {
-        // Try to extract questions from transcript
-        const lines = (transcript || "").split('\n').filter(line => line.trim());
+        // Try to extract questions from formatted transcript (Q1: ... A1: ... format)
+        const questions: string[] = [];
+        const parts = (transcript || "").split(/\n\n---\n\n|(?=Q\d+:)/);
+        parts.forEach(part => {
+            const qMatch = part.match(/Q\d+:\s*([\s\S]+?)(?=\n\nA\d+:|$)/);
+            if (qMatch && qMatch[1]) {
+                questions.push(qMatch[1].trim());
+            }
+        });
 
         aiResponses.forEach((response, idx) => {
-            // Find corresponding question (simplified matching)
-            const question = lines[idx] || `Question ${idx + 1}`;
+            const question = questions[idx] || `Question ${idx + 1}`;
             pairs.push({
-                question: question.replace(/^(Q:|Question:|\d+\.|\-)\s*/i, '').trim() || `Question ${idx + 1}`,
+                question: question,
                 answer: response.replace(/^(A:|Answer:)\s*/i, '').trim()
             });
         });
     } else if (transcript) {
         // Parse transcript for Q&A patterns
-        const sections = transcript.split(/(?=Q:|Question:|Interviewer:)/i);
+        const sections = transcript.split(/(?=Q:|Question:|Interviewer:|Q\d+:)/i);
         sections.forEach(section => {
             if (section.trim()) {
-                const parts = section.split(/(?=A:|Answer:|Candidate:|You:)/i);
+                const parts = section.split(/(?=A:|Answer:|Candidate:|You:|A\d+:)/i);
                 if (parts.length >= 2) {
                     pairs.push({
-                        question: parts[0].replace(/^(Q:|Question:|Interviewer:)\s*/i, '').trim(),
-                        answer: parts.slice(1).join(' ').replace(/^(A:|Answer:|Candidate:|You:)\s*/i, '').trim()
+                        question: parts[0].replace(/^(Q:|Question:|Interviewer:|Q\d+:)\s*/i, '').trim(),
+                        answer: parts.slice(1).join(' ').replace(/^(A:|Answer:|Candidate:|You:|A\d+:)\s*/i, '').trim()
                     });
                 }
             }
@@ -191,7 +210,8 @@ export default function InterviewHistoryPage() {
                     {interviews.map((interview) => {
                         const qaPairs = parseTranscriptToQA(
                             interview.transcript,
-                            interview.analysis?.ai_responses
+                            interview.analysis?.ai_responses,
+                            interview.analysis?.questions
                         );
 
                         return (
