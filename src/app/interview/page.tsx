@@ -2,13 +2,15 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, Video, VideoOff, Send, Loader2, AlertCircle, CheckCircle, Settings, Eye, EyeOff, Sparkles, Trash2, StopCircle, Copy } from "lucide-react";
+import { Mic, MicOff, Video, VideoOff, Send, Loader2, AlertCircle, CheckCircle, Settings, Eye, EyeOff, Sparkles, Trash2, StopCircle, Copy, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from 'react-markdown';
 
+import { useRouter } from "next/navigation";
 import { SettingsDialog } from "@/components/settings-dialog";
 
 export default function InterviewPage() {
+    const router = useRouter();
     const videoRef = useRef<HTMLVideoElement>(null);
     const recognitionRef = useRef<any>(null);
     const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -536,39 +538,57 @@ export default function InterviewPage() {
                             >
                                 {isCameraOn ? <Video size={26} strokeWidth={2.5} /> : <VideoOff size={26} strokeWidth={2} />}
                             </button>
+
+                            {/* End Interview Button */}
+                            <button
+                                onClick={() => router.push("/dashboard")}
+                                className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm bg-red-500 hover:bg-red-600 text-white"
+                                title="End Interview"
+                            >
+                                <LogOut size={26} strokeWidth={2} />
+                            </button>
                         </div>
                     </div>
                 )}
 
                 {/* Hidden Camera State Controls */}
                 {!isCameraVisible && (
-                    <div className="flex justify-center gap-8 my-6">
+                    <div className="flex justify-center gap-6 my-6 flex-wrap">
                         {/* Microphone Icon Button */}
                         <button
                             onClick={toggleRecording}
                             className={cn(
-                                "w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
+                                "w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
                                 isRecording
                                     ? "bg-[#00D95A] text-white scale-110 shadow-green-500/30 ring-4 ring-green-100 dark:ring-green-900/30"
                                     : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
                             )}
                             title={isRecording ? "Stop Recording" : "Start Recording"}
                         >
-                            <Mic size={30} strokeWidth={isRecording ? 2.5 : 2} />
+                            <Mic size={26} strokeWidth={isRecording ? 2.5 : 2} />
                         </button>
 
                         {/* Camera Icon Button */}
                         <button
                             onClick={() => setIsCameraVisible(true)}
                             className={cn(
-                                "w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
+                                "w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
                                 isCameraOn
                                     ? "bg-[#00D95A] text-white scale-110 shadow-green-500/30 ring-4 ring-green-100 dark:ring-green-900/30"
                                     : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
                             )}
                             title={isCameraOn ? "Camera On - Show" : "Camera Off - Show"}
                         >
-                            {isCameraOn ? <Video size={30} strokeWidth={2.5} /> : <VideoOff size={30} strokeWidth={2} />}
+                            {isCameraOn ? <Video size={26} strokeWidth={2.5} /> : <VideoOff size={26} strokeWidth={2} />}
+                        </button>
+
+                        {/* End Interview Button */}
+                        <button
+                            onClick={() => router.push("/dashboard")}
+                            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md bg-red-500 hover:bg-red-600 text-white"
+                            title="End Interview"
+                        >
+                            <LogOut size={26} strokeWidth={2} />
                         </button>
                     </div>
                 )}

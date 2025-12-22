@@ -7,6 +7,49 @@ import { Clock, Trash2, FileText, AlertCircle, ChevronDown, ChevronUp, Trash, Lo
 import { interviewService, Interview } from "@/lib/interview-service";
 import { cn } from "@/lib/utils";
 
+interface QAPair {
+    question: string;
+    answer: string;
+}
+
+// Helper function to parse transcript into Q&A pairs
+function parseTranscriptToQA(transcript: string | null, aiResponses: string[] | undefined): QAPair[] {
+    if (!transcript && (!aiResponses || aiResponses.length === 0)) return [];
+
+    const pairs: QAPair[] = [];
+
+    // If we have AI responses, pair them with questions from transcript
+    if (aiResponses && aiResponses.length > 0) {
+        // Try to extract questions from transcript
+        const lines = (transcript || "").split('\n').filter(line => line.trim());
+
+        aiResponses.forEach((response, idx) => {
+            // Find corresponding question (simplified matching)
+            const question = lines[idx] || `Question ${idx + 1}`;
+            pairs.push({
+                question: question.replace(/^(Q:|Question:|\d+\.|\-)\s*/i, '').trim() || `Question ${idx + 1}`,
+                answer: response.replace(/^(A:|Answer:)\s*/i, '').trim()
+            });
+        });
+    } else if (transcript) {
+        // Parse transcript for Q&A patterns
+        const sections = transcript.split(/(?=Q:|Question:|Interviewer:)/i);
+        sections.forEach(section => {
+            if (section.trim()) {
+                const parts = section.split(/(?=A:|Answer:|Candidate:|You:)/i);
+                if (parts.length >= 2) {
+                    pairs.push({
+                        question: parts[0].replace(/^(Q:|Question:|Interviewer:)\s*/i, '').trim(),
+                        answer: parts.slice(1).join(' ').replace(/^(A:|Answer:|Candidate:|You:)\s*/i, '').trim()
+                    });
+                }
+            }
+        });
+    }
+
+    return pairs;
+}
+
 export default function InterviewHistoryPage() {
     const router = useRouter();
     const [interviews, setInterviews] = useState<Interview[]>([]);
@@ -53,7 +96,6 @@ export default function InterviewHistoryPage() {
         if (!confirm("Are you sure you want to delete ALL interviews? This cannot be undone!")) return;
 
         try {
-            // Use Promise.all for faster parallel deletion
             await Promise.all(
                 interviews.map(interview => interviewService.deleteInterview(interview.id))
             );
@@ -61,7 +103,6 @@ export default function InterviewHistoryPage() {
         } catch (e) {
             console.error("Failed to delete all:", e);
             alert("Failed to delete some interviews");
-            // Reload to show actual state
             loadInterviews();
         }
     };
@@ -84,7 +125,7 @@ export default function InterviewHistoryPage() {
         <div className="p-3 sm:p-6 max-w-4xl mx-auto">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                    <Clock className="text-teal-500" />
+                    <Clock className="text-green-600" />
                     Interview History
                 </h1>
                 <div className="flex gap-2">
@@ -108,7 +149,7 @@ export default function InterviewHistoryPage() {
             </div>
 
             {error && (
-                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-600">
+                <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-2 text-red-600 dark:text-red-400">
                     <AlertCircle size={20} />
                     {error}
                 </div>
@@ -131,100 +172,123 @@ export default function InterviewHistoryPage() {
                 </div>
             ) : (
                 <div className="space-y-4">
-                    {interviews.map((interview) => (
-                        <div
-                            key={interview.id}
-                            className={cn(
-                                "p-4 rounded-xl border transition-all cursor-pointer",
-                                "bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-700",
-                                expandedId === interview.id ? "shadow-lg ring-2 ring-teal-500" : "hover:shadow-md"
-                            )}
-                            onClick={() => toggleExpand(interview.id)}
-                        >
-                            <div className="flex items-start justify-between">
-                                <div className="flex-1">
-                                    <h3 className="font-semibold text-gray-900 dark:text-white">
-                                        {interview.title}
-                                    </h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                        {formatDate(interview.created_at)}
-                                    </p>
-                                    {interview.analysis?.interview_type && (
-                                        <span className="inline-block mt-2 px-2 py-1 text-xs rounded-full bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400">
-                                            {interview.analysis.interview_type}
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="flex gap-2 items-center">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                                        onClick={(e) => handleDelete(interview.id, e)}
-                                    >
-                                        <Trash2 size={16} />
-                                    </Button>
-                                    {expandedId === interview.id ? (
-                                        <ChevronUp size={20} className="text-gray-400" />
-                                    ) : (
-                                        <ChevronDown size={20} className="text-gray-400" />
-                                    )}
-                                </div>
-                            </div>
+                    {interviews.map((interview) => {
+                        const qaPairs = parseTranscriptToQA(
+                            interview.transcript,
+                            interview.analysis?.ai_responses
+                        );
 
-                            {/* Expanded Content */}
-                            {expandedId === interview.id && (
-                                <div className="mt-4 space-y-4 border-t pt-4 border-gray-100 dark:border-zinc-700">
-                                    {/* Transcript Section */}
-                                    {interview.transcript && (
-                                        <div>
-                                            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                                📝 Transcript
-                                            </h4>
-                                            <div className="p-3 bg-gray-50 dark:bg-zinc-900 rounded-lg max-h-48 overflow-y-auto">
-                                                <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
-                                                    {interview.transcript}
-                                                </p>
-                                            </div>
+                        return (
+                            <div
+                                key={interview.id}
+                                className={cn(
+                                    "p-4 rounded-xl border transition-all cursor-pointer",
+                                    "bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-700",
+                                    expandedId === interview.id ? "shadow-lg ring-2 ring-green-500" : "hover:shadow-md"
+                                )}
+                                onClick={() => toggleExpand(interview.id)}
+                            >
+                                <div className="flex items-start justify-between">
+                                    <div className="flex-1">
+                                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                                            {interview.title}
+                                        </h3>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                            {formatDate(interview.created_at)}
+                                        </p>
+                                        <div className="flex gap-2 mt-2 flex-wrap">
+                                            {interview.analysis?.interview_type && (
+                                                <span className="inline-block px-2 py-1 text-xs rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                                                    {interview.analysis.interview_type}
+                                                </span>
+                                            )}
+                                            {qaPairs.length > 0 && (
+                                                <span className="inline-block px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600 dark:bg-zinc-700 dark:text-gray-300">
+                                                    {qaPairs.length} Questions
+                                                </span>
+                                            )}
                                         </div>
-                                    )}
+                                    </div>
+                                    <div className="flex gap-2 items-center">
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                            onClick={(e) => handleDelete(interview.id, e)}
+                                        >
+                                            <Trash2 size={16} />
+                                        </Button>
+                                        {expandedId === interview.id ? (
+                                            <ChevronUp size={20} className="text-gray-400" />
+                                        ) : (
+                                            <ChevronDown size={20} className="text-gray-400" />
+                                        )}
+                                    </div>
+                                </div>
 
-                                    {/* AI Responses Section */}
-                                    {interview.analysis?.ai_responses && interview.analysis.ai_responses.length > 0 && (
-                                        <div>
-                                            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                                🤖 AI Responses
-                                            </h4>
-                                            <div className="space-y-2">
-                                                {interview.analysis.ai_responses.map((response, idx) => (
-                                                    <div key={idx} className="p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg">
-                                                        <p className="text-sm text-teal-800 dark:text-teal-300 whitespace-pre-wrap">
-                                                            {response}
-                                                        </p>
+                                {/* Expanded Content - Q&A Format */}
+                                {expandedId === interview.id && (
+                                    <div className="mt-4 space-y-4 border-t pt-4 border-gray-100 dark:border-zinc-700">
+                                        {qaPairs.length > 0 ? (
+                                            <div className="space-y-6">
+                                                {qaPairs.map((qa, idx) => (
+                                                    <div key={idx} className="space-y-2">
+                                                        {/* Question */}
+                                                        <div className="flex gap-3">
+                                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-xs font-bold text-green-700 dark:text-green-400">
+                                                                Q
+                                                            </span>
+                                                            <p className="font-semibold text-green-700 dark:text-green-400 leading-relaxed">
+                                                                {qa.question}
+                                                            </p>
+                                                        </div>
+                                                        {/* Answer */}
+                                                        <div className="flex gap-3 ml-0 sm:ml-2">
+                                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-100 dark:bg-zinc-700 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">
+                                                                A
+                                                            </span>
+                                                            <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+                                                                {qa.answer}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 ))}
                                             </div>
-                                        </div>
-                                    )}
+                                        ) : (
+                                            /* Fallback: Show raw transcript if no Q&A pairs */
+                                            interview.transcript && (
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                                        Transcript
+                                                    </h4>
+                                                    <div className="p-3 bg-gray-50 dark:bg-zinc-900 rounded-lg max-h-48 overflow-y-auto">
+                                                        <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+                                                            {interview.transcript}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )}
 
-                                    {/* Job Description */}
-                                    {interview.analysis?.job_description && (
-                                        <div>
-                                            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                                💼 Job Description
-                                            </h4>
-                                            <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg max-h-32 overflow-y-auto">
-                                                <p className="text-sm text-blue-800 dark:text-blue-300">
-                                                    {interview.analysis.job_description.slice(0, 500)}
-                                                    {interview.analysis.job_description.length > 500 && "..."}
-                                                </p>
+                                        {/* Job Description (if available) */}
+                                        {interview.analysis?.job_description && (
+                                            <div className="pt-4 border-t border-gray-100 dark:border-zinc-700">
+                                                <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                                    Job Description
+                                                </h4>
+                                                <div className="p-3 bg-gray-50 dark:bg-zinc-900 rounded-lg max-h-32 overflow-y-auto">
+                                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                                        {interview.analysis.job_description.slice(0, 500)}
+                                                        {interview.analysis.job_description.length > 500 && "..."}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             )}
         </div>
