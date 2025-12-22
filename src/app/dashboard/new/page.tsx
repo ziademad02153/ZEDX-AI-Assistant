@@ -280,8 +280,8 @@ export default function NewInterviewPage() {
                                         onChange={handleFileUpload}
                                     />
                                     <label htmlFor="resume-upload">
-                                        <Button variant="outline" size="sm" className="cursor-pointer dark:bg-zinc-800 dark:text-white dark:border-zinc-700 dark:hover:bg-zinc-700" asChild>
-                                            <span>
+                                        <Button variant="outline" size="sm" className="cursor-pointer dark:bg-zinc-800 dark:border-zinc-700 dark:hover:bg-zinc-700" asChild>
+                                            <span className="text-gray-700 dark:text-white">
                                                 <Upload size={14} className="mr-2" />
                                                 Upload File
                                             </span>

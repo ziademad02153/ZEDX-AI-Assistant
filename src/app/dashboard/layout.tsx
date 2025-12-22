@@ -92,29 +92,7 @@ export default function DashboardLayout({
             <Navbar />
             <SettingsDialog open={showSettings} onOpenChange={setShowSettings} />
 
-            {/* Mobile Menu Toggle Button */}
-            <div className="md:hidden fixed bottom-6 right-6 z-50">
-                <Button
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="w-14 h-14 rounded-full shadow-lg bg-green-600 hover:bg-green-700 text-white"
-                >
-                    {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </Button>
-            </div>
 
-            {/* Mobile Menu Overlay */}
-            {mobileMenuOpen && (
-                <div className="md:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
-            )}
-
-            {/* Mobile Menu Slide Panel */}
-            <div className={`md:hidden fixed top-0 left-0 h-full w-72 bg-white dark:bg-zinc-900 z-50 transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                <div className="p-4 pt-20">
-                    <nav className="space-y-2">
-                        <NavItems />
-                    </nav>
-                </div>
-            </div>
 
             <div className="flex flex-1 pt-20 container mx-auto px-4 gap-8">
                 {/* Desktop Sidebar */}
