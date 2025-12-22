@@ -6,9 +6,11 @@ import { Plus, Clock, CheckCircle, Calendar, ArrowRight, Trash2, Loader2 } from 
 import Link from "next/link";
 import { interviewService, Interview } from "@/lib/interview-service";
 import { useRouter } from "next/navigation";
+import { useConfirmDialog } from "@/components/confirm-dialog";
 
 export default function DashboardPage() {
     const router = useRouter();
+    const { confirm } = useConfirmDialog();
     const [stats, setStats] = useState({ totalInterviews: 0, totalMinutes: 0 });
     const [recentSessions, setRecentSessions] = useState<Interview[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +45,13 @@ export default function DashboardPage() {
     const handleDelete = async (id: string, e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        if (!confirm("Delete this interview?")) return;
+        const confirmed = await confirm({
+            title: "Delete Interview",
+            message: "Are you sure you want to delete this interview?",
+            confirmText: "Delete",
+            variant: "danger"
+        });
+        if (!confirmed) return;
 
         try {
             await interviewService.deleteInterview(id);

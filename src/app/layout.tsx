@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ErrorBoundary from "@/components/error-boundary";
+import { ConfirmDialogProvider } from "@/components/confirm-dialog";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -142,7 +143,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ErrorBoundary>
-          {children}
+          <ConfirmDialogProvider>
+            {children}
+          </ConfirmDialogProvider>
         </ErrorBoundary>
       </body>
     </html>

@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Plus, Trash2, FileText, Calendar, ArrowRight, RefreshCw, AlertCircle } from "lucide-react";
 import { resumeService, Resume } from "@/lib/resume-service";
 import { useRouter } from "next/navigation";
+import { useConfirmDialog } from "@/components/confirm-dialog";
 
 export default function MyResumesPage() {
     const router = useRouter();
+    const { confirm, showToast } = useConfirmDialog();
     const [resumes, setResumes] = useState<Resume[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isAdding, setIsAdding] = useState(false);
@@ -42,18 +44,17 @@ export default function MyResumesPage() {
         if (!newResumeName.trim() || !newResumeContent.trim()) return;
 
         try {
-            setIsAdding(false); // Close modal first
+            setIsAdding(false);
             setIsLoading(true);
             await resumeService.createResume(newResumeName, newResumeContent);
             await loadResumes();
-
-            // Reset form
             setNewResumeName("");
             setNewResumeContent("");
+            showToast("Resume saved successfully", "success");
         } catch (error) {
             console.error("Failed to add resume:", error);
-            alert("Failed to save resume. Please try again.");
-            setIsAdding(true); // Re-open modal on error
+            showToast("Failed to save resume. Please try again.", "error");
+            setIsAdding(true);
         } finally {
             setIsLoading(false);
         }
@@ -81,22 +82,30 @@ export default function MyResumesPage() {
             if (!res.ok) throw new Error(data.error || "Failed to parse PDF");
 
             setNewResumeContent(data.text);
+            showToast("Resume uploaded successfully", "success");
         } catch (err) {
             console.error((err as Error).message);
-            alert("Failed to upload/parse resume. Please check console.");
+            showToast("Failed to upload/parse resume", "error");
         } finally {
             setIsUploading(false);
         }
     };
 
     const handleDeleteResume = async (id: string) => {
-        if (confirm("Are you sure you want to delete this resume?")) {
+        const confirmed = await confirm({
+            title: "Delete Resume",
+            message: "Are you sure you want to delete this resume?",
+            confirmText: "Delete",
+            variant: "danger"
+        });
+        if (confirmed) {
             try {
                 await resumeService.deleteResume(id);
                 setResumes((prev) => prev.filter(r => r.id !== id));
+                showToast("Resume deleted", "success");
             } catch (error) {
                 console.error("Failed to delete resume:", error);
-                alert("Failed to delete resume.");
+                showToast("Failed to delete resume", "error");
             }
         }
     };

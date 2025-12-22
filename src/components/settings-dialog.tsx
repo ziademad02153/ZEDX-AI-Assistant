@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Settings, User, LogOut, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
+import { useConfirmDialog } from "@/components/confirm-dialog";
 
 interface SettingsDialogProps {
     open: boolean;
@@ -12,6 +13,7 @@ interface SettingsDialogProps {
 }
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
+    const { confirm, showToast } = useConfirmDialog();
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -40,9 +42,14 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
         }
     };
 
-    const resetAppData = () => {
-        if (confirm("Are you sure? This will clear your local data (Resume, Interview settings). This cannot be undone.")) {
-            // Clear only app-specific data, not auth
+    const resetAppData = async () => {
+        const confirmed = await confirm({
+            title: "Reset App Data",
+            message: "Are you sure? This will clear your local data (Resume, Interview settings). This cannot be undone.",
+            confirmText: "Reset Data",
+            variant: "danger"
+        });
+        if (confirmed) {
             const keysToRemove = [
                 "interview_context_jd",
                 "interview_context_resume",
@@ -51,8 +58,8 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                 "selected_ai_model"
             ];
             keysToRemove.forEach(key => localStorage.removeItem(key));
-            alert("App data cleared. Page will reload.");
-            window.location.reload();
+            showToast("App data cleared. Page will reload.", "success");
+            setTimeout(() => window.location.reload(), 1000);
         }
     };
 
