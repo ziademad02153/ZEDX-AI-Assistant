@@ -421,7 +421,7 @@ export default function LoginPage() {
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    className="w-full h-11 rounded-xl border-gray-200 hover:bg-gray-50 font-medium flex items-center justify-center gap-3"
+                                    className="w-full h-11 rounded-xl border-gray-200 dark:border-zinc-600 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-800 dark:text-gray-100 font-medium flex items-center justify-center gap-3"
                                     onClick={async () => {
                                         try {
                                             await signInWithGoogle();
