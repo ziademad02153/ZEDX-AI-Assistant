@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Clock, Trash2, FileText, AlertCircle, ChevronDown, ChevronUp, Trash, Loader2 } from "lucide-react";
 import { interviewService, Interview } from "@/lib/interview-service";
 import { cn } from "@/lib/utils";
+import { useConfirmDialog } from "@/components/confirm-dialog";
 
 interface QAPair {
     question: string;
@@ -52,6 +53,7 @@ function parseTranscriptToQA(transcript: string | null, aiResponses: string[] | 
 
 export default function InterviewHistoryPage() {
     const router = useRouter();
+    const { confirm, showToast } = useConfirmDialog();
     const [interviews, setInterviews] = useState<Interview[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -81,28 +83,42 @@ export default function InterviewHistoryPage() {
 
     const handleDelete = async (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!confirm("Are you sure you want to delete this interview?")) return;
+        const confirmed = await confirm({
+            title: "Delete Interview",
+            message: "Are you sure you want to delete this interview?",
+            confirmText: "Delete",
+            variant: "danger"
+        });
+        if (!confirmed) return;
 
         try {
             await interviewService.deleteInterview(id);
             setInterviews(prev => prev.filter(i => i.id !== id));
+            showToast("Interview deleted", "success");
         } catch (e) {
             console.error("Failed to delete:", e);
-            alert("Failed to delete interview");
+            showToast("Failed to delete interview", "error");
         }
     };
 
     const handleDeleteAll = async () => {
-        if (!confirm("Are you sure you want to delete ALL interviews? This cannot be undone!")) return;
+        const confirmed = await confirm({
+            title: "Delete All Interviews",
+            message: "Are you sure you want to delete ALL interviews? This cannot be undone!",
+            confirmText: "Delete All",
+            variant: "danger"
+        });
+        if (!confirmed) return;
 
         try {
             await Promise.all(
                 interviews.map(interview => interviewService.deleteInterview(interview.id))
             );
             setInterviews([]);
+            showToast("All interviews deleted", "success");
         } catch (e) {
             console.error("Failed to delete all:", e);
-            alert("Failed to delete some interviews");
+            showToast("Failed to delete some interviews", "error");
             loadInterviews();
         }
     };

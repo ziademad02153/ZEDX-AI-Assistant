@@ -8,9 +8,12 @@ import ReactMarkdown from 'react-markdown';
 
 import { useRouter } from "next/navigation";
 import { SettingsDialog } from "@/components/settings-dialog";
+import { useConfirmDialog } from "@/components/confirm-dialog";
+import { interviewService } from "@/lib/interview-service";
 
 export default function InterviewPage() {
     const router = useRouter();
+    const { showToast } = useConfirmDialog();
     const videoRef = useRef<HTMLVideoElement>(null);
     const recognitionRef = useRef<any>(null);
     const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -31,6 +34,8 @@ export default function InterviewPage() {
     const [isAutoMode, setIsAutoMode] = useState(true); // Auto Answer ON by default
     const [debugLog, setDebugLog] = useState<string[]>([]);
     const [lastTranscript, setLastTranscript] = useState<string>(""); // For retry functionality
+    const [allAiResponses, setAllAiResponses] = useState<string[]>([]); // Track all AI responses for saving
+    const [isSaving, setIsSaving] = useState(false);
 
     // Constants
     const MAX_TRANSCRIPT_LENGTH = 4000; // Limit transcript to prevent API issues
@@ -390,6 +395,8 @@ export default function InterviewPage() {
             if (!text) throw new Error("Empty response from AI.");
 
             setAiResponse(text);
+            // Track AI responses for saving to history
+            setAllAiResponses(prev => [...prev, text]);
             // Text-to-speech disabled - text only mode
             isAiSpeakingRef.current = false;
 
@@ -469,6 +476,40 @@ export default function InterviewPage() {
         }
     };
 
+    // Handle End Interview - Save to history and navigate
+    const handleEndInterview = async () => {
+        // Only save if there's meaningful content
+        if (transcript.length < 10 && allAiResponses.length === 0) {
+            router.push("/dashboard");
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            const title = interviewContext.type
+                ? `${interviewContext.type} Interview`
+                : "Interview Session";
+
+            await interviewService.saveInterview(
+                title,
+                transcript,
+                {
+                    job_description: interviewContext.jd,
+                    interview_type: interviewContext.type,
+                    language: interviewContext.lang,
+                    ai_responses: allAiResponses
+                }
+            );
+            showToast("Interview saved to history", "success");
+        } catch (error) {
+            console.error("Failed to save interview:", error);
+            // Still navigate even if save fails
+        } finally {
+            setIsSaving(false);
+            router.push("/dashboard");
+        }
+    };
+
     return (
         <div className="min-h-screen flex flex-col lg:flex-row gap-4 p-2 sm:p-4 pt-20 transition-colors duration-300 bg-gray-100 dark:bg-black overflow-auto">
             {/* Error Banner */}
@@ -541,11 +582,12 @@ export default function InterviewPage() {
 
                             {/* End Interview Button */}
                             <button
-                                onClick={() => router.push("/dashboard")}
-                                className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm bg-red-500 hover:bg-red-600 text-white"
+                                onClick={handleEndInterview}
+                                disabled={isSaving}
+                                className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
                                 title="End Interview"
                             >
-                                <LogOut size={26} strokeWidth={2} />
+                                {isSaving ? <Loader2 size={26} className="animate-spin" /> : <LogOut size={26} strokeWidth={2} />}
                             </button>
                         </div>
                     </div>
@@ -584,11 +626,12 @@ export default function InterviewPage() {
 
                         {/* End Interview Button */}
                         <button
-                            onClick={() => router.push("/dashboard")}
-                            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md bg-red-500 hover:bg-red-600 text-white"
+                            onClick={handleEndInterview}
+                            disabled={isSaving}
+                            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
                             title="End Interview"
                         >
-                            <LogOut size={26} strokeWidth={2} />
+                            {isSaving ? <Loader2 size={26} className="animate-spin" /> : <LogOut size={26} strokeWidth={2} />}
                         </button>
                     </div>
                 )}
@@ -661,7 +704,7 @@ export default function InterviewPage() {
                                 className="h-8 w-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
                                 onClick={() => {
                                     navigator.clipboard.writeText(aiResponse.replace(/\*\*/g, '').replace(/\*/g, ''));
-                                    alert("Copied to clipboard!");
+                                    showToast("Copied to clipboard!", "success");
                                 }}
                                 title="Copy to clipboard"
                             >
