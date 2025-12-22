@@ -26,9 +26,16 @@ export default function DashboardPage() {
             const interviews = await interviewService.getUserInterviews();
             setIsAuthChecking(false); // Auth passed
             setRecentSessions(interviews.slice(0, 3)); // Get top 3
+
+            // Calculate total minutes from actual durations, fallback to 1 min per interview
+            const totalMins = interviews.reduce((sum, iv) => {
+                const duration = iv.analysis?.duration_minutes || 1;
+                return sum + duration;
+            }, 0);
+
             setStats({
                 totalInterviews: interviews.length,
-                totalMinutes: interviews.length * 5 // Estimate 5 min per interview
+                totalMinutes: totalMins
             });
         } catch (e: any) {
             if (e.message.includes("User not authenticated")) {

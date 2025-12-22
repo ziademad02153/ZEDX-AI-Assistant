@@ -11,6 +11,8 @@ export interface Interview {
         interview_type?: string;
         language?: string;
         ai_responses?: string[];
+        duration_minutes?: number;
+        questions?: string[];
     } | null;
     created_at: string;
 }
