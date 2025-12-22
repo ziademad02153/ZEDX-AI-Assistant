@@ -251,13 +251,39 @@ export default function InterviewPage() {
                     const cleanedFinal = finalText.trim();
                     if (cleanedFinal) {
                         setTranscript(prev => {
-                            // Prevent adding duplicate text
-                            const words = cleanedFinal.split(' ');
-                            const lastWord = words[words.length - 1];
-                            if (prev.trim().endsWith(lastWord) && words.length === 1) {
-                                return prev; // Skip single word that already exists
+                            // Enhanced deduplication: check if the new text overlaps with the end of existing transcript
+                            const prevTrimmed = prev.trim();
+
+                            // Check if this text is a repeat of what we just added
+                            if (prevTrimmed.endsWith(cleanedFinal)) {
+                                return prev; // Skip complete duplicate
                             }
-                            const newTranscript = prev + (prev ? ' ' : '') + cleanedFinal;
+
+                            // Check for partial overlap (last N words match first N words of new text)
+                            const prevWords = prevTrimmed.split(' ').slice(-10); // Last 10 words
+                            const newWords = cleanedFinal.split(' ');
+
+                            // Find overlap: check if end of prev matches start of new
+                            let overlapLength = 0;
+                            for (let len = Math.min(prevWords.length, newWords.length); len > 0; len--) {
+                                const prevEnd = prevWords.slice(-len).join(' ').toLowerCase();
+                                const newStart = newWords.slice(0, len).join(' ').toLowerCase();
+                                if (prevEnd === newStart) {
+                                    overlapLength = len;
+                                    break;
+                                }
+                            }
+
+                            // Remove overlapping words from new text
+                            const textToAdd = overlapLength > 0
+                                ? newWords.slice(overlapLength).join(' ')
+                                : cleanedFinal;
+
+                            if (!textToAdd.trim()) {
+                                return prev; // Nothing new to add
+                            }
+
+                            const newTranscript = prev + (prev ? ' ' : '') + textToAdd;
                             // Limit transcript length
                             if (newTranscript.length > MAX_TRANSCRIPT_LENGTH) {
                                 return newTranscript.slice(-MAX_TRANSCRIPT_LENGTH); // Keep last 4000 chars
