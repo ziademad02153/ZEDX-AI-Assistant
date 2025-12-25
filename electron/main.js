@@ -309,6 +309,22 @@ async function initialize() {
     createMainAppWindow();
     createTray();
     setupIpcHandlers();
+
+    // Auto-Updater Logic
+    if (!isDev) {
+        const { autoUpdater } = require('electron-updater');
+        autoUpdater.checkForUpdatesAndNotify();
+
+        autoUpdater.on('update-available', () => {
+             if (mainAppWindow) mainAppWindow.webContents.send('update-available');
+        });
+
+        autoUpdater.on('update-downloaded', () => {
+            if (mainAppWindow) mainAppWindow.webContents.send('update-downloaded');
+            // Silent restart after download
+            // autoUpdater.quitAndInstall(); 
+        });
+    }
 }
 
 app.whenReady().then(initialize);
