@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "main": "electron/main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ziademad02153/ZEDX-AI-Assistant.git"
+  },
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
@@ -42,7 +46,14 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "ziademad02153",
+        "repo": "ZEDX-AI-Assistant"
+      }
+    ]
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -52,6 +63,7 @@
     "@supabase/supabase-js": "^2.86.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "electron-updater": "^6.6.2",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.555.0",
     "next": "^16.0.8",
