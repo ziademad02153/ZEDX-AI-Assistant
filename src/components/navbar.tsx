@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Bird, Menu, X, Settings, Sparkles, Info } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -10,14 +10,24 @@ import Image from "next/image";
 export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
 
     useEffect(() => {
+        // Check if running in Electron desktop mode
+        if (typeof window !== "undefined" && (window as unknown as { electronAPI?: { isElectron: boolean } }).electronAPI?.isElectron) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsDesktop(true);
+        }
+
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    // Hide full navbar in desktop mode - DesktopNavBar handles navigation
+    if (isDesktop) return null;
 
     return (
         <nav
@@ -37,6 +47,7 @@ export function Navbar() {
                         width={87}
                         height={87}
                         className="object-contain w-14 h-14 md:w-16 md:h-16 lg:w-[87px] lg:h-[87px]"
+                        style={{ height: 'auto' }}
                         priority
                     />
                 </Link>
@@ -58,6 +69,15 @@ export function Navbar() {
                     >
                         <span className="px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 transition-all">
                             How it Works
+                        </span>
+                    </Link>
+                    <Link
+                        href="/download"
+                        className="flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors group relative"
+                    >
+                        <span className="px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 transition-all flex items-center gap-2">
+                            Desktop App
+                            <span className="bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse shadow-md shadow-emerald-500/20">NEW</span>
                         </span>
                     </Link>
                     <Link
@@ -241,10 +261,13 @@ function AuthButtons() {
                     >
                         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-green-500 shadow-md">
                             {userAvatar ? (
-                                <img
+                                <Image
                                     src={userAvatar}
                                     alt="User Avatar"
+                                    width={40}
+                                    height={40}
                                     className="w-full h-full object-cover"
+                                    style={{ height: 'auto' }}
                                 />
                             ) : (
                                 <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold text-lg">
@@ -262,10 +285,13 @@ function AuthButtons() {
                                 <div className="flex items-center gap-3">
                                     <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-green-500">
                                         {userAvatar ? (
-                                            <img
+                                            <Image
                                                 src={userAvatar}
                                                 alt="User Avatar"
+                                                width={48}
+                                                height={48}
                                                 className="w-full h-full object-cover"
+                                                style={{ height: 'auto' }}
                                             />
                                         ) : (
                                             <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold text-xl">

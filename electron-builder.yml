@@ -1,0 +1,64 @@
+appId: com.zedxai.desktop
+productName: ZEDX AI
+copyright: Copyright (c) 2024 ZEDX AI
+
+directories:
+  output: dist
+  buildResources: electron/assets
+
+files:
+  - electron/**/*
+  - .next/**/*
+  - public/**/*
+  - package.json
+  - "!node_modules/**/*"
+  - node_modules/**/*
+
+extraResources:
+  - from: electron/assets/
+    to: assets/
+    filter:
+      - "**/*"
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: electron/assets/icon.ico
+  artifactName: ZEDX-AI-${version}-Setup.${ext}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  icon: electron/assets/icon.icns
+  artifactName: ZEDX-AI-${version}.${ext}
+  category: public.app-category.productivity
+
+dmg:
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+  icon: electron/assets/icon.png
+  category: Utility

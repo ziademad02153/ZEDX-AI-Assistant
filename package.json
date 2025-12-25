@@ -1,22 +1,61 @@
 {
-  "name": "interview-ass",
-  "version": "0.1.0",
+  "name": "zedx-ai-desktop",
+  "version": "1.0.0",
   "private": true,
+  "main": "electron/main.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "dist": "npm run build && electron-builder",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.zedx.ai",
+    "productName": "ZEDX AI",
+    "copyright": "Copyright © 2024 ZEDX AI",
+    "npmRebuild": false,
+    "directories": {
+      "output": "dist",
+      "buildResources": "resources"
+    },
+    "files": [
+      "electron/**/*",
+      ".next/**/*",
+      "public/**/*",
+      "package.json",
+      "!**/node_modules/@img/sharp-darwin-arm64/**/*",
+      "!**/node_modules/@img/sharp-libvips-darwin-arm64/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/favicon.jpg"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/favicon.jpg"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@huggingface/transformers": "^3.8.1",
     "@radix-ui/react-slot": "^1.2.4",
+    "@ricky0123/vad-web": "^0.0.30",
     "@supabase/supabase-js": "^2.86.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.555.0",
     "next": "^16.0.8",
+    "onnxruntime-web": "^1.23.2",
     "pdfjs-dist": "^5.4.449",
     "react": "19.2.0",
     "react-dom": "19.2.0",
@@ -30,9 +69,14 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.2.1",
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12",
     "eslint": "^9",
     "eslint-config-next": "16.0.5",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wait-on": "^9.0.3"
   }
 }

@@ -42,7 +42,7 @@ export default function TermsOfServicePage() {
 
                     <section>
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">5. Limitation of Liability</h2>
-                        <p>ZEDX-AI Assistant is provided "as is" without warranties of any kind. We are not responsible for:</p>
+                        <p>ZEDX-AI Assistant is provided &quot;as is&quot; without warranties of any kind. We are not responsible for:</p>
                         <ul className="list-disc ml-6 mt-2 space-y-1">
                             <li>Interview outcomes or job offers</li>
                             <li>Accuracy of AI-generated responses</li>

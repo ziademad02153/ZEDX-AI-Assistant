@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .app-container {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #18181b;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-bar {
+            height: 40px;
+            background: linear-gradient(90deg, #064e3b 0%, #047857 100%);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 8px;
+            -webkit-app-region: drag;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            -webkit-app-region: no-drag;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .nav-title {
+            flex: 1;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .close-btn {
+            background: rgba(239, 68, 68, 0.8);
+        }
+
+        .close-btn:hover {
+            background: rgba(239, 68, 68, 1);
+        }
+
+        .content-frame {
+            flex: 1;
+            border: none;
+            width: 100%;
+            height: 100%;
+            background: #18181b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="nav-bar">
+            <button class="nav-btn" id="backBtn" title="Back">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button class="nav-btn" id="refreshBtn" title="Refresh">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 11-3-6.7" />
+                    <path d="M21 4v5h-5" />
+                </svg>
+            </button>
+            <span class="nav-title">ZEDX AI</span>
+            <button class="nav-btn" id="minimizeBtn" title="Minimize">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round">
+                    <path d="M5 12h14" />
+                </svg>
+            </button>
+            <button class="nav-btn close-btn" id="closeBtn" title="Hide">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <iframe id="contentFrame" class="content-frame" src="http://localhost:3000/interview?desktop=true"></iframe>
+    </div>
+
+    <script>
+        const backBtn = document.getElementById('backBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const minimizeBtn = document.getElementById('minimizeBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const contentFrame = document.getElementById('contentFrame');
+
+        backBtn.addEventListener('click', () => {
+            try {
+                contentFrame.contentWindow.history.back();
+            } catch (e) {
+                if (window.electronAPI) {
+                    window.electronAPI.goBack();
+                }
+            }
+        });
+
+        refreshBtn.addEventListener('click', () => {
+            contentFrame.src = contentFrame.src;
+        });
+
+        minimizeBtn.addEventListener('click', () => {
+            if (window.electronAPI) {
+                window.electronAPI.hideApp();
+            }
+        });
+
+        closeBtn.addEventListener('click', () => {
+            if (window.electronAPI) {
+                window.electronAPI.hideApp();
+            }
+        });
+    </script>
+</body>
+
+</html>

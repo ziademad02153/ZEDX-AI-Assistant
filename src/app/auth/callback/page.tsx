@@ -87,9 +87,10 @@ export default function AuthCallbackPage() {
                         window.location.href = "/login";
                     }, 3000);
                 }
-            } catch (e: any) {
-                console.error("Auth callback error:", e);
-                setError(e.message || "An unexpected error occurred");
+            } catch (e: unknown) {
+                const err = e as Error;
+                console.error("Auth callback error:", err);
+                setError(err.message || "An unexpected error occurred");
                 setTimeout(() => {
                     window.location.href = "/login?error=unknown";
                 }, 3000);

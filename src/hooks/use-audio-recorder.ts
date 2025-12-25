@@ -91,8 +91,9 @@ export function useAudioRecorder({ onTranscript, language = "en" }: UseAudioReco
 
             startSlice();
 
-        } catch (err: any) {
-            console.error("Error starting microphone:", err);
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error("Error starting microphone:", error);
             setError("Microphone access denied or not supported.");
             setIsRecording(false);
         }

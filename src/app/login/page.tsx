@@ -1,16 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Mail, ArrowRight, Lock, User, KeyRound, Eye, EyeOff, Sparkles, RefreshCw, CheckCircle2, Zap, Shield, Trophy } from "lucide-react";
+import { Eye, EyeOff, Sparkles, RefreshCw, Zap, Shield, Trophy } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { cn, generateStrongPassword } from "@/lib/utils";
+import { generateStrongPassword } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
 export default function LoginPage() {
-    const router = useRouter();
+    // const router = useRouter();
     const { signIn, signUp, verifyOtp, signInWithGoogle } = useAuth();
 
     // UI State
@@ -97,24 +97,27 @@ export default function LoginPage() {
                     await signUp(formData.email, formData.password, formData.name);
                     setSuccess("Verification code sent! Check your email.");
                     setMode("verify");
-                } catch (err: any) {
-                    setError(err.message || "Signup failed");
+                } catch (err: unknown) {
+                    const error = err as Error;
+                    setError(error.message || "Signup failed");
                 }
             } else if (mode === "verify") {
                 // Should not reach here typically due to separate handler
             } else {
                 try {
-                    const result = await signIn(formData.email, formData.password);
+                    const result = await signIn(formData.email, formData.password) as { session?: { access_token: string } };
                     // Generate unique session token using Supabase session ID + timestamp
                     const sessionId = result?.session?.access_token?.slice(0, 32) || crypto.randomUUID();
                     document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Strict; Secure`;
                     window.location.href = "/dashboard";
-                } catch (err: any) {
-                    setError(err.message || "Invalid credentials");
+                } catch (err: unknown) {
+                    const error = err as Error;
+                    setError(error.message || "Invalid credentials");
                 }
             }
-        } catch (err: any) {
-            console.error("Auth error:", err);
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error("Auth error:", error);
             setError("An unexpected error occurred.");
         } finally {
             setIsLoading(false);
@@ -127,8 +130,9 @@ export default function LoginPage() {
         try {
             await signUp(formData.email, formData.password, formData.name);
             setSuccess("Verification code resent! Check your email.");
-        } catch (err: any) {
-            setError(err.message || "Failed to resend code");
+        } catch (err: unknown) {
+            const error = err as Error;
+            setError(error.message || "Failed to resend code");
         } finally {
             setIsLoading(false);
         }
@@ -139,13 +143,14 @@ export default function LoginPage() {
         setIsLoading(true);
         setError(null);
         try {
-            const result = await verifyOtp(formData.email, formData.otp, 'signup');
+            const result = await verifyOtp(formData.email, formData.otp, 'signup') as { session?: { access_token: string } };
             // Generate unique session token from Supabase response
             const sessionId = result?.session?.access_token?.slice(0, 32) || crypto.randomUUID();
             document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Strict; Secure`;
             window.location.href = "/dashboard";
-        } catch (err: any) {
-            setError(err.message || "Invalid code");
+        } catch (err: unknown) {
+            const error = err as Error;
+            setError(error.message || "Invalid code");
         } finally {
             setIsLoading(false);
         }
@@ -375,14 +380,17 @@ export default function LoginPage() {
                                     <input
                                         type="text"
                                         placeholder="123456"
+                                        maxLength={6}
+                                        inputMode="numeric"
+                                        pattern="[0-9]{6}"
                                         className="flex h-12 w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-4 py-3 text-sm text-gray-900 dark:text-white ring-offset-white dark:ring-offset-zinc-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-center tracking-[0.5em] font-mono text-xl transition-all"
                                         value={formData.otp}
-                                        onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
+                                        onChange={(e) => setFormData({ ...formData, otp: e.target.value.replace(/\D/g, '').slice(0, 6) })}
                                         required
                                     />
                                 </div>
                                 <p className="text-xs text-center text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                    We sent a code to <span className="font-medium text-gray-900 dark:text-white">{formData.email}</span>. <br />Check your spam folder if it doesn't appear.
+                                    We sent a code to <span className="font-medium text-gray-900 dark:text-white">{formData.email}</span>. <br />Check your spam folder if it doesn&apos;t appear.
                                 </p>
                                 <button
                                     type="button"
@@ -425,8 +433,9 @@ export default function LoginPage() {
                                     onClick={async () => {
                                         try {
                                             await signInWithGoogle();
-                                        } catch (err: any) {
-                                            setError(err.message || "Google sign-in failed");
+                                        } catch (err: unknown) {
+                                            const error = err as Error;
+                                            setError(error.message || "Google sign-in failed");
                                         }
                                     }}
                                     disabled={isLoading}
@@ -446,7 +455,7 @@ export default function LoginPage() {
                     <div className="text-center text-sm text-gray-500">
                         {mode === 'signin' ? (
                             <>
-                                Don't have an account?{" "}
+                                Don&apos;t have an account?{" "}
                                 <button onClick={() => setMode('signup')} className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-all">
                                     Sign up
                                 </button>

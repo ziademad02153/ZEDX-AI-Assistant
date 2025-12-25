@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            background: transparent;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        body {
+            -webkit-app-region: drag;
+        }
+
+        .floating-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: #064e3b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            -webkit-app-region: no-drag;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-icon:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .floating-icon:active {
+            transform: scale(0.95);
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="floating-icon" id="floatingIcon">
+        <img src="../public/favicon.jpg" alt="ZEDX AI" class="logo-img" onerror="this.style.display='none'">
+    </div>
+
+    <script>
+        const icon = document.getElementById('floatingIcon');
+
+        icon.addEventListener('click', () => {
+            if (window.electronAPI) {
+                window.electronAPI.toggleApp();
+            }
+        });
+    </script>
+</body>
+
+</html>

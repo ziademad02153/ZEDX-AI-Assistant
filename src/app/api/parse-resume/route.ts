@@ -43,10 +43,11 @@ export async function POST(req: NextRequest) {
                 // result.text is an array of strings (one per page)
                 text = Array.isArray(result.text) ? result.text.join("\n") : (result.text || "");
                 console.log("PDF Parsed successfully with unpdf, length:", text?.length);
-            } catch (pdfError: any) {
-                console.error("PDF Parse Error:", pdfError);
+            } catch (pdfError: unknown) {
+                const err = pdfError as Error;
+                console.error("PDF Parse Error:", err);
                 return NextResponse.json({
-                    error: "Could not parse PDF: " + (pdfError.message || "Unknown error"),
+                    error: "Could not parse PDF: " + (err.message || "Unknown error"),
                     suggestion: "Please try copying your resume text and pasting it directly."
                 }, { status: 500 });
             }
@@ -76,10 +77,11 @@ export async function POST(req: NextRequest) {
             success: true
         });
 
-    } catch (error: any) {
-        console.error("Parsing Error:", error);
+    } catch (error: unknown) {
+        const err = error as Error;
+        console.error("Parsing Error:", err);
         return NextResponse.json(
-            { error: error.message || "Failed to parse file" },
+            { error: err.message || "Failed to parse file" },
             { status: 500 }
         );
     }

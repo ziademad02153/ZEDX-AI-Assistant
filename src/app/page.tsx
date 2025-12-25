@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { Check, Zap, FileText, Globe, Brain, Sparkles, MessageSquare, BarChart3, UploadCloud } from "lucide-react";
+import { Check, Globe, Sparkles } from "lucide-react";
 
 export default function Home() {
   return (
@@ -29,8 +29,8 @@ export default function Home() {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
-              Ace Every Interview. <br />
-              <span className="text-gradient-fusion">Confidently. Discreetly.</span>
+              The #1 AI Interview <br />
+              <span className="text-gradient-fusion">Assistant & Copilot.</span>
             </h1>
 
             <p className="text-xl text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -46,6 +46,12 @@ export default function Home() {
               <Link href="#features" className="w-full sm:w-auto">
                 <Button variant="outline" className="w-full sm:w-auto text-lg px-8 py-6 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 text-gray-900 dark:text-white font-medium">
                   How it Works
+                </Button>
+              </Link>
+              <Link href="/download" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full sm:w-auto text-lg px-8 py-6 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 text-gray-900 dark:text-white font-medium flex items-center gap-2 relative overflow-visible group">
+                  Desktop App
+                  <span className="absolute -top-3 -right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg shadow-emerald-500/30 animate-bounce">NEW</span>
                 </Button>
               </Link>
             </div>
@@ -72,7 +78,7 @@ export default function Home() {
                   <div className="relative z-10 w-full max-w-lg space-y-6">
                     <div className="flex gap-4 items-start animate-fade-in-up">
                       <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
-                        <Image src="/IIcon1.jpg" alt="Interviewer" width={40} height={40} className="object-cover" />
+                        <Image src="/IIcon1.jpg" alt="Interviewer" width={40} height={40} className="object-cover" style={{ height: 'auto' }} />
                       </div>
                       <div className="bg-gray-100 dark:bg-zinc-800 rounded-2xl rounded-tl-none p-4 text-sm text-gray-700 dark:text-gray-300 shadow-sm max-w-[80%]">
                         Can you describe a time you had to optimize a slow database query?
@@ -85,10 +91,10 @@ export default function Home() {
                           <Sparkles className="w-4 h-4 text-green-500 fill-green-500" />
                         </div>
                         <p className="font-medium text-green-700 mb-1 text-xs uppercase tracking-wide">AI Suggestion</p>
-                        "In my previous role, I identified a bottleneck in a PostgreSQL query. I analyzed the execution plan, added a composite index, and refactored the join logic, reducing execution time by 85%..."
+                        &quot;In my previous role, I identified a bottleneck in a PostgreSQL query. I analyzed the execution plan, added a composite index, and refactored the join logic, reducing execution time by 85%...&quot;
                       </div>
                       <div className="w-10 h-10 rounded-full overflow-hidden bg-green-100 flex items-center justify-center">
-                        <Image src="/AI.jpg" alt="ZEDX AI Assistant providing interview coaching" width={40} height={40} className="object-cover" />
+                        <Image src="/AI.jpg" alt="ZEDX AI Assistant providing interview coaching" width={40} height={40} className="object-cover" style={{ height: 'auto' }} />
                       </div>
                     </div>
                   </div>

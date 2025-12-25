@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
                     {/* Introduction */}
                     <section className="mb-10">
                         <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                            This Privacy Notice for ZEDX AI ("we," "us," or "our"), describes how and why we might access, collect, store, use, and/or share ("process") your personal information when you use our services ("Services"), including when you:
+                            This Privacy Notice for ZEDX AI (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), describes how and why we might access, collect, store, use, and/or share (&quot;process&quot;) your personal information when you use our services (&quot;Services&quot;), including when you:
                         </p>
                         <ul className="list-disc ml-6 mt-4 space-y-2 text-gray-600 dark:text-gray-300">
                             <li>Visit our website at zedx-ai-assistant-1.vercel.app, or any website of ours that links to this Privacy Notice</li>
@@ -162,10 +162,10 @@ export default function PrivacyPolicyPage() {
                             <em>In Short: We offer products powered by artificial intelligence and machine learning technologies.</em>
                         </p>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
-                            As part of our Services, we offer products, features, or tools powered by artificial intelligence, machine learning, or similar technologies (collectively, "AI Products"). These tools are designed to enhance your interview experience and provide you with AI-generated answers.
+                            As part of our Services, we offer products, features, or tools powered by artificial intelligence, machine learning, or similar technologies (collectively, &quot;AI Products&quot;). These tools are designed to enhance your interview experience and provide you with AI-generated answers.
                         </p>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
-                            <strong>Use of AI Technologies:</strong> We provide AI Products through third-party service providers ("AI Service Providers"), including OpenAI, Google AI, and Groq. Your input, output, and personal information will be shared with and processed by these AI Service Providers to enable your use of our AI Products.
+                            <strong>Use of AI Technologies:</strong> We provide AI Products through third-party service providers (&quot;AI Service Providers&quot;), including OpenAI, Google AI, and Groq. Your input, output, and personal information will be shared with and processed by these AI Service Providers to enable your use of our AI Products.
                         </p>
                         <p className="text-gray-600 dark:text-gray-300">
                             <strong>Our AI Products are designed for:</strong>
@@ -187,7 +187,7 @@ export default function PrivacyPolicyPage() {
                             Our Services offer you the ability to register and log in using your Google account. Where you choose to do this, we will receive certain profile information about you from Google. The profile information we receive may include your name, email address, and profile picture.
                         </p>
                         <p className="text-gray-600 dark:text-gray-300">
-                            We will use the information we receive only for the purposes described in this Privacy Notice. We recommend that you review Google's privacy policy to understand how they collect, use, and share your personal information.
+                            We will use the information we receive only for the purposes described in this Privacy Notice. We recommend that you review Google&apos;s privacy policy to understand how they collect, use, and share your personal information.
                         </p>
                     </section>
 
@@ -265,7 +265,7 @@ export default function PrivacyPolicyPage() {
                             <em>In Short: Yes, we will update this notice as necessary to stay compliant with relevant laws.</em>
                         </p>
                         <p className="text-gray-600 dark:text-gray-300">
-                            We may update this Privacy Notice from time to time. The updated version will be indicated by an updated "Last Updated" date at the top of this Privacy Notice. We encourage you to review this Privacy Notice frequently to be informed of how we are protecting your information.
+                            We may update this Privacy Notice from time to time. The updated version will be indicated by an updated &quot;Last Updated&quot; date at the top of this Privacy Notice. We encourage you to review this Privacy Notice frequently to be informed of how we are protecting your information.
                         </p>
                     </section>
 
