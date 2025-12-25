@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ErrorBoundary from "@/components/error-boundary";
 import { ConfirmDialogProvider } from "@/components/confirm-dialog";
+import { DesktopNavBar } from "@/components/desktop-nav";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -15,13 +16,14 @@ export const metadata: Metadata = {
     default: "ZEDX AI - Free AI Interview Assistant & Copilot",
     template: "%s | ZEDX AI"
   },
-  description: "ZEDX AI is your free AI-powered interview copilot. Get real-time AI answers during job interviews. Practice with AI, upload resumes, and ace your next interview with ZEDX.",
+  description: "ZEDX AI is the best free AI interview assistant & copilot. Get real-time answers for coding, behavioral, and technical questions. Ace your Zoom, Teams, or Google Meet interviews.",
   keywords: [
-    "ZEDX", "ZEDX AI", "ZEDX-AI", "zedx", "zedx ai",
-    "AI Interview", "AI Interview Assistant", "Interview Copilot",
-    "AI Job Interview", "Interview Helper", "Interview Practice",
-    "Free AI Interview", "Real-time Interview AI", "Job Interview AI",
-    "مساعد المقابلات", "ذكاء اصطناعي للمقابلات"
+    "ZEDX", "ZEDX AI", "ZEDX-AI", "zedx", "zedx ai", "zed x ai",
+    "AI Interview Assistant", "AI for Interview", "Interview Copilot", "Interview AI",
+    "Real-time Interview Helper", "AI Interview Cheat Sheet", "Coding Interview AI",
+    "Free AI Interview Tool", "Live Interview Assistant", "Job Interview Copilot",
+    "Technical Interview AI", "AI Resume Copilot",
+    "مساعد المقابلات", "ذكاء اصطناعي للمقابلات", "حل اسئلة الانترفيو"
   ],
   authors: [{ name: "ZEDX AI Team", url: "https://zedx-ai-assistant-1.vercel.app" }],
   creator: "ZEDX AI",
@@ -169,6 +171,7 @@ export default function RootLayout({
         className={`${inter.variable} antialiased`}
         suppressHydrationWarning
       >
+        <DesktopNavBar />
         <ErrorBoundary>
           <ConfirmDialogProvider>
             {children}

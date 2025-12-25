@@ -7,12 +7,22 @@ const eslintConfig = defineConfig([
   ...nextTs,
   // Override default ignores of eslint-config-next.
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",
+    "dist/**",
+    "node_modules/**",
+    "public/**",
     "next-env.d.ts",
   ]),
+  {
+    files: ["electron/**/*.js"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/no-unused-vars": "off"
+    }
+  }
 ]);
 
 export default eslintConfig;

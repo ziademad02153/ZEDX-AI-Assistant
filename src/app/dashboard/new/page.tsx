@@ -28,15 +28,7 @@ const ResumeIcon = () => (
     </svg>
 );
 
-const RobotIcon = () => (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="11" width="18" height="10" rx="2" />
-        <circle cx="12" cy="5" r="2" />
-        <path d="M12 7v4" />
-        <line x1="8" y1="16" x2="8" y2="16" />
-        <line x1="16" y1="16" x2="16" y2="16" />
-    </svg>
-);
+
 
 const SparklesIcon = () => (
     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -108,12 +100,13 @@ export default function NewInterviewPage() {
             try {
                 const data = await resumeService.getUserResumes();
                 setSavedResumes(data);
-            } catch (e: any) {
-                if (e.message.includes("User not authenticated")) {
+            } catch (e: unknown) {
+                const err = e as Error;
+                if (err.message?.includes("User not authenticated")) {
                     console.warn("Session expired, redirecting to login.");
                     router.push("/login");
                 } else {
-                    console.error("Failed to load resumes", e);
+                    console.error("Failed to load resumes", err);
                 }
             }
         };
@@ -123,8 +116,8 @@ export default function NewInterviewPage() {
         try {
             const savedModel = localStorage.getItem("selected_ai_model");
             if (savedModel) setSelectedModel(savedModel);
-        } catch (e) { /* localStorage unavailable */ }
-    }, []);
+        } catch { /* localStorage unavailable */ }
+    }, [router]);
 
     // Validation - only need job description and resume now (no API key!)
     const isValid = jobDescription.trim().length > 10 && resume.trim().length > 10;
@@ -160,13 +153,14 @@ export default function NewInterviewPage() {
                 // Refresh saved resumes list
                 const updatedResumes = await resumeService.getUserResumes();
                 setSavedResumes(updatedResumes);
-            } catch (saveErr: any) {
+            } catch (saveErr: unknown) {
                 // Silent fail or console warn for auto-save, don't nag user
                 console.warn("Could not auto-save resume:", saveErr);
             }
-        } catch (err: any) {
-            console.error(err);
-            setError(err.message || "Upload Failed. Please try converting to .txt");
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error(error);
+            setError(error.message || "Upload Failed. Please try converting to .txt");
         }
     };
 
@@ -185,7 +179,7 @@ export default function NewInterviewPage() {
             localStorage.setItem("interview_context_lang", language);
             localStorage.setItem("selected_ai_model", selectedModel);
         } catch (e) {
-            console.warn("Could not save to localStorage");
+            console.warn("Could not save to localStorage", e);
         }
 
         // Navigate to interview

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2, FileText, Calendar, ArrowRight, RefreshCw, AlertCircle } from "lucide-react";
 import { resumeService, Resume } from "@/lib/resume-service";
@@ -18,27 +18,28 @@ export default function MyResumesPage() {
     const [isUploading, setIsUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        loadResumes();
-    }, []);
-
-    const loadResumes = async () => {
+    const loadResumes = useCallback(async () => {
         try {
             setIsLoading(true);
             setError(null);
             const data = await resumeService.getUserResumes();
             setResumes(data);
-        } catch (error: any) {
-            if (error.message.includes("User not authenticated")) {
+        } catch (error: unknown) {
+            const err = error as Error;
+            if (err.message?.includes("User not authenticated")) {
                 router.push("/login");
             } else {
-                console.error("Failed to load resumes:", error);
+                console.error("Failed to load resumes:", err);
                 setError("Failed to load resumes. Please try again.");
             }
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [router]);
+
+    useEffect(() => {
+        loadResumes();
+    }, [loadResumes]);
 
     const handleAddResume = async () => {
         if (!newResumeName.trim() || !newResumeContent.trim()) return;

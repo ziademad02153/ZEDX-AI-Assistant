@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Sparkles, X, Send, MessageSquare, Loader2 } from "lucide-react";
+import { Sparkles, X, Send, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function AiCopilot() {
@@ -39,7 +39,7 @@ export function AiCopilot() {
             let selectedModel = "llama-3.1-8b-instant";
             try {
                 selectedModel = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
-            } catch (e) {
+            } catch {
                 // localStorage may be unavailable in some browsers
             }
 

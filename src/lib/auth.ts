@@ -5,10 +5,10 @@ import { User } from '@supabase/supabase-js';
 interface AuthState {
   user: User | null;
   loading: boolean;
-  signIn: (email?: string, password?: string) => Promise<any>;
+  signIn: (email?: string, password?: string) => Promise<unknown>;
   signInWithGoogle: () => Promise<void>;
-  signUp: (email: string, password?: string, fullName?: string) => Promise<any>;
-  verifyOtp: (email: string, token: string, type?: 'signup' | 'recovery' | 'magiclink') => Promise<any>;
+  signUp: (email: string, password?: string, fullName?: string) => Promise<unknown>;
+  verifyOtp: (email: string, token: string, type?: 'signup' | 'recovery' | 'magiclink') => Promise<unknown>;
   signOut: () => Promise<void>;
   checkSession: () => Promise<void>;
 }
@@ -28,17 +28,16 @@ export const useAuth = create<AuthState>((set) => ({
         // Auto-set cookie when session changes
         if (session) {
           const sessionId = session.access_token.slice(0, 32);
-          document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax`;
+          // SECURITY FIX: Added Secure flag for HTTPS-only transmission
+          document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Strict; Secure`;
         }
       });
 
-      // Store cleanup function for proper unsubscribe
+      // FIX: Store subscription cleanup in a global ref for proper unsubscribe
       if (typeof window !== 'undefined') {
-        const cleanup = () => {
-          subscription?.unsubscribe();
-          window.removeEventListener('beforeunload', cleanup);
-        };
-        window.addEventListener('beforeunload', cleanup);
+        // Store reference for cleanup on page unload
+        // @ts-expect-error - Storing subscription globally for cleanup
+        window.__authSubscription = subscription;
       }
     } catch (error) {
       console.error('Session check failed', error);

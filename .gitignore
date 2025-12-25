@@ -13,11 +13,11 @@
 # testing
 /coverage
 
-# next.js
+# build outputs
 /.next/
 /out/
-
-# production
+/dist
+/dist-win
 /build
 
 # misc
@@ -38,4 +38,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+
+# Electron Builder
+/dist
+/dist-win

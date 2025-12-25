@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, Video, VideoOff, Send, Loader2, AlertCircle, CheckCircle, Settings, Eye, EyeOff, Sparkles, Trash2, StopCircle, Copy, LogOut } from "lucide-react";
+import { Mic, Video, VideoOff, Loader2, AlertCircle, Sparkles, Trash2, LogOut, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from 'react-markdown';
 
@@ -15,6 +15,7 @@ export default function InterviewPage() {
     const router = useRouter();
     const { showToast } = useConfirmDialog();
     const videoRef = useRef<HTMLVideoElement>(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const recognitionRef = useRef<any>(null);
     const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
     const isAiSpeakingRef = useRef(false);
@@ -32,41 +33,23 @@ export default function InterviewPage() {
     const [systemStatus, setSystemStatus] = useState({ browser: true, camera: false, mic: false });
     const [interviewContext, setInterviewContext] = useState({ type: "", jd: "", resume: "", lang: "en-US" });
     const [isAutoMode, setIsAutoMode] = useState(true); // Auto Answer ON by default
-    const [debugLog, setDebugLog] = useState<string[]>([]);
     const [lastTranscript, setLastTranscript] = useState<string>(""); // For retry functionality
     const [allQAPairs, setAllQAPairs] = useState<{ question: string, answer: string }[]>([]); // Track Q&A pairs
     const [isSaving, setIsSaving] = useState(false);
     const [interviewStartTime] = useState<Date>(new Date()); // Track when interview started
+    const [manualQuestion, setManualQuestion] = useState(""); // Manual input for coding questions
 
     // Constants
     const MAX_TRANSCRIPT_LENGTH = 4000; // Limit transcript to prevent API issues
 
-    // Settings State
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    const voiceSpeed = 2.0; // Fixed fastest speed
-
-    const addDebugLog = (msg: string) => {
-        setDebugLog(prev => [msg, ...prev].slice(0, 5)); // Keep last 5 logs
-        console.log(`[Debug]: ${msg}`);
-    };
+    // --- DESK_TOP STT ---
 
     // Load Settings
     useEffect(() => {
-        const loadSettings = () => {
-            try {
-                const savedTheme = localStorage.getItem("theme");
-                if (savedTheme === "dark") setIsDarkMode(true);
-                else setIsDarkMode(false);
-            } catch (e) {
-                // localStorage unavailable
-                setIsDarkMode(false);
-            }
-        };
-
-        loadSettings();
-
         // Listen for changes from SettingsDialog
-        const handleSettingsChange = () => loadSettings();
+        const handleSettingsChange = () => {
+            // Placeholder for responsive UI if needed
+        };
         window.addEventListener("settingsChanged", handleSettingsChange);
         window.addEventListener("themeChanged", handleSettingsChange);
 
@@ -84,7 +67,7 @@ export default function InterviewPage() {
             const savedResume = localStorage.getItem("interview_context_resume") || "";
             const savedLang = localStorage.getItem("interview_context_lang") || "en-US";
             setInterviewContext({ type: savedType, jd: savedJD, resume: savedResume, lang: savedLang });
-        } catch (e) {
+        } catch {
             // localStorage unavailable (private mode)
             setInterviewContext({ type: "General", jd: "", resume: "", lang: "en-US" });
         }
@@ -119,226 +102,18 @@ export default function InterviewPage() {
             setSystemStatus(prev => ({ ...prev, camera: false }));
         }
 
+        const videoElem = videoRef.current;
         return () => {
             if (currentStream) {
                 currentStream.getTracks().forEach(track => track.stop());
             }
-            if (videoRef.current) {
-                videoRef.current.srcObject = null;
+            // Fix: Use local variable for cleanup to avoid ref mutation issues
+            if (videoElem) {
+                videoElem.srcObject = null;
             }
         };
     }, [isCameraOn, isCameraVisible]);
-
-    // Silence Detection for Auto-Answer
-    useEffect(() => {
-        if (!isAutoMode || !isRecording || isLoading || !transcript.trim()) return;
-
-        if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
-
-        silenceTimerRef.current = setTimeout(() => {
-            console.log("Auto-answering due to silence...");
-            getAiAnswer();
-        }, 1200);
-
-        return () => {
-            if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
-        };
-    }, [transcript, isAutoMode, isLoading, isRecording]);
-
-    const toggleRecording = () => {
-        if (!systemStatus.browser) {
-            setError("Speech recognition not supported in this browser.");
-            return;
-        }
-
-        if (isRecording) {
-            setIsRecording(false);
-            recognitionRef.current?.stop();
-        } else {
-            try {
-                // Abort any existing recognition first (more reliable than stop)
-                if (recognitionRef.current) {
-                    try {
-                        recognitionRef.current.abort();
-                    } catch (e) { /* Ignore abort error */ }
-                }
-
-                // Small delay to allow abort to process
-                setTimeout(() => {
-                    if (!recognitionRef.current) return;
-
-                    try {
-                        recognitionRef.current.start();
-                        setIsRecording(true);
-                        setError(null);
-                    } catch (err: any) {
-                        console.error("Error starting recognition:", err);
-                        if (err.name === 'InvalidStateError') {
-                            // Already running, just sync state
-                            console.warn("Recognition already running. Syncing state.");
-                            setIsRecording(true);
-                        } else if (err.name === 'NotAllowedError') {
-                            setError("Microphone access denied. Please allow microphone permissions.");
-                            setIsRecording(false);
-                        } else {
-                            setError("Could not start recording. Please refresh.");
-                            setIsRecording(false);
-                        }
-                    }
-                }, 150);
-            } catch (err) {
-                console.error("Error in toggleRecording:", err);
-                setIsRecording(false);
-            }
-        }
-    };
-
-    // Initialize Speech Recognition
-    useEffect(() => {
-        if (typeof window !== 'undefined' && ((window as any).webkitSpeechRecognition || (window as any).SpeechRecognition)) {
-            const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-            recognitionRef.current = new SpeechRecognition();
-            recognitionRef.current.continuous = true;
-            recognitionRef.current.interimResults = true;
-            // Force ar-EG for better Egyptian recognition if generic Arabic is selected
-            recognitionRef.current.lang = interviewContext.lang.startsWith('ar') ? 'ar-EG' : interviewContext.lang;
-            recognitionRef.current.maxAlternatives = 3; // Get more alternatives for better accuracy
-
-            recognitionRef.current.onstart = () => {
-                setSystemStatus(prev => ({ ...prev, mic: true }));
-                setError(null);
-                console.log("[Speech] Recognition started");
-            };
-
-            recognitionRef.current.onend = () => {
-                console.log("[Speech] Recognition ended, isRecording:", isRecording, "isAiSpeaking:", isAiSpeakingRef.current);
-                // Auto-restart ONLY if we are supposed to be recording AND AI is NOT speaking
-                if (isRecording && !isAiSpeakingRef.current) {
-                    console.log("[Speech] Auto-restarting...");
-                    // Use a small delay to prevent rapid restart loops
-                    setTimeout(() => {
-                        if (recognitionRef.current && isRecording && !isAiSpeakingRef.current) {
-                            try {
-                                recognitionRef.current.start();
-                            } catch (e: any) {
-                                if (e.name !== 'InvalidStateError') {
-                                    console.error("[Speech] Failed to restart:", e);
-                                }
-                            }
-                        }
-                    }, 100);
-                }
-            };
-
-            recognitionRef.current.onresult = (event: any) => {
-                let interim = '';
-                let finalText = '';
-
-                // Process only new results
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    const result = event.results[i];
-                    const transcript = result[0].transcript;
-
-                    if (result.isFinal) {
-                        finalText += transcript;
-                    } else {
-                        interim = transcript; // Only keep the latest interim
-                    }
-                }
-
-                // Add final text to transcript
-                if (finalText) {
-                    const cleanedFinal = finalText.trim();
-                    if (cleanedFinal) {
-                        setTranscript(prev => {
-                            // Enhanced deduplication: check if the new text overlaps with the end of existing transcript
-                            const prevTrimmed = prev.trim();
-
-                            // Check if this text is a repeat of what we just added
-                            if (prevTrimmed.endsWith(cleanedFinal)) {
-                                return prev; // Skip complete duplicate
-                            }
-
-                            // Check for partial overlap (last N words match first N words of new text)
-                            const prevWords = prevTrimmed.split(' ').slice(-10); // Last 10 words
-                            const newWords = cleanedFinal.split(' ');
-
-                            // Find overlap: check if end of prev matches start of new
-                            let overlapLength = 0;
-                            for (let len = Math.min(prevWords.length, newWords.length); len > 0; len--) {
-                                const prevEnd = prevWords.slice(-len).join(' ').toLowerCase();
-                                const newStart = newWords.slice(0, len).join(' ').toLowerCase();
-                                if (prevEnd === newStart) {
-                                    overlapLength = len;
-                                    break;
-                                }
-                            }
-
-                            // Remove overlapping words from new text
-                            const textToAdd = overlapLength > 0
-                                ? newWords.slice(overlapLength).join(' ')
-                                : cleanedFinal;
-
-                            if (!textToAdd.trim()) {
-                                return prev; // Nothing new to add
-                            }
-
-                            const newTranscript = prev + (prev ? ' ' : '') + textToAdd;
-                            // Limit transcript length
-                            if (newTranscript.length > MAX_TRANSCRIPT_LENGTH) {
-                                return newTranscript.slice(-MAX_TRANSCRIPT_LENGTH); // Keep last 4000 chars
-                            }
-                            return newTranscript;
-                        });
-                    }
-                    setInterimTranscript('');
-                } else if (interim) {
-                    setInterimTranscript(interim);
-                }
-            };
-
-            recognitionRef.current.onerror = (event: any) => {
-                console.log("[Speech] Error:", event.error);
-
-                // Ignore these non-critical errors and auto-restart
-                if (event.error === 'no-speech' || event.error === 'aborted') {
-                    // Still try to restart after no-speech error
-                    if (event.error === 'no-speech' && isRecording && !isAiSpeakingRef.current) {
-                        setTimeout(() => {
-                            if (recognitionRef.current && isRecording) {
-                                try {
-                                    recognitionRef.current.start();
-                                } catch (e) { /* ignore */ }
-                            }
-                        }, 200);
-                    }
-                    return;
-                }
-
-                // Handle network errors with auto-retry
-                if (event.error === 'network') {
-                    console.log("[Speech] Network error, will retry...");
-                    setTimeout(() => {
-                        if (recognitionRef.current && isRecording) {
-                            try {
-                                recognitionRef.current.start();
-                            } catch (e) { /* ignore */ }
-                        }
-                    }, 1000);
-                    return;
-                }
-
-                console.error("[Speech] Recognition error:", event.error);
-                if (event.error === 'not-allowed') {
-                    setIsRecording(false);
-                    setError("Microphone access denied. Please allow microphone permissions.");
-                    setSystemStatus(prev => ({ ...prev, mic: false }));
-                }
-            };
-        }
-    }, [interviewContext.lang, isRecording]);
-
-    const getAiAnswer = async (retryTranscript?: string) => {
+    const getAiAnswer = useCallback(async (retryTranscript?: string) => {
         const transcriptToUse = retryTranscript || transcript;
 
         // No API key check needed - server has Groq configuration
@@ -367,37 +142,37 @@ export default function InterviewPage() {
             let selectedModel = "llama-3.1-8b-instant";
             try {
                 selectedModel = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
-            } catch (e) { /* localStorage unavailable */ }
+            } catch { /* localStorage unavailable */ }
 
             // Construct the prompt (Unified for all providers)
             const systemPrompt = `
-          SYSTEM INSTRUCTION:
-          You are the candidate in a job interview. You are NOT a coach. You are NOT an assistant.
-          Your name is Ziad (or whatever name is in the resume).
-          
-          CRITICAL RULES:
-          1. Answer the question DIRECTLY. Do not say "Here is how I would answer". Just answer.
-          2. USE THE RESUME DATA. Do not use placeholders like "[insert date]" or "[mention project]". If the specific date or detail is missing in the resume, estimate it reasonably or speak generally about the experience, but NEVER output bracketed placeholders.
-          3. If the resume is empty or missing, say: "I apologize, I don't have my resume details in front of me. Could you ask me about a specific technology?"
-          4. Keep answers concise (2-3 sentences max) and conversational.
-          5. LANGUAGE INSTRUCTION: Answer in the language: ${interviewContext.lang}. 
-          - If the language is 'ar-EG', **YOU MUST ANSWER IN EGYPTIAN ARABIC DIALECT (اللهجة المصرية العامية فقط)**.
-          - **FORBIDDEN**: Do NOT speak Standard Arabic (Fusha). Do NOT use words like "حسناً", "لماذا", "أريد", "سوف".
-          - **REQUIRED**: Speak like a local Egyptian in Cairo. Use words like: "يا فندم", "يا باشا", "حضرتك", "عايز", "عشان", "إيه", "كده", "طب".
-          - Example: "أقدر اساعد حضرتك إزاي؟", "هعمل كده".
-          
-          - If the language is 'ar-SA', **YOU MUST ANSWER IN STANDARD ARABIC (اللغة العربية الفصحى)**.
-          - Speak professionally and formally. Use words like "حسناً", "كيف يمكنني مساعدتك", "سوف نقوم".
-          
-          - If 'en-US', answer in English.
-          
-          CONTEXT:
-          - Interview Type: ${interviewContext.type}
-          - Job Description: ${interviewContext.jd || "Not provided"}
-          - Candidate Resume: ${interviewContext.resume || "Not provided"}
-            `;
+        SYSTEM INSTRUCTION:
+        You are the candidate in a job interview. You are NOT a coach. You are NOT an assistant.
+        Your name is Ziad (or whatever name is in the resume).
 
-            const fullPrompt = `${systemPrompt}\n\nTRANSCRIPT (Interviewer):\n"${currentTranscript}"\n\nYOUR RESPONSE (Candidate):`;
+        CRITICAL RULES:
+        1. Answer the question DIRECTLY. Do not say "Here is how I would answer". Just answer.
+        2. USE THE RESUME DATA. Do not use placeholders like "[insert date]" or "[mention project]". If the specific date or detail is missing in the resume, estimate it reasonably or speak generally about the experience, but NEVER output bracketed placeholders.
+        3. If the resume is empty or missing, say: "I apologize, I don't have my resume details in front of me. Could you ask me about a specific technology?"
+        4. Keep answers concise (2-3 sentences max) and conversational.
+        5. LANGUAGE INSTRUCTION: Answer in the language: ${interviewContext.lang}.
+        - If the language is 'ar-EG', **YOU MUST ANSWER IN EGYPTIAN ARABIC DIALECT (اللهجة المصرية العامية فقط)**.
+        - **FORBIDDEN**: Do NOT speak Standard Arabic (Fusha). Do NOT use words like "حسناً", "لماذا", "أريد", "سوف".
+        - **REQUIRED**: Speak like a local Egyptian in Cairo. Use words like: "يا فندم", "يا باشا", "حضرتك", "عايز", "عشان", "إيه", "كده", "طب".
+        - Example: "أقدر اساعد حضرتك إزاي؟", "هعمل كده".
+
+        - If the language is 'ar-SA', **YOU MUST ANSWER IN STANDARD ARABIC (اللغة العربية الفصحى)**.
+        - Speak professionally and formally. Use words like "حسناً", "كيف يمكنني مساعدتك", "سوف نقوم".
+
+        - If 'en-US', answer in English.
+
+        CONTEXT:
+        - Interview Type: ${interviewContext.type}
+        - Job Description: ${interviewContext.jd || "Not provided"}
+        - Candidate Resume: ${interviewContext.resume || "Not provided"}
+        `;
+
+            // Construct the prompt (Unified for all providers)
 
             // Call Server-Side API (Groq powered - no API key needed)
             const response = await fetch("/api/generate", {
@@ -439,15 +214,16 @@ export default function InterviewPage() {
                 }, 300);
             }
 
-        } catch (error: any) {
-            console.error("Error generating AI response:", error);
+        } catch (error: unknown) {
+            const err = error as Error;
+            console.error("Error generating AI response:", err);
             let errorMessage = "Could not generate response.";
-            if (error.message.includes("429")) {
+            if (err.message.includes("429")) {
                 errorMessage = "AI is busy (Rate Limit). Please try again.";
-            } else if (error.message.includes("configuration missing")) {
+            } else if (err.message.includes("configuration missing")) {
                 errorMessage = "Server AI configuration error. Please contact support.";
             } else {
-                errorMessage = error.message;
+                errorMessage = err.message;
             }
             setAiResponse(`**Error:** ${errorMessage}`);
             setError(errorMessage);
@@ -457,51 +233,482 @@ export default function InterviewPage() {
         } finally {
             setIsLoading(false);
         }
+    }, [interviewContext, transcript, isAutoMode, isRecording, recognitionRef]);
+
+    const handleManualSubmit = () => {
+        if (!manualQuestion.trim()) return;
+        getAiAnswer(manualQuestion);
     };
 
-    const speakResponse = (text: string) => {
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text.replace(/\*/g, ''));
+    // Silence Detection for Auto-Answer
+    useEffect(() => {
+        if (!isAutoMode || !isRecording || isLoading || !transcript.trim()) return;
 
-            // Advanced Voice Selection
-            const voices = window.speechSynthesis.getVoices();
-            // Prioritize "Google" voices, then "Premium", then "Enhanced"
-            const preferredVoice = voices.find(v =>
-                (v.name.includes("Google") || v.name.includes("Premium") || v.name.includes("Enhanced")) &&
-                v.lang.startsWith(interviewContext.lang.split('-')[0])
-            ) || voices.find(v => v.lang.startsWith(interviewContext.lang.split('-')[0]));
+        if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
 
-            if (preferredVoice) {
-                utterance.voice = preferredVoice;
-                addDebugLog(`Using voice: ${preferredVoice.name}`);
+        silenceTimerRef.current = setTimeout(() => {
+            console.log("Auto-answering due to silence...");
+            getAiAnswer();
+        }, 1200);
+
+        return () => {
+            if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+        };
+    }, [transcript, isAutoMode, isLoading, isRecording, getAiAnswer]);
+
+    // Detect if running in Electron (Desktop App)
+    const isElectron = typeof window !== 'undefined' && (window as unknown as { electronAPI?: { isElectron: boolean } }).electronAPI?.isElectron;
+
+    // --- DESKTOP STT (Groq Whisper with Silence Detection) ---
+    const activeStreamsRef = useRef<MediaStream[]>([]);
+    const lastGroqTranscriptRef = useRef<string>("");
+
+    // BANNED_PHRASES - Only filter CLEAR hallucinations (YouTube artifacts, never real speech)
+    const BANNED_PHRASES = [
+        "please subscribe", "like and subscribe", "subscribe to",
+        "thanks for watching", "thank you for watching",
+        "copyright", "subtitles by", "captioned by",
+        "[music]", "[applause]", "(music)", "(applause)"
+    ];
+
+    const processGroqAudio = async (audioBlob: Blob) => {
+        try {
+            // Filter out tiny blobs (headers/noise) to prevent Groq 400 errors
+            if (audioBlob.size < 5000) {
+                console.log(`[Desktop STT] Skipped: audio too small (${audioBlob.size} bytes)`);
+                return;
             }
 
-            utterance.lang = interviewContext.lang;
-            utterance.rate = voiceSpeed; // Use user-defined speed
+            const formData = new FormData();
+            formData.append('file', audioBlob, 'audio.webm');
+            formData.append('model', 'whisper-large-v3-turbo');
 
-            utterance.onstart = () => {
-                isAiSpeakingRef.current = true;
+            // Get selected language
+            const langCode = interviewContext.lang.split('-')[0];
+            formData.append('language', langCode);
+
+            // Add prompt to help Whisper understand the expected language
+            if (langCode === 'en') {
+                formData.append('prompt', 'This is an English job interview conversation.');
+            } else if (langCode === 'ar') {
+                formData.append('prompt', 'هذه محادثة مقابلة عمل باللغة العربية.');
+            }
+
+            console.log(`[Desktop STT] Sending audio with language: ${langCode}`);
+
+            let response;
+            let retries = 2; // Try up to 2 extra times
+            let delay = 1000;
+
+            while (retries >= 0) {
+                response = await fetch('/api/transcribe', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) break;
+
+                if (response.status === 503 || response.status === 429) {
+                    console.warn(`[Desktop STT] Retrying due to ${response.status}... (${retries} left)`);
+                    await new Promise(r => setTimeout(r, delay));
+                    retries--;
+                    delay *= 2;
+                } else {
+                    break;
+                }
+            }
+
+            if (!response || !response.ok) {
+                console.error(`[Desktop STT] API Error: ${response?.status}`);
+                return;
+            }
+
+            const data = await response.json();
+            console.log(`[Desktop STT] Groq returned: "${data.text || '(empty)'}"`);
+
+            if (data.text && data.text.trim()) {
+                const newText = data.text.trim();
+                const clean = newText.toLowerCase().replace(/[.,!?]/g, '').trim();
+                const wordCount = clean.split(/\s+/).length;
+
+                // Filter: too short
+                if (wordCount < 2) {
+                    console.log(`[Desktop STT] Filtered: too short (${wordCount} words): "${newText}"`);
+                    return;
+                }
+
+                // Filter: banned phrases
+                if (BANNED_PHRASES.some(b => clean.includes(b))) {
+                    console.log(`[Desktop STT] Filtered: banned phrase: "${newText}"`);
+                    return;
+                }
+
+                // Filter: duplicate
+                if (lastGroqTranscriptRef.current === clean) {
+                    console.log(`[Desktop STT] Filtered: duplicate`);
+                    return;
+                }
+
+                // Filter: unexpected languages
+                const unexpectedCharsRegex = /[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]/;
+                if (unexpectedCharsRegex.test(newText)) {
+                    console.log(`[Desktop STT] Filtered: unexpected language: "${newText}"`);
+                    return;
+                }
+
+                lastGroqTranscriptRef.current = clean;
+                console.log(`[Desktop STT] ✅ Heard (${langCode}): "${newText}"`);
+
+                setTranscript(prev => (prev + " " + newText).trim().slice(-MAX_TRANSCRIPT_LENGTH));
+
+                if ((window as unknown as { electronAPI?: { sendTranscript: (t: string) => void } }).electronAPI?.sendTranscript) {
+                    (window as unknown as { electronAPI: { sendTranscript: (t: string) => void } }).electronAPI.sendTranscript(newText);
+                }
+            } else {
+                console.log("[Desktop STT] Groq returned empty response");
+            }
+        } catch (error) {
+            console.error("[Desktop STT] Error:", error);
+        }
+    };
+
+    const startDesktopSTT = async () => {
+        try {
+            console.log("[Desktop STT] Starting Smart VAD...");
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+            });
+            activeStreamsRef.current = [stream];
+
+            const audioContext = new AudioContext();
+            const analyser = audioContext.createAnalyser();
+            const source = audioContext.createMediaStreamSource(stream);
+            source.connect(analyser);
+            analyser.fftSize = 512;
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+            (activeStreamsRef.current as unknown as { audioContext: AudioContext }).audioContext = audioContext;
+
+            // VAD Parameters (Optimized to prevent 503 Rate Limiting)
+            const SPEECH_THRESHOLD = 25;        // Volume threshold
+            const SILENCE_DURATION = 2000;      // 2s silence = End of sentence (Reduces API calls)
+            const MIN_SPEECH_DURATION = 1500;   // Ignore < 1.5s (Filters noise & hallucinations)
+            const MAX_RECORDING_TIME = 20000;   // Force send after 20s
+
+            let mediaRecorder: MediaRecorder | null = null;
+            let audioChunks: Blob[] = [];
+            let isSpeaking = false;
+            let silenceStart = 0;
+            let speechStart = 0;
+            let lastLogTime = 0;
+
+            const checkAudioLevel = () => {
+                if (!activeStreamsRef.current.length) return;
+
+                analyser.getByteFrequencyData(dataArray);
+                const average = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+
+                // Log every 2s
+                if (Date.now() - lastLogTime > 2000) {
+                    console.log(`[Desktop STT] Level: ${average.toFixed(1)} | Speaking: ${isSpeaking}`);
+                    lastLogTime = Date.now();
+                }
+
+                if (average > SPEECH_THRESHOLD) {
+                    // SPEECH DETECTED
+                    silenceStart = 0;
+                    if (!isSpeaking) {
+                        isSpeaking = true;
+                        speechStart = Date.now();
+                        audioChunks = [];
+                        console.log("[Desktop STT] Speech detected! 🎙️");
+
+                        mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                        mediaRecorder.ondataavailable = (e) => {
+                            if (e.data.size > 0) audioChunks.push(e.data);
+                        };
+                        mediaRecorder.start(50);
+                    } else {
+                        // Check Max Duration
+                        if (Date.now() - speechStart > MAX_RECORDING_TIME) {
+                            console.log("[Desktop STT] Max duration reached, forcing stop.");
+                            stopAndProcess();
+                        }
+                    }
+                } else {
+                    // SILENCE
+                    if (isSpeaking) {
+                        if (silenceStart === 0) {
+                            silenceStart = Date.now();
+                        } else if (Date.now() - silenceStart > SILENCE_DURATION) {
+                            console.log("[Desktop STT] Sentence finished (Silence).");
+                            stopAndProcess();
+                        }
+                    }
+                }
+                requestAnimationFrame(checkAudioLevel);
             };
 
-            utterance.onend = () => {
-                isAiSpeakingRef.current = false;
-                if (isRecording) {
-                    console.log("Speech ended, resuming recognition...");
-                    try {
-                        recognitionRef.current?.start();
-                    } catch (e) {
-                        console.error("Failed to resume recognition:", e);
-                    }
+            const stopAndProcess = () => {
+                isSpeaking = false;
+                silenceStart = 0;
+
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
+                    mediaRecorder.onstop = async () => {
+                        const duration = Date.now() - speechStart;
+                        console.log(`[Desktop STT] Recording stopped. Duration: ${duration}ms`);
+
+                        if (duration < MIN_SPEECH_DURATION) {
+                            console.log(`[Desktop STT] 🚮 Discarded: Too short (<${MIN_SPEECH_DURATION}ms)`);
+                            audioChunks = [];
+                            return;
+                        }
+
+                        if (audioChunks.length > 0) {
+                            const fullAudio = new Blob(audioChunks, { type: 'audio/webm' });
+                            console.log(`[Desktop STT] 🚀 Sending ${(fullAudio.size / 1024).toFixed(1)}KB to Groq...`);
+                            await processGroqAudio(fullAudio);
+                        }
+                        audioChunks = [];
+                    };
                 }
             };
 
-            window.speechSynthesis.speak(utterance);
-        } else {
-            isAiSpeakingRef.current = false;
-            if (isRecording) recognitionRef.current?.start();
+            checkAudioLevel();
+            setIsRecording(true);
+            console.log("[Desktop STT] VAD Engine Started");
+
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error("Desktop STT Error:", error);
+            setError(error.message || "Recording failed.");
         }
     };
+
+    const stopDesktopSTT = () => {
+        const intervalId = (activeStreamsRef.current as unknown as { intervalId?: NodeJS.Timeout })?.intervalId;
+        if (intervalId) clearInterval(intervalId);
+
+        const audioContext = (activeStreamsRef.current as unknown as { audioContext?: AudioContext })?.audioContext;
+        if (audioContext) audioContext.close();
+
+        activeStreamsRef.current.forEach(stream => {
+            stream.getTracks().forEach(track => track.stop());
+        });
+        activeStreamsRef.current = [];
+        setIsRecording(false);
+        console.log("[Desktop STT] Stopped");
+    };
+
+    // --- TOGGLE RECORDING (UNIFIED) ---
+    const toggleRecording = () => {
+        if (isRecording) {
+            // STOP
+            if (isElectron) {
+                stopDesktopSTT();
+            } else {
+                setIsRecording(false);
+                recognitionRef.current?.stop();
+            }
+        } else {
+            // START
+            if (isElectron) {
+                // Desktop: Use Groq Whisper
+                startDesktopSTT();
+            } else {
+                // Website: Use Web Speech API (original code)
+                if (!systemStatus.browser) {
+                    setError("Speech recognition not supported in this browser.");
+                    return;
+                }
+                try {
+                    if (recognitionRef.current) {
+                        try { recognitionRef.current.abort(); } catch { }
+                    }
+                    setTimeout(() => {
+                        if (!recognitionRef.current) return;
+                        try {
+                            recognitionRef.current.start();
+                            setIsRecording(true);
+                            setError(null);
+                        } catch (err: unknown) {
+                            const error = err as Error;
+                            if (error.name === 'InvalidStateError') {
+                                setIsRecording(true);
+                            } else if (error.name === 'NotAllowedError') {
+                                setError("Microphone access denied.");
+                                setIsRecording(false);
+                            } else {
+                                setError("Could not start recording. Please refresh.");
+                                setIsRecording(false);
+                            }
+                        }
+                    }, 150);
+                } catch {
+                    setIsRecording(false);
+                }
+            }
+        }
+    };
+
+    // Initialize Speech Recognition (WEBSITE ONLY - not in Electron)
+    useEffect(() => {
+        // Skip Web Speech API in Electron - it doesn't work there and causes network errors
+        const isElectronApp = typeof window !== 'undefined' && (window as unknown as { electronAPI?: { isElectron: boolean } }).electronAPI?.isElectron;
+        if (isElectronApp) {
+            console.log("[Speech] Skipping Web Speech API in Electron - using Groq instead");
+            return;
+        }
+
+        interface SpeechRecognitionWindow extends Window {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            webkitSpeechRecognition: any;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            SpeechRecognition: any;
+        }
+        const win = window as unknown as SpeechRecognitionWindow;
+        const SpeechRecognition = win.webkitSpeechRecognition || win.SpeechRecognition;
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = true;
+        recognitionRef.current.interimResults = true;
+        // Force ar-EG for better Egyptian recognition if generic Arabic is selected
+        recognitionRef.current.lang = interviewContext.lang.startsWith('ar') ? 'ar-EG' : interviewContext.lang;
+        recognitionRef.current.maxAlternatives = 3; // Get more alternatives for better accuracy
+
+        recognitionRef.current.onstart = () => {
+            setSystemStatus(prev => ({ ...prev, mic: true }));
+            setError(null);
+            console.log("[Speech] Recognition started");
+        };
+
+        recognitionRef.current.onend = () => {
+            console.log("[Speech] Recognition ended, isRecording:", isRecording, "isAiSpeaking:", isAiSpeakingRef.current);
+            // Auto-restart ONLY if we are supposed to be recording AND AI is NOT speaking
+            if (isRecording && !isAiSpeakingRef.current) {
+                console.log("[Speech] Auto-restarting...");
+                // Use a small delay to prevent rapid restart loops
+                setTimeout(() => {
+                    if (recognitionRef.current && isRecording && !isAiSpeakingRef.current) {
+                        try {
+                            recognitionRef.current.start();
+                        } catch (err: unknown) {
+                            const error = err as Error;
+                            if (error.name !== 'InvalidStateError') {
+                                console.error("[Speech] Failed to restart:", error);
+                            }
+                        }
+                    }
+                }, 100);
+            }
+        };
+
+        recognitionRef.current.onresult = (event: { resultIndex: number; results: { [key: number]: { isFinal: boolean;[key: number]: { transcript: string; }; }; length: number; }; }) => {
+            let interim = '';
+            let finalText = '';
+
+            // Process only new results
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const result = event.results[i];
+                const transcript = result[0].transcript;
+
+                if (result.isFinal) {
+                    finalText += transcript;
+                } else {
+                    interim = transcript; // Only keep the latest interim
+                }
+            }
+
+            // Add final text to transcript
+            if (finalText) {
+                const cleanedFinal = finalText.trim();
+                if (cleanedFinal) {
+                    setTranscript(prev => {
+                        // Enhanced deduplication: check if the new text overlaps with the end of existing transcript
+                        const prevTrimmed = prev.trim();
+
+                        // Check if this text is a repeat of what we just added
+                        if (prevTrimmed.endsWith(cleanedFinal)) {
+                            return prev; // Skip complete duplicate
+                        }
+
+                        // Check for partial overlap (last N words match first N words of new text)
+                        const prevWords = prevTrimmed.split(' ').slice(-10); // Last 10 words
+                        const newWords = cleanedFinal.split(' ');
+
+                        // Find overlap: check if end of prev matches start of new
+                        let overlapLength = 0;
+                        for (let len = Math.min(prevWords.length, newWords.length); len > 0; len--) {
+                            const prevEnd = prevWords.slice(-len).join(' ').toLowerCase();
+                            const newStart = newWords.slice(0, len).join(' ').toLowerCase();
+                            if (prevEnd === newStart) {
+                                overlapLength = len;
+                                break;
+                            }
+                        }
+
+                        // Remove overlapping words from new text
+                        const textToAdd = overlapLength > 0
+                            ? newWords.slice(overlapLength).join(' ')
+                            : cleanedFinal;
+
+                        if (!textToAdd.trim()) {
+                            return prev; // Nothing new to add
+                        }
+
+                        const newTranscript = prev + (prev ? ' ' : '') + textToAdd;
+                        // Limit transcript length
+                        if (newTranscript.length > MAX_TRANSCRIPT_LENGTH) {
+                            return newTranscript.slice(-MAX_TRANSCRIPT_LENGTH); // Keep last 4000 chars
+                        }
+                        return newTranscript;
+                    });
+                }
+                setInterimTranscript('');
+            } else if (interim) {
+                setInterimTranscript(interim);
+            }
+        };
+
+        recognitionRef.current.onerror = (event: { error: string; }) => {
+            console.log("[Speech] Error:", event.error);
+
+            // Ignore these non-critical errors and auto-restart
+            if (event.error === 'no-speech' || event.error === 'aborted') {
+                // Still try to restart after no-speech error
+                if (event.error === 'no-speech' && isRecording && !isAiSpeakingRef.current) {
+                    setTimeout(() => {
+                        if (recognitionRef.current && isRecording) {
+                            try {
+                                recognitionRef.current.start();
+                            } catch { /* ignore */ }
+                        }
+                    }, 200);
+                }
+                return;
+            }
+
+            // Handle network errors with auto-retry
+            if (event.error === 'network') {
+                console.log("[Speech] Network error, will retry...");
+                setTimeout(() => {
+                    if (recognitionRef.current && isRecording) {
+                        try {
+                            recognitionRef.current.start();
+                        } catch { /* ignore */ }
+                    }
+                }, 1000);
+                return;
+            }
+
+            console.error("[Speech] Recognition error:", event.error);
+            if (event.error === 'not-allowed') {
+                setIsRecording(false);
+                setError("Microphone access denied. Please allow microphone permissions.");
+                setSystemStatus(prev => ({ ...prev, mic: false }));
+            }
+        };
+    }, [interviewContext.lang, isRecording]);
+
 
     // Handle End Interview - Save to history and navigate
     const handleEndInterview = async () => {
@@ -715,6 +922,33 @@ export default function InterviewPage() {
                                 <Sparkles size={14} />
                                 <span className="hidden sm:inline">{isAutoMode ? "Auto Answer ON" : "Auto Answer OFF"}</span>
                                 <span className="sm:hidden">{isAutoMode ? "Auto ON" : "Auto OFF"}</span>
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Manual Input for Coding Questions */}
+                    <div className="mb-4">
+                        <div className="relative">
+                            <textarea
+                                value={manualQuestion}
+                                onChange={(e) => setManualQuestion(e.target.value)}
+                                placeholder="Paste coding question or type here... (Press Enter to ask)"
+                                className="w-full p-3 pr-12 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50 resize-y min-h-[60px] text-gray-800 dark:text-gray-200"
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleManualSubmit();
+                                    }
+                                }}
+                            />
+                            <Button
+                                size="icon"
+                                onClick={handleManualSubmit}
+                                disabled={isLoading || !manualQuestion.trim()}
+                                className="absolute bottom-2 right-2 h-8 w-8 bg-green-600 hover:bg-green-700 text-white rounded-md shadow-sm disabled:opacity-50"
+                                title="Get Answer"
+                            >
+                                <Sparkles size={16} />
                             </Button>
                         </div>
                     </div>

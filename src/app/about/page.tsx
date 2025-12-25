@@ -23,19 +23,7 @@ function IconRealTime() {
     );
 }
 
-function IconFree() {
-    return (
-        <div className="relative w-12 h-12">
-            <div className="absolute inset-0 translate-x-0.5 translate-y-0.5 rounded-xl bg-emerald-400/30 blur-sm"></div>
-            <div className="relative w-full h-full rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    <path d="m9 12 2 2 4-4" />
-                </svg>
-            </div>
-        </div>
-    );
-}
+
 
 function IconLanguage() {
     return (
@@ -96,21 +84,7 @@ function IconSmart() {
     );
 }
 
-function IconBrain() {
-    return (
-        <div className="relative w-12 h-12">
-            <div className="absolute inset-0 translate-x-0.5 translate-y-0.5 rounded-xl bg-emerald-400/30 blur-sm"></div>
-            <div className="relative w-full h-full rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
-                    <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
-                    <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
-                    <path d="M12 18v4" />
-                </svg>
-            </div>
-        </div>
-    );
-}
+
 
 export default function AboutPage() {
     const features = [

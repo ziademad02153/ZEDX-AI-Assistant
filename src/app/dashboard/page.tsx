@@ -17,37 +17,38 @@ export default function DashboardPage() {
     const [isAuthChecking, setIsAuthChecking] = useState(true);
 
     useEffect(() => {
-        loadData();
-    }, []);
+        const loadData = async () => {
+            try {
+                setIsLoading(true);
+                const interviews = await interviewService.getUserInterviews();
+                setIsAuthChecking(false); // Auth passed
+                setRecentSessions(interviews.slice(0, 3)); // Get top 3
 
-    const loadData = async () => {
-        try {
-            setIsLoading(true);
-            const interviews = await interviewService.getUserInterviews();
-            setIsAuthChecking(false); // Auth passed
-            setRecentSessions(interviews.slice(0, 3)); // Get top 3
+                // Calculate total minutes from actual durations, fallback to 1 min per interview
+                const totalMins = interviews.reduce((sum, iv) => {
+                    const duration = iv.analysis?.duration_minutes || 1;
+                    return sum + duration;
+                }, 0);
 
-            // Calculate total minutes from actual durations, fallback to 1 min per interview
-            const totalMins = interviews.reduce((sum, iv) => {
-                const duration = iv.analysis?.duration_minutes || 1;
-                return sum + duration;
-            }, 0);
-
-            setStats({
-                totalInterviews: interviews.length,
-                totalMinutes: totalMins
-            });
-        } catch (e: any) {
-            if (e.message.includes("User not authenticated")) {
-                router.push("/login");
-                return;
+                setStats({
+                    totalInterviews: interviews.length,
+                    totalMinutes: totalMins
+                });
+            } catch (e: unknown) {
+                const err = e as Error;
+                if (err.message?.includes("User not authenticated")) {
+                    router.push("/login");
+                    return;
+                }
+                setIsAuthChecking(false);
+                console.error(err);
+            } finally {
+                setIsLoading(false);
             }
-            setIsAuthChecking(false);
-            console.error(e);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        };
+
+        loadData();
+    }, [router]);
 
     const handleDelete = async (id: string, e: React.MouseEvent) => {
         e.preventDefault();
@@ -64,8 +65,11 @@ export default function DashboardPage() {
             await interviewService.deleteInterview(id);
             setRecentSessions(prev => prev.filter(s => s.id !== id));
             setStats(prev => ({ ...prev, totalInterviews: prev.totalInterviews - 1 }));
-        } catch (e) {
-            console.error(e);
+        } catch (e: unknown) {
+            const err = e as Error;
+            console.error(err);
+            // FIX: Show user-facing error message when delete fails
+            alert("Failed to delete interview:" + (err.message || "Try again"));
         }
     };
 

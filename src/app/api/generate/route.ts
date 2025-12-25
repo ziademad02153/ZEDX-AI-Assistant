@@ -8,6 +8,11 @@ const GROQ_MODELS = [
     "openai/gpt-oss-120b"
 ];
 
+// Debug GET handler to verify endpoint reaches the server
+export async function GET() {
+    return NextResponse.json({ status: "ok", message: "AI Generate endpoint is active" });
+}
+
 export async function POST(request: Request) {
     try {
         const body = await request.json();
@@ -31,7 +36,7 @@ export async function POST(request: Request) {
         const modelsToTry = model ? [model, ...GROQ_MODELS.filter(m => m !== model)] : GROQ_MODELS;
         const uniqueModels = [...new Set(modelsToTry)];
 
-        let lastError: any = null;
+        let lastError: Error | null = null;
 
         for (const targetModel of uniqueModels) {
             try {
@@ -82,12 +87,13 @@ export async function POST(request: Request) {
                     provider: "groq"
                 });
 
-            } catch (error: any) {
-                console.warn(`[API Generate] Groq ${targetModel} failed:`, error.message);
-                lastError = error;
+            } catch (error: unknown) {
+                const err = error as Error;
+                console.warn(`[API Generate] Groq ${targetModel} failed:`, err.message);
+                lastError = err;
 
                 // If rate limited or quota exceeded, try next model
-                if (error.message.includes("429") || error.message.includes("quota")) {
+                if (err.message.includes("429") || err.message.includes("quota")) {
                     continue;
                 }
             }
@@ -102,11 +108,12 @@ export async function POST(request: Request) {
             }
         }, { status: 503 });
 
-    } catch (error: any) {
-        console.error("[API Generate] Internal Error:", error);
+    } catch (error: unknown) {
+        const err = error as Error;
+        console.error("[API Generate] Internal Error:", err);
         const isDevEnv = process.env.NODE_ENV === 'development';
         return NextResponse.json(
-            { error: { message: isDevEnv ? error.message : "An error occurred. Please try again." } },
+            { error: { message: isDevEnv ? err.message : "An error occurred. Please try again." } },
             { status: 500 }
         );
     }

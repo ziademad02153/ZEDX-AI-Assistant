@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Clock, Trash2, FileText, AlertCircle, ChevronDown, ChevronUp, Trash, Loader2 } from "lucide-react";
@@ -78,27 +78,28 @@ export default function InterviewHistoryPage() {
     const [error, setError] = useState<string | null>(null);
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
-    useEffect(() => {
-        loadInterviews();
-    }, []);
-
-    const loadInterviews = async () => {
+    const loadInterviews = useCallback(async () => {
         try {
             setIsLoading(true);
             const data = await interviewService.getUserInterviews();
             setInterviews(data);
             setError(null);
-        } catch (e: any) {
-            if (e.message.includes("User not authenticated")) {
+        } catch (e: unknown) {
+            const err = e as Error;
+            if (err.message?.includes("User not authenticated")) {
                 router.push("/login");
             } else {
                 setError("Failed to load interviews");
-                console.error(e);
+                console.error(err);
             }
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [router]);
+
+    useEffect(() => {
+        loadInterviews();
+    }, [loadInterviews]);
 
     const handleDelete = async (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
