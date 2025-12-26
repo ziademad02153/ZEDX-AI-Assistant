@@ -108,15 +108,20 @@ export default function DownloadPage() {
                             </ul>
 
                             <div className="space-y-3">
-                                <Button className="w-full rounded-xl py-7 text-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/25 group relative overflow-hidden">
-                                    <span className="relative z-10 flex items-center justify-center gap-2">
-                                        <Download size={20} />
-                                        Download for Windows
-                                        <span className="text-xs opacity-80 font-normal ml-1">(.exe)</span>
-                                    </span>
-                                    {/* Shimmer Effect */}
-                                    <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-0"></div>
-                                </Button>
+                                <Link
+                                    href="https://github.com/ziademad02153/ZEDX-AI-Assistant/releases/download/v1.0.0/ZEDX.AI.Setup.1.0.0.exe"
+                                    className="block"
+                                >
+                                    <Button className="w-full rounded-xl py-7 text-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/25 group relative overflow-hidden">
+                                        <span className="relative z-10 flex items-center justify-center gap-2">
+                                            <Download size={20} />
+                                            Download for Windows
+                                            <span className="text-xs opacity-80 font-normal ml-1">(.exe)</span>
+                                        </span>
+                                        {/* Shimmer Effect */}
+                                        <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-0"></div>
+                                    </Button>
+                                </Link>
                                 <p className="text-center text-xs text-gray-400">
                                     v1.0.0 Stable • Windows 10/11 • 64-bit
                                 </p>
