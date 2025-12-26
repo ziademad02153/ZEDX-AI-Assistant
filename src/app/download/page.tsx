@@ -109,7 +109,7 @@ export default function DownloadPage() {
 
                             <div className="space-y-3">
                                 <Link
-                                    href="https://github.com/ziademad02153/ZEDX-AI-Assistant/releases/latest/download/ZEDX.AI.Setup.1.0.5.exe"
+                                    href="/ZEDX%20AI%20Setup%201.0.5.exe"
                                     className="block"
                                 >
                                     <Button className="w-full rounded-xl py-7 text-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/25 group relative overflow-hidden">

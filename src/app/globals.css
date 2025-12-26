@@ -168,3 +168,62 @@ body {
   background: radial-gradient(circle at 50% 50%, rgba(22, 163, 74, 0.1), rgba(0, 0, 0, 0) 50%),
     radial-gradient(circle at 0% 0%, rgba(13, 148, 136, 0.08), rgba(0, 0, 0, 0) 50%);
 }
+
+/* Final Optimized Marquee */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-scroll linear infinite;
+  will-change: transform;
+}
+
+.pause-on-hover:hover {
+  animation-play-state: paused !important;
+}
+
+/* Static Logo Style */
+.logo-fuji-shadow {
+  filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.5));
+}
+
+.zedx-glow {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, transparent 70%);
+}
+
+/* Floating animation for Logo */
+@keyframes floating {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+.animate-floating {
+  animation: floating 4s ease-in-out infinite;
+}
+
+.hover-pause:hover .marquee-content {
+  animation-play-state: paused !important;
+}
+
+/* High-res Glow */
+.glow-green {
+  box-shadow: 0 0 25px rgba(34, 197, 94, 0.4);
+}
+
+.pill-glow {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), 0 0 20px rgba(255, 255, 255, 0.4);
+}

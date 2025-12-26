@@ -42,3 +42,6 @@ yarn-error.log*
 # Electron Builder
 /dist
 /dist-win
+
+# Binaries & Large files (Setup files shouldn't be in git)
+public/*.exe

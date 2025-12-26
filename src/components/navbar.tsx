@@ -44,9 +44,9 @@ export function Navbar() {
                     <Image
                         src="/zedx-logo.png"
                         alt="ZEDX-AI Logo"
-                        width={87}
-                        height={87}
-                        className="object-contain w-14 h-14 md:w-16 md:h-16 lg:w-[87px] lg:h-[87px]"
+                        width={95}
+                        height={95}
+                        className="object-contain w-15 h-15 md:w-18 md:h-18 lg:w-[95px] lg:h-[95px] transition-transform group-hover:scale-105"
                         style={{ height: 'auto' }}
                         priority
                     />
@@ -54,37 +54,34 @@ export function Navbar() {
 
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center space-x-4">
-
                     <Link
                         href="/#features"
-                        className="flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                        className="flex items-center gap-1.5 text-[15px] font-semibold text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                         onClick={(e) => {
-                            // If already on home page, scroll to features
                             if (window.location.pathname === '/') {
                                 e.preventDefault();
                                 document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
                             }
-                            // Otherwise, let the link navigate to /#features
                         }}
                     >
-                        <span className="px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 transition-all">
+                        <span className="px-5 py-2.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all">
                             How it Works
                         </span>
                     </Link>
                     <Link
                         href="/download"
-                        className="flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors group relative"
+                        className="flex items-center gap-1.5 text-[15px] font-semibold text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors group relative"
                     >
-                        <span className="px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 transition-all flex items-center gap-2">
+                        <span className="px-5 py-2.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all flex items-center gap-2">
                             Desktop App
-                            <span className="bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse shadow-md shadow-emerald-500/20">NEW</span>
+                            <span className="bg-emerald-500 text-white text-[10.5px] font-bold px-2 py-0.5 rounded-full animate-pulse shadow-md shadow-emerald-500/20">NEW</span>
                         </span>
                     </Link>
                     <Link
                         href="/about"
-                        className="text-sm font-medium transition-colors"
+                        className="text-[15px] font-semibold transition-colors"
                     >
-                        <span className="px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 transition-all">
+                        <span className="px-5 py-2.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all text-gray-700 dark:text-gray-200">
                             About ZEDX AI
                         </span>
                     </Link>
@@ -96,7 +93,6 @@ export function Navbar() {
 
                 {/* Mobile Menu Button */}
                 <div className="md:hidden flex items-center gap-4">
-
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -165,7 +161,6 @@ export function Navbar() {
         </nav>
     );
 }
-
 
 function AuthButtons() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -252,20 +247,17 @@ function AuthButtons() {
         return (
             <div className="relative user-dropdown">
                 <div className="flex items-center gap-4">
-
-
-                    {/* Avatar Button */}
                     <button
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+                        className="flex items-center gap-2 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
                     >
-                        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-green-500 shadow-md">
+                        <div className="w-10.5 h-10.5 rounded-full overflow-hidden border-2 border-green-500 shadow-md">
                             {userAvatar ? (
                                 <Image
                                     src={userAvatar}
                                     alt="User Avatar"
-                                    width={40}
-                                    height={40}
+                                    width={42}
+                                    height={42}
                                     className="w-full h-full object-cover"
                                     style={{ height: 'auto' }}
                                 />
@@ -312,7 +304,6 @@ function AuthButtons() {
 
                             {/* Menu Items */}
                             <div className="p-2">
-
                                 <button
                                     onClick={handleSwitchAccount}
                                     className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-xl transition-colors"
