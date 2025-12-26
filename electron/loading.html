@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>ZEDX AI - Loading</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #18181b;
+            /* zinc-950 */
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            user-select: none;
+            -webkit-app-region: drag;
+        }
+
+        .loader-container {
+            text-align: center;
+            -webkit-app-region: no-drag;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(16, 185, 129, 0.1);
+            /* emerald-500/10 */
+            border-left-color: #10b981;
+            /* emerald-500 */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #e4e4e7;
+            /* zinc-200 */
+        }
+
+        p {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #71717a;
+            /* zinc-500 */
+        }
+
+        /* Essential Window Controls */
+        .window-controls {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            -webkit-app-region: no-drag;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            width: 46px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            color: #a1a1aa;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .control-btn.close:hover {
+            background: #ef4444;
+            /* red-500 */
+            color: white;
+        }
+
+        #error-message {
+            display: none;
+            color: #ef4444;
+            margin-top: 15px;
+            max-width: 80%;
+            font-size: 12px;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        #retry-btn {
+            display: none;
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            -webkit-app-region: no-drag;
+        }
+
+        #retry-btn:hover {
+            background: #059669;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Persistent Close Button (Always visible) -->
+    <div class="window-controls">
+        <button class="control-btn close" id="closeBtn" title="Close App">✕</button>
+    </div>
+
+    <div class="loader-container">
+        <div class="spinner"></div>
+        <h2>Initializing ZEDX AI...</h2>
+        <p>Establishing secure connection</p>
+
+        <div id="error-message"></div>
+        <button id="retry-btn">Retry Connection</button>
+    </div>
+
+    <script>
+        // Use the ContextBridge API (electronAPI) defined in preload.js
+        // Direct require() is blocked by contextIsolation: true
+
+        const statusText = document.querySelector('p');
+        const h2 = document.querySelector('h2');
+        const loader = document.querySelector('.spinner');
+        const errDiv = document.getElementById('error-message');
+        const retryBtn = document.getElementById('retry-btn');
+
+        // Update status after 3 seconds if still loading
+        const slowLoadTimeout = setTimeout(() => {
+            statusText.textContent = 'Connecting to ZEDX Cloud...';
+            statusText.style.color = '#e4e4e7';
+        }, 3000);
+
+        // Update status after 8 seconds
+        const verySlowTimeout = setTimeout(() => {
+            statusText.textContent = 'This is taking longer than usual...';
+            statusText.style.color = '#f59e0b';
+        }, 8000);
+
+        document.getElementById('closeBtn').addEventListener('click', () => {
+            if (window.electronAPI) {
+                window.electronAPI.quitApp();
+            }
+        });
+
+        document.getElementById('retry-btn').addEventListener('click', () => {
+            if (window.electronAPI) {
+                window.electronAPI.retryConnection();
+            }
+            // Reset UI
+            errDiv.style.display = 'none';
+            retryBtn.style.display = 'none';
+            loader.style.display = 'block';
+            h2.textContent = 'Initializing ZEDX AI...';
+            statusText.textContent = 'Retrying connection...';
+            statusText.style.color = '#71717a';
+        });
+
+        // Listen for load errors via Bridge
+        if (window.electronAPI) {
+            window.electronAPI.onLoadError((errorDescription) => {
+                clearTimeout(slowLoadTimeout);
+                clearTimeout(verySlowTimeout);
+
+                errDiv.textContent = `Connection Failed: ${errorDescription}`;
+                errDiv.style.display = 'block';
+                retryBtn.style.display = 'inline-block';
+
+                loader.style.display = 'none';
+                h2.textContent = 'Network Error';
+                statusText.textContent = 'Could not reach ZEDX servers.';
+                statusText.style.color = '#ef4444';
+            });
+        }
+    </script>
+</body>
+
+</html>

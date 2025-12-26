@@ -42,5 +42,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
         return () => ipcRenderer.removeListener('audio-source-ready', wrapper);
     },
 
+    // Error Handling & Connectivity
+    retryConnection: () => ipcRenderer.send('retry-connection'),
+    quitApp: () => ipcRenderer.send('hide-app'), // Using hide-app as per main.js logic for close
+    onLoadError: (callback) => {
+        const wrapper = (event, errorDescription) => callback(errorDescription);
+        ipcRenderer.on('load-error', wrapper);
+        return () => ipcRenderer.removeListener('load-error', wrapper);
+    },
+
     isElectron: true
 });
