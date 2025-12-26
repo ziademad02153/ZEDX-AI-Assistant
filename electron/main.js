@@ -7,7 +7,8 @@ let tray = null;
 let isAppVisible = false;
 
 const isDev = process.env.NODE_ENV !== 'production';
-const APP_URL = isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../.next/server/app/index.html')}`;
+// Using the live site in production ensures all APIs and Auth work perfectly without local overhead
+const APP_URL = isDev ? 'http://localhost:3000' : 'https://zedx-ai-assistant-1.vercel.app';
 
 function initStealth() {
     if (process.platform === 'win32') {
@@ -316,7 +317,7 @@ async function initialize() {
         autoUpdater.checkForUpdatesAndNotify();
 
         autoUpdater.on('update-available', () => {
-             if (mainAppWindow) mainAppWindow.webContents.send('update-available');
+            if (mainAppWindow) mainAppWindow.webContents.send('update-available');
         });
 
         autoUpdater.on('update-downloaded', () => {
