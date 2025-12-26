@@ -1,117 +1,72 @@
-# ZEDX-AI: The Elite AI Interview Copilot
+# ZEDX-AI: Professional Intelligence Systems
 
-![ZEDX-AI Hero](public/zedx-cyberpunk-banner.png)
+[Live Platform](https://zedx-ai-assistant-1.vercel.app) | [Desktop Console](https://github.com/ziademad02153/ZEDX-AI-Assistant/releases/latest)
 
-<div align="center">
-
-**Dominating job interviews with real-time, privacy-first AI intelligence.**
-
-Live Website: [zedx-ai-assistant-1.vercel.app](https://zedx-ai-assistant-1.vercel.app)  
-Desktop App: [Download for Windows](https://github.com/ziademad02153/ZEDX-AI-Assistant/releases/latest)
-
-</div>
+ZEDX-AI is an specialized AI Intelligence System designed for real-time interview augmentation. By integrating advanced neural processing with a low-level system overlay, ZEDX-AI provides untraceable, high-fidelity guidance for professional career advancement.
 
 ---
 
-## The Ultimate Interview Advantage
+## Technical Architecture
 
-ZEDX-AI is a professional-grade AI Interview Copilot engineered for clarity, speed, and absolute stealth. Unlike standard browser extensions, ZEDX-AI utilizes advanced hardware-level audio capture and an untraceable overlay system to provide real-time guidance during Zoom, Teams, and Google Meet interviews.
+ZEDX-AI operates on a hybrid infrastructure, balancing client-side responsiveness with cloud-scale intelligence.
 
-### System Architecture
+### Neural Processing Pipeline
 
 ```mermaid
-graph TD
-    subgraph "Client Interface (Next.js + Electron)"
-        UI[Elite UI Overlay] -->|Hardware Capture| Audio[System Audio Engine]
-        Audio -->|Neural VAD| Filter[VAD Noise Filter]
-        Filter -->|Clean Stream| STT[ZEDX-Whiz Transcription]
-    end
-    
-    subgraph "Intelligence Core (Server-Side)"
-        STT -->|Auth Session| API[Elite API Gateway]
-        API -->|Round-Robin| Keys[5x LPU Keys]
-        Keys -->|Inference| AI[Groq Intelligence]
-    end
-    
-    subgraph "Secure Storage"
-        AI -->|Analysis| DB[Supabase PostgreSQL]
-        DB -->|RLS Encrypted| History[User Sessions]
-    end
-    
-    style STT fill:#10b981,stroke:#064e3b,stroke-width:2px,color:#fff
-    style AI fill:#10b981,stroke:#064e3b,stroke-width:2px,color:#fff
-    style DB fill:#10b981,stroke:#064e3b,stroke-width:2px,color:#fff
+graph LR
+    A[System Audio] --> B(Neural VAD Filter)
+    B --> C{Transcription Whiz}
+    C -->|Local| D[Web Speech API]
+    C -->|Relay| E[Groq Whisper LPU]
+    E --> F[Context-Aware Prompting]
+    F --> G[Llama 3.3 70B Intelligence]
+    G --> H[Stealth Visualization]
 ```
 
-### User Journey
+### Infrastructure Components
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant App as ZEDX-AI Desktop
-    participant AI as Intelligence Engine
-    
-    User->>App: Launch Stealth Overlay (Alt+Space)
-    App->>App: Initialize Hardware Audio Sync
-    
-    loop Real-Time Guidance
-        User->>App: Receives Interview Question
-        App->>App: Process System Audio via VAD
-        App->>AI: Send Encrypted Transcript + Context
-        AI->>App: Generate Elite Response (LPU Speed)
-        App->>User: Display Guidance in Stealth Overlay
-    end
-```
-
-### Why ZEDX-AI?
-- Professional-Grade Accuracy: Context-aware AI that reads your Resume and Job Description to generate tailored, high-impact responses.
-- Ultra-Fast Inference: Powered by Groq LPU, delivering AI suggestions in under 500ms.
-- Privacy-First Architecture: Your interview data stays yours. Encryption and Row-Level Security (RLS) ensure total isolation.
+| Layer | Technology | Function |
+| :--- | :--- | :--- |
+| Core Framework | Next.js 16 (Turbopack) | High-performance reactive web architecture. |
+| Desktop Runtime | Electron 39 | Low-level OS integration and hardware access. |
+| AI Inference | Groq LPU (5-Key Scaling) | Sub-500ms response latency for complex queries. |
+| Data Security | Supabase PostgreSQL | Military-grade RLS (Row Level Security) encryption. |
+| Audio Intelligence | Neural VAD (Voice Activity) | Precision filtering of background digital noise. |
 
 ---
 
-## Professional Desktop Features
+## Core System Capabilities
 
-The ZEDX-AI Desktop Application is where the true power lies, offering features impossible to achieve in a web browser:
+### Untraceable Stealth Overlay
+The ZEDX-AI Desktop Console utilizes a custom windowing strategy that ensures the intelligence overlay remains invisible to all screen-sharing and monitoring software.
+- High-Performance Transparency: Zero GPU overhead during active sessions.
+- System Integration: Direct hardware-level listeners for interviewer audio capture.
 
-### Stealth Overlay (Untraceable)
-Run ZEDX-AI as a transparent, high-performance overlay that sits directly over your video conferencing app. It is 100% untraceable by screen-sharing software (Zoom/Teams), allowing you to receive guidance without detection.
+### Hybrid STT Scaling (ZEDX-Whiz)
+Transcription is handled by a sophisticated logic-gate system that optimizes for both cost and accuracy.
+- Browser Instance: Utilizes native Web Speech API for zero-cost, localized processing.
+- Desktop Instance: Utilizes a 5-key round-robin Groq Whisper relay to bypass rate limits and maintain high-fidelity verbal capture.
 
-### System Audio Capture
-Capture crystal-clear interviewer audio directly from your system. Whether you're using headphones or speakers, ZEDX-AI hears what you hear, ensuring perfect transcription even in complex setups.
-
-### Multi-Key High Availability
-Our backend utilizes a sophisticated Multi-Key Load Balancing system (5x Groq Keys) to ensure zero downtime and sub-second transcription latency, even during peak usage.
-
-### Auto-Update System
-Stay on the cutting edge with our built-in auto-updater. The app seamlessly checks for and installs the latest optimizations and features from GitHub.
-
----
-
-## Elite Tech Stack
-
-- Framework: Next.js 16 + Electron 39
-- Intelligence Engine: Groq LPU (Llama 3.3 70B, Llama 3.1 8B, Qwen 32B)
-- Voice Control: Hybrid Web Speech API + High-Accuracy Server-Side Whisper (Groq)
-- Neural VAD: Custom Voice Activity Detection to filter noise and silence.
-- Secure Backend: Supabase with Row-Level Security (RLS)
-- UI/UX: Tailored Cyberpunk Aesthetic with Tailwind CSS 4.0 and Framer Motion
+### Contextual Memory Engine
+The AI does not operate in a vacuum. It ingests and correlates multiple data points to provide precise guidance:
+- Professional Resumes: Parsed and indexed in real-time.
+- Job Specifications: Semantic matching between user skills and career requirements.
 
 ---
 
-## Getting Started
+## Deployment & Implementation
 
-1. Download and Install: Grab the latest EXE from the Releases page.
-2. Login: Seamlessly sync with your Google account via Supabase Auth.
-3. Prepare: Upload your Resume and JD to the dashboard.
-4. Activate: Launch the Stealth Overlay (Alt+Space) and dominate your interview.
+### Prerequisites
+- Windows 10/11 Architecture
+- Node.js 18 (LTS) for development
+- Active Supabase Project for persistent state management
+
+### Native Installation
+1. Binary Execution: Download the latest ZEDX Setup EXE from the official repository.
+2. Secure Authentication: Sign in via the encrypted Supabase Auth gateway.
+3. Intelligence Activation: Initialize the Console and toggle the Stealth Overlay (Alt+Space).
 
 ---
 
-<div align="center">
-
-**Engineering the future of employment interviews.**
-
-Developed by Ziad Emad
-
-</div>
+Developed by Ziad Emad.
+Focused on Technical Excellence and Privacy-First Design.

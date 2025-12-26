@@ -1,39 +1,31 @@
-# Professional Implementation Guidelines: ZEDX-AI
+# Professional Standards and Logic Guidelines: ZEDX-AI
 
-## UI/UX Engineering and Branding
-- Aesthetic Integrity: The ZEDX Cyberpunk aesthetic (Black, Gray, Emerald) is the project identity. All UI changes must adhere to this high-contrast, premium design system.
-- Micro-Animations: Use Framer Motion for smooth transitions, hover effects, and shimmer animations to maintain a premium feel.
-- Branding: ZEDX-AI must be consistently capitalized and styled. Avoid zedx or lowercase variants in user-facing text.
+## Architecture Overview
+ZEDX-AI is a high-fidelity intelligence platform. Every implementation must respect the balance between stealth, speed, and data integrity.
 
-## Advanced Transcription Engine (ZEDX-Whiz)
-> Our proprietary transcription strategy ensures 99.9% uptime and ultra-low latency.
+## Engineering Principles
+- Performance Hierarchy: Local processing is preferred for latency; Cloud scaling is utilized for intelligence depth.
+- Branding Standards: Use "ZEDX-AI" in all professional communications. Visuals must adhere to the high-contrast Emerald/Dark Gray palette.
+- Documentation Integrity: Maintain clean, information-dense Markdown files without decorative elements.
 
-| Environment | Engine | Scaling | Logic |
-|-------------|--------|---------|-------|
-| Web Browser | Web Speech API | Native | Zero-latency, privacy-first, free. |
-| Desktop Elite | Groq-Whisper-Turbo | 5-Key Load Balanced | High-fidelity transcription for system audio capture. |
+## Transcription Logic (ZEDX-Whiz)
+The transcription system is divided into two operational modes:
+1. Native Web Mode: Implementation via Web Speech API. Reserved for browser-based interactions.
+2. Desktop Console Mode: Implementation via 5-key load-balanced Groq Whisper LPU. Reserved for low-level system capture.
 
-### Technical Directives:
-1. High Availability: The 5-key round-robin system in transcribe/route.ts is a critical architecture choice. It bypasses Groq Rate Limits and ensures sub-second responses.
-2. Stealth Mode Logic: The overlay MUST remain untraceable. This is achieved through transparent windowing and hardware-level capture in Electron.
-3. Smart VAD (Digital Silence Filter): Our custom VAD implementation filters background noise and digital silence before hitting the API, saving bandwidth and improving accuracy.
+### Critical Directives:
+- VAD Implementation: All audio streams must pass through the Voice Activity Detection filter to prevent API resource depletion during silence.
+- Round-Robin Scaling: Ensure the 5-key logic in the API layer is never compromised, as it is essential for bypass of standard rate limiting.
 
-## Technical Excellence Standards
-- Performance First: All React components should be optimized with useMemo and useCallback where necessary to ensure the overlay does not lag during intense GPU tasks.
-- Enterprise-Grade Security: Row-Level Security (RLS) is the backbone of our data privacy. Every query must respect the auth.uid() = user_id constraint.
-- Code Cleanliness: No placeholder code or TODOs in the production branch. All variables must be strictly typed (TypeScript).
+## Security Framework
+- Row-Level Security: Mandatory for all tables. No data leak between user sessions is acceptable.
+- Context Isolation: Desktop windows must run with `contextIsolation: true` to prevent unauthorized cross-process communication.
 
-## Communication and Ethics
-- Technical Honesty: We do not hide limitations; we engineer solutions for them. If a feature (like 100% hallucination-free AI) is impossible, we implement filters to minimize its impact.
-- Expert Guidance: We provide the USER with technical options, highlighting the Premium path over the Minimum Viable path.
-
-## The Whisper Hallucination Shield
-- Hallucination Filtering: We implement minimum-duration and noise-floor filters locally.
-- Response Validation: AI responses are validated for professional tone and context matching before display.
-
-## Strategic Constraints
-- No Heavy Subsystems: We avoid Python/Docker dependencies to keep the installer footprint under 500MB and user-friendly.
-- Next.js + Electron Core: Our stack is chosen for its balance of power and portability.
+## Ethics and Accuracy
+- Technical Transparency: Limitations of the Whisper model (hallucination in silence) are countered by system-level filters, not concealed by marketing text.
+- Expert Trajectory: Always prioritize the technical "Premium" path over basic alternatives during development.
 
 ---
-**ZEDX-AI: Professionalism through Technical Dominance.**
+Engineering Excellence. 
+Professional Dominance.
+🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️ (في الشات بس!)
