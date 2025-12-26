@@ -107,10 +107,63 @@ function createMainAppWindow() {
         mainAppWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
     }
 
-    // Load desktop entry page - handles auth check and redirects properly
-    // If logged in → dashboard, if not → login
-    // QA FIX: Direct to login if desktop route is flaky
-    mainAppWindow.loadURL(`${APP_URL}/login?desktop=true`);
+    // STEP 1: Load local loading screen immediately (Ensures window is never black/empty)
+    mainAppWindow.loadFile(path.join(__dirname, 'loading.html'));
+
+    // STEP 2: Attempt to load the remote app after a brief render delay
+    loadAppContent();
+
+    mainAppWindow.on('close', (e) => {
+        e.preventDefault();
+        mainAppWindow.hide();
+        isAppVisible = false;
+    });
+}
+
+function loadAppContent() {
+    if (!mainAppWindow) return;
+
+    const startUrl = `${APP_URL}/login?desktop=true`;
+    console.log('[Electron] Loading Remote URL:', startUrl);
+
+    // Add a small delay to ensure loading.html is fully rendered before navigation starts
+    setTimeout(() => {
+        mainAppWindow.loadURL(startUrl).catch(e => {
+            console.error('[Electron] Failed to load URL:', e);
+            // If loadURL fails synchronously (e.g. invalid URL), notify the loading page
+            mainAppWindow.webContents.send('load-error', e.message);
+        });
+    }, 1500);
+
+    // SAFETY NET: If the page takes more than 15 seconds to load, show a timeout error
+    const safetyTimeout = setTimeout(() => {
+        console.error('[Electron] Navigation timed out (15s limit)');
+        mainAppWindow.loadFile(path.join(__dirname, 'loading.html'));
+        mainAppWindow.webContents.once('did-finish-load', () => {
+            mainAppWindow.webContents.send('load-error', 'Connection timed out. Please check your internet.');
+        });
+    }, 15000);
+
+    // Clear timeout if load succeeds
+    mainAppWindow.webContents.once('did-finish-load', () => {
+        clearTimeout(safetyTimeout);
+        console.log('[Electron] Remote content loaded successfully');
+    });
+
+    // Handle network failures during navigation (e.g. DNS error, Timeout)
+    mainAppWindow.webContents.once('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+        clearTimeout(safetyTimeout);
+        // Ignore expected aborts (e.g. user clicking retry quickly)
+        if (errorCode === -3) return;
+
+        console.error('[Electron] Page failed to load:', errorCode, errorDescription);
+
+        // Reload loading.html and send error
+        mainAppWindow.loadFile(path.join(__dirname, 'loading.html'));
+        mainAppWindow.webContents.once('did-finish-load', () => {
+            mainAppWindow.webContents.send('load-error', errorDescription);
+        });
+    });
 
     mainAppWindow.on('close', (e) => {
         e.preventDefault();
@@ -138,11 +191,20 @@ function setupIpcHandlers() {
     });
 
     ipcMain.on('hide-app', () => {
-        if (mainAppWindow && isAppVisible) {
+        if (mainAppWindow) {
             mainAppWindow.hide();
             isAppVisible = false;
         }
     });
+
+    ipcMain.on('retry-connection', () => {
+        loadAppContent();
+    });
+
+    ipcMain.on('quit-app', () => {
+        app.quit();
+    });
+
 
     ipcMain.on('go-back', () => {
         if (mainAppWindow && mainAppWindow.webContents.canGoBack()) {

@@ -1,6 +1,6 @@
 {
   "name": "zedx-ai-desktop",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "ZEDX AI - The ultimate AI Interview Assistant for real-time technical and behavioral guidance.",
   "author": "Ziad Emad",
   "private": true,
@@ -45,8 +45,8 @@
       "icon": "public/favicon.jpg"
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true
     },
     "publish": [
