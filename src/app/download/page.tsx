@@ -126,6 +126,16 @@ export default function DownloadPage() {
                                     v1.0.0 Stable • Windows 10/11 • 64-bit
                                 </p>
                             </div>
+
+                            {/* Security Note for Unsigned App */}
+                            <div className="mt-8 p-4 rounded-xl bg-blue-500/5 border border-blue-500/10 flex gap-3 text-left animate-fade-in">
+                                <Info size={20} className="text-blue-500 shrink-0 mt-0.5" />
+                                <div className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                                    <strong className="text-gray-900 dark:text-white block mb-1">Security Note:</strong>
+                                    Windows might show a "Protected your PC" warning because ZEDX AI is currently an independent developer app.
+                                    To install, simply click <strong>"More info"</strong> and then <strong>"Run anyway"</strong>.
+                                </div>
+                            </div>
                         </div>
                     </div>
 

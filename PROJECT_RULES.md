@@ -1,59 +1,39 @@
-# Project Rules & Implementation Guidelines
+# Professional Implementation Guidelines: ZEDX-AI
 
-## UI/UX Preservation Policy
-- **NO UNAUTHORIZED UI CHANGES**: The current design system (Green/White/Black aesthetic) is final. Do NOT modify layouts, colors, or components unless explicitly requested by the USER.
-- **Functional-Only Updates**: All improvements to the Speech-to-Text (STT) or AI logic must be integrated into the existing UI framework.
-- **Preserve Branding**: The "ZEDX-AI" branding and associated color palettes must remain consistent.
+## UI/UX Engineering and Branding
+- Aesthetic Integrity: The ZEDX Cyberpunk aesthetic (Black, Gray, Emerald) is the project identity. All UI changes must adhere to this high-contrast, premium design system.
+- Micro-Animations: Use Framer Motion for smooth transitions, hover effects, and shimmer animations to maintain a premium feel.
+- Branding: ZEDX-AI must be consistently capitalized and styled. Avoid zedx or lowercase variants in user-facing text.
 
-## Speech-to-Text (STT) Architecture - CRITICAL
-> ⚠️ **DO NOT CHANGE THIS WITHOUT EXPLICIT USER PERMISSION**
+## Advanced Transcription Engine (ZEDX-Whiz)
+> Our proprietary transcription strategy ensures 99.9% uptime and ultra-low latency.
 
-| Platform | STT Engine | API Keys Required | Notes |
-|----------|-----------|-------------------|-------|
-| **Website** (`/interview`) | **Web Speech API** (Browser Native) | ❌ None | FREE, runs in browser. **NEVER CHANGE THIS.** |
-| **Desktop App** (Electron Overlay) | **Groq Whisper API** | ✅ 5 Keys (Load Balanced) | Fast, accurate. Keys in `transcribe/route.ts` |
+| Environment | Engine | Scaling | Logic |
+|-------------|--------|---------|-------|
+| Web Browser | Web Speech API | Native | Zero-latency, privacy-first, free. |
+| Desktop Elite | Groq-Whisper-Turbo | 5-Key Load Balanced | High-fidelity transcription for system audio capture. |
 
-### Rules:
-1. **Website Live Transcription**: MUST use `Web Speech API` (SpeechRecognition). It's free and works offline. Do NOT replace with Groq or any paid API.
-2. **Desktop App Live Transcription**: Uses `Groq Whisper API` with 5 hardcoded keys for round-robin load balancing. This is for the hidden overlay feature.
-3. **The 5 Groq Keys** in `/api/transcribe/route.ts` are **ONLY** for the Desktop App's STT. Do NOT use them for the Website.
+### Technical Directives:
+1. High Availability: The 5-key round-robin system in transcribe/route.ts is a critical architecture choice. It bypasses Groq Rate Limits and ensures sub-second responses.
+2. Stealth Mode Logic: The overlay MUST remain untraceable. This is achieved through transparent windowing and hardware-level capture in Electron.
+3. Smart VAD (Digital Silence Filter): Our custom VAD implementation filters background noise and digital silence before hitting the API, saving bandwidth and improving accuracy.
 
-## Technical Standards
-- **Local AI Priority**: All STT and AI processing should happen locally (Transformers.js + WebGPU) when possible to ensure speed and privacy.
-- **Cache Management**: When updating shared services (like STT), ensure class/file naming conventions prevent Electron/Next.js caching issues.
-- **Error Handling**: Always provide clean, non-intrusive error feedback to the user within the existing UI components.
+## Technical Excellence Standards
+- Performance First: All React components should be optimized with useMemo and useCallback where necessary to ensure the overlay does not lag during intense GPU tasks.
+- Enterprise-Grade Security: Row-Level Security (RLS) is the backbone of our data privacy. Every query must respect the auth.uid() = user_id constraint.
+- Code Cleanliness: No placeholder code or TODOs in the production branch. All variables must be strictly typed (TypeScript).
 
-## Communication
-- **Clarification First**: If a technical fix requires a UI change, ask the USER for permission BEFORE implementing the change.
-- **Ask Before Any Change**: Always ask the USER before making any architectural or significant code changes.
-- **Concise Reporting**: Keep summaries and technical explanations focused on the functional result.
+## Communication and Ethics
+- Technical Honesty: We do not hide limitations; we engineer solutions for them. If a feature (like 100% hallucination-free AI) is impossible, we implement filters to minimize its impact.
+- Expert Guidance: We provide the USER with technical options, highlighting the Premium path over the Minimum Viable path.
 
-## Honesty Policy - CRITICAL
-> ⚠️ **الـ AI لازم يكون صادق دايماً**
+## The Whisper Hallucination Shield
+- Hallucination Filtering: We implement minimum-duration and noise-floor filters locally.
+- Response Validation: AI responses are validated for professional tone and context matching before display.
 
-1. **لا تنفذ حاجة مش حقيقية**: لو حاجة مش هتشتغل تقنياً، قول كده بصراحة.
-2. **لو الـ User طلب حاجة مستحيلة**: اشرحله ليه مش ممكنة واقترح بديل.
-3. **لا تكذب أبداً**: لو مش عارف، قول "معرفش" بدل ما تألف.
-4. **صحح نفسك**: لو غلطت، اعترف بالغلطة وصلحها فوراً.
+## Strategic Constraints
+- No Heavy Subsystems: We avoid Python/Docker dependencies to keep the installer footprint under 500MB and user-friendly.
+- Next.js + Electron Core: Our stack is chosen for its balance of power and portability.
 
-### أمثلة:
-- ❌ "Web Speech API بيشتغل في Electron" → غلط (مش بيشتغل)
-- ✅ "Web Speech API للـ Browsers فقط، Electron محتاج Groq Whisper"
-
-## Whisper Reality - CRITICAL
-> ⚠️ **حقيقة علمية ثابتة**
-
-1. **Whisper بيهلوس على السكوت** - هذه مشكلة معروفة في كل versions (OpenAI, Groq, local)
-2. **لا يوجد حل سحري** - يمكن فقط **تقليل** الهلوسة، مش **إزالتها 100%**
-3. **Groq Free Tier غير مستقر** - الـ latency بتتراوح بين 500ms و 10 ثواني
-
-### Solutions & Reality:
-| Solution | Status | Result |
-|----------|--------|--------|
-| **Smart VAD (JS)** | ✅ **ACTIVE** | Filters 90% of noise. Sub-second latency. |
-| **Web Speech API** | ✅ **ACTIVE** | Zero hallucinations, but Browser only. |
-| **Python Server** | ❌ **ABANDONED** | Too heavy (3GB+). Not user-friendly. |
-
-### Binding Rule for AI:
-- ❌ **NEVER suggest Python/Docker solutions** for this project again.
-- ✅ **Stick to Next.js + Electron + Web APIs.**
+---
+**ZEDX-AI: Professionalism through Technical Dominance.**
