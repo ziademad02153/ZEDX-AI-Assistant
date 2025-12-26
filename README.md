@@ -17,6 +17,52 @@ Desktop App: [Download for Windows](https://github.com/ziademad02153/ZEDX-AI-Ass
 
 ZEDX-AI is a professional-grade AI Interview Copilot engineered for clarity, speed, and absolute stealth. Unlike standard browser extensions, ZEDX-AI utilizes advanced hardware-level audio capture and an untraceable overlay system to provide real-time guidance during Zoom, Teams, and Google Meet interviews.
 
+### System Architecture
+
+```mermaid
+graph TD
+    subgraph "Client Interface (Next.js + Electron)"
+        UI[Elite UI Overlay] -->|Hardware Capture| Audio[System Audio Engine]
+        Audio -->|Neural VAD| Filter[VAD Noise Filter]
+        Filter -->|Clean Stream| STT[ZEDX-Whiz Transcription]
+    end
+    
+    subgraph "Intelligence Core (Server-Side)"
+        STT -->|Auth Session| API[Elite API Gateway]
+        API -->|Round-Robin| Keys[5x LPU Keys]
+        Keys -->|Inference| AI[Groq Intelligence]
+    end
+    
+    subgraph "Secure Storage"
+        AI -->|Analysis| DB[Supabase PostgreSQL]
+        DB -->|RLS Encrypted| History[User Sessions]
+    end
+    
+    style STT fill:#10b981,stroke:#064e3b,stroke-width:2px,color:#fff
+    style AI fill:#10b981,stroke:#064e3b,stroke-width:2px,color:#fff
+    style DB fill:#10b981,stroke:#064e3b,stroke-width:2px,color:#fff
+```
+
+### User Journey
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant App as ZEDX-AI Desktop
+    participant AI as Intelligence Engine
+    
+    User->>App: Launch Stealth Overlay (Alt+Space)
+    App->>App: Initialize Hardware Audio Sync
+    
+    loop Real-Time Guidance
+        User->>App: Receives Interview Question
+        App->>App: Process System Audio via VAD
+        App->>AI: Send Encrypted Transcript + Context
+        AI->>App: Generate Elite Response (LPU Speed)
+        App->>User: Display Guidance in Stealth Overlay
+    end
+```
+
 ### Why ZEDX-AI?
 - Professional-Grade Accuracy: Context-aware AI that reads your Resume and Job Description to generate tailored, high-impact responses.
 - Ultra-Fast Inference: Powered by Groq LPU, delivering AI suggestions in under 500ms.
