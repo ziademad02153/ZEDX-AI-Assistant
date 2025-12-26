@@ -45,6 +45,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Error Handling & Connectivity
     retryConnection: () => ipcRenderer.send('retry-connection'),
     quitApp: () => ipcRenderer.send('hide-app'), // Using hide-app as per main.js logic for close
+    hideIcon: () => ipcRenderer.send('hide-icon'),
     onLoadError: (callback) => {
         const wrapper = (event, errorDescription) => callback(errorDescription);
         ipcRenderer.on('load-error', wrapper);

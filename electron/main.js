@@ -6,7 +6,7 @@ let mainAppWindow = null;
 let tray = null;
 let isAppVisible = false;
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = !app.isPackaged;
 // Using the live site in production ensures all APIs and Auth work perfectly without local overhead
 const APP_URL = isDev ? 'http://localhost:3000' : 'https://zedx-ai-assistant-1.vercel.app';
 
@@ -191,6 +191,16 @@ function setupIpcHandlers() {
     });
 
     ipcMain.on('hide-app', () => {
+        if (mainAppWindow) {
+            mainAppWindow.hide();
+            isAppVisible = false;
+        }
+    });
+
+    ipcMain.on('hide-icon', () => {
+        if (floatingIconWindow) {
+            floatingIconWindow.hide();
+        }
         if (mainAppWindow) {
             mainAppWindow.hide();
             isAppVisible = false;
