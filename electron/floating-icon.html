@@ -52,16 +52,57 @@
             border-radius: 10px;
             object-fit: cover;
         }
+
+        .close-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 16px;
+            height: 16px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-family: sans-serif;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            background: #ef4444;
+        }
+
+        .floating-icon:hover .close-btn {
+            opacity: 1;
+        }
     </style>
 </head>
 
 <body>
     <div class="floating-icon" id="floatingIcon">
+        <div class="close-btn" id="closeIcon">✕</div>
         <img src="../public/favicon.jpg" alt="ZEDX AI" class="logo-img" onerror="this.style.display='none'">
     </div>
 
     <script>
         const icon = document.getElementById('floatingIcon');
+        const closeBtn = document.getElementById('closeIcon');
+
+        // Prevent dragging when clicking the close button
+        closeBtn.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+        });
+
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Don't trigger toggleApp
+            if (window.electronAPI) {
+                window.electronAPI.hideIcon();
+            }
+        });
 
         icon.addEventListener('click', () => {
             if (window.electronAPI) {
