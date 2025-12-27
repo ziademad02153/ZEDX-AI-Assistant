@@ -28,8 +28,8 @@ export const useAuth = create<AuthState>((set) => ({
         // Auto-set cookie when session changes
         if (session) {
           const sessionId = session.access_token.slice(0, 32);
-          // SECURITY FIX: Added Secure flag for HTTPS-only transmission
-          document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Strict; Secure`;
+          const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
+          document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax${isSecure ? '; Secure' : ''}`;
         }
       });
 

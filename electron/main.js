@@ -77,7 +77,7 @@ function createMainAppWindow() {
         y: 50,
         frame: false,
         transparent: false,
-        icon: path.join(__dirname, '..', 'public', 'favicon-green.jpg'),
+        icon: path.join(__dirname, 'assets', 'icon.png'),
         alwaysOnTop: true,
         skipTaskbar: true,
         resizable: true,

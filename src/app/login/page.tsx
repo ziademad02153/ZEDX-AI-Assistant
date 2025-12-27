@@ -62,7 +62,8 @@ export default function LoginPage() {
                 if (data.session) {
                     // User is already logged in, set cookie and redirect
                     const sessionId = data.session.access_token.slice(0, 32);
-                    document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax`;
+                    const isSecure = window.location.protocol === 'https:';
+                    document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax${isSecure ? '; Secure' : ''}`;
                     window.location.href = "/dashboard";
                 }
             } catch (e) {
@@ -108,7 +109,8 @@ export default function LoginPage() {
                     const result = await signIn(formData.email, formData.password) as { session?: { access_token: string } };
                     // Generate unique session token using Supabase session ID + timestamp
                     const sessionId = result?.session?.access_token?.slice(0, 32) || crypto.randomUUID();
-                    document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Strict; Secure`;
+                    const isSecure = window.location.protocol === 'https:';
+                    document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax${isSecure ? '; Secure' : ''}`;
                     window.location.href = "/dashboard";
                 } catch (err: unknown) {
                     const error = err as Error;
@@ -146,7 +148,8 @@ export default function LoginPage() {
             const result = await verifyOtp(formData.email, formData.otp, 'signup') as { session?: { access_token: string } };
             // Generate unique session token from Supabase response
             const sessionId = result?.session?.access_token?.slice(0, 32) || crypto.randomUUID();
-            document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Strict; Secure`;
+            const isSecure = window.location.protocol === 'https:';
+            document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax${isSecure ? '; Secure' : ''}`;
             window.location.href = "/dashboard";
         } catch (err: unknown) {
             const error = err as Error;
