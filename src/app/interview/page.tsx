@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, Video, VideoOff, Loader2, AlertCircle, Sparkles, Trash2, LogOut, Copy, RotateCcw } from "lucide-react";
+import { Mic, Video, VideoOff, Loader2, AlertCircle, Sparkles, Trash2, LogOut, Copy, RotateCcw, Monitor, MonitorOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from 'react-markdown';
 
@@ -38,6 +38,13 @@ export default function InterviewPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [interviewStartTime] = useState<Date>(new Date()); // Track when interview started
     const [manualQuestion, setManualQuestion] = useState(""); // Manual input for coding questions
+    const [isScreenAudioActive, setIsScreenAudioActive] = useState(false);
+    const screenStreamRef = useRef<MediaStream | null>(null);
+    const audioContextRef = useRef<AudioContext | null>(null);
+    const analyserRef = useRef<AnalyserNode | null>(null);
+    const micSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
+    const screenSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
+    const [hasMounted, setHasMounted] = useState(false);
 
     // Constants
     const MAX_TRANSCRIPT_LENGTH = 4000; // Limit transcript to prevent API issues
@@ -59,8 +66,8 @@ export default function InterviewPage() {
         };
     }, []);
 
-    // Load context from local storage
     useEffect(() => {
+        setHasMounted(true);
         try {
             const savedType = localStorage.getItem("interview_context_type") || "General";
             const savedJD = localStorage.getItem("interview_context_jd") || "";
@@ -257,7 +264,88 @@ export default function InterviewPage() {
     }, [transcript, isAutoMode, isLoading, isRecording, getAiAnswer]);
 
     // Detect if running in Electron (Desktop App)
-    const isElectron = typeof window !== 'undefined' && (window as unknown as { electronAPI?: { isElectron: boolean } }).electronAPI?.isElectron;
+    const isElectron = hasMounted && typeof window !== 'undefined' && (window as unknown as { electronAPI?: { isElectron: boolean } }).electronAPI?.isElectron;
+
+    // --- SCREEN AUDIO CAPTURE (ELECTRON ONLY) ---
+    const stopScreenAudio = useCallback(() => {
+        if (screenStreamRef.current) {
+            screenStreamRef.current.getTracks().forEach(t => t.stop());
+            screenStreamRef.current = null;
+        }
+        if (screenSourceRef.current) {
+            screenSourceRef.current.disconnect();
+            screenSourceRef.current = null;
+        }
+        setIsScreenAudioActive(false);
+        console.log("[Screen Audio] Stopped");
+    }, []);
+
+    const toggleScreenAudio = async () => {
+        if (!isElectron) return;
+
+        if (isScreenAudioActive) {
+            stopScreenAudio();
+            (window as any).electronAPI.stopSystemAudioCapture();
+        } else {
+            console.log("[Screen Audio] Requesting capture...");
+            const result = await (window as any).electronAPI.startSystemAudioCapture();
+            if (!result.success) {
+                setError(result.error || "Failed to start screen capture.");
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (!isElectron) return;
+
+        const cleanup = (window as any).electronAPI.onAudioSourceReady(async (sourceId: string) => {
+            console.log("[Screen Audio] Source ID received:", sourceId);
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        mandatory: {
+                            chromeMediaSource: 'desktop',
+                            chromeMediaSourceId: sourceId
+                        }
+                    },
+                    video: {
+                        mandatory: {
+                            chromeMediaSource: 'desktop',
+                            chromeMediaSourceId: sourceId
+                        }
+                    }
+                } as any);
+
+                screenStreamRef.current = stream;
+                setIsScreenAudioActive(true);
+
+                // If recording is already active, connect this new stream to existing context
+                if (isRecording && audioContextRef.current && analyserRef.current) {
+                    try {
+                        const screenSource = audioContextRef.current.createMediaStreamSource(stream);
+                        screenSource.connect(analyserRef.current);
+                        screenSourceRef.current = screenSource;
+                        console.log("[Screen Audio] Stream mixed into active recording");
+                    } catch (e) {
+                        console.error("[Screen Audio] Failed to mix stream:", e);
+                    }
+                }
+
+                // Monitor for capture stop (user clicks "Stop Sharing" in OS)
+                stream.getVideoTracks()[0].onended = () => {
+                    console.log("[Screen Audio] Capture stopped by OS");
+                    stopScreenAudio();
+                };
+
+            } catch (err) {
+                console.error("[Screen Audio] Failed to get stream:", err);
+                setIsScreenAudioActive(false);
+                setError("System audio capture failed (Permission or selection issue).");
+            }
+        });
+
+        return () => cleanup && cleanup();
+    }, [isElectron, isRecording, stopScreenAudio]);
 
     // --- DESKTOP STT (Groq Whisper with Silence Detection) ---
     const activeStreamsRef = useRef<MediaStream[]>([]);
@@ -273,9 +361,9 @@ export default function InterviewPage() {
 
     const processGroqAudio = async (audioBlob: Blob) => {
         try {
-            // Filter out tiny blobs (headers/noise) to prevent Groq 400 errors
-            if (audioBlob.size < 5000) {
-                console.log(`[Desktop STT] Skipped: audio too small (${audioBlob.size} bytes)`);
+            // Groq is picky about types. Ensure it's marked as webm.
+            if (audioBlob.size < 8000) {
+                console.log(`[VAD] Discarded: too small (${audioBlob.size} bytes)`);
                 return;
             }
 
@@ -375,18 +463,39 @@ export default function InterviewPage() {
     const startDesktopSTT = async () => {
         try {
             console.log("[Desktop STT] Starting Smart VAD...");
-            const stream = await navigator.mediaDevices.getUserMedia({
+
+            // 1. Get Microphone stream
+            const micStream = await navigator.mediaDevices.getUserMedia({
                 audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
             });
-            activeStreamsRef.current = [stream];
+            activeStreamsRef.current = [micStream];
 
+            // 2. Initialize Audio Context & Analyser (Saved to Refs for mixing)
             const audioContext = new AudioContext();
             const analyser = audioContext.createAnalyser();
-            const source = audioContext.createMediaStreamSource(stream);
-            source.connect(analyser);
             analyser.fftSize = 512;
+
+            audioContextRef.current = audioContext;
+            analyserRef.current = analyser;
+
+            // 3. Connect Microphone
+            const micSource = audioContext.createMediaStreamSource(micStream);
+            micSource.connect(analyser);
+            micSourceRef.current = micSource;
+
+            // 4. Connect Screen Audio (if already active)
+            if (isScreenAudioActive && screenStreamRef.current) {
+                try {
+                    const screenSource = audioContext.createMediaStreamSource(screenStreamRef.current);
+                    screenSource.connect(analyser);
+                    screenSourceRef.current = screenSource;
+                    console.log("[Desktop STT] Screen audio mixed at start");
+                } catch (e) {
+                    console.warn("[Desktop STT] Failed to mix screen audio at start:", e);
+                }
+            }
+
             const dataArray = new Uint8Array(analyser.frequencyBinCount);
-            (activeStreamsRef.current as unknown as { audioContext: AudioContext }).audioContext = audioContext;
 
             // VAD Parameters (Optimized to prevent 503 Rate Limiting)
             const SPEECH_THRESHOLD = 25;        // Volume threshold
@@ -402,14 +511,14 @@ export default function InterviewPage() {
             let lastLogTime = 0;
 
             const checkAudioLevel = () => {
-                if (!activeStreamsRef.current.length) return;
+                if (!activeStreamsRef.current.length && !screenStreamRef.current) return;
 
                 analyser.getByteFrequencyData(dataArray);
                 const average = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
 
-                // Log every 2s
-                if (Date.now() - lastLogTime > 2000) {
-                    console.log(`[Desktop STT] Level: ${average.toFixed(1)} | Speaking: ${isSpeaking}`);
+                // Log every 2.5s to reduce console noise
+                if (Date.now() - lastLogTime > 2500) {
+                    console.log(`[VAD] Avg: ${average.toFixed(1)} | Mic: ${!!micStream} | Screen: ${isScreenAudioActive}`);
                     lastLogTime = Date.now();
                 }
 
@@ -420,17 +529,29 @@ export default function InterviewPage() {
                         isSpeaking = true;
                         speechStart = Date.now();
                         audioChunks = [];
-                        console.log("[Desktop STT] Speech detected! 🎙️");
+                        console.log("[VAD] ⚡ Speech detected!");
 
-                        mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                        // Create a mixed stream for the MediaRecorder
+                        const dest = audioContext.createMediaStreamDestination();
+                        micSource.connect(dest);
+                        if (screenSourceRef.current) {
+                            screenSourceRef.current.connect(dest);
+                        }
+
+                        // Use standard webm to avoid header issues with Whisper
+                        const mimeType = 'audio/webm';
+                        mediaRecorder = new MediaRecorder(dest.stream, { mimeType });
                         mediaRecorder.ondataavailable = (e) => {
                             if (e.data.size > 0) audioChunks.push(e.data);
                         };
-                        mediaRecorder.start(50);
+
+                        // IMPORTANT: Start without timeslice to get a single valid blob at onstop
+                        // This produces a much more stable WebM file for Groq
+                        mediaRecorder.start();
                     } else {
                         // Check Max Duration
                         if (Date.now() - speechStart > MAX_RECORDING_TIME) {
-                            console.log("[Desktop STT] Max duration reached, forcing stop.");
+                            console.log("[VAD] Max duration reached, forcing stop.");
                             stopAndProcess();
                         }
                     }
@@ -440,7 +561,7 @@ export default function InterviewPage() {
                         if (silenceStart === 0) {
                             silenceStart = Date.now();
                         } else if (Date.now() - silenceStart > SILENCE_DURATION) {
-                            console.log("[Desktop STT] Sentence finished (Silence).");
+                            console.log("[VAD] End of sentence (Silence detected).");
                             stopAndProcess();
                         }
                     }
@@ -456,17 +577,15 @@ export default function InterviewPage() {
                     mediaRecorder.stop();
                     mediaRecorder.onstop = async () => {
                         const duration = Date.now() - speechStart;
-                        console.log(`[Desktop STT] Recording stopped. Duration: ${duration}ms`);
-
                         if (duration < MIN_SPEECH_DURATION) {
-                            console.log(`[Desktop STT] 🚮 Discarded: Too short (<${MIN_SPEECH_DURATION}ms)`);
+                            console.log(`[VAD] Skipping: Too short (${duration}ms)`);
                             audioChunks = [];
                             return;
                         }
 
                         if (audioChunks.length > 0) {
                             const fullAudio = new Blob(audioChunks, { type: 'audio/webm' });
-                            console.log(`[Desktop STT] 🚀 Sending ${(fullAudio.size / 1024).toFixed(1)}KB to Groq...`);
+                            console.log(`[VAD] Sending ${(fullAudio.size / 1024).toFixed(1)}KB...`);
                             await processGroqAudio(fullAudio);
                         }
                         audioChunks = [];
@@ -485,80 +604,104 @@ export default function InterviewPage() {
         }
     };
 
-    const stopDesktopSTT = () => {
-        const intervalId = (activeStreamsRef.current as unknown as { intervalId?: NodeJS.Timeout })?.intervalId;
-        if (intervalId) clearInterval(intervalId);
+    const stopDesktopSTT = useCallback(() => {
+        if (screenSourceRef.current) {
+            screenSourceRef.current.disconnect();
+            screenSourceRef.current = null;
+        }
 
-        const audioContext = (activeStreamsRef.current as unknown as { audioContext?: AudioContext })?.audioContext;
-        if (audioContext) audioContext.close();
+        if (micSourceRef.current) {
+            micSourceRef.current.disconnect();
+            micSourceRef.current = null;
+        }
+
+        const audioContext = audioContextRef.current;
+        if (audioContext) {
+            audioContext.close();
+            audioContextRef.current = null;
+        }
 
         activeStreamsRef.current.forEach(stream => {
             stream.getTracks().forEach(track => track.stop());
         });
         activeStreamsRef.current = [];
-        setIsRecording(false);
         console.log("[Desktop STT] Stopped");
-    };
+    }, []);
 
     // --- TOGGLE RECORDING (UNIFIED) ---
-    const toggleRecording = () => {
+    const toggleRecording = async () => {
         if (isRecording) {
             // STOP
+            setIsRecording(false);
+            setIsAutoMode(false);
+
+            // 1. Stop Browser Recognition
+            if (recognitionRef.current) {
+                try { recognitionRef.current.stop(); } catch { }
+            }
+
+            // 2. Stop Desktop VAD (if running)
             if (isElectron) {
                 stopDesktopSTT();
-            } else {
-                setIsRecording(false);
-                recognitionRef.current?.stop();
             }
-        } else {
-            // START
-            if (isElectron) {
-                // Desktop: Use Groq Whisper
-                startDesktopSTT();
-            } else {
-                // Website: Use Web Speech API (original code)
-                if (!systemStatus.browser) {
-                    setError("Speech recognition not supported in this browser.");
-                    return;
-                }
-                try {
-                    if (recognitionRef.current) {
-                        try { recognitionRef.current.abort(); } catch { }
-                    }
-                    setTimeout(() => {
-                        if (!recognitionRef.current) return;
-                        try {
-                            recognitionRef.current.start();
-                            setIsRecording(true);
-                            setError(null);
-                        } catch (err: unknown) {
-                            const error = err as Error;
-                            if (error.name === 'InvalidStateError') {
-                                setIsRecording(true);
-                            } else if (error.name === 'NotAllowedError') {
-                                setError("Microphone access denied.");
-                                setIsRecording(false);
-                            } else {
-                                setError("Could not start recording. Please refresh.");
-                                setIsRecording(false);
-                            }
+
+            if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+            console.log("[Interview] Recording stopped");
+            return;
+        }
+
+        // START
+        setError(null);
+        setTranscript("");
+        setInterimTranscript("");
+
+        try {
+            // STEP 1: Always start Fast Live Transcript (Web Speech API)
+            // This provides the immediate visual feedback the user wants
+            const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                const recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = interviewContext.lang || 'en-US';
+
+                recognition.onresult = (event: any) => {
+                    let interim = "";
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            const text = event.results[i][0].transcript;
+                            setTranscript(prev => (prev + " " + text).trim().slice(-MAX_TRANSCRIPT_LENGTH));
+                        } else {
+                            interim += event.results[i][0].transcript;
                         }
-                    }, 150);
-                } catch {
-                    setIsRecording(false);
-                }
+                    }
+                    setInterimTranscript(interim);
+                };
+
+                recognitionRef.current = recognition;
+                recognition.start();
+                console.log("[Speech] Fast Live Engine started");
             }
+
+            // STEP 2: Desktop Only - Start High-Quality mixed audio STT
+            if (isElectron) {
+                await startDesktopSTT();
+            }
+
+            setIsRecording(true);
+            setIsAutoMode(true);
+            console.log("[Interview] Recording started (Dual-Engine Mode)");
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error("Failed to start recording:", error);
+            setError("Could not access microphone.");
         }
     };
 
     // Initialize Speech Recognition (WEBSITE ONLY - not in Electron)
     useEffect(() => {
         // Skip Web Speech API in Electron - it doesn't work there and causes network errors
-        const isElectronApp = typeof window !== 'undefined' && (window as unknown as { electronAPI?: { isElectron: boolean } }).electronAPI?.isElectron;
-        if (isElectronApp) {
-            console.log("[Speech] Skipping Web Speech API in Electron - using Groq instead");
-            return;
-        }
+        // The new toggleRecording handles Web Speech API for both desktop and web.
 
         interface SpeechRecognitionWindow extends Window {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -833,6 +976,22 @@ export default function InterviewPage() {
                             >
                                 {isSaving ? <Loader2 size={26} className="animate-spin" /> : <LogOut size={26} strokeWidth={2} />}
                             </button>
+
+                            {/* Screen Audio Toggle Button (Electron Only) */}
+                            {isElectron && (
+                                <button
+                                    onClick={toggleScreenAudio}
+                                    className={cn(
+                                        "w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm",
+                                        isScreenAudioActive
+                                            ? "bg-blue-500 text-white scale-110 shadow-blue-500/40"
+                                            : "bg-black/40 text-white hover:bg-black/60 border border-white/10"
+                                    )}
+                                    title={isScreenAudioActive ? "Stop System Audio" : "Start System Audio (Screen Sharing)"}
+                                >
+                                    {isScreenAudioActive ? <Monitor size={26} strokeWidth={2.5} /> : <MonitorOff size={26} strokeWidth={2} />}
+                                </button>
+                            )}
                         </div>
                     </div>
                 )}
@@ -877,6 +1036,22 @@ export default function InterviewPage() {
                         >
                             {isSaving ? <Loader2 size={26} className="animate-spin" /> : <LogOut size={26} strokeWidth={2} />}
                         </button>
+
+                        {/* Screen Audio Toggle Button (Electron Only) */}
+                        {isElectron && (
+                            <button
+                                onClick={toggleScreenAudio}
+                                className={cn(
+                                    "w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
+                                    isScreenAudioActive
+                                        ? "bg-blue-500 text-white scale-110 shadow-blue-500/30 ring-4 ring-blue-100 dark:ring-blue-900/30"
+                                        : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                                )}
+                                title={isScreenAudioActive ? "Stop System Audio" : "Start System Audio (Screen Sharing)"}
+                            >
+                                {isScreenAudioActive ? <Monitor size={26} strokeWidth={2.5} /> : <MonitorOff size={26} strokeWidth={2} />}
+                            </button>
+                        )}
                     </div>
                 )}
 

@@ -77,6 +77,7 @@ function createMainAppWindow() {
         y: 50,
         frame: false,
         transparent: false,
+        icon: path.join(__dirname, '..', 'public', 'favicon-green.jpg'),
         alwaysOnTop: true,
         skipTaskbar: true,
         resizable: true,
@@ -126,23 +127,32 @@ function loadAppContent() {
     const startUrl = `${APP_URL}/login?desktop=true`;
     console.log('[Electron] Loading Remote URL:', startUrl);
 
-    // Add a small delay to ensure loading.html is fully rendered before navigation starts
-    setTimeout(() => {
-        mainAppWindow.loadURL(startUrl).catch(e => {
-            console.error('[Electron] Failed to load URL:', e);
-            // If loadURL fails synchronously (e.g. invalid URL), notify the loading page
-            mainAppWindow.webContents.send('load-error', e.message);
+    // Dynamic port detection for development
+    const tryLoad = (url) => {
+        mainAppWindow.loadURL(url).catch(e => {
+            console.error(`[Electron] Failed to load ${url}:`, e);
+            if (isDev && url.includes(':3000')) {
+                console.log('[Electron] Retrying with port 3001...');
+                tryLoad(url.replace(':3000', ':3001'));
+            } else {
+                mainAppWindow.webContents.send('load-error', e.message);
+            }
         });
-    }, 1500);
+    };
 
-    // SAFETY NET: If the page takes more than 15 seconds to load, show a timeout error
+    // Add a delay to ensure loading.html is fully rendered
+    setTimeout(() => {
+        tryLoad(startUrl);
+    }, 2000);
+
+    // SAFETY NET: If the page takes more than 30 seconds to load, show a timeout error
     const safetyTimeout = setTimeout(() => {
-        console.error('[Electron] Navigation timed out (15s limit)');
+        console.error('[Electron] Navigation timed out (30s limit)');
         mainAppWindow.loadFile(path.join(__dirname, 'loading.html'));
         mainAppWindow.webContents.once('did-finish-load', () => {
-            mainAppWindow.webContents.send('load-error', 'Connection timed out. Please check your internet.');
+            mainAppWindow.webContents.send('load-error', 'Connection timed out. Please ensure npm run dev is running.');
         });
-    }, 15000);
+    }, 30000);
 
     // Clear timeout if load succeeds
     mainAppWindow.webContents.once('did-finish-load', () => {
@@ -319,7 +329,7 @@ function setupIpcHandlers() {
 
 function createTray() {
     try {
-        const iconPath = path.join(__dirname, '..', 'public', 'favicon.jpg');
+        const iconPath = path.join(__dirname, '..', 'public', 'favicon-green.jpg');
         let icon = nativeImage.createEmpty();
 
         try {

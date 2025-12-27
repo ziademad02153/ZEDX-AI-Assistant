@@ -38,11 +38,11 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "public/favicon.jpg"
+      "icon": "public/favicon-green.jpg"
     },
     "mac": {
       "target": "dmg",
-      "icon": "public/favicon.jpg"
+      "icon": "public/favicon-green.jpg"
     },
     "nsis": {
       "oneClick": true,

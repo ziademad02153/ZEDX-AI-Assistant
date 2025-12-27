@@ -18,15 +18,9 @@ export async function POST(request: Request) {
             process.env.GROQ_STT_KEY_5,
         ].filter(Boolean) as string[];
 
-        // Re-create the file to ensure integrity
-        console.log(`[Transcribe API] Received file: ${file.name}, Type: ${file.type}, Size: ${file.size} bytes`);
-
-        if (file.size === 0) {
-            return NextResponse.json({ error: "Received empty file" }, { status: 400 });
-        }
-
-        const fileBuffer = await file.arrayBuffer();
-        const fileBlob = new Blob([fileBuffer], { type: 'audio/webm' });
+        // Use the received file directly as a Blob/File
+        const audioFile = file;
+        console.log(`[Transcribe API] Processing file: ${audioFile.name}, Type: ${audioFile.type}, Size: ${audioFile.size} bytes`);
 
         if (API_KEYS.length === 0) {
             console.error("[Transcribe API] No keys found! Check .env.local");
@@ -45,9 +39,9 @@ export async function POST(request: Request) {
                 console.log(`[Transcribe API] Attempting with Key: ${maskedKey}`);
 
                 const groqFormData = new FormData();
-                // IMPORTANT: Must provide filename so Groq knows it's .webm
-                groqFormData.append("file", fileBlob, "audio.webm");
-                groqFormData.append("model", formData.get("model")?.toString() || "whisper-large-v3"); // Revert to stable model
+                // Use the file directly. Filename is important for Groq to detect format.
+                groqFormData.append("file", audioFile, "audio.webm");
+                groqFormData.append("model", formData.get("model")?.toString() || "whisper-large-v3-turbo");
                 groqFormData.append("temperature", "0");
 
                 if (formData.get("language")) {
