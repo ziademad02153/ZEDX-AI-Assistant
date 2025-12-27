@@ -25,7 +25,7 @@ win:
     - target: nsis
       arch:
         - x64
-  icon: electron/assets/icon.png
+  icon: public/favicon.png
   artifactName: ZEDX-AI-${version}-Setup.${ext}
 
 nsis:
@@ -42,7 +42,7 @@ mac:
       arch:
         - x64
         - arm64
-  icon: electron/assets/icon.png
+  icon: public/favicon.png
   artifactName: ZEDX-AI-${version}.${ext}
   category: public.app-category.productivity
 
@@ -60,5 +60,5 @@ linux:
     - target: AppImage
       arch:
         - x64
-  icon: electron/assets/icon.png
+  icon: public/favicon.png
   category: Utility
