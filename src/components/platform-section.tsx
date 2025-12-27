@@ -113,7 +113,7 @@ export function PlatformSection() {
                         </div>
 
                         {/* Static ZEDX Robot Mascot - Pinned to Bottom (Parakeet match) */}
-                        <div className="absolute bottom-0 -right-8 sm:-right-10 md:-right-20 w-48 h-48 sm:w-80 sm:h-80 md:w-[480px] md:h-[480px] z-20 pointer-events-none">
+                        <div className="absolute bottom-0 -right-4 sm:-right-10 md:-right-20 w-72 h-72 sm:w-80 sm:h-80 md:w-[480px] md:h-[480px] z-20 pointer-events-none">
                             <div className="relative w-full h-full flex items-end">
                                 <Image
                                     src="/zedx-logo-for-v.png"
