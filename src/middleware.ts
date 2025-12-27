@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
 
         // SECURITY FIX: Stricter token format validation
         // Token must be exactly 32 alphanumeric characters (from Supabase JWT slice)
-        const tokenRegex = /^[A-Za-z0-9_-]{32}$/;
+        const tokenRegex = /^[A-Za-z0-9_-]{32,36}$/;
         if (!tokenRegex.test(token.value)) {
             // Invalid token format, clear it and redirect
             const response = NextResponse.redirect(new URL('/login', request.url));

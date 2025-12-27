@@ -77,7 +77,7 @@ function createMainAppWindow() {
         y: 50,
         frame: false,
         transparent: false,
-        icon: path.join(__dirname, 'assets', 'icon.png'),
+        icon: path.join(__dirname, '..', 'public', 'favicon.ico'),
         alwaysOnTop: true,
         skipTaskbar: true,
         resizable: true,
@@ -184,20 +184,22 @@ function loadAppContent() {
 
 function toggleApp() {
     if (!mainAppWindow) return;
+    mainAppWindow.show();
+    mainAppWindow.focus();
+    isAppVisible = true;
+}
 
-    if (isAppVisible) {
-        mainAppWindow.hide();
-        isAppVisible = false;
-    } else {
-        mainAppWindow.show();
-        mainAppWindow.focus();
-        isAppVisible = true;
-    }
+// Dedicated function to only show/focus without hiding
+function showApp() {
+    if (!mainAppWindow) return;
+    mainAppWindow.show();
+    mainAppWindow.focus();
+    isAppVisible = true;
 }
 
 function setupIpcHandlers() {
     ipcMain.on('toggle-app', () => {
-        toggleApp();
+        showApp(); // Changed from toggleApp to showApp to prevent accidental hiding
     });
 
     ipcMain.on('hide-app', () => {
@@ -329,7 +331,7 @@ function setupIpcHandlers() {
 
 function createTray() {
     try {
-        const iconPath = path.join(__dirname, '..', 'public', 'favicon-green.jpg');
+        const iconPath = path.join(__dirname, '..', 'public', 'favicon.ico');
         let icon = nativeImage.createEmpty();
 
         try {

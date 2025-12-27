@@ -158,18 +158,19 @@ export default function InterviewPage() {
         Your name is Ziad (or whatever name is in the resume).
 
         CRITICAL RULES:
-        1. Answer the question DIRECTLY. Do not say "Here is how I would answer". Just answer.
-        2. USE THE RESUME DATA. Do not use placeholders like "[insert date]" or "[mention project]". If the specific date or detail is missing in the resume, estimate it reasonably or speak generally about the experience, but NEVER output bracketed placeholders.
-        3. If the resume is empty or missing, say: "I apologize, I don't have my resume details in front of me. Could you ask me about a specific technology?"
+        1. LANGUAGE INSTRUCTION: Answer strictly in the language: ${interviewContext.lang}. 
+           - DO NOT switch languages even if the user speaks to you in a different language. 
+           - IF the language is 'en-US', only English is allowed.
+           - IF the language is 'ar-EG', only Egyptian Arabic is allowed.
+
+        2. Answer the question DIRECTLY. Do not say "Here is how I would answer". Just answer.
+        3. USE THE RESUME DATA. Do not use placeholders like "[insert date]" or "[mention project]". If the specific detail is missing, estimate it reasonably or speak generally, but NEVER output bracketed placeholders.
         4. Keep answers concise (2-3 sentences max) and conversational.
-        5. LANGUAGE INSTRUCTION: Answer in the language: ${interviewContext.lang}.
+
+        DETAILED LANGUAGE SPECS:
         - If the language is 'ar-EG', **YOU MUST ANSWER IN EGYPTIAN ARABIC DIALECT (اللهجة المصرية العامية فقط)**.
         - **FORBIDDEN**: Do NOT speak Standard Arabic (Fusha). Do NOT use words like "حسناً", "لماذا", "أريد", "سوف".
         - **REQUIRED**: Speak like a local Egyptian in Cairo. Use words like: "يا فندم", "يا باشا", "حضرتك", "عايز", "عشان", "إيه", "كده", "طب".
-        - Example: "أقدر اساعد حضرتك إزاي؟", "هعمل كده".
-
-        - If the language is 'ar-SA', **YOU MUST ANSWER IN STANDARD ARABIC (اللغة العربية الفصحى)**.
-        - Speak professionally and formally. Use words like "حسناً", "كيف يمكنني مساعدتك", "سوف نقوم".
 
         - If 'en-US', answer in English.
 
@@ -354,7 +355,9 @@ export default function InterviewPage() {
     // BANNED_PHRASES - Only filter CLEAR hallucinations (YouTube artifacts, never real speech)
     const BANNED_PHRASES = [
         "please subscribe", "like and subscribe", "subscribe to",
-        "thanks for watching", "thank you for watching",
+        "thanks for watching", "thank you for watching", "thanks for watching",
+        "thank you very much", "i hope you enjoyed", "bye bye",
+        "thank you", "thanks", "thank you.",
         "copyright", "subtitles by", "captioned by",
         "[music]", "[applause]", "(music)", "(applause)"
     ];
@@ -425,9 +428,15 @@ export default function InterviewPage() {
                     return;
                 }
 
-                // Filter: banned phrases
+                // Filter: banned phrases (Case-insensitive)
                 if (BANNED_PHRASES.some(b => clean.includes(b))) {
                     console.log(`[Desktop STT] Filtered: banned phrase: "${newText}"`);
+                    return;
+                }
+
+                // Extra safety: Filter single word "Thank you" even if slightly different
+                if (clean === "thank you" || clean === "thanks") {
+                    console.log(`[Desktop STT] Filtered: single word hallucination`);
                     return;
                 }
 
@@ -497,10 +506,10 @@ export default function InterviewPage() {
 
             const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
-            // VAD Parameters (Optimized to prevent 503 Rate Limiting)
+            // VAD Parameters (Optimized for fast response and hallucination rejection)
             const SPEECH_THRESHOLD = 25;        // Volume threshold
-            const SILENCE_DURATION = 2000;      // 2s silence = End of sentence (Reduces API calls)
-            const MIN_SPEECH_DURATION = 1500;   // Ignore < 1.5s (Filters noise & hallucinations)
+            const SILENCE_DURATION = 1500;      // 1.5s silence = End of sentence (Faster response)
+            const MIN_SPEECH_DURATION = 1200;   // Ignore < 1.2s (Filters short noise/hiccups)
             const MAX_RECORDING_TIME = 20000;   // Force send after 20s
 
             let mediaRecorder: MediaRecorder | null = null;

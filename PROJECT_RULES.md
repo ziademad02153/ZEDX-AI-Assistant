@@ -14,8 +14,14 @@ The transcription system is divided into two operational modes:
 2. Desktop Console Mode: Implementation via 5-key load-balanced Groq Whisper LPU. Reserved for low-level system capture.
 
 ### Critical Directives:
-- VAD Implementation: All audio streams must pass through the Voice Activity Detection filter to prevent API resource depletion during silence.
+- VAD Implementation: All audio streams must pass through the Voice Activity Detection filter to prevent API resource depletion during silence. Standard silence threshold for sentence termination: 1.5 seconds.
 - Round-Robin Scaling: Ensure the 5-key logic in the API layer is never compromised, as it is essential for bypass of standard rate limiting.
+- Hallucination Rejection: Implement system-level filters (`BANNED_PHRASES`) to discard repetitive Whisper artifacts like "Thank you" or "Please subscribe" during silence or background noise.
+
+## AI Response Logic (ZEDX-Brain)
+- Strict Language Adherence: Responses must be generated **strictly** in the target language selected by the user (`en-US` or `ar-EG`). Code-switching or language drifting based on user input is strictly prohibited.
+- Technical Persona: The AI must act as the candidate, referencing resume data without bracketed placeholders.
+- Response Metrics: Maintain a 2-3 sentence limit for conversational agility. 
 
 ## Security Framework
 - Row-Level Security: Mandatory for all tables. No data leak between user sessions is acceptable.
