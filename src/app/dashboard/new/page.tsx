@@ -3,12 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Upload, AlertCircle } from "lucide-react";
+import { ArrowLeft, Upload, AlertCircle, Sparkles, Zap, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { SUPPORTED_LANGUAGES } from "@/lib/languages";
 import { resumeService, Resume } from "@/lib/resume-service";
+import { ModelChat } from "@/components/dashboard/model-chat";
+import { motion } from "framer-motion";
 
 // Custom SVG Icons
 const BriefcaseIcon = () => (
@@ -28,16 +30,6 @@ const ResumeIcon = () => (
     </svg>
 );
 
-
-
-const SparklesIcon = () => (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z" />
-        <path d="M5 19l.5 1.5L7 21l-1.5.5L5 23l-.5-1.5L3 21l1.5-.5L5 19z" />
-        <path d="M19 12l.5 1.5L21 14l-1.5.5L19 16l-.5-1.5L17 14l1.5-.5L19 12z" />
-    </svg>
-);
-
 const GlobeIcon = () => (
     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10" />
@@ -51,34 +43,34 @@ const AI_MODELS = [
     {
         id: "llama-3.1-8b-instant",
         name: "Llama 3.1 8B",
-        description: "Fast",
+        description: "Fast, efficient",
         logo: "/meta.png",
-        borderColor: "border-blue-500",
-        bgColor: "bg-blue-50 dark:bg-blue-900/20"
+        gradient: "from-blue-500/20 to-cyan-500/20",
+        border: "group-hover:border-blue-500/50"
     },
     {
         id: "llama-3.3-70b-versatile",
         name: "Llama 3.3 70B",
-        description: "Smart",
+        description: "Smart reasoning",
         logo: "/meta.png",
-        borderColor: "border-purple-500",
-        bgColor: "bg-purple-50 dark:bg-purple-900/20"
+        gradient: "from-purple-500/20 to-pink-500/20",
+        border: "group-hover:border-purple-500/50"
     },
     {
         id: "qwen/qwen3-32b",
         name: "Qwen 32B",
-        description: "Multilingual",
+        description: "Multilingual pro",
         logo: "/qwen.png",
-        borderColor: "border-indigo-500",
-        bgColor: "bg-indigo-50 dark:bg-indigo-900/20"
+        gradient: "from-indigo-500/20 to-violet-500/20",
+        border: "group-hover:border-indigo-500/50"
     },
     {
         id: "openai/gpt-oss-120b",
         name: "GPT-OSS 120B",
-        description: "Powerful",
+        description: "Max power",
         logo: "/openai-logo.png",
-        borderColor: "border-emerald-500",
-        bgColor: "bg-emerald-50 dark:bg-emerald-900/20"
+        gradient: "from-emerald-500/20 to-green-500/20",
+        border: "group-hover:border-emerald-500/50"
     },
 ];
 
@@ -93,33 +85,26 @@ export default function NewInterviewPage() {
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [savedResumes, setSavedResumes] = useState<Resume[]>([]);
+    const [showChat, setShowChat] = useState(true); // Default show chat for better engagement
 
-    // Load saved resumes from Supabase
+    // Load saved resumes
     useEffect(() => {
         const loadResumes = async () => {
             try {
                 const data = await resumeService.getUserResumes();
                 setSavedResumes(data);
             } catch (e: unknown) {
-                const err = e as Error;
-                if (err.message?.includes("User not authenticated")) {
-                    console.warn("Session expired, redirecting to login.");
-                    router.push("/login");
-                } else {
-                    console.error("Failed to load resumes", err);
-                }
+                // Silent catch
             }
         };
         loadResumes();
 
-        // Load saved model preference
         try {
             const savedModel = localStorage.getItem("selected_ai_model");
             if (savedModel) setSelectedModel(savedModel);
-        } catch { /* localStorage unavailable */ }
+        } catch { }
     }, [router]);
 
-    // Validation - only need job description and resume now (no API key!)
     const isValid = jobDescription.trim().length > 10 && resume.trim().length > 10;
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,28 +123,18 @@ export default function NewInterviewPage() {
 
             if (!res.ok) throw new Error(data.error || "Failed to parse PDF");
 
-            console.log("API Response:", data); // DEBUG
-            console.log("Extracted Text Length:", data.text?.length); // DEBUG
-
             setResume(data.text);
             setError(null);
-            setSuccessMessage(`Resume "${file.name}" uploaded successfully!`); // Add success state if needed, or just let the filled textarea be the feedback
+            setSuccessMessage(`Resume "${file.name}" uploaded successfully!`);
 
-            // Auto-save resume to Supabase
             try {
                 const fileName = file.name.replace('.pdf', '').replace('.PDF', '');
                 await resumeService.createResume(fileName, data.text);
-
-                // Refresh saved resumes list
                 const updatedResumes = await resumeService.getUserResumes();
                 setSavedResumes(updatedResumes);
-            } catch (saveErr: unknown) {
-                // Silent fail or console warn for auto-save, don't nag user
-                console.warn("Could not auto-save resume:", saveErr);
-            }
+            } catch (saveErr) { console.warn(saveErr); }
         } catch (err: unknown) {
             const error = err as Error;
-            console.error(error);
             setError(error.message || "Upload Failed. Please try converting to .txt");
         }
     };
@@ -171,7 +146,6 @@ export default function NewInterviewPage() {
         }
 
         setIsLoading(true);
-        // Save context to localStorage
         try {
             localStorage.setItem("interview_context_jd", jobDescription);
             localStorage.setItem("interview_context_resume", resume);
@@ -179,219 +153,275 @@ export default function NewInterviewPage() {
             localStorage.setItem("interview_context_lang", language);
             localStorage.setItem("selected_ai_model", selectedModel);
         } catch (e) {
-            console.warn("Could not save to localStorage", e);
+            console.warn(e);
         }
 
-        // Navigate to interview
         setTimeout(() => {
             router.push("/interview");
-        }, 500);
+        }, 800);
     };
 
+    const currentModelData = AI_MODELS.find(m => m.id === selectedModel) || AI_MODELS[0];
+
     return (
-        <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8 pb-12 px-2 sm:px-0">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-                <Link href="/dashboard">
-                    <Button variant="ghost" size="icon" className="dark:text-white dark:hover:bg-gray-800">
-                        <ArrowLeft size={20} />
-                    </Button>
-                </Link>
-                <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Setup New Interview</h1>
-                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">Provide context to get personalized AI coaching.</p>
-                </div>
+        <div className="min-h-screen bg-[#0A0A0A] text-white selection:bg-emerald-500/30">
+            {/* Background Ambient Glows */}
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/10 rounded-full blur-[150px]"></div>
+                <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[150px]"></div>
             </div>
 
-            {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 p-4 rounded-xl flex items-center gap-2 text-sm animate-fade-in-up">
-                    <AlertCircle size={20} />
-                    {error}
-                </div>
-            )}
-
-            {successMessage && (
-                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 p-4 rounded-xl flex items-center gap-2 text-sm animate-fade-in-up">
-                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white text-xs">✓</div>
-                    {successMessage}
-                </div>
-            )}
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                {/* Job Description */}
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
-                    <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
-                            <BriefcaseIcon />
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-12">
+                    <div className="flex items-center gap-4">
+                        <Link href="/dashboard">
+                            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white hover:bg-white/10 rounded-full w-12 h-12">
+                                <ArrowLeft size={24} />
+                            </Button>
+                        </Link>
+                        <div>
+                            <h1 className="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                                Setup Interview
+                            </h1>
+                            <p className="text-gray-400 mt-1">Configure your AI copilot for the perfect session.</p>
                         </div>
-                        <h3>Job Description <span className="text-red-500">*</span></h3>
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Paste the job description you are applying for.</p>
-                    <textarea
-                        className="w-full h-64 p-4 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm resize-none dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                        placeholder="e.g. Senior Frontend Engineer at Google..."
-                        value={jobDescription}
-                        onChange={(e) => { setJobDescription(e.target.value); setError(null); setSuccessMessage(null); }}
-                    />
+                    {isValid && (
+                        <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium animate-pulse">
+                            <Zap size={16} className="fill-current" />
+                            Ready to Start
+                        </div>
+                    )}
                 </div>
 
-                {/* Resume & Settings */}
-                <div className="space-y-6">
-                    {/* Resume Section */}
-                    <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
-                        <div className="flex flex-wrap items-center justify-between gap-2 text-lg font-semibold text-gray-800 dark:text-white">
-                            <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
-                                    <ResumeIcon />
-                                </div>
-                                <h3>Your Resume <span className="text-red-500">*</span></h3>
-                            </div>
-                            <div className="flex gap-2 flex-shrink-0">
-                                {/* Resume Selection Dropdown */}
-                                <select
-                                    className="text-xs p-2 border rounded-lg bg-white dark:bg-zinc-800 dark:text-white border-gray-200 dark:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    onChange={(e) => {
-                                        const selectedId = e.target.value;
-                                        if (!selectedId) return;
-                                        const selectedResume = savedResumes.find(r => r.id === selectedId);
-                                        if (selectedResume) {
-                                            setResume(selectedResume.content);
-                                        }
-                                    }}
-                                    defaultValue=""
-                                >
-                                    <option value="" disabled>Select Saved Resume</option>
-                                    {savedResumes.map((r) => (
-                                        <option key={r.id} value={r.id}>{r.name}</option>
-                                    ))}
-                                </select>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    {/* Left Column: Configuration (8 cols) */}
+                    <div className="lg:col-span-7 space-y-6">
 
-                                <div className="relative">
-                                    <input
-                                        type="file"
-                                        id="resume-upload"
-                                        className="hidden"
-                                        accept=".pdf,.txt"
-                                        onChange={handleFileUpload}
-                                    />
-                                    <label htmlFor="resume-upload">
-                                        <Button variant="outline" size="sm" className="cursor-pointer bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-600 hover:bg-gray-50 dark:hover:bg-zinc-700" asChild>
-                                            <span className="flex items-center text-gray-800 dark:text-gray-100">
-                                                <Upload size={14} className="mr-2" />
-                                                Upload File
-                                            </span>
-                                        </Button>
+                        {/* Job Description Card */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4 }}
+                            className="group relative bg-[#111111] border border-white/5 rounded-3xl p-1 shadow-2xl overflow-hidden"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none"></div>
+                            <div className="relative bg-[#151515] rounded-[22px] p-6 sm:p-8">
+                                <div className="flex items-center justify-between mb-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
+                                            <BriefcaseIcon />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-lg">Job Description</h3>
+                                            <p className="text-xs text-gray-500">Paste the target role details.</p>
+                                        </div>
+                                    </div>
+                                    <span className="text-xs font-mono text-emerald-500/50 bg-emerald-500/5 px-2 py-1 rounded">REQUIRED</span>
+                                </div>
+                                <textarea
+                                    className="w-full h-48 bg-black/20 border border-white/10 rounded-xl p-4 text-sm text-gray-200 placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all"
+                                    placeholder="e.g. Senior React Developer at Netflix..."
+                                    value={jobDescription}
+                                    onChange={(e) => setJobDescription(e.target.value)}
+                                />
+                            </div>
+                        </motion.div>
+
+                        {/* Resume Card */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 0.1 }}
+                            className="bg-[#111111] border border-white/5 rounded-3xl p-6 sm:p-8 relative overflow-hidden"
+                        >
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                                        <ResumeIcon />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-lg">Your Resume</h3>
+                                        <p className="text-xs text-gray-500">Add your resume for tailored context.</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <select
+                                        className="h-9 px-3 bg-white/5 border border-white/10 rounded-lg text-xs text-gray-300 focus:outline-none focus:border-blue-500/50"
+                                        onChange={(e) => {
+                                            const r = savedResumes.find(sr => sr.id === e.target.value);
+                                            if (r) setResume(r.content);
+                                        }}
+                                        defaultValue=""
+                                    >
+                                        <option value="" disabled>Saved Resumes</option>
+                                        {savedResumes.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                                    </select>
+                                    <label className="h-9 px-3 flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded-lg cursor-pointer transition-colors">
+                                        <Upload size={14} />
+                                        Upload
+                                        <input type="file" className="hidden" accept=".pdf,.txt" onChange={handleFileUpload} />
                                     </label>
                                 </div>
                             </div>
-                        </div>
-                        <textarea
-                            className="w-full h-32 p-4 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none dark:text-white transition-colors placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                            placeholder="Paste your full resume text here..."
-                            value={resume}
-                            onChange={(e) => { setResume(e.target.value); setError(null); setSuccessMessage(null); }}
-                        />
-                    </div>
-
-                    {/* AI Model Selection - with Brand Logo Images */}
-                    <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
-                        <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
-                            <Image
-                                src="/AI.jpg"
-                                alt="AI Model"
-                                width={36}
-                                height={36}
-                                className="rounded-xl"
-                                style={{ width: 'auto', height: 'auto' }}
+                            <textarea
+                                className="w-full h-32 bg-black/20 border border-white/10 rounded-xl p-4 text-sm text-gray-200 placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 resize-none transition-all"
+                                placeholder="Paste resume text or upload PDF..."
+                                value={resume}
+                                onChange={(e) => setResume(e.target.value)}
                             />
-                            <h3>AI Model</h3>
-                        </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Choose the AI model for your interview.</p>
+                            {successMessage && (
+                                <div className="mt-3 flex items-center gap-2 text-xs text-emerald-400">
+                                    <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">✓</span>
+                                    {successMessage}
+                                </div>
+                            )}
+                        </motion.div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            {AI_MODELS.map((model) => (
-                                <button
-                                    key={model.id}
-                                    onClick={() => setSelectedModel(model.id)}
-                                    className={cn(
-                                        "p-4 rounded-xl border-2 text-left transition-all duration-200 group hover:scale-[1.02]",
-                                        selectedModel === model.id
-                                            ? `${model.borderColor} ${model.bgColor} shadow-lg`
-                                            : "border-gray-200 dark:border-zinc-700 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-md"
-                                    )}
+                        {/* Settings Row */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 0.2 }}
+                            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                        >
+                            <div className="bg-[#111111] border border-white/5 rounded-2xl p-5">
+                                <label className="flex items-center gap-2 text-sm font-medium text-gray-400 mb-3">
+                                    <Sparkles size={16} className="text-purple-400" /> Interview Type
+                                </label>
+                                <select
+                                    className="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-purple-500/50"
+                                    value={interviewType}
+                                    onChange={(e) => setInterviewType(e.target.value)}
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 flex items-center justify-center transition-transform group-hover:scale-110">
-                                            <Image
-                                                src={model.logo}
-                                                alt={model.name}
-                                                width={36}
-                                                height={36}
-                                                className="object-contain"
-                                                style={{ width: "auto", height: "auto" }}
-                                            />
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold text-sm text-gray-800 dark:text-white">{model.name}</p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">{model.description}</p>
-                                        </div>
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
+                                    <option>Technical</option>
+                                    <option>System Design</option>
+                                    <option>Behavioral</option>
+                                    <option>HR Screening</option>
+                                </select>
+                            </div>
+                            <div className="bg-[#111111] border border-white/5 rounded-2xl p-5">
+                                <label className="flex items-center gap-2 text-sm font-medium text-gray-400 mb-3">
+                                    <GlobeIcon /> Language
+                                </label>
+                                <select
+                                    className="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-purple-500/50"
+                                    value={language}
+                                    onChange={(e) => setLanguage(e.target.value)}
+                                >
+                                    {SUPPORTED_LANGUAGES.map(lang => (
+                                        <option key={lang.code} value={lang.code}>{lang.native}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </motion.div>
+
                     </div>
 
-                    {/* Type & Language */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
-                            <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
-                                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
-                                    <SparklesIcon />
-                                </div>
-                                <h3>Type</h3>
+
+                    {/* Right Column: Model Selection & Chat (5 cols) */}
+                    <div className="lg:col-span-5 space-y-6">
+
+                        {/* Model Selection */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="bg-[#111111] border border-white/5 rounded-3xl p-6 sm:p-8"
+                        >
+                            <h3 className="text-lg font-semibold mb-1 flex items-center gap-2">
+                                <Zap size={18} className="text-yellow-400" />
+                                AI Engine
+                            </h3>
+                            <p className="text-xs text-gray-500 mb-6">Choose the brain behind ZEDX</p>
+
+                            <div className="space-y-3">
+                                {AI_MODELS.map((model) => (
+                                    <button
+                                        key={model.id}
+                                        onClick={() => setSelectedModel(model.id)}
+                                        className={cn(
+                                            "w-full group relative p-3 rounded-2xl border transition-all duration-300 flex items-center gap-4 text-left overflow-hidden",
+                                            selectedModel === model.id
+                                                ? "bg-white/5 border-emerald-500/50 shadow-lg shadow-emerald-500/10"
+                                                : "bg-transparent border-white/5 hover:bg-white/[0.02]"
+                                        )}
+                                    >
+                                        <div className={cn(
+                                            "absolute inset-0 bg-gradient-to-r opacity-0 transition-opacity duration-300",
+                                            model.gradient,
+                                            selectedModel === model.id ? "opacity-10" : "group-hover:opacity-5"
+                                        )}></div>
+
+                                        <div className="relative z-10 w-10 h-10 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center p-1.5 shrink-0">
+                                            <Image src={model.logo} alt={model.name} width={32} height={32} className="object-contain" />
+                                        </div>
+                                        <div className="relative z-10 flex-grow">
+                                            <div className="flex items-center justify-between">
+                                                <h4 className={cn("font-medium text-sm", selectedModel === model.id ? "text-white" : "text-gray-400")}>{model.name}</h4>
+                                                {selectedModel === model.id && <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>}
+                                            </div>
+                                            <p className="text-xs text-gray-500">{model.description}</p>
+                                        </div>
+                                    </button>
+                                ))}
                             </div>
-                            <select
-                                className="w-full p-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900 dark:text-white transition-colors"
-                                value={interviewType}
-                                onChange={(e) => setInterviewType(e.target.value)}
+                        </motion.div>
+
+                        {/* Model Chat Preview */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                        >
+                            <div className="flex items-center justify-between mb-4 px-2">
+                                <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
+                                    <MessageSquare size={16} />
+                                    Test Drive Model
+                                </h3>
+                            </div>
+                            <ModelChat
+                                modelId={selectedModel}
+                                modelName={currentModelData.name}
+                                modelLogo={currentModelData.logo}
+                            />
+                        </motion.div>
+
+                        {/* Start Action */}
+                        <div className="pt-4 sticky bottom-6 z-20">
+                            {error && (
+                                <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center gap-2">
+                                    <AlertCircle size={14} />
+                                    {error}
+                                </div>
+                            )}
+                            <Button
+                                onClick={handleStart}
+                                disabled={isLoading || !isValid}
+                                className={cn(
+                                    "w-full h-14 text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl",
+                                    isValid
+                                        ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20 hover:shadow-emerald-500/30 hover:-translate-y-1"
+                                        : "bg-white/5 text-gray-500 cursor-not-allowed"
+                                )}
                             >
-                                <option value="Technical" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white">Technical</option>
-                                <option value="System Design" className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white">System Design</option>
-                            </select>
+                                {isLoading ? (
+                                    <span className="flex items-center gap-2">
+                                        <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                        Preparing...
+                                    </span>
+                                ) : (
+                                    <span className="flex items-center gap-2">
+                                        <Zap className={cn("transition-transform", isValid ? "group-hover:scale-110" : "")} fill="currentColor" />
+                                        Start Session
+                                    </span>
+                                )}
+                            </Button>
                         </div>
 
-                        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 space-y-4 transition-colors">
-                            <div className="flex items-center gap-3 text-lg font-semibold text-gray-800 dark:text-white">
-                                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shadow-green-500/25">
-                                    <GlobeIcon />
-                                </div>
-                                <h3>Language</h3>
-                            </div>
-                            <select
-                                className="w-full p-3 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900 dark:text-white transition-colors"
-                                value={language}
-                                onChange={(e) => setLanguage(e.target.value)}
-                            >
-                                {SUPPORTED_LANGUAGES.map((lang) => (
-                                    <option key={lang.code} value={lang.code} className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white">
-                                        {lang.native}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="flex justify-end pt-4">
-                <Button
-                    variant="gradient"
-                    size="lg"
-                    className={cn("w-full md:w-auto px-12 text-lg shadow-green-900/20 transition-all", !isValid && "opacity-50 cursor-not-allowed grayscale")}
-                    onClick={handleStart}
-                    disabled={isLoading || !isValid}
-                >
-                    {isLoading ? "Setting up..." : "Start Interview"}
-                </Button>
             </div>
         </div>
     );
