@@ -12,6 +12,12 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://zedx-ai-assistant-1.vercel.app"),
+  applicationName: "ZEDX AI",
+  appleWebApp: {
+    title: "ZEDX AI",
+    statusBarStyle: "default",
+    capable: true,
+  },
   title: {
     default: "ZEDX AI - Free AI Interview Assistant & Copilot",
     template: "%s | ZEDX AI"
@@ -77,11 +83,15 @@ export const metadata: Metadata = {
   category: "Technology",
   icons: {
     icon: [
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/zedx-logo.png", sizes: "192x192", type: "image/png" },
     ],
-    shortcut: "/favicon-32x32.png",
-    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   manifest: "/site.webmanifest",
 };
