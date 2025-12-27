@@ -164,11 +164,11 @@ export default function NewInterviewPage() {
     const currentModelData = AI_MODELS.find(m => m.id === selectedModel) || AI_MODELS[0];
 
     return (
-        <div className="min-h-screen bg-[#0A0A0A] text-white selection:bg-emerald-500/30">
+        <div className="min-h-screen bg-background text-foreground selection:bg-emerald-500/30">
             {/* Background Ambient Glows */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/10 rounded-full blur-[150px]"></div>
-                <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[150px]"></div>
+                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
+                <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
             </div>
 
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -176,23 +176,17 @@ export default function NewInterviewPage() {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-12">
                     <div className="flex items-center gap-4">
                         <Link href="/dashboard">
-                            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white hover:bg-white/10 rounded-full w-12 h-12">
+                            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full w-12 h-12">
                                 <ArrowLeft size={24} />
                             </Button>
                         </Link>
                         <div>
-                            <h1 className="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                            <h1 className="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400">
                                 Setup Interview
                             </h1>
-                            <p className="text-gray-400 mt-1">Configure your AI copilot for the perfect session.</p>
+                            <p className="text-gray-500 dark:text-gray-400 mt-1">Configure your AI copilot for the perfect session.</p>
                         </div>
                     </div>
-                    {isValid && (
-                        <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium animate-pulse">
-                            <Zap size={16} className="fill-current" />
-                            Ready to Start
-                        </div>
-                    )}
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -204,24 +198,24 @@ export default function NewInterviewPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4 }}
-                            className="group relative bg-[#111111] border border-white/5 rounded-3xl p-1 shadow-2xl overflow-hidden"
+                            className="group relative bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-1 shadow-xl dark:shadow-2xl overflow-hidden"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none"></div>
-                            <div className="relative bg-[#151515] rounded-[22px] p-6 sm:p-8">
+                            <div className="relative bg-white dark:bg-[#151515] rounded-[22px] p-6 sm:p-8">
                                 <div className="flex items-center justify-between mb-6">
                                     <div className="flex items-center gap-3">
-                                        <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400">
+                                        <div className="p-3 bg-emerald-100 dark:bg-emerald-500/10 rounded-xl text-emerald-600 dark:text-emerald-400">
                                             <BriefcaseIcon />
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-lg">Job Description</h3>
+                                            <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Job Description</h3>
                                             <p className="text-xs text-gray-500">Paste the target role details.</p>
                                         </div>
                                     </div>
-                                    <span className="text-xs font-mono text-emerald-500/50 bg-emerald-500/5 px-2 py-1 rounded">REQUIRED</span>
+                                    <span className="text-xs font-mono text-emerald-600/70 dark:text-emerald-500/50 bg-emerald-100 dark:bg-emerald-500/5 px-2 py-1 rounded">REQUIRED</span>
                                 </div>
                                 <textarea
-                                    className="w-full h-48 bg-black/20 border border-white/10 rounded-xl p-4 text-sm text-gray-200 placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all"
+                                    className="w-full h-48 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-sm text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all"
                                     placeholder="e.g. Senior React Developer at Netflix..."
                                     value={jobDescription}
                                     onChange={(e) => setJobDescription(e.target.value)}
@@ -234,21 +228,21 @@ export default function NewInterviewPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: 0.1 }}
-                            className="bg-[#111111] border border-white/5 rounded-3xl p-6 sm:p-8 relative overflow-hidden"
+                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-lg dark:shadow-none"
                         >
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                                    <div className="p-3 bg-emerald-100 dark:bg-emerald-500/10 rounded-xl text-emerald-600 dark:text-emerald-400">
                                         <ResumeIcon />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-lg">Your Resume</h3>
+                                        <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Your Resume</h3>
                                         <p className="text-xs text-gray-500">Add your resume for tailored context.</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-2">
                                     <select
-                                        className="h-9 px-3 bg-white/5 border border-white/10 rounded-lg text-xs text-gray-300 focus:outline-none focus:border-blue-500/50"
+                                        className="h-9 px-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-xs text-gray-600 dark:text-gray-300 focus:outline-none focus:border-emerald-500/50"
                                         onChange={(e) => {
                                             const r = savedResumes.find(sr => sr.id === e.target.value);
                                             if (r) setResume(r.content);
@@ -258,7 +252,7 @@ export default function NewInterviewPage() {
                                         <option value="" disabled>Saved Resumes</option>
                                         {savedResumes.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                                     </select>
-                                    <label className="h-9 px-3 flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded-lg cursor-pointer transition-colors">
+                                    <label className="h-9 px-3 flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg cursor-pointer transition-colors">
                                         <Upload size={14} />
                                         Upload
                                         <input type="file" className="hidden" accept=".pdf,.txt" onChange={handleFileUpload} />
@@ -266,14 +260,14 @@ export default function NewInterviewPage() {
                                 </div>
                             </div>
                             <textarea
-                                className="w-full h-32 bg-black/20 border border-white/10 rounded-xl p-4 text-sm text-gray-200 placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 resize-none transition-all"
+                                className="w-full h-32 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-sm text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all"
                                 placeholder="Paste resume text or upload PDF..."
                                 value={resume}
                                 onChange={(e) => setResume(e.target.value)}
                             />
                             {successMessage && (
-                                <div className="mt-3 flex items-center gap-2 text-xs text-emerald-400">
-                                    <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">✓</span>
+                                <div className="mt-3 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400">
+                                    <span className="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center">✓</span>
                                     {successMessage}
                                 </div>
                             )}
@@ -286,12 +280,12 @@ export default function NewInterviewPage() {
                             transition={{ duration: 0.4, delay: 0.2 }}
                             className="grid grid-cols-1 sm:grid-cols-2 gap-4"
                         >
-                            <div className="bg-[#111111] border border-white/5 rounded-2xl p-5">
-                                <label className="flex items-center gap-2 text-sm font-medium text-gray-400 mb-3">
-                                    <Sparkles size={16} className="text-purple-400" /> Interview Type
+                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-2xl p-5 shadow-sm">
+                                <label className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+                                    <Sparkles size={16} className="text-emerald-500 dark:text-emerald-400" /> Interview Type
                                 </label>
                                 <select
-                                    className="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-purple-500/50"
+                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
                                     value={interviewType}
                                     onChange={(e) => setInterviewType(e.target.value)}
                                 >
@@ -301,12 +295,12 @@ export default function NewInterviewPage() {
                                     <option>HR Screening</option>
                                 </select>
                             </div>
-                            <div className="bg-[#111111] border border-white/5 rounded-2xl p-5">
-                                <label className="flex items-center gap-2 text-sm font-medium text-gray-400 mb-3">
+                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-2xl p-5 shadow-sm">
+                                <label className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
                                     <GlobeIcon /> Language
                                 </label>
                                 <select
-                                    className="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:border-purple-500/50"
+                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
                                     value={language}
                                     onChange={(e) => setLanguage(e.target.value)}
                                 >
@@ -328,10 +322,10 @@ export default function NewInterviewPage() {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-[#111111] border border-white/5 rounded-3xl p-6 sm:p-8"
+                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-8 shadow-lg dark:shadow-none"
                         >
-                            <h3 className="text-lg font-semibold mb-1 flex items-center gap-2">
-                                <Zap size={18} className="text-yellow-400" />
+                            <h3 className="text-lg font-semibold mb-1 flex items-center gap-2 text-gray-900 dark:text-white">
+                                <Zap size={18} className="text-yellow-500 dark:text-yellow-400" />
                                 AI Engine
                             </h3>
                             <p className="text-xs text-gray-500 mb-6">Choose the brain behind ZEDX</p>
@@ -344,8 +338,8 @@ export default function NewInterviewPage() {
                                         className={cn(
                                             "w-full group relative p-3 rounded-2xl border transition-all duration-300 flex items-center gap-4 text-left overflow-hidden",
                                             selectedModel === model.id
-                                                ? "bg-white/5 border-emerald-500/50 shadow-lg shadow-emerald-500/10"
-                                                : "bg-transparent border-white/5 hover:bg-white/[0.02]"
+                                                ? "bg-emerald-50 dark:bg-white/5 border-emerald-500/50 shadow-md dark:shadow-lg shadow-emerald-500/10"
+                                                : "bg-transparent border-gray-100 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/[0.02]"
                                         )}
                                     >
                                         <div className={cn(
@@ -354,12 +348,12 @@ export default function NewInterviewPage() {
                                             selectedModel === model.id ? "opacity-10" : "group-hover:opacity-5"
                                         )}></div>
 
-                                        <div className="relative z-10 w-10 h-10 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center p-1.5 shrink-0">
+                                        <div className="relative z-10 w-10 h-10 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 flex items-center justify-center p-1.5 shrink-0">
                                             <Image src={model.logo} alt={model.name} width={32} height={32} className="object-contain" />
                                         </div>
                                         <div className="relative z-10 flex-grow">
                                             <div className="flex items-center justify-between">
-                                                <h4 className={cn("font-medium text-sm", selectedModel === model.id ? "text-white" : "text-gray-400")}>{model.name}</h4>
+                                                <h4 className={cn("font-medium text-sm", selectedModel === model.id ? "text-emerald-700 dark:text-white" : "text-gray-600 dark:text-gray-400")}>{model.name}</h4>
                                                 {selectedModel === model.id && <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>}
                                             </div>
                                             <p className="text-xs text-gray-500">{model.description}</p>
@@ -376,7 +370,7 @@ export default function NewInterviewPage() {
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
                             <div className="flex items-center justify-between mb-4 px-2">
-                                <h3 className="text-sm font-medium text-gray-400 flex items-center gap-2">
+                                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2">
                                     <MessageSquare size={16} />
                                     Test Drive Model
                                 </h3>
@@ -391,7 +385,7 @@ export default function NewInterviewPage() {
                         {/* Start Action */}
                         <div className="pt-4 sticky bottom-6 z-20">
                             {error && (
-                                <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center gap-2">
+                                <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
                                     <AlertCircle size={14} />
                                     {error}
                                 </div>
@@ -403,7 +397,7 @@ export default function NewInterviewPage() {
                                     "w-full h-14 text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl",
                                     isValid
                                         ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20 hover:shadow-emerald-500/30 hover:-translate-y-1"
-                                        : "bg-white/5 text-gray-500 cursor-not-allowed"
+                                        : "bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                                 )}
                             >
                                 {isLoading ? (

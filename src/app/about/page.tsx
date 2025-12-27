@@ -13,21 +13,21 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen flex flex-col bg-[#0A0A0A] font-sans text-gray-100 overflow-x-hidden selection:bg-emerald-500/30">
+        <div className="min-h-screen flex flex-col bg-background font-sans text-foreground overflow-x-hidden selection:bg-emerald-500/30">
             <Navbar />
 
             {/* Global Background Ambience */}
             <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/10 rounded-full blur-[150px]"></div>
-                <div className="absolute top-[40%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[150px]"></div>
-                <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[150px]"></div>
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
+                <div className="absolute top-[40%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
+                <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-green-500/5 dark:bg-green-500/10 rounded-full blur-[150px]"></div>
             </div>
 
             <main className="flex-grow pt-32 relative z-10">
                 {/* Hero Section */}
                 <section className="pb-24 text-center container mx-auto px-4">
                     <div className="max-w-4xl mx-auto flex flex-col items-center">
-                        <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-emerald-400 font-medium text-sm animate-fade-in-up">
+                        <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50/50 dark:bg-white/5 border border-emerald-100 dark:border-white/10 backdrop-blur-md text-emerald-600 dark:text-emerald-400 font-medium text-sm animate-fade-in-up">
                             <span className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -35,12 +35,12 @@ export default function AboutPage() {
                             Revolutionizing Interview Prep
                         </div>
 
-                        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-8 leading-[1.1]">
+                        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
                             The Future of <br />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400">Career Success</span>
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 dark:from-emerald-400 dark:via-green-400 dark:to-teal-400">Career Success</span>
                         </h1>
 
-                        <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
                             ZEDX AI isn't just a tool; it's your unfair advantage. Engineered for stealth, speed, and precision to help you dominate every interview.
                         </p>
                     </div>
@@ -48,49 +48,49 @@ export default function AboutPage() {
 
                 {/* Mission Section */}
                 <section className="py-20 px-4 relative">
-                    <div className="absolute inset-0 bg-white/[0.02] border-y border-white/5"></div>
+                    <div className="absolute inset-0 bg-gray-50/50 dark:bg-white/[0.02] border-y border-gray-200 dark:border-white/5"></div>
                     <div className="max-w-5xl mx-auto relative z-10 grid md:grid-cols-2 gap-12 items-center">
                         <div>
-                            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
                                 Beyond Standard Assistants
                             </h2>
-                            <div className="space-y-6 text-gray-400 text-lg leading-relaxed">
+                            <div className="space-y-6 text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
                                 <p>
-                                    Most interview tools rely on browser extensions that can be detected or fail to capture audio correctly. <strong className="text-white">ZEDX AI is different.</strong>
+                                    Most interview tools rely on browser extensions that can be detected or fail to capture audio correctly. <strong className="text-gray-900 dark:text-white">ZEDX AI is different.</strong>
                                 </p>
                                 <p>
-                                    We built a native desktop application that captures <span className="text-emerald-400">System Audio</span> directly from the visible sound stream, meaning it works with headphones and is completely invisible to screen-sharing detection agents.
+                                    We built a native desktop application that captures <span className="text-emerald-600 dark:text-emerald-400">System Audio</span> directly from the visible sound stream, meaning it works with headphones and is completely invisible to screen-sharing detection agents.
                                 </p>
                             </div>
                         </div>
                         <div className="relative">
-                            <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-blue-500/20 blur-3xl rounded-full"></div>
-                            <div className="relative bg-[#111] border border-white/10 rounded-3xl p-8 shadow-2xl">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-green-500/10 dark:from-emerald-500/20 dark:to-green-500/20 blur-3xl rounded-full"></div>
+                            <div className="relative bg-white dark:bg-[#111] border border-gray-200 dark:border-white/10 rounded-3xl p-8 shadow-xl dark:shadow-2xl">
                                 <div className="space-y-4">
-                                    <div className="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-                                        <div className="p-3 bg-emerald-500/20 text-emerald-400 rounded-lg">
+                                    <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5">
+                                        <div className="p-3 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-lg">
                                             <Zap size={24} />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-white">Real-Time Intelligence</h3>
+                                            <h3 className="font-bold text-gray-900 dark:text-white">Real-Time Intelligence</h3>
                                             <p className="text-sm text-gray-500">Zero latency answers streaming.</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-                                        <div className="p-3 bg-blue-500/20 text-blue-400 rounded-lg">
+                                    <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5">
+                                        <div className="p-3 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-lg">
                                             <Shield size={24} />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-white">Undetectable Overlay</h3>
+                                            <h3 className="font-bold text-gray-900 dark:text-white">Undetectable Overlay</h3>
                                             <p className="text-sm text-gray-500">Safe for all conferencing tools.</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-                                        <div className="p-3 bg-purple-500/20 text-purple-400 rounded-lg">
+                                    <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5">
+                                        <div className="p-3 bg-teal-100 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400 rounded-lg">
                                             <Cpu size={24} />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-white">System Audio Core</h3>
+                                            <h3 className="font-bold text-gray-900 dark:text-white">System Audio Core</h3>
                                             <p className="text-sm text-gray-500">Captures output directly from OS.</p>
                                         </div>
                                     </div>
@@ -101,12 +101,12 @@ export default function AboutPage() {
                 </section>
 
                 {/* Core Features */}
-                <section className="py-24 px-4">
+                <section className="py-24 px-4 bg-white dark:bg-transparent transition-colors duration-300">
                     <div className="max-w-6xl mx-auto text-center mb-16">
-                        <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-                            Engineered for <span className="text-emerald-400">Performance</span>
+                        <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                            Engineered for <span className="text-emerald-600 dark:text-emerald-400">Performance</span>
                         </h2>
-                        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                        <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
                             A suite of powerful features designed to give you the confidence of an expert.
                         </p>
                     </div>
@@ -120,12 +120,12 @@ export default function AboutPage() {
                             { icon: <Shield />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers." },
                             { icon: <Cpu />, title: "Model Agnostic", desc: "Switch between Llama 3, GPT-4, and Qwen models on the fly for best results." }
                         ].map((item, i) => (
-                            <div key={i} className="group p-8 rounded-3xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] hover:border-emerald-500/30 transition-all duration-300">
-                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-gray-800 to-black border border-white/10 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                            <div key={i} className="group p-8 rounded-3xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 hover:border-emerald-500/30 dark:hover:border-emerald-500/30 hover:shadow-lg dark:hover:bg-white/[0.06] transition-all duration-300">
+                                <div className="w-12 h-12 rounded-2xl bg-white dark:bg-gradient-to-br dark:from-gray-800 dark:to-black border border-gray-200 dark:border-white/10 flex items-center justify-center text-emerald-600 dark:text-white mb-6 group-hover:scale-110 transition-transform shadow-sm dark:shadow-lg">
                                     {item.icon}
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
-                                <p className="text-gray-400 leading-relaxed">{item.desc}</p>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{item.title}</h3>
+                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -134,24 +134,24 @@ export default function AboutPage() {
                 {/* CTA */}
                 <section className="py-20 px-4">
                     <div className="max-w-4xl mx-auto">
-                        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-b from-emerald-900/40 to-black border border-emerald-500/20 p-12 md:p-20 text-center">
-                            <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-20 bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+                        <div className="relative overflow-hidden rounded-[2.5rem] bg-emerald-50 dark:bg-gradient-to-b dark:from-emerald-900/40 dark:to-black border border-emerald-200 dark:border-emerald-500/20 p-12 md:p-20 text-center shadow-xl dark:shadow-2xl">
+                            <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-10 bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] dark:opacity-20"></div>
 
                             <div className="relative z-10">
-                                <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
-                                    Ready to upgrades your career?
+                                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
+                                    Ready to upgrade your career?
                                 </h2>
-                                <p className="text-lg text-gray-300 mb-10 max-w-xl mx-auto">
+                                <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-xl mx-auto">
                                     Join thousands of engineers, managers, and executives using ZEDX AI to secure their next role.
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                     <Link href="/download">
-                                        <Button className="h-14 px-8 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-lg shadow-lg shadow-emerald-900/20 transition-all hover:-translate-y-1">
+                                        <Button className="h-14 px-8 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-lg shadow-lg shadow-emerald-500/30 dark:shadow-emerald-900/20 transition-all hover:-translate-y-1">
                                             Download for Windows
                                         </Button>
                                     </Link>
                                     <Link href="/dashboard">
-                                        <Button variant="outline" className="h-14 px-8 rounded-full border-white/10 hover:bg-white/5 text-white font-semibold text-lg backdrop-blur-sm transition-all hover:-translate-y-1">
+                                        <Button variant="outline" className="h-14 px-8 rounded-full border-emerald-200 dark:border-white/10 hover:bg-emerald-100 dark:hover:bg-white/5 text-emerald-700 dark:text-white font-semibold text-lg backdrop-blur-sm transition-all hover:-translate-y-1">
                                             Try Web Version
                                         </Button>
                                     </Link>
