@@ -30,17 +30,17 @@ const iconsSet3 = [
 // Reusable Marquee Row Component for perfect seamlessness
 function MarqueeRow({ icons, duration, reverse = false }: { icons: any[], duration: string, reverse?: boolean }) {
     return (
-        <div className="relative bg-white rounded-l-full rounded-r-none py-3 px-6 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-[calc(100%+200px)] md:w-[calc(100%+400px)]">
+        <div className="relative bg-white rounded-l-full rounded-r-none py-1.5 md:py-3 px-4 md:px-6 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-[calc(100%+100px)] md:w-[calc(100%+400px)]">
             <div
                 className="flex w-max animate-marquee pause-on-hover will-change-transform"
                 style={{ animationDuration: duration, animationDirection: reverse ? 'reverse' : 'normal' }}
             >
                 {/* First Set with a perfect gap/padding for seamlessness */}
-                <div className="flex gap-8 pr-8">
+                <div className="flex gap-6 md:gap-8 pr-6 md:pr-8">
                     {icons.map((icon, idx) => (
                         <div
                             key={`set1-${idx}`}
-                            className="flex-shrink-0 w-20 h-20 flex items-center justify-center transition-transform hover:scale-110"
+                            className="flex-shrink-0 w-12 h-12 md:w-20 md:h-20 flex items-center justify-center transition-transform hover:scale-110"
                         >
                             <Image
                                 src={icon.src}
@@ -56,11 +56,11 @@ function MarqueeRow({ icons, duration, reverse = false }: { icons: any[], durati
                     ))}
                 </div>
                 {/* Second Identical Set for -50% translation loop */}
-                <div className="flex gap-8 pr-8">
+                <div className="flex gap-6 md:gap-8 pr-6 md:pr-8">
                     {icons.map((icon, idx) => (
                         <div
                             key={`set2-${idx}`}
-                            className="flex-shrink-0 w-20 h-20 flex items-center justify-center transition-transform hover:scale-110"
+                            className="flex-shrink-0 w-12 h-12 md:w-20 md:h-20 flex items-center justify-center transition-transform hover:scale-110"
                         >
                             <Image
                                 src={icon.src}
@@ -106,14 +106,14 @@ export function PlatformSection() {
                         </div>
 
                         {/* Right: Premium Rails (55%) - Bleeding to the right */}
-                        <div className="w-full md:w-[55%] relative flex flex-col gap-6 -mr-14 md:-mr-14">
+                        <div className="w-full md:w-[55%] relative flex flex-col gap-4 md:gap-6 -mr-4 md:-mr-14">
                             <MarqueeRow icons={iconsSet1} duration="15s" />
                             <MarqueeRow icons={iconsSet2} duration="18s" reverse />
                             <MarqueeRow icons={iconsSet3} duration="20s" />
                         </div>
 
                         {/* Static ZEDX Robot Mascot - Pinned to Bottom (Parakeet match) */}
-                        <div className="absolute bottom-0 -right-12 sm:-right-10 md:-right-20 w-64 h-64 sm:w-80 sm:h-80 md:w-[480px] md:h-[480px] z-20 pointer-events-none">
+                        <div className="absolute bottom-0 -right-8 sm:-right-10 md:-right-20 w-48 h-48 sm:w-80 sm:h-80 md:w-[480px] md:h-[480px] z-20 pointer-events-none">
                             <div className="relative w-full h-full flex items-end">
                                 <Image
                                     src="/zedx-logo-for-v.png"

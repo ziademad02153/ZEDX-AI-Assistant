@@ -29,12 +29,12 @@ export default function Home() {
               AI Interview Copilot
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-[5.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.1] max-w-[90rem] mx-auto px-4">
-              The #1 AI Interview <br className="sm:hidden" />
+            <h1 className="text-[2.25rem] xs:text-4xl sm:text-5xl md:text-[5.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.15] md:leading-[1.1] max-w-[90rem] mx-auto px-4">
+              The #1 AI Interview <br className="xs:hidden" />
               <span className="text-gradient-fusion">Assistant & Copilot.</span>
             </h1>
 
-            <p className="text-base md:text-xl text-gray-500 dark:text-gray-400 mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed font-medium px-6 md:px-0">
+            <p className="text-[0.95rem] md:text-xl text-gray-500 dark:text-gray-400 mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed font-medium px-6 md:px-0">
               Your invisible AI assistant. Get real-time answers, tailored to your resume, <br className="hidden md:block" />
               directly on your screen during any video interview.
             </p>
@@ -61,32 +61,32 @@ export default function Home() {
                     Interview Session - Live
                   </div>
                 </div>
-                <div className="p-6 md:p-14 bg-white dark:bg-zinc-900 min-h-[350px] md:min-h-[440px] flex flex-col items-center justify-center relative overflow-hidden">
+                <div className="p-4 md:p-14 bg-white dark:bg-zinc-900 min-h-[320px] md:min-h-[440px] flex flex-col items-center justify-center relative overflow-hidden">
                   {/* Background Grid */}
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:3rem_3rem] md:bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
 
                   {/* Floating Chat Bubbles */}
                   <div className="relative z-10 w-full max-w-4xl space-y-6 md:space-y-10">
-                    <div className="flex gap-4 md:gap-7 items-start animate-fade-in-up">
-                      <div className="w-10 h-10 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
+                    <div className="flex gap-3 md:gap-7 items-start animate-fade-in-up">
+                      <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
                         <Image src="/IIcon1.jpg" alt="Interviewer" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
-                      <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.25rem] md:rounded-[2rem] rounded-tl-none p-4 md:p-6 text-[0.9rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                      <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
                         Can you describe a time you had to optimize a slow database query?
                       </div>
                     </div>
 
-                    <div className="flex gap-4 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
-                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-[1.25rem] md:rounded-[2.1rem] rounded-tr-none p-5 md:p-8 text-[0.95rem] md:text-[1.1rem] text-gray-800 dark:text-gray-100 shadow-xl max-w-[85%] relative border-l-4 border-l-green-500">
-                        <div className="absolute -top-3 -left-3 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1.5 md:p-2.5 shadow-xl">
-                          <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-green-500 fill-green-500" />
+                    <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
+                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 text-[0.85rem] md:text-[1.1rem] text-gray-800 dark:text-gray-100 shadow-xl max-w-[88%] md:max-w-[85%] relative border-l-4 border-l-green-500">
+                        <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
+                          <Sparkles className="w-4 h-4 md:w-6 md:h-6 text-green-500 fill-green-500" />
                         </div>
-                        <p className="font-extrabold text-green-600 mb-2 md:mb-2.5 text-[10px] md:text-sm uppercase tracking-widest">AI Suggestion</p>
+                        <p className="font-extrabold text-green-600 mb-1.5 md:mb-2.5 text-[9px] md:text-sm uppercase tracking-widest">AI Suggestion</p>
                         <p className="leading-relaxed">
                           &quot;In my previous role, I identified a bottleneck in a PostgreSQL query. I analyzed the execution plan, added a composite index, and refactored the join logic, reducing execution time by 85%...&quot;
                         </p>
                       </div>
-                      <div className="w-10 h-10 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
+                      <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
                         <Image src="/AI.jpg" alt="ZEDX AI Assistant" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
                     </div>
@@ -121,28 +121,28 @@ export default function Home() {
                   Technical Interview - Live Coding
                 </div>
               </div>
-              <div className="p-6 md:p-14 bg-white dark:bg-zinc-900 min-h-[400px] md:min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden">
+              <div className="p-4 md:p-14 bg-white dark:bg-zinc-900 min-h-[380px] md:min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden">
                 {/* Background Grid */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:3rem_3rem] md:bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
 
                 {/* Floating Chat Bubbles */}
                 <div className="relative z-10 w-full max-w-4xl space-y-6 md:space-y-10">
-                  <div className="flex gap-4 md:gap-7 items-start animate-fade-in-up">
-                    <div className="w-10 h-10 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
+                  <div className="flex gap-3 md:gap-7 items-start animate-fade-in-up">
+                    <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
                       <Image src="/IIcon1.jpg" alt="Interviewer" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
-                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.25rem] md:rounded-[2rem] rounded-tl-none p-4 md:p-6 text-[0.9rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
                       How would you implement a custom React hook to track the previous value of a prop?
                     </div>
                   </div>
 
-                  <div className="flex gap-4 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.25rem] md:rounded-[2.1rem] rounded-tr-none p-5 md:p-8 shadow-xl max-w-[85%] relative border-l-4 border-l-green-500">
-                      <div className="absolute -top-3 -left-3 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1.5 md:p-2.5 shadow-xl">
-                        <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-green-500 fill-green-500" />
+                  <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 shadow-xl max-w-[88%] md:max-w-[85%] relative border-l-4 border-l-green-500">
+                      <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
+                        <Sparkles className="w-4 h-4 md:w-6 md:h-6 text-green-500 fill-green-500" />
                       </div>
-                      <p className="font-extrabold text-green-600 mb-2 md:mb-2.5 text-[10px] md:text-sm uppercase tracking-widest">AI Code Suggestion</p>
-                      <div className="bg-gray-900/5 dark:bg-white/5 rounded-xl p-3 md:p-4 mb-3 md:mb-4 font-mono text-[10px] md:text-sm leading-relaxed overflow-x-auto border border-black/5 dark:border-white/5">
+                      <p className="font-extrabold text-green-600 mb-1.5 md:mb-2.5 text-[9px] md:text-sm uppercase tracking-widest">AI Code Suggestion</p>
+                      <div className="bg-gray-900/5 dark:bg-white/5 rounded-xl p-2.5 md:p-4 mb-3 md:mb-4 font-mono text-[9px] md:text-sm leading-relaxed overflow-x-auto border border-black/5 dark:border-white/5">
                         <pre className="text-emerald-900 dark:text-emerald-200">
                           {`const usePrevious = (value) => {
   const ref = useRef();
@@ -153,11 +153,11 @@ export default function Home() {
 };`}
                         </pre>
                       </div>
-                      <p className="leading-relaxed text-[0.9rem] md:text-[1rem] text-gray-700 dark:text-gray-200">
+                      <p className="leading-relaxed text-[0.85rem] md:text-[1rem] text-gray-700 dark:text-gray-200">
                         This hook utilizes <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useRef</code> to persist the value and <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useEffect</code> to update it.
                       </p>
                     </div>
-                    <div className="w-10 h-10 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
+                    <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
                       <Image src="/AI.jpg" alt="ZEDX AI Assistant" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
                   </div>
