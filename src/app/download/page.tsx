@@ -109,7 +109,7 @@ export default function DownloadPage() {
 
                             <div className="space-y-3">
                                 <Link
-                                    href="https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.0.5/ZEDX.AI.Setup.1.0.5.exe"
+                                    href="https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.0.6/ZEDX.AI.Setup.1.0.6.exe"
                                     className="block"
                                 >
                                     <Button className="w-full rounded-xl py-7 text-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/25 group relative overflow-hidden">
@@ -123,7 +123,7 @@ export default function DownloadPage() {
                                     </Button>
                                 </Link>
                                 <p className="text-center text-xs text-gray-400">
-                                    v1.0.5 Stable • Windows 10/11 • 64-bit
+                                    v1.0.6 Stable • Windows 10/11 • 64-bit
                                 </p>
                             </div>
 
