@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { Check, Globe, Sparkles } from "lucide-react";
+import { Check, Globe, Sparkles, ChevronDown } from "lucide-react";
 import { PlatformSection } from "@/components/platform-section";
 
 export default function Home() {
@@ -167,6 +167,11 @@ export default function Home() {
             {/* Massive Atmosphere Glow */}
             <div className="absolute -inset-16 bg-gradient-to-r from-emerald-400/10 to-green-400/10 blur-[130px] -z-10 rounded-full"></div>
           </div>
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce hidden md:flex flex-col items-center gap-2 opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
+            <span className="text-[10px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-semibold">Scroll</span>
+            <ChevronDown className="text-gray-400 dark:text-gray-500 w-5 h-5" />
+          </div>
         </section>
 
         {/* Platform Integration Section */}
@@ -326,6 +331,6 @@ export default function Home() {
       </main>
 
       <Footer />
-    </div>
+    </div >
   );
 }

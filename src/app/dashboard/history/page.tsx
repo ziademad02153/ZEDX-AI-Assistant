@@ -7,6 +7,7 @@ import { Clock, Trash2, FileText, AlertCircle, ChevronDown, ChevronUp, Trash, Lo
 import { interviewService, Interview } from "@/lib/interview-service";
 import { cn } from "@/lib/utils";
 import { useConfirmDialog } from "@/components/confirm-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface QAPair {
     question: string;
@@ -192,16 +193,40 @@ export default function InterviewHistoryPage() {
             )}
 
             {isLoading ? (
-                <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+                <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="p-4 bg-white dark:bg-zinc-800 rounded-xl border border-gray-100 dark:border-zinc-700">
+                            <div className="flex justify-between items-start mb-4">
+                                <div className="space-y-2 w-full max-w-[200px]">
+                                    <Skeleton className="h-5 w-3/4" />
+                                    <Skeleton className="h-4 w-1/2" />
+                                </div>
+                                <div className="flex gap-2">
+                                    <Skeleton className="h-8 w-8 rounded-md" />
+                                    <Skeleton className="h-8 w-8 rounded-md" />
+                                </div>
+                            </div>
+                            <div className="flex gap-2">
+                                <Skeleton className="h-6 w-20 rounded-full" />
+                                <Skeleton className="h-6 w-24 rounded-full" />
+                            </div>
+                        </div>
+                    ))}
                 </div>
             ) : interviews.length === 0 ? (
-                <div className="text-center py-12 bg-gray-50 dark:bg-zinc-800 rounded-2xl">
-                    <FileText size={48} className="mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-                    <p className="text-gray-500 dark:text-gray-400">No interviews yet</p>
+                <div className="text-center py-16 bg-white dark:bg-zinc-900/50 border border-dashed border-gray-200 dark:border-zinc-800 rounded-3xl">
+                    <div className="w-20 h-20 bg-emerald-50 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                        <div className="absolute inset-0 bg-emerald-100 dark:bg-emerald-500/10 rounded-full animate-ping opacity-20"></div>
+                        <FileText size={32} className="text-emerald-500 dark:text-emerald-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No interviews recorded</h3>
+                    <p className="text-gray-500 dark:text-gray-400 max-w-sm mx-auto mb-8">
+                        Your interview history will appear here. Ready to practice and master your next interview?
+                    </p>
                     <Button
-                        className="mt-4"
                         onClick={() => router.push("/dashboard/new")}
+                        className="rounded-full shadow-lg shadow-emerald-500/20"
+                        size="lg"
                     >
                         Start Your First Interview
                     </Button>

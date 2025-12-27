@@ -60,6 +60,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@huggingface/transformers": "^3.8.1",
+    "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.4",
     "@ricky0123/vad-web": "^0.0.30",
     "@supabase/supabase-js": "^2.86.2",

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, Clock, CheckCircle, Calendar, ArrowRight, Trash2, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 import { interviewService, Interview } from "@/lib/interview-service";
 import { useRouter } from "next/navigation";
 import { useConfirmDialog } from "@/components/confirm-dialog";
@@ -76,8 +77,20 @@ export default function DashboardPage() {
     // Show loading while checking auth
     if (isAuthChecking) {
         return (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+            <div className="space-y-8 animate-pulse">
+                <div className="flex items-center justify-between">
+                    <div className="space-y-2">
+                        <Skeleton className="h-8 w-48" />
+                        <Skeleton className="h-4 w-64" />
+                    </div>
+                    <Skeleton className="h-10 w-40" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <Skeleton className="h-32 rounded-2xl" />
+                    <Skeleton className="h-32 rounded-2xl" />
+                    <Skeleton className="h-32 rounded-2xl" />
+                </div>
+                <Skeleton className="h-64 rounded-2xl" />
             </div>
         );
     }
@@ -137,7 +150,19 @@ export default function DashboardPage() {
                 </div>
 
                 {isLoading ? (
-                    <div className="text-center py-8 text-gray-500">Loading...</div>
+                    <div className="space-y-4">
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                                <div className="flex items-center gap-4 w-full">
+                                    <Skeleton className="w-10 h-10 rounded-lg" />
+                                    <div className="space-y-2 w-full max-w-[200px]">
+                                        <Skeleton className="h-4 w-full" />
+                                        <Skeleton className="h-3 w-2/3" />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 ) : recentSessions.length === 0 ? (
                     <div className="text-center py-8">
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">No interviews yet</h3>
@@ -176,6 +201,6 @@ export default function DashboardPage() {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }

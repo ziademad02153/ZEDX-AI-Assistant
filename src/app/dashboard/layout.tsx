@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 import { SettingsDialog } from "@/components/settings-dialog";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { PageTransition } from "@/components/page-transition";
+
 
 
 function NavItems({ setMobileMenuOpen }: { setMobileMenuOpen: (open: boolean) => void }) {
@@ -111,7 +113,9 @@ export default function DashboardLayout({
 
                 {/* Main Content */}
                 <main className="flex-1 py-8">
-                    {children}
+                    <PageTransition>
+                        {children}
+                    </PageTransition>
                 </main>
             </div>
         </div>

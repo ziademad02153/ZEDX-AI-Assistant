@@ -7,9 +7,10 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
+
 export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
 
     useEffect(() => {
@@ -91,73 +92,64 @@ export function Navbar() {
                     </div>
                 </div>
 
-                {/* Mobile Menu Button */}
+                {/* Mobile Menu (Sheet) */}
                 <div className="md:hidden flex items-center gap-4">
-                    <button
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    >
-                        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300">
+                                <Menu size={24} />
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="right" className="w-[300px] sm:w-[350px] border-l border-gray-200 dark:border-gray-800 bg-white/95 dark:bg-black/95 backdrop-blur-xl">
+                            <SheetHeader>
+                                <SheetTitle className="text-left text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                    <Image src="/favicon.png" alt="Logo" width={24} height={24} />
+                                    Menu
+                                </SheetTitle>
+                            </SheetHeader>
+                            <div className="flex flex-col gap-2 mt-8">
+                                <Link href="/dashboard">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                        Dashboard
+                                    </Button>
+                                </Link>
+                                <Link href="/dashboard/new">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                        New Interview
+                                    </Button>
+                                </Link>
+                                <Link href="/dashboard/resumes">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                        My Resumes
+                                    </Button>
+                                </Link>
+                                <Link href="/dashboard/history">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                        Interview History
+                                    </Button>
+                                </Link>
+
+                                <div className="h-px bg-gray-100 dark:bg-gray-800 my-4" />
+
+                                <Link href="/#features">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                        How it Works
+                                    </Button>
+                                </Link>
+                                <Link href="/about">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                        About ZEDX AI
+                                    </Button>
+                                </Link>
+
+                                <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                                    <AuthButtons />
+                                </div>
+                            </div>
+                        </SheetContent>
+                    </Sheet>
                 </div>
             </div>
-
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-                <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 absolute w-full shadow-lg">
-                    <div className="px-4 pt-2 pb-6 space-y-2">
-                        <Link
-                            href="/dashboard"
-                            className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-green-600 dark:hover:text-green-400"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Dashboard
-                        </Link>
-                        <Link
-                            href="/dashboard/new"
-                            className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-green-600 dark:hover:text-green-400"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            New Interview
-                        </Link>
-                        <Link
-                            href="/dashboard/resumes"
-                            className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-green-600 dark:hover:text-green-400"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            My Resumes
-                        </Link>
-                        <Link
-                            href="/dashboard/history"
-                            className="block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-green-600 dark:hover:text-green-400"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Interview History
-                        </Link>
-                        <Link
-                            href="/#features"
-                            className="block"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            <span className="block px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 text-center">
-                                How it Works
-                            </span>
-                        </Link>
-                        <Link
-                            href="/about"
-                            className="block"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            <span className="block px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-200 text-center">
-                                About ZEDX AI
-                            </span>
-                        </Link>
-                        <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
-                            <AuthButtons />
-                        </div>
-                    </div>
-                </div>
-            )}
         </nav>
     );
 }
