@@ -147,7 +147,7 @@ export default function DownloadPage() {
                         </div>
                         <p className="text-sm text-gray-500">
                             We are currently polishing the Mac version.
-                            <span className="block mt-1 font-medium text-emerald-500 cursor-pointer hover:underline">Notify me when it's ready</span>
+                            <span className="block mt-1 font-medium text-emerald-500 cursor-pointer hover:underline">soon</span>
                         </p>
                     </div>
 
