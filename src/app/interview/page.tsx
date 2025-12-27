@@ -928,12 +928,27 @@ export default function InterviewPage() {
 
                     {/* Manual Input for Coding Questions */}
                     <div className="mb-4">
+                        <div className="flex items-center justify-between mb-2">
+                            <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Manual Question / Code
+                            </label>
+                            {manualQuestion && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setManualQuestion("")}
+                                    className="h-6 px-2 text-gray-400 hover:text-red-500 text-[10px] gap-1"
+                                >
+                                    <Trash2 size={12} /> Clear
+                                </Button>
+                            )}
+                        </div>
                         <div className="relative">
                             <textarea
                                 value={manualQuestion}
                                 onChange={(e) => setManualQuestion(e.target.value)}
                                 placeholder="Paste coding question or type here... (Press Enter to ask)"
-                                className="w-full p-3 pr-12 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50 resize-y min-h-[60px] text-gray-800 dark:text-gray-200"
+                                className="w-full p-4 pr-12 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50 resize-y min-h-[120px] text-gray-800 dark:text-gray-200 shadow-sm"
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' && !e.shiftKey) {
                                         e.preventDefault();
@@ -945,10 +960,10 @@ export default function InterviewPage() {
                                 size="icon"
                                 onClick={handleManualSubmit}
                                 disabled={isLoading || !manualQuestion.trim()}
-                                className="absolute bottom-2 right-2 h-8 w-8 bg-green-600 hover:bg-green-700 text-white rounded-md shadow-sm disabled:opacity-50"
+                                className="absolute bottom-3 right-3 h-9 w-9 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-md disabled:opacity-50 transition-all hover:scale-105"
                                 title="Get Answer"
                             >
-                                <Sparkles size={16} />
+                                <Sparkles size={18} />
                             </Button>
                         </div>
                     </div>
