@@ -29,65 +29,65 @@ export default function Home() {
               AI Interview Copilot
             </div>
 
-            <h1 className="text-5xl md:text-[5.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.05] max-w-[90rem] mx-auto">
-              The #1 AI Interview <br />
+            <h1 className="text-4xl sm:text-5xl md:text-[5.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.1] max-w-[90rem] mx-auto px-4">
+              The #1 AI Interview <br className="sm:hidden" />
               <span className="text-gradient-fusion">Assistant & Copilot.</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-12 max-w-4xl mx-auto leading-relaxed font-medium">
+            <p className="text-base md:text-xl text-gray-500 dark:text-gray-400 mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed font-medium px-6 md:px-0">
               Your invisible AI assistant. Get real-time answers, tailored to your resume, <br className="hidden md:block" />
               directly on your screen during any video interview.
             </p>
 
-            <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16">
+            <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4">
               <Link href="/dashboard" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto text-2xl px-12 py-8 rounded-full bg-gray-900 hover:bg-gray-800 text-white shadow-xl shadow-gray-900/20 transition-all hover:scale-105">
+                <Button className="w-full sm:w-auto text-lg md:text-2xl px-8 py-6 md:px-12 md:py-8 rounded-full bg-gray-900 hover:bg-gray-800 text-white shadow-xl shadow-gray-900/20 transition-all hover:scale-105">
                   Get Started for Free
                 </Button>
               </Link>
             </div>
 
             {/* Hero Visual: Realistic UI Mockup (Reverted) */}
-            <div className="relative w-full max-w-[1180px] mx-auto perspective-1000">
-              <div className="bg-white dark:bg-zinc-900 rounded-[2.25rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-zinc-700 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
-                <div className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-700 p-4 flex items-center gap-2.5">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-400"></div>
+            <div className="relative w-full max-w-[1180px] mx-auto perspective-1000 px-4">
+              <div className="bg-white dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2.25rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-zinc-700 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
+                <div className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-700 p-3 md:p-4 flex items-center gap-2 md:gap-2.5">
+                  <div className="flex gap-1.5 md:gap-2">
+                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-400"></div>
+                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-400"></div>
+                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-400"></div>
                   </div>
-                  <div className="mx-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 px-4 py-1 rounded-full text-[12px] text-gray-500 font-bold flex items-center gap-2.5">
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <div className="mx-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 px-3 py-1 md:px-4 md:py-1 rounded-full text-[10px] md:text-[12px] text-gray-500 font-bold flex items-center gap-2 md:gap-2.5">
+                    <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500 animate-pulse"></div>
                     Interview Session - Live
                   </div>
                 </div>
-                <div className="p-8 md:p-14 bg-white dark:bg-zinc-900 min-h-[440px] flex flex-col items-center justify-center relative overflow-hidden">
+                <div className="p-6 md:p-14 bg-white dark:bg-zinc-900 min-h-[350px] md:min-h-[440px] flex flex-col items-center justify-center relative overflow-hidden">
                   {/* Background Grid */}
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:3rem_3rem] md:bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
 
                   {/* Floating Chat Bubbles */}
-                  <div className="relative z-10 w-full max-w-4xl space-y-10">
-                    <div className="flex gap-7 items-start animate-fade-in-up">
-                      <div className="w-13 h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
-                        <Image src="/IIcon1.jpg" alt="Interviewer" width={52} height={52} className="object-cover" style={{ height: 'auto' }} />
+                  <div className="relative z-10 w-full max-w-4xl space-y-6 md:space-y-10">
+                    <div className="flex gap-4 md:gap-7 items-start animate-fade-in-up">
+                      <div className="w-10 h-10 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
+                        <Image src="/IIcon1.jpg" alt="Interviewer" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
-                      <div className="bg-gray-100 dark:bg-zinc-800 rounded-[2rem] rounded-tl-none p-6 text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                      <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.25rem] md:rounded-[2rem] rounded-tl-none p-4 md:p-6 text-[0.9rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
                         Can you describe a time you had to optimize a slow database query?
                       </div>
                     </div>
 
-                    <div className="flex gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
-                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-[2.1rem] rounded-tr-none p-8 text-[1.1rem] text-gray-800 dark:text-gray-100 shadow-xl max-w-[85%] relative border-l-4 border-l-green-500">
-                        <div className="absolute -top-5 -left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-2.5 shadow-xl">
-                          <Sparkles className="w-6 h-6 text-green-500 fill-green-500" />
+                    <div className="flex gap-4 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
+                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-[1.25rem] md:rounded-[2.1rem] rounded-tr-none p-5 md:p-8 text-[0.95rem] md:text-[1.1rem] text-gray-800 dark:text-gray-100 shadow-xl max-w-[85%] relative border-l-4 border-l-green-500">
+                        <div className="absolute -top-3 -left-3 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1.5 md:p-2.5 shadow-xl">
+                          <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-green-500 fill-green-500" />
                         </div>
-                        <p className="font-extrabold text-green-600 mb-2.5 text-sm uppercase tracking-widest">AI Suggestion</p>
+                        <p className="font-extrabold text-green-600 mb-2 md:mb-2.5 text-[10px] md:text-sm uppercase tracking-widest">AI Suggestion</p>
                         <p className="leading-relaxed">
                           &quot;In my previous role, I identified a bottleneck in a PostgreSQL query. I analyzed the execution plan, added a composite index, and refactored the join logic, reducing execution time by 85%...&quot;
                         </p>
                       </div>
-                      <div className="w-13 h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
-                        <Image src="/AI.jpg" alt="ZEDX AI Assistant" width={52} height={52} className="object-cover" style={{ height: 'auto' }} />
+                      <div className="w-10 h-10 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
+                        <Image src="/AI.jpg" alt="ZEDX AI Assistant" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
                     </div>
                   </div>
@@ -99,50 +99,50 @@ export default function Home() {
 
           </div>
 
-          <div className="mt-32 relative w-full max-w-[1180px] mx-auto perspective-1000">
-            <div className="text-center mb-16">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-extrabold tracking-widest uppercase mb-4">
+          <div className="mt-20 md:mt-32 relative w-full max-w-[1180px] mx-auto perspective-1000 px-4">
+            <div className="text-center mb-10 md:mb-16">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] md:text-xs font-extrabold tracking-widest uppercase mb-4">
                 Advanced Coding
               </span>
-              <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
+              <h2 className="text-2xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
                 Technical <span className="text-gradient-fusion">Precision.</span>
               </h2>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 rounded-[2.25rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-zinc-700 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
-              <div className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-700 p-4 flex items-center gap-2.5">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
+            <div className="bg-white dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2.25rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-zinc-700 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
+              <div className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-700 p-3 md:p-4 flex items-center gap-2 md:gap-2.5">
+                <div className="flex gap-1.5 md:gap-2">
+                  <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-400"></div>
+                  <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-400"></div>
+                  <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-400"></div>
                 </div>
-                <div className="mx-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 px-4 py-1 rounded-full text-[12px] text-gray-500 font-bold flex items-center gap-2.5">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <div className="mx-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 px-3 py-1 md:px-4 md:py-1 rounded-full text-[10px] md:text-[12px] text-gray-500 font-bold flex items-center gap-2 md:gap-2.5">
+                  <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500 animate-pulse"></div>
                   Technical Interview - Live Coding
                 </div>
               </div>
-              <div className="p-8 md:p-14 bg-white dark:bg-zinc-900 min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden">
+              <div className="p-6 md:p-14 bg-white dark:bg-zinc-900 min-h-[400px] md:min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden">
                 {/* Background Grid */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:3rem_3rem] md:bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
 
                 {/* Floating Chat Bubbles */}
-                <div className="relative z-10 w-full max-w-4xl space-y-10">
-                  <div className="flex gap-7 items-start animate-fade-in-up">
-                    <div className="w-13 h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
-                      <Image src="/IIcon1.jpg" alt="Interviewer" width={52} height={52} className="object-cover" style={{ height: 'auto' }} />
+                <div className="relative z-10 w-full max-w-4xl space-y-6 md:space-y-10">
+                  <div className="flex gap-4 md:gap-7 items-start animate-fade-in-up">
+                    <div className="w-10 h-10 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
+                      <Image src="/IIcon1.jpg" alt="Interviewer" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
-                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[2rem] rounded-tl-none p-6 text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.25rem] md:rounded-[2rem] rounded-tl-none p-4 md:p-6 text-[0.9rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
                       How would you implement a custom React hook to track the previous value of a prop?
                     </div>
                   </div>
 
-                  <div className="flex gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[2.1rem] rounded-tr-none p-8 shadow-xl max-w-[85%] relative border-l-4 border-l-green-500">
-                      <div className="absolute -top-5 -left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-2.5 shadow-xl">
-                        <Sparkles className="w-6 h-6 text-green-500 fill-green-500" />
+                  <div className="flex gap-4 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.25rem] md:rounded-[2.1rem] rounded-tr-none p-5 md:p-8 shadow-xl max-w-[85%] relative border-l-4 border-l-green-500">
+                      <div className="absolute -top-3 -left-3 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1.5 md:p-2.5 shadow-xl">
+                        <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-green-500 fill-green-500" />
                       </div>
-                      <p className="font-extrabold text-green-600 mb-2.5 text-sm uppercase tracking-widest">AI Code Suggestion</p>
-                      <div className="bg-gray-900/5 dark:bg-white/5 rounded-xl p-4 mb-4 font-mono text-sm leading-relaxed overflow-x-auto border border-black/5 dark:border-white/5">
+                      <p className="font-extrabold text-green-600 mb-2 md:mb-2.5 text-[10px] md:text-sm uppercase tracking-widest">AI Code Suggestion</p>
+                      <div className="bg-gray-900/5 dark:bg-white/5 rounded-xl p-3 md:p-4 mb-3 md:mb-4 font-mono text-[10px] md:text-sm leading-relaxed overflow-x-auto border border-black/5 dark:border-white/5">
                         <pre className="text-emerald-900 dark:text-emerald-200">
                           {`const usePrevious = (value) => {
   const ref = useRef();
@@ -153,12 +153,12 @@ export default function Home() {
 };`}
                         </pre>
                       </div>
-                      <p className="leading-relaxed text-gray-700 dark:text-gray-200">
-                        This hook utilizes <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded">useRef</code> to persist the value across renders and <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded">useEffect</code> to update it after each render cycle.
+                      <p className="leading-relaxed text-[0.9rem] md:text-[1rem] text-gray-700 dark:text-gray-200">
+                        This hook utilizes <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useRef</code> to persist the value and <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useEffect</code> to update it.
                       </p>
                     </div>
-                    <div className="w-13 h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
-                      <Image src="/AI.jpg" alt="ZEDX AI Assistant" width={52} height={52} className="object-cover" style={{ height: 'auto' }} />
+                    <div className="w-10 h-10 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
+                      <Image src="/AI.jpg" alt="ZEDX AI Assistant" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
                   </div>
                 </div>

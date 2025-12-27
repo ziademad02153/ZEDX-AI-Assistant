@@ -94,13 +94,13 @@ export function PlatformSection() {
 
                         {/* Left: Text Content (45%) */}
                         <div className="w-full md:w-[45%] flex flex-col justify-center text-left">
-                            <h2 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-2 tracking-tight">
+                            <h2 className="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-2 tracking-tight">
                                 Works with any
                             </h2>
-                            <h2 className="text-4xl md:text-5xl font-extrabold text-lime-300 leading-tight mb-6 tracking-tight">
+                            <h2 className="text-3xl md:text-5xl font-extrabold text-lime-300 leading-tight mb-6 tracking-tight">
                                 interview platform
                             </h2>
-                            <p className="text-white/80 text-lg leading-relaxed max-w-sm">
+                            <p className="text-white/80 text-base md:text-lg leading-relaxed max-w-sm">
                                 You can use ZEDX-AI with any video or coding platform including Zoom, Google Meet, Microsoft Teams, HackerRank, and LeetCode.
                             </p>
                         </div>
@@ -113,7 +113,7 @@ export function PlatformSection() {
                         </div>
 
                         {/* Static ZEDX Robot Mascot - Pinned to Bottom (Parakeet match) */}
-                        <div className="absolute bottom-0 -right-10 md:-right-20 w-80 h-80 md:w-[480px] md:h-[480px] z-20 pointer-events-none">
+                        <div className="absolute bottom-0 -right-12 sm:-right-10 md:-right-20 w-64 h-64 sm:w-80 sm:h-80 md:w-[480px] md:h-[480px] z-20 pointer-events-none">
                             <div className="relative w-full h-full flex items-end">
                                 <Image
                                     src="/zedx-logo-for-v.png"

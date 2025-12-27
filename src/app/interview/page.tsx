@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, Video, VideoOff, Loader2, AlertCircle, Sparkles, Trash2, LogOut, Copy } from "lucide-react";
+import { Mic, Video, VideoOff, Loader2, AlertCircle, Sparkles, Trash2, LogOut, Copy, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from 'react-markdown';
 
@@ -955,17 +955,17 @@ export default function InterviewPage() {
 
                     <div className="flex-1 rounded-xl p-6 overflow-y-auto prose prose-lg max-w-none bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors relative">
                         <div className="absolute top-2 right-2 flex gap-1">
-                            {/* Retry Button - only shows when lastTranscript exists and there was an error */}
-                            {lastTranscript && error && (
+                            {/* Retry Button - always shows when lastTranscript exists */}
+                            {lastTranscript && (
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-8 w-8 text-orange-500 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                                    className="h-8 w-8 text-blue-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                                     onClick={() => getAiAnswer(lastTranscript)}
                                     disabled={isLoading}
                                     title="Retry last question"
                                 >
-                                    <AlertCircle size={16} />
+                                    <RotateCcw size={16} />
                                 </Button>
                             )}
                             {/* Copy Button */}

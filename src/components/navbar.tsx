@@ -46,7 +46,7 @@ export function Navbar() {
                         alt="ZEDX-AI Logo"
                         width={95}
                         height={95}
-                        className="object-contain w-15 h-15 md:w-18 md:h-18 lg:w-[95px] lg:h-[95px] transition-transform group-hover:scale-105"
+                        className="object-contain w-12 h-12 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-[95px] lg:h-[95px] transition-transform group-hover:scale-105"
                         style={{ height: 'auto' }}
                         priority
                     />
