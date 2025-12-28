@@ -4,7 +4,6 @@ import "./globals.css";
 import ErrorBoundary from "@/components/error-boundary";
 import { ConfirmDialogProvider } from "@/components/confirm-dialog";
 import { DesktopNavBar } from "@/components/desktop-nav";
-import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -106,6 +105,22 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="msvalidate.01" content="410978477B68DFFC4D1109011EAF121F" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem("theme");
+                  if (theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+                    document.documentElement.classList.add("dark");
+                  } else {
+                    document.documentElement.classList.remove("dark");
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         {/* JSON-LD Structured Data for SEO */}
         <script
           type="application/ld+json"
@@ -170,15 +185,14 @@ export default function RootLayout({
         className={`${inter.variable} antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <DesktopNavBar />
-          <ErrorBoundary>
-            <ConfirmDialogProvider>
-              {children}
-            </ConfirmDialogProvider>
-          </ErrorBoundary>
-        </ThemeProvider>
+        <DesktopNavBar />
+        <ErrorBoundary>
+          <ConfirmDialogProvider>
+            {children}
+          </ConfirmDialogProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );
 }
+
