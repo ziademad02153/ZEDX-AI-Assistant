@@ -8,7 +8,6 @@ import { PlatformSection } from "@/components/platform-section";
 
 export default function Home() {
   return (
-  return (
     <div className="min-h-screen flex flex-col font-sans text-gray-900 dark:text-gray-100 overflow-x-hidden bg-background transition-colors duration-300">
       <Navbar />
 
