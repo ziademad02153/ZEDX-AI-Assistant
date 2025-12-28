@@ -46,19 +46,19 @@ export default function Home() {
 
             {/* Hero Visual: Realistic UI Mockup (Reverted) */}
             <div className="relative w-full max-w-[1180px] mx-auto perspective-1000 px-4">
-              <div className="bg-white dark:bg-black rounded-[1.5rem] md:rounded-[2.25rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-white/10 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
-                <div className="bg-white dark:bg-black border-b border-gray-100 dark:border-white/10 p-3 md:p-4 flex items-center gap-2 md:gap-2.5">
+              <div className="bg-gray-50 dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2.25rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-white/10 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
+                <div className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-white/10 p-3 md:p-4 flex items-center gap-2 md:gap-2.5">
                   <div className="flex gap-1.5 md:gap-2">
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-400"></div>
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-400"></div>
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-400"></div>
                   </div>
-                  <div className="mx-auto bg-white dark:bg-black border border-gray-200 dark:border-white/10 px-3 py-1 md:px-4 md:py-1 rounded-full text-[10px] md:text-[12px] text-gray-500 font-bold flex items-center gap-2 md:gap-2.5">
+                  <div className="mx-auto bg-white dark:bg-zinc-900 border border-gray-200 dark:border-white/10 px-3 py-1 md:px-4 md:py-1 rounded-full text-[10px] md:text-[12px] text-gray-500 font-bold flex items-center gap-2 md:gap-2.5">
                     <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500 animate-pulse"></div>
                     Interview Session - Live
                   </div>
                 </div>
-                <div className="p-4 md:p-14 bg-white dark:bg-black min-h-[320px] md:min-h-[440px] flex flex-col items-center justify-center relative overflow-hidden">
+                <div className="p-4 md:p-14 bg-gray-50 dark:bg-zinc-900 min-h-[320px] md:min-h-[440px] flex flex-col items-center justify-center relative overflow-hidden">
                   {/* Background Grid */}
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#111_1px,transparent_1px),linear-gradient(to_bottom,#111_1px,transparent_1px)] bg-[size:3rem_3rem] md:bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
 
@@ -68,7 +68,7 @@ export default function Home() {
                       <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-white flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
                         <Image src="/IIcon1.jpg" alt="Interviewer" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
-                      <div className="bg-white dark:bg-black rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 dark:border-white/10 leading-relaxed font-medium">
+                      <div className="bg-white dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 dark:border-white/10 leading-relaxed font-medium">
                         Can you describe a time you had to optimize a slow database query?
                       </div>
                     </div>
@@ -106,19 +106,19 @@ export default function Home() {
               </h2>
             </div>
 
-            <div className="bg-white dark:bg-black rounded-[1.5rem] md:rounded-[2.25rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-white/10 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
-              <div className="bg-white dark:bg-black border-b border-gray-100 dark:border-white/10 p-3 md:p-4 flex items-center gap-2 md:gap-2.5">
+            <div className="bg-gray-50 dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2.25rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-white/10 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
+              <div className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-white/10 p-3 md:p-4 flex items-center gap-2 md:gap-2.5">
                 <div className="flex gap-1.5 md:gap-2">
                   <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-400"></div>
                   <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-400"></div>
                   <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-400"></div>
                 </div>
-                <div className="mx-auto bg-white dark:bg-black border border-gray-200 dark:border-white/10 px-3 py-1 md:px-4 md:py-1 rounded-full text-[10px] md:text-[12px] text-gray-500 font-bold flex items-center gap-2 md:gap-2.5">
+                <div className="mx-auto bg-white dark:bg-zinc-900 border border-gray-200 dark:border-white/10 px-3 py-1 md:px-4 md:py-1 rounded-full text-[10px] md:text-[12px] text-gray-500 font-bold flex items-center gap-2 md:gap-2.5">
                   <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500 animate-pulse"></div>
                   Technical Interview - Live Coding
                 </div>
               </div>
-              <div className="p-4 md:p-14 bg-white dark:bg-black min-h-[380px] md:min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden">
+              <div className="p-4 md:p-14 bg-gray-50 dark:bg-zinc-900 min-h-[380px] md:min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden">
                 {/* Background Grid */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#111_1px,transparent_1px),linear-gradient(to_bottom,#111_1px,transparent_1px)] bg-[size:3rem_3rem] md:bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
 
@@ -189,7 +189,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
 
               {/* Feature 1: Resume Upload */}
-              <div className="bg-white dark:bg-black rounded-[2rem] p-8 border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
+              <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
                 <div className="mb-4">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-green-100 text-green-800 text-xs font-bold tracking-wider uppercase">
                     Resume
@@ -199,9 +199,9 @@ export default function Home() {
 
                 {/* Visual: Resume File */}
                 <div className="flex-grow flex items-center justify-center mb-8">
-                  <div className="bg-white dark:bg-black rounded-xl border border-gray-100 dark:border-white/10 p-6 shadow-sm relative overflow-hidden w-full max-w-[280px]">
+                  <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-100 dark:border-white/10 p-6 shadow-sm relative overflow-hidden w-full max-w-[280px]">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-16 bg-white dark:bg-black border border-gray-200 dark:border-white/20 rounded-lg flex flex-col items-center justify-center gap-1 shadow-sm">
+                      <div className="w-12 h-16 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-white/20 rounded-lg flex flex-col items-center justify-center gap-1 shadow-sm">
                         <div className="w-8 h-1 bg-gray-200 rounded-full"></div>
                         <div className="w-6 h-1 bg-gray-200 rounded-full"></div>
                         <div className="w-8 h-1 bg-gray-200 rounded-full"></div>
@@ -222,7 +222,7 @@ export default function Home() {
               </div>
 
               {/* Feature 2: Instant Answers */}
-              <div className="bg-white dark:bg-black rounded-[2rem] p-8 border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
+              <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
                 <div className="mb-4">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-teal-100 text-teal-800 text-xs font-bold tracking-wider uppercase">
                     Instant Answers
@@ -233,7 +233,7 @@ export default function Home() {
                 {/* Visual: Chat Bubble */}
                 <div className="flex-grow flex items-center justify-center mb-8 w-full">
                   <div className="space-y-3 w-full max-w-[280px]">
-                    <div className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-600 dark:text-gray-300 w-3/4">
+                    <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-white/10 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-600 dark:text-gray-300 w-3/4">
                       What are your salary expectations?
                     </div>
                     <div className="bg-teal-50 dark:bg-teal-900/10 border border-teal-100 dark:border-teal-900 p-3 rounded-2xl rounded-tr-none shadow-sm text-sm text-gray-800 dark:text-gray-200 w-3/4 ml-auto">
@@ -248,7 +248,7 @@ export default function Home() {
               </div>
 
               {/* Feature 3: Multilingual */}
-              <div className="bg-white dark:bg-black rounded-[2rem] p-8 border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
+              <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
                 <div className="mb-4">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-[#84cc16] text-black text-xs font-bold tracking-wider uppercase">
                     Multilingual
@@ -265,7 +265,7 @@ export default function Home() {
                     <div className="absolute inset-8 border border-green-300/50 rounded-full animate-[spin_20s_linear_infinite]"></div>
 
                     {/* Center Icon */}
-                    <div className="w-16 h-16 bg-white dark:bg-black rounded-full shadow-sm flex items-center justify-center z-10 relative">
+                    <div className="w-16 h-16 bg-white dark:bg-zinc-800 rounded-full shadow-sm flex items-center justify-center z-10 relative">
                       <Globe size={32} className="text-gray-700 dark:text-gray-300" strokeWidth={1.5} />
                     </div>
 
@@ -282,7 +282,7 @@ export default function Home() {
               </div>
 
               {/* Feature 4: AI Analysis */}
-              <div className="bg-white dark:bg-black rounded-[2rem] p-8 border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
+              <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
                 <div className="mb-4">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-[#84cc16] dark:bg-green-700 text-black dark:text-white text-xs font-bold tracking-wider uppercase">
                     Summary
@@ -292,7 +292,7 @@ export default function Home() {
 
                 {/* Visual: Summary Card Mockup */}
                 <div className="flex-grow flex items-center justify-center mb-8">
-                  <div className="w-full max-w-[280px] bg-white dark:bg-black border border-gray-100 dark:border-white/10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-5 relative overflow-hidden">
+                  <div className="w-full max-w-[280px] bg-white dark:bg-zinc-900 border border-gray-100 dark:border-white/10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-5 relative overflow-hidden">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">A</div>
