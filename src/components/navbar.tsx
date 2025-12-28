@@ -39,25 +39,25 @@ export function Navbar() {
                     : "py-4 bg-transparent"
             )}
         >
-            <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
+            <div className="w-full max-w-[75vw] mx-auto px-4 sm:px-6 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center group">
                     <Image
                         src="/zedx-logo.png"
                         alt="ZEDX-AI Logo"
-                        width={95}
-                        height={95}
-                        className="object-contain w-12 h-12 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-[95px] lg:h-[95px] transition-transform group-hover:scale-105"
+                        width={110}
+                        height={110}
+                        className="object-contain w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-[110px] lg:h-[110px] transition-transform group-hover:scale-105"
                         style={{ height: 'auto' }}
                         priority
                     />
                 </Link>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center space-x-4">
+                <div className="hidden md:flex items-center space-x-5">
                     <Link
                         href="/#features"
-                        className="flex items-center gap-1.5 text-[15px] font-semibold text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                        className="flex items-center gap-1.5 text-lg font-bold text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                         onClick={(e) => {
                             if (window.location.pathname === '/') {
                                 e.preventDefault();
@@ -65,24 +65,24 @@ export function Navbar() {
                             }
                         }}
                     >
-                        <span className="px-5 py-2.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all">
+                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all shadow-sm">
                             How it Works
                         </span>
                     </Link>
                     <Link
                         href="/download"
-                        className="flex items-center gap-1.5 text-[15px] font-semibold text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors group relative"
+                        className="flex items-center gap-1.5 text-lg font-bold text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors group relative"
                     >
-                        <span className="px-5 py-2.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all flex items-center gap-2">
+                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all shadow-sm flex items-center gap-2">
                             Desktop App
-                            <span className="bg-emerald-500 text-white text-[10.5px] font-bold px-2 py-0.5 rounded-full animate-pulse shadow-md shadow-emerald-500/20">NEW</span>
+                            <span className="bg-emerald-500 text-white text-xs font-extra-bold px-2.5 py-1 rounded-full animate-pulse shadow-md shadow-emerald-500/20">NEW</span>
                         </span>
                     </Link>
                     <Link
                         href="/about"
-                        className="text-[15px] font-semibold transition-colors"
+                        className="text-lg font-bold transition-colors"
                     >
-                        <span className="px-5 py-2.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all text-gray-700 dark:text-gray-200">
+                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all shadow-sm text-gray-700 dark:text-gray-200">
                             About ZEDX AI
                         </span>
                     </Link>

@@ -101,10 +101,10 @@ export default function DashboardLayout({
 
 
 
-            <div className="flex flex-1 pt-20 container mx-auto px-4 gap-8">
+            <div className="flex flex-1 pt-20 w-full max-w-[75vw] mx-auto px-4 sm:px-6 gap-6 sm:gap-8">
                 {/* Desktop Sidebar */}
                 <aside className="w-64 hidden md:block py-8">
-                    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-4 sticky top-24 transition-colors duration-300">
+                    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-4 sticky top-24 mt-20 transition-colors duration-300">
                         <nav className="space-y-2">
                             <NavItems setMobileMenuOpen={setMobileMenuOpen} />
                         </nav>

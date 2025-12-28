@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Upload, AlertCircle, Sparkles, Zap, MessageSquare } from "lucide-react";
+import { ArrowLeft, Upload, AlertCircle, Sparkles, Zap, MessageSquare, Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -73,6 +73,8 @@ const AI_MODELS = [
         border: "group-hover:border-emerald-500/50"
     },
 ];
+
+import { ParticleWave } from "@/components/ui/particle-wave";
 
 export default function NewInterviewPage() {
     const router = useRouter();
@@ -163,59 +165,62 @@ export default function NewInterviewPage() {
 
     const currentModelData = AI_MODELS.find(m => m.id === selectedModel) || AI_MODELS[0];
 
+
+
     return (
         <div className="min-h-screen bg-white dark:bg-black text-foreground selection:bg-emerald-500/30">
-            {/* Background Ambient Glows */}
+            {/* Background Ambient Glows & Particle Wave */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
                 <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
                 <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
             </div>
+            <ParticleWave />
 
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+            <div className="relative z-10 w-full mx-auto px-6 py-8 sm:py-12 pb-32">
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-12">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-5">
                         <Link href="/dashboard">
-                            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full w-12 h-12">
-                                <ArrowLeft size={24} />
+                            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full w-14 h-14">
+                                <ArrowLeft size={28} />
                             </Button>
                         </Link>
                         <div>
-                            <h1 className="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400">
+                            <h1 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400 mb-2">
                                 Setup Interview
                             </h1>
-                            <p className="text-gray-500 dark:text-gray-400 mt-1">Configure your AI copilot for the perfect session.</p>
+                            <p className="text-lg text-gray-500 dark:text-gray-400">Configure your AI copilot for the perfect session.</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[calc(100vh-250px)]">
                     {/* Left Column: Configuration (8 cols) */}
-                    <div className="lg:col-span-7 space-y-6">
+                    <div className="lg:col-span-7 flex flex-col gap-8 h-full">
 
                         {/* Job Description Card */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4 }}
-                            className="group relative bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-1 shadow-xl dark:shadow-2xl overflow-hidden"
+                            className="group relative bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-1 shadow-xl dark:shadow-2xl overflow-hidden flex-1 flex flex-col"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none"></div>
-                            <div className="relative bg-white dark:bg-[#151515] rounded-[22px] p-6 sm:p-8">
-                                <div className="flex items-center justify-between mb-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-3 bg-emerald-100 dark:bg-emerald-500/10 rounded-xl text-emerald-600 dark:text-emerald-400">
+                            <div className="relative bg-white dark:bg-[#151515] rounded-[22px] p-8 sm:p-10 flex-1 flex flex-col">
+                                <div className="flex items-center justify-between mb-8">
+                                    <div className="flex items-center gap-5">
+                                        <div className="p-4 bg-emerald-100 dark:bg-emerald-900/40 rounded-2xl text-emerald-700 dark:text-emerald-400">
                                             <BriefcaseIcon />
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Job Description</h3>
-                                            <p className="text-xs text-gray-500">Paste the target role details.</p>
+                                            <h3 className="font-bold text-2xl text-gray-900 dark:text-white mb-1">Job Description</h3>
+                                            <p className="text-base text-gray-500 font-medium">Paste the target role details.</p>
                                         </div>
                                     </div>
-                                    <span className="text-xs font-mono text-emerald-600/70 dark:text-emerald-500/50 bg-emerald-100 dark:bg-emerald-500/5 px-2 py-1 rounded">REQUIRED</span>
+                                    <span className="text-sm font-bold font-mono text-emerald-800 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-4 py-2 rounded-xl tracking-wider">REQUIRED</span>
                                 </div>
                                 <textarea
-                                    className="w-full h-48 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-sm text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all"
+                                    className="w-full flex-1 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl p-6 text-lg text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all min-h-[220px] leading-relaxed"
                                     placeholder="e.g. Senior React Developer at Netflix..."
                                     value={jobDescription}
                                     onChange={(e) => setJobDescription(e.target.value)}
@@ -228,21 +233,21 @@ export default function NewInterviewPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: 0.1 }}
-                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-lg dark:shadow-none"
+                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-8 sm:p-10 relative overflow-hidden shadow-lg dark:shadow-none flex-1 flex flex-col"
                         >
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-3 bg-emerald-100 dark:bg-emerald-500/10 rounded-xl text-emerald-600 dark:text-emerald-400">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+                                <div className="flex items-center gap-5">
+                                    <div className="p-4 bg-emerald-100 dark:bg-emerald-900/40 rounded-2xl text-emerald-700 dark:text-emerald-400">
                                         <ResumeIcon />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Your Resume</h3>
-                                        <p className="text-xs text-gray-500">Add your resume for tailored context.</p>
+                                        <h3 className="font-semibold text-2xl text-gray-900 dark:text-white">Your Resume</h3>
+                                        <p className="text-base text-gray-500">Add your resume for tailored context.</p>
                                     </div>
                                 </div>
-                                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                                     <select
-                                        className="h-10 sm:h-9 px-3 w-full sm:w-40 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-xs text-gray-600 dark:text-gray-300 focus:outline-none focus:border-emerald-500/50 truncate"
+                                        className="h-12 px-4 w-full sm:w-48 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-emerald-500/50 truncate"
                                         onChange={(e) => {
                                             const r = savedResumes.find(sr => sr.id === e.target.value);
                                             if (r) setResume(r.content);
@@ -252,22 +257,22 @@ export default function NewInterviewPage() {
                                         <option value="" disabled>Saved Resumes</option>
                                         {savedResumes.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                                     </select>
-                                    <label className="h-10 sm:h-9 px-3 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg cursor-pointer transition-colors w-full sm:w-auto">
-                                        <Upload size={14} />
+                                    <label className="h-12 px-6 flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold rounded-xl cursor-pointer transition-colors w-full sm:w-auto shadow-lg shadow-emerald-500/20">
+                                        <Upload size={18} />
                                         Upload
                                         <input type="file" className="hidden" accept=".pdf,.txt" onChange={handleFileUpload} />
                                     </label>
                                 </div>
                             </div>
                             <textarea
-                                className="w-full h-32 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-sm text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all"
+                                className="w-full flex-1 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl p-6 text-lg text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all min-h-[220px]"
                                 placeholder="Paste resume text or upload PDF..."
                                 value={resume}
                                 onChange={(e) => setResume(e.target.value)}
                             />
                             {successMessage && (
-                                <div className="mt-3 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400">
-                                    <span className="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center">✓</span>
+                                <div className="mt-4 flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-500/10 p-3 rounded-xl">
+                                    <span className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center">✓</span>
                                     {successMessage}
                                 </div>
                             )}
@@ -278,14 +283,14 @@ export default function NewInterviewPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: 0.2 }}
-                            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                            className="grid grid-cols-1 sm:grid-cols-2 gap-6"
                         >
-                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-2xl p-5 shadow-sm">
-                                <label className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
-                                    <Sparkles size={16} className="text-emerald-500 dark:text-emerald-400" /> Interview Type
+                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
+                                <label className="flex items-center gap-3 text-base font-bold text-gray-700 dark:text-gray-300 mb-4">
+                                    <Sparkles size={20} className="text-emerald-500 dark:text-emerald-400" /> Interview Type
                                 </label>
                                 <select
-                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
+                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
                                     value={interviewType}
                                     onChange={(e) => setInterviewType(e.target.value)}
                                 >
@@ -295,12 +300,12 @@ export default function NewInterviewPage() {
                                     <option>HR Screening</option>
                                 </select>
                             </div>
-                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-2xl p-5 shadow-sm">
-                                <label className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
-                                    <GlobeIcon /> Language
+                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
+                                <label className="flex items-center gap-3 text-base font-bold text-gray-700 dark:text-gray-300 mb-4">
+                                    <div className="text-emerald-600 dark:text-emerald-500"><GlobeIcon /></div> Language
                                 </label>
                                 <select
-                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
+                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
                                     value={language}
                                     onChange={(e) => setLanguage(e.target.value)}
                                 >
@@ -315,108 +320,121 @@ export default function NewInterviewPage() {
 
 
                     {/* Right Column: Model Selection & Chat (5 cols) */}
-                    <div className="lg:col-span-5 space-y-6">
+                    <div className="lg:col-span-5 relative flex flex-col h-full">
 
-                        {/* Model Selection */}
+                        {/* Model Selection Card */}
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-8 shadow-lg dark:shadow-none"
+                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-8 sm:p-10 shadow-lg dark:shadow-none flex-grow flex flex-col h-full"
                         >
-                            <h3 className="text-lg font-semibold mb-1 flex items-center gap-2 text-gray-900 dark:text-white">
-                                <Zap size={18} className="text-yellow-500 dark:text-yellow-400" />
-                                AI Engine
-                            </h3>
-                            <p className="text-xs text-gray-500 mb-6">Choose the brain behind ZEDX</p>
+                            {/* AI Model Header with AI.jpg */}
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10">
+                                    <Image src="/AI.jpg" alt="AI Model" width={48} height={48} className="w-full h-full object-cover" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-gray-900 dark:text-white text-xl">AI Model</h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">Choose the brain behind ZEDX</p>
+                                </div>
+                            </div>
 
-                            <div className="space-y-3">
+                            {/* Models List */}
+                            <div className="space-y-4 mb-8">
                                 {AI_MODELS.map((model) => (
-                                    <button
+                                    <div
                                         key={model.id}
                                         onClick={() => setSelectedModel(model.id)}
                                         className={cn(
-                                            "w-full group relative p-3 rounded-2xl border transition-all duration-300 flex items-center gap-4 text-left overflow-hidden",
+                                            "relative p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-5 group/item",
                                             selectedModel === model.id
-                                                ? "bg-emerald-50 dark:bg-white/5 border-emerald-500/50 shadow-md dark:shadow-lg shadow-emerald-500/10"
-                                                : "bg-transparent border-gray-100 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/[0.02]"
+                                                ? "bg-white dark:bg-white/5 border-emerald-500 shadow-sm"
+                                                : "bg-gray-50 dark:bg-black/20 border-transparent hover:bg-gray-100 dark:hover:bg-white/5"
                                         )}
                                     >
-                                        <div className={cn(
-                                            "absolute inset-0 bg-gradient-to-r opacity-0 transition-opacity duration-300",
-                                            model.gradient,
-                                            selectedModel === model.id ? "opacity-10" : "group-hover:opacity-5"
-                                        )}></div>
-
-                                        <div className="relative z-10 w-10 h-10 rounded-xl bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 flex items-center justify-center p-1.5 shrink-0">
-                                            <Image src={model.logo} alt={model.name} width={32} height={32} className="object-contain" />
+                                        <div className="w-12 h-12 rounded-xl bg-white dark:bg-black p-2 shadow-sm border border-gray-100 dark:border-white/10 flex items-center justify-center">
+                                            <Image src={model.logo} alt={model.name} width={40} height={40} className="w-full h-full object-contain" />
                                         </div>
-                                        <div className="relative z-10 flex-grow">
-                                            <div className="flex items-center justify-between">
-                                                <h4 className={cn("font-medium text-sm", selectedModel === model.id ? "text-emerald-700 dark:text-white" : "text-gray-600 dark:text-gray-400")}>{model.name}</h4>
-                                                {selectedModel === model.id && <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>}
+                                        <div className="flex-1">
+                                            <div className="flex items-center justify-between mb-1">
+                                                <h4 className={cn("font-bold text-base", selectedModel === model.id ? "text-gray-900 dark:text-white" : "text-gray-600 dark:text-gray-400")}>
+                                                    {model.name}
+                                                </h4>
+                                                {selectedModel === model.id && (
+                                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>
+                                                )}
                                             </div>
-                                            <p className="text-xs text-gray-500">{model.description}</p>
+                                            <p className="text-sm text-gray-400 dark:text-gray-500">{model.description}</p>
                                         </div>
-                                    </button>
+                                    </div>
                                 ))}
                             </div>
-                        </motion.div>
 
-                        {/* Model Chat Preview */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5, delay: 0.2 }}
-                        >
-                            <div className="flex items-center justify-between mb-4 px-2">
-                                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                                    <MessageSquare size={16} />
-                                    Test Drive Model
-                                </h3>
-                            </div>
-                            <ModelChat
-                                modelId={selectedModel}
-                                modelName={currentModelData.name}
-                                modelLogo={currentModelData.logo}
-                            />
-                        </motion.div>
-
-                        {/* Start Action */}
-                        <div className="pt-4 sticky bottom-6 z-20">
-                            {error && (
-                                <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
-                                    <AlertCircle size={14} />
-                                    {error}
-                                </div>
-                            )}
-                            <Button
-                                onClick={handleStart}
-                                disabled={isLoading || !isValid}
-                                className={cn(
-                                    "w-full h-14 text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl",
-                                    isValid
-                                        ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20 hover:shadow-emerald-500/30 hover:-translate-y-1"
-                                        : "bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-gray-500 cursor-not-allowed"
-                                )}
+                            {/* Chat Preview */}
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5, delay: 0.2 }}
+                                className="flex-1 flex flex-col"
                             >
-                                {isLoading ? (
-                                    <span className="flex items-center gap-2">
-                                        <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                                        Preparing...
-                                    </span>
-                                ) : (
-                                    <span className="flex items-center gap-2">
-                                        <Zap className={cn("transition-transform", isValid ? "group-hover:scale-110" : "")} fill="currentColor" />
-                                        Start Session
-                                    </span>
-                                )}
-                            </Button>
-                        </div>
+                                <div className="flex items-center justify-between mb-4 px-2">
+                                    <h3 className="text-base font-semibold text-gray-500 dark:text-gray-400 flex items-center gap-3">
+                                        <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center">
+                                            <Image src="/AI2.png" alt="AI" width={24} height={24} className="w-full h-full object-cover" />
+                                        </div>
+                                        Test Drive Model
+                                    </h3>
+                                </div>
+                                <div className="flex-1 min-h-[400px] mb-6">
+                                    <ModelChat
+                                        modelId={selectedModel}
+                                        modelName={currentModelData.name}
+                                        modelLogo={currentModelData.logo}
+                                    />
+                                </div>
 
+                                {/* Static Start Interview Button */}
+                                <div className="mt-auto pt-6">
+                                    {error && (
+                                        <div className="mb-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm font-medium flex items-center gap-2 backdrop-blur-md animate-in slide-in-from-bottom-2">
+                                            <AlertCircle size={18} />
+                                            {error}
+                                        </div>
+                                    )}
+                                    <Button
+                                        onClick={handleStart}
+                                        disabled={isLoading || !isValid}
+                                        className={cn(
+                                            "w-full h-16 text-xl font-bold rounded-2xl transition-all duration-300 shadow-xl",
+                                            isValid
+                                                ? "bg-gradient-to-r from-emerald-600 to-green-500 hover:from-emerald-500 hover:to-green-400 text-white shadow-emerald-500/25 hover:shadow-emerald-500/35 hover:-translate-y-0.5 active:translate-y-0"
+                                                : "bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                                        )}
+                                    >
+                                        {isLoading ? (
+                                            <span className="flex items-center justify-center gap-3">
+                                                <Loader2 size={24} className="animate-spin" />
+                                                Preparing...
+                                            </span>
+                                        ) : (
+                                            <span className="flex items-center justify-center gap-3">
+                                                Start Interview
+                                                <ArrowLeft className="rotate-180" size={24} />
+                                            </span>
+                                        )}
+                                    </Button>
+
+                                </div>
+                            </motion.div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
+
+            {/* Premium Floating Action Bar */}
+
         </div>
     );
 }
+

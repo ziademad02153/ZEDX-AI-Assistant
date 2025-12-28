@@ -257,7 +257,7 @@ export default function InterviewPage() {
         silenceTimerRef.current = setTimeout(() => {
             console.log("Auto-answering due to silence...");
             getAiAnswer();
-        }, 1200);
+        }, 800);
 
         return () => {
             if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
@@ -668,28 +668,50 @@ export default function InterviewPage() {
             // STEP 1: Always start Fast Live Transcript (Web Speech API)
             // This provides the immediate visual feedback the user wants
             const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
             if (SpeechRecognition) {
-                const recognition = new SpeechRecognition();
-                recognition.continuous = true;
-                recognition.interimResults = true;
-                recognition.lang = interviewContext.lang || 'en-US';
+                try {
+                    const recognition = new SpeechRecognition();
+                    recognition.continuous = true;
+                    recognition.interimResults = true;
+                    recognition.lang = interviewContext.lang || 'en-US';
 
-                recognition.onresult = (event: any) => {
-                    let interim = "";
-                    for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        if (event.results[i].isFinal) {
-                            const text = event.results[i][0].transcript;
-                            setTranscript(prev => (prev + " " + text).trim().slice(-MAX_TRANSCRIPT_LENGTH));
-                        } else {
-                            interim += event.results[i][0].transcript;
+                    recognition.onresult = (event: any) => {
+                        let interim = "";
+                        for (let i = event.resultIndex; i < event.results.length; ++i) {
+                            if (event.results[i].isFinal) {
+                                const text = event.results[i][0].transcript;
+                                setTranscript(prev => (prev + " " + text).trim().slice(-MAX_TRANSCRIPT_LENGTH));
+                            } else {
+                                interim += event.results[i][0].transcript;
+                            }
                         }
-                    }
-                    setInterimTranscript(interim);
-                };
+                        setInterimTranscript(interim);
+                    };
 
-                recognitionRef.current = recognition;
-                recognition.start();
-                console.log("[Speech] Fast Live Engine started");
+                    recognition.onerror = (e: any) => {
+                        if (e.error === 'aborted' || e.error === 'no-speech' || e.error === 'audio-capture') return;
+                        console.error("[Speech] Runtime Error:", e.error);
+                        if (e.error === 'not-allowed') {
+                            setError("Microphone access denied. Check browser settings.");
+                            setIsRecording(false);
+                        }
+                    };
+
+                    recognitionRef.current = recognition;
+                    recognition.start();
+                    console.log("[Speech] Fast Live Engine started successfully");
+                } catch (e) {
+                    console.error("[Speech] Failed to initialize Web Speech API:", e);
+                    if (!isElectron) {
+                        setError("Browser speech recognition failed. Try Chrome/Edge.");
+                    }
+                }
+            } else {
+                console.warn("[Speech] Web Speech API not verified in this browser.");
+                if (!isElectron) {
+                    setError("Your browser does not support Live Speech. Use Chrome or Edge.");
+                }
             }
 
             // STEP 2: Desktop Only - Start High-Quality mixed audio STT
