@@ -97,13 +97,13 @@ export default function DashboardPage() {
 
     return (
         <div className="space-y-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
                     <p className="text-gray-600 dark:text-gray-300">Welcome back! Ready for your next interview?</p>
                 </div>
-                <Link href="/dashboard/new">
-                    <Button variant="gradient" className="shadow-lg shadow-green-900/20">
+                <Link href="/dashboard/new" className="w-full sm:w-auto">
+                    <Button variant="gradient" className="w-full sm:w-auto shadow-lg shadow-green-900/20">
                         <Plus className="mr-2 h-4 w-4" />
                         Start New Interview
                     </Button>
@@ -137,7 +137,7 @@ export default function DashboardPage() {
 
             </div>
 
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-8 transition-colors">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 sm:p-8 transition-colors">
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white">Recent History</h3>
                     {recentSessions.length > 0 && (

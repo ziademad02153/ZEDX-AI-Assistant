@@ -74,7 +74,8 @@ const AI_MODELS = [
     },
 ];
 
-import { ParticleWave } from "@/components/ui/particle-wave";
+// ParticleWave removed to improve mobile performance/clarity
+// import { ParticleWave } from "@/components/ui/particle-wave";
 
 export default function NewInterviewPage() {
     const router = useRouter();
@@ -178,18 +179,18 @@ export default function NewInterviewPage() {
 
             <div className="relative z-10 w-full mx-auto px-6 py-8 sm:py-12 pb-32">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-12">
-                    <div className="flex items-center gap-5">
+                <div className="flex flex-col items-start gap-6 mb-12">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
                         <Link href="/dashboard">
-                            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full w-14 h-14">
-                                <ArrowLeft size={28} />
+                            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full w-12 h-12 sm:w-14 sm:h-14">
+                                <ArrowLeft size={24} className="sm:size-[28px]" />
                             </Button>
                         </Link>
                         <div>
-                            <h1 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400 mb-2">
+                            <h1 className="text-3xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400 mb-2">
                                 Setup Interview
                             </h1>
-                            <p className="text-lg text-gray-500 dark:text-gray-400">Configure your AI copilot for the perfect session.</p>
+                            <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400">Configure your AI copilot for the perfect session.</p>
                         </div>
                     </div>
                 </div>
@@ -206,7 +207,7 @@ export default function NewInterviewPage() {
                             className="group relative bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-1 shadow-xl dark:shadow-2xl overflow-hidden flex-1 flex flex-col"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none"></div>
-                            <div className="relative bg-white dark:bg-[#151515] rounded-[22px] p-8 sm:p-10 flex-1 flex flex-col">
+                            <div className="relative bg-white dark:bg-[#151515] rounded-[22px] p-6 sm:p-10 flex-1 flex flex-col">
                                 <div className="flex items-center justify-between mb-8">
                                     <div className="flex items-center gap-5">
                                         <div className="p-4 bg-emerald-100 dark:bg-emerald-900/40 rounded-2xl text-emerald-700 dark:text-emerald-400">
@@ -220,7 +221,7 @@ export default function NewInterviewPage() {
                                     <span className="text-sm font-bold font-mono text-emerald-800 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-4 py-2 rounded-xl tracking-wider">REQUIRED</span>
                                 </div>
                                 <textarea
-                                    className="w-full flex-1 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl p-6 text-lg text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all min-h-[220px] leading-relaxed"
+                                    className="w-full flex-1 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl p-4 sm:p-6 text-base sm:text-lg text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all min-h-[180px] sm:min-h-[220px] leading-relaxed"
                                     placeholder="e.g. Senior React Developer at Netflix..."
                                     value={jobDescription}
                                     onChange={(e) => setJobDescription(e.target.value)}
@@ -233,7 +234,7 @@ export default function NewInterviewPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: 0.1 }}
-                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-8 sm:p-10 relative overflow-hidden shadow-lg dark:shadow-none flex-1 flex flex-col"
+                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-lg dark:shadow-none flex-1 flex flex-col"
                         >
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
                                 <div className="flex items-center gap-5">
@@ -265,7 +266,7 @@ export default function NewInterviewPage() {
                                 </div>
                             </div>
                             <textarea
-                                className="w-full flex-1 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl p-6 text-lg text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all min-h-[220px]"
+                                className="w-full flex-1 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl p-4 sm:p-6 text-base sm:text-lg text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all min-h-[180px] sm:min-h-[220px]"
                                 placeholder="Paste resume text or upload PDF..."
                                 value={resume}
                                 onChange={(e) => setResume(e.target.value)}
@@ -327,7 +328,7 @@ export default function NewInterviewPage() {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-8 sm:p-10 shadow-lg dark:shadow-none flex-grow flex flex-col h-full"
+                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-10 shadow-lg dark:shadow-none flex-grow flex flex-col h-full"
                         >
                             {/* AI Model Header with AI.jpg */}
                             <div className="flex items-center gap-4 mb-8">
