@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen flex flex-col bg-background dark:bg-black font-sans text-foreground dark:text-gray-100 overflow-x-hidden selection:bg-emerald-500/30 transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-white dark:bg-black font-sans text-gray-900 dark:text-gray-100 overflow-x-hidden selection:bg-emerald-500/30 transition-colors duration-300">
             <Navbar />
 
             {/* Global Background Ambience */}
@@ -27,7 +27,7 @@ export default function AboutPage() {
                 {/* Hero Section */}
                 <section className="pb-24 text-center container mx-auto px-4">
                     <div className="max-w-4xl mx-auto flex flex-col items-center">
-                        <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50/50 dark:bg-zinc-800/50 border border-emerald-100 dark:border-white/10 backdrop-blur-md text-emerald-600 dark:text-emerald-400 font-medium text-sm animate-fade-in-up">
+                        <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-black border border-emerald-100 dark:border-white/10 backdrop-blur-md text-emerald-600 dark:text-emerald-400 font-bold text-sm animate-fade-in-up">
                             <span className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -37,10 +37,10 @@ export default function AboutPage() {
 
                         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
                             The Future of <br />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 dark:from-emerald-400 dark:via-green-400 dark:to-teal-400">Career Success</span>
+                            <span className="text-gradient-fusion">Career Success</span>
                         </h1>
 
-                        <p className="text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
                             ZEDX AI isn't just a tool; it's your unfair advantage. Engineered for stealth, speed, and precision to help you dominate every interview.
                         </p>
                     </div>
