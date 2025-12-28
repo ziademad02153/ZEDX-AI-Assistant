@@ -164,7 +164,7 @@ export default function NewInterviewPage() {
     const currentModelData = AI_MODELS.find(m => m.id === selectedModel) || AI_MODELS[0];
 
     return (
-        <div className="min-h-screen bg-background text-foreground selection:bg-emerald-500/30">
+        <div className="min-h-screen bg-white dark:bg-black text-foreground selection:bg-emerald-500/30">
             {/* Background Ambient Glows */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
                 <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
@@ -230,7 +230,7 @@ export default function NewInterviewPage() {
                             transition={{ duration: 0.4, delay: 0.1 }}
                             className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-lg dark:shadow-none"
                         >
-                            <div className="flex items-center justify-between mb-6">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                                 <div className="flex items-center gap-3">
                                     <div className="p-3 bg-emerald-100 dark:bg-emerald-500/10 rounded-xl text-emerald-600 dark:text-emerald-400">
                                         <ResumeIcon />
@@ -240,9 +240,9 @@ export default function NewInterviewPage() {
                                         <p className="text-xs text-gray-500">Add your resume for tailored context.</p>
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                                     <select
-                                        className="h-9 px-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-xs text-gray-600 dark:text-gray-300 focus:outline-none focus:border-emerald-500/50"
+                                        className="h-10 sm:h-9 px-3 w-full sm:w-40 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-xs text-gray-600 dark:text-gray-300 focus:outline-none focus:border-emerald-500/50 truncate"
                                         onChange={(e) => {
                                             const r = savedResumes.find(sr => sr.id === e.target.value);
                                             if (r) setResume(r.content);
@@ -252,7 +252,7 @@ export default function NewInterviewPage() {
                                         <option value="" disabled>Saved Resumes</option>
                                         {savedResumes.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                                     </select>
-                                    <label className="h-9 px-3 flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg cursor-pointer transition-colors">
+                                    <label className="h-10 sm:h-9 px-3 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg cursor-pointer transition-colors w-full sm:w-auto">
                                         <Upload size={14} />
                                         Upload
                                         <input type="file" className="hidden" accept=".pdf,.txt" onChange={handleFileUpload} />

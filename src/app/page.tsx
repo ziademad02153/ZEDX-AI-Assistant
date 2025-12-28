@@ -26,7 +26,7 @@ export default function Home() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              AI Interview Copilot
+              ZEDX AI: Interview Copilot
             </div>
 
             <h1 className="text-[2.25rem] xs:text-4xl sm:text-5xl md:text-[5.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.15] md:leading-[1.1] max-w-[90rem] mx-auto px-4">
@@ -35,7 +35,7 @@ export default function Home() {
             </h1>
 
             <p className="text-[0.95rem] md:text-xl text-gray-500 dark:text-gray-400 mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed font-medium px-6 md:px-0">
-              Your invisible AI assistant. Get real-time answers, tailored to your resume, <br className="hidden md:block" />
+              ZEDX AI is your invisible assistant. Get real-time answers, tailored to your resume, <br className="hidden md:block" />
               directly on your screen during any video interview.
             </p>
 
