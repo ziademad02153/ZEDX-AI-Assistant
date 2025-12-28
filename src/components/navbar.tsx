@@ -109,22 +109,22 @@ export function Navbar() {
                             </SheetHeader>
                             <div className="flex flex-col gap-2 mt-8">
                                 <Link href="/dashboard">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
                                         Dashboard
                                     </Button>
                                 </Link>
                                 <Link href="/dashboard/new">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
                                         New Interview
                                     </Button>
                                 </Link>
                                 <Link href="/dashboard/resumes">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
                                         My Resumes
                                     </Button>
                                 </Link>
                                 <Link href="/dashboard/history">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
                                         Interview History
                                     </Button>
                                 </Link>
@@ -132,12 +132,12 @@ export function Navbar() {
                                 <div className="h-px bg-gray-100 dark:bg-gray-800 my-4" />
 
                                 <Link href="/#features">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
                                         How it Works
                                     </Button>
                                 </Link>
                                 <Link href="/about">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
                                         About ZEDX AI
                                     </Button>
                                 </Link>

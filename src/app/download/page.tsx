@@ -9,6 +9,34 @@ import Link from "next/link";
 export default function DownloadPage() {
     return (
         <div className="min-h-screen flex flex-col bg-white dark:bg-black font-sans text-gray-900 dark:text-gray-100 overflow-x-hidden">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "SoftwareApplication",
+                        "name": "ZEDX AI Desktop",
+                        "operatingSystem": "Windows 10, Windows 11",
+                        "applicationCategory": "BusinessApplication",
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.9",
+                            "ratingCount": "150"
+                        },
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        },
+                        "downloadUrl": "https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.0.6/ZEDX.AI.Setup.1.0.6.exe",
+                        "featureList": "Real-time Interview Assistance, System Audio Capture, Resume Analysis, Stealth Mode, AI Copilot",
+                        "author": {
+                            "@type": "Organization",
+                            "name": "ZEDX AI"
+                        }
+                    })
+                }}
+            />
             <Navbar />
 
             <main className="flex-grow pt-32 pb-20 relative">
