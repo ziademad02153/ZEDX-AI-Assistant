@@ -177,18 +177,18 @@ export default function NewInterviewPage() {
 
             <div className="relative z-10 w-full mx-auto px-6 py-8 sm:py-12 pb-32">
                 {/* Header */}
-                <div className="flex flex-col items-start gap-6 mb-12">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                <div className="flex flex-col items-start gap-4 mb-8 sm:mb-12">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
                         <Link href="/dashboard">
-                            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full w-12 h-12 sm:w-14 sm:h-14">
-                                <ArrowLeft size={24} className="sm:size-[28px]" />
+                            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-full w-10 h-10 sm:w-14 sm:h-14">
+                                <ArrowLeft size={20} className="sm:size-[28px]" />
                             </Button>
                         </Link>
                         <div>
-                            <h1 className="text-3xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400 mb-2">
+                            <h1 className="text-2xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400 mb-1 sm:mb-2">
                                 Setup Interview
                             </h1>
-                            <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400">Configure your AI copilot for the perfect session.</p>
+                            <p className="text-sm sm:text-lg text-gray-500 dark:text-gray-400">Configure your AI copilot for the perfect session.</p>
                         </div>
                     </div>
                 </div>
@@ -206,17 +206,17 @@ export default function NewInterviewPage() {
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none"></div>
                             <div className="relative bg-white dark:bg-[#151515] rounded-[22px] p-6 sm:p-10 flex-1 flex flex-col">
-                                <div className="flex items-center justify-between mb-8">
-                                    <div className="flex items-center gap-5">
-                                        <div className="p-4 bg-emerald-100 dark:bg-emerald-900/40 rounded-2xl text-emerald-700 dark:text-emerald-400">
+                                <div className="flex items-center justify-between mb-6 sm:mb-8">
+                                    <div className="flex items-center gap-4 sm:gap-5">
+                                        <div className="p-3 sm:p-4 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl sm:rounded-2xl text-emerald-700 dark:text-emerald-400">
                                             <BriefcaseIcon />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-2xl text-gray-900 dark:text-white mb-1">Job Description</h3>
-                                            <p className="text-base text-gray-500 font-medium">Paste the target role details.</p>
+                                            <h3 className="font-bold text-lg sm:text-2xl text-gray-900 dark:text-white mb-0.5 sm:mb-1">Job Description</h3>
+                                            <p className="text-sm sm:text-base text-gray-500 font-medium">Paste the target role details.</p>
                                         </div>
                                     </div>
-                                    <span className="text-sm font-bold font-mono text-emerald-800 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-4 py-2 rounded-xl tracking-wider">REQUIRED</span>
+                                    <span className="text-[10px] sm:text-sm font-bold font-mono text-emerald-800 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl tracking-wider uppercase">REQUIRED</span>
                                 </div>
                                 <textarea
                                     className="w-full flex-1 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl p-4 sm:p-6 text-base sm:text-lg text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 resize-none transition-all min-h-[180px] sm:min-h-[220px] leading-relaxed"
@@ -235,18 +235,18 @@ export default function NewInterviewPage() {
                             className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-lg dark:shadow-none flex-1 flex flex-col"
                         >
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
-                                <div className="flex items-center gap-5">
-                                    <div className="p-4 bg-emerald-100 dark:bg-emerald-900/40 rounded-2xl text-emerald-700 dark:text-emerald-400">
+                                <div className="flex items-center gap-4 sm:gap-5">
+                                    <div className="p-3 sm:p-4 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl sm:rounded-2xl text-emerald-700 dark:text-emerald-400">
                                         <ResumeIcon />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-2xl text-gray-900 dark:text-white">Your Resume</h3>
-                                        <p className="text-base text-gray-500">Add your resume for tailored context.</p>
+                                        <h3 className="font-semibold text-lg sm:text-2xl text-gray-900 dark:text-white">Your Resume</h3>
+                                        <p className="text-sm sm:text-base text-gray-500">Add your resume for tailored context.</p>
                                     </div>
                                 </div>
-                                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
                                     <select
-                                        className="h-12 px-4 w-full sm:w-48 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-emerald-500/50 truncate"
+                                        className="h-10 sm:h-12 px-3 sm:px-4 w-full sm:w-48 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg sm:rounded-xl text-xs sm:text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-emerald-500/50 truncate"
                                         onChange={(e) => {
                                             const r = savedResumes.find(sr => sr.id === e.target.value);
                                             if (r) setResume(r.content);
@@ -256,8 +256,8 @@ export default function NewInterviewPage() {
                                         <option value="" disabled>Saved Resumes</option>
                                         {savedResumes.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                                     </select>
-                                    <label className="h-12 px-6 flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold rounded-xl cursor-pointer transition-colors w-full sm:w-auto shadow-lg shadow-emerald-500/20">
-                                        <Upload size={18} />
+                                    <label className="h-10 sm:h-12 px-4 sm:px-6 flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold rounded-lg sm:rounded-xl cursor-pointer transition-colors w-full sm:w-auto shadow-lg shadow-emerald-500/20">
+                                        <Upload size={16} className="sm:size-[18px]" />
                                         Upload
                                         <input type="file" className="hidden" accept=".pdf,.txt" onChange={handleFileUpload} />
                                     </label>
@@ -285,11 +285,11 @@ export default function NewInterviewPage() {
                             className="grid grid-cols-1 sm:grid-cols-2 gap-6"
                         >
                             <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
-                                <label className="flex items-center gap-3 text-base font-bold text-gray-700 dark:text-gray-300 mb-4">
-                                    <Sparkles size={20} className="text-emerald-500 dark:text-emerald-400" /> Interview Type
+                                <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
+                                    <Sparkles size={18} className="text-emerald-500 dark:text-emerald-400 sm:size-[20px]" /> Interview Type
                                 </label>
                                 <select
-                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
+                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
                                     value={interviewType}
                                     onChange={(e) => setInterviewType(e.target.value)}
                                 >
@@ -300,11 +300,11 @@ export default function NewInterviewPage() {
                                 </select>
                             </div>
                             <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
-                                <label className="flex items-center gap-3 text-base font-bold text-gray-700 dark:text-gray-300 mb-4">
+                                <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
                                     <div className="text-emerald-600 dark:text-emerald-500"><GlobeIcon /></div> Language
                                 </label>
                                 <select
-                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
+                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
                                     value={language}
                                     onChange={(e) => setLanguage(e.target.value)}
                                 >
@@ -329,42 +329,42 @@ export default function NewInterviewPage() {
                             className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-10 shadow-lg dark:shadow-none flex-grow flex flex-col h-full"
                         >
                             {/* AI Model Header with AI.jpg */}
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10">
+                            <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10">
                                     <Image src="/AI.jpg" alt="AI Model" width={48} height={48} className="w-full h-full object-cover" />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-gray-900 dark:text-white text-xl">AI Model</h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">Choose the brain behind ZEDX</p>
+                                    <h3 className="font-bold text-gray-900 dark:text-white text-lg sm:text-xl">AI Model</h3>
+                                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Choose the brain behind ZEDX</p>
                                 </div>
                             </div>
 
                             {/* Models List */}
-                            <div className="space-y-4 mb-8">
+                            <div className="space-y-3 sm:space-y-4 mb-8">
                                 {AI_MODELS.map((model) => (
                                     <div
                                         key={model.id}
                                         onClick={() => setSelectedModel(model.id)}
                                         className={cn(
-                                            "relative p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-5 group/item",
+                                            "relative p-3.5 sm:p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-4 sm:gap-5 group/item",
                                             selectedModel === model.id
                                                 ? "bg-white dark:bg-white/5 border-emerald-500 shadow-sm"
                                                 : "bg-gray-50 dark:bg-black/20 border-transparent hover:bg-gray-100 dark:hover:bg-white/5"
                                         )}
                                     >
-                                        <div className="w-12 h-12 rounded-xl bg-white dark:bg-black p-2 shadow-sm border border-gray-100 dark:border-white/10 flex items-center justify-center">
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white dark:bg-black p-1.5 sm:p-2 shadow-sm border border-gray-100 dark:border-white/10 flex items-center justify-center">
                                             <Image src={model.logo} alt={model.name} width={40} height={40} className="w-full h-full object-contain" />
                                         </div>
                                         <div className="flex-1">
-                                            <div className="flex items-center justify-between mb-1">
-                                                <h4 className={cn("font-bold text-base", selectedModel === model.id ? "text-gray-900 dark:text-white" : "text-gray-600 dark:text-gray-400")}>
+                                            <div className="flex items-center justify-between mb-0.5 sm:mb-1">
+                                                <h4 className={cn("font-bold text-sm sm:text-base", selectedModel === model.id ? "text-gray-900 dark:text-white" : "text-gray-600 dark:text-gray-400")}>
                                                     {model.name}
                                                 </h4>
                                                 {selectedModel === model.id && (
-                                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>
+                                                    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>
                                                 )}
                                             </div>
-                                            <p className="text-sm text-gray-400 dark:text-gray-500">{model.description}</p>
+                                            <p className="text-[10px] sm:text-sm text-gray-400 dark:text-gray-500">{model.description}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -405,7 +405,7 @@ export default function NewInterviewPage() {
                                         onClick={handleStart}
                                         disabled={isLoading || !isValid}
                                         className={cn(
-                                            "w-full h-16 text-xl font-bold rounded-2xl transition-all duration-300 shadow-xl",
+                                            "w-full h-14 sm:h-16 text-lg sm:text-xl font-bold rounded-2xl transition-all duration-300 shadow-xl",
                                             isValid
                                                 ? "bg-gradient-to-r from-emerald-600 to-green-500 hover:from-emerald-500 hover:to-green-400 text-white shadow-emerald-500/25 hover:shadow-emerald-500/35 hover:-translate-y-0.5 active:translate-y-0"
                                                 : "bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-gray-500 cursor-not-allowed"
@@ -413,13 +413,13 @@ export default function NewInterviewPage() {
                                     >
                                         {isLoading ? (
                                             <span className="flex items-center justify-center gap-3">
-                                                <Loader2 size={24} className="animate-spin" />
+                                                <Loader2 size={20} className="animate-spin sm:size-[24px]" />
                                                 Preparing...
                                             </span>
                                         ) : (
                                             <span className="flex items-center justify-center gap-3">
                                                 Start Interview
-                                                <ArrowLeft className="rotate-180" size={24} />
+                                                <ArrowLeft className="rotate-180 sm:size-[24px]" size={20} />
                                             </span>
                                         )}
                                     </Button>
