@@ -10,7 +10,7 @@ const XLogo = ({ size = 20 }: { size?: number }) => (
 
 export function Footer() {
     return (
-        <footer className="bg-white dark:bg-black border-t border-gray-200 dark:border-white/10 py-12">
+        <footer className="bg-gray-50 dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-800 py-12">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="space-y-4 col-span-1 md:col-span-4 text-center">

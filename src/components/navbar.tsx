@@ -65,7 +65,7 @@ export function Navbar() {
                             }
                         }}
                     >
-                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-black hover:bg-gray-50 dark:hover:bg-white/5 transition-all shadow-sm">
+                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all shadow-sm">
                             How it Works
                         </span>
                     </Link>
@@ -73,7 +73,7 @@ export function Navbar() {
                         href="/download"
                         className="flex items-center gap-1.5 text-lg font-bold text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors group relative"
                     >
-                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-black hover:bg-gray-50 dark:hover:bg-white/5 transition-all shadow-sm flex items-center gap-2">
+                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all shadow-sm flex items-center gap-2">
                             Desktop App
                             <span className="bg-emerald-500 text-white text-xs font-extra-bold px-2.5 py-1 rounded-full animate-pulse shadow-md shadow-emerald-500/20">NEW</span>
                         </span>
@@ -82,7 +82,7 @@ export function Navbar() {
                         href="/about"
                         className="text-lg font-bold transition-colors"
                     >
-                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-black hover:bg-gray-50 dark:hover:bg-white/5 transition-all shadow-sm text-gray-700 dark:text-gray-200">
+                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all shadow-sm text-gray-700 dark:text-gray-200">
                             About ZEDX AI
                         </span>
                     </Link>
@@ -132,12 +132,12 @@ export function Navbar() {
                                 <div className="h-px bg-gray-100 dark:bg-gray-800 my-4" />
 
                                 <Link href="/#features">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
                                         How it Works
                                     </Button>
                                 </Link>
                                 <Link href="/about">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10">
+                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
                                         About ZEDX AI
                                     </Button>
                                 </Link>

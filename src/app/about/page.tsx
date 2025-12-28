@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen flex flex-col bg-white dark:bg-black font-sans text-gray-900 dark:text-gray-100 overflow-x-hidden selection:bg-emerald-500/30 transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-background dark:bg-zinc-950 font-sans text-foreground dark:text-gray-100 overflow-x-hidden selection:bg-emerald-500/30 transition-colors duration-300">
             <Navbar />
 
             {/* Global Background Ambience */}
@@ -27,7 +27,7 @@ export default function AboutPage() {
                 {/* Hero Section */}
                 <section className="pb-24 text-center container mx-auto px-4">
                     <div className="max-w-4xl mx-auto flex flex-col items-center">
-                        <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-black border border-emerald-100 dark:border-white/10 backdrop-blur-md text-emerald-600 dark:text-emerald-400 font-bold text-sm animate-fade-in-up">
+                        <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50/50 dark:bg-zinc-800/50 border border-emerald-100 dark:border-white/10 backdrop-blur-md text-emerald-600 dark:text-emerald-400 font-medium text-sm animate-fade-in-up">
                             <span className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -48,7 +48,7 @@ export default function AboutPage() {
 
                 {/* Mission Section */}
                 <section className="py-20 px-4 relative">
-                    <div className="absolute inset-0 bg-white dark:bg-black border-y border-gray-100 dark:border-white/5 backdrop-blur-sm"></div>
+                    <div className="absolute inset-0 bg-gray-50/50 dark:bg-zinc-900/40 border-y border-gray-200 dark:border-white/5 backdrop-blur-sm"></div>
                     <div className="max-w-5xl mx-auto relative z-10 grid md:grid-cols-2 gap-12 items-center">
                         <div>
                             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
@@ -65,7 +65,7 @@ export default function AboutPage() {
                         </div>
                         <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-green-500/10 dark:from-emerald-500/20 dark:to-green-500/20 blur-3xl rounded-full"></div>
-                            <div className="relative bg-white dark:bg-black border border-gray-100 dark:border-white/10 rounded-3xl p-8 shadow-xl dark:shadow-2xl backdrop-blur-sm">
+                            <div className="relative bg-white dark:bg-zinc-900/80 border border-gray-100 dark:border-white/10 rounded-3xl p-8 shadow-xl dark:shadow-2xl backdrop-blur-sm">
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-4 p-4 bg-white dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5 hover:border-emerald-500/20 transition-colors">
                                         <div className="p-3 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-lg">
@@ -101,7 +101,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* Core Features */}
-                <section className="py-24 px-4 bg-white dark:bg-black transition-colors duration-300">
+                <section className="py-24 px-4 transition-colors duration-300">
                     <div className="max-w-6xl mx-auto text-center mb-16">
                         <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                             Engineered for <span className="text-emerald-600 dark:text-emerald-400">Performance</span>
@@ -120,7 +120,7 @@ export default function AboutPage() {
                             { icon: <Shield />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers." },
                             { icon: <Cpu />, title: "Model Agnostic", desc: "Switch between Llama 3, GPT-4, and Qwen models on the fly for best results." }
                         ].map((item, i) => (
-                            <div key={i} className="group p-8 rounded-3xl bg-white dark:bg-black border border-gray-100 dark:border-white/10 hover:border-emerald-500/30 dark:hover:border-white/20 hover:shadow-lg transition-all duration-300">
+                            <div key={i} className="group p-8 rounded-3xl bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-white/5 hover:border-emerald-500/30 dark:hover:border-white/20 hover:shadow-lg transition-all duration-300">
                                 <div className="w-12 h-12 rounded-2xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 group-hover:scale-110 transition-transform shadow-sm">
                                     {item.icon}
                                 </div>
@@ -134,7 +134,7 @@ export default function AboutPage() {
                 {/* CTA */}
                 <section className="py-20 px-4">
                     <div className="max-w-4xl mx-auto">
-                        <div className="relative overflow-hidden rounded-[2.5rem] bg-white dark:bg-black border border-emerald-200 dark:border-emerald-500/30 p-12 md:p-20 text-center shadow-xl dark:shadow-2xl">
+                        <div className="relative overflow-hidden rounded-[2.5rem] bg-emerald-50 dark:bg-zinc-900 border border-emerald-200 dark:border-white/5 p-12 md:p-20 text-center shadow-xl dark:shadow-2xl">
                             <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-5 dark:opacity-5"></div>
 
                             <div className="relative z-10">
