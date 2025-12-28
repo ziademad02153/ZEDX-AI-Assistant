@@ -929,7 +929,7 @@ export default function InterviewPage() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col lg:flex-row gap-4 p-2 sm:p-4 pt-20 transition-colors duration-300 bg-gray-100 dark:bg-black overflow-auto">
+        <div className="min-h-screen flex flex-col lg:flex-row gap-4 p-2 sm:p-4 pt-20 transition-colors duration-300 bg-gray-50 dark:bg-zinc-950 overflow-auto">
             {/* Error Banner */}
             {error && (
                 <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded z-50 flex items-center gap-2 shadow-lg">
@@ -1120,10 +1120,15 @@ export default function InterviewPage() {
                         </h3>
                         <div className="flex flex-wrap gap-2">
                             <Button
-                                variant={isAutoMode ? "default" : "outline"}
+                                variant="outline"
                                 size="sm"
                                 onClick={() => setIsAutoMode(!isAutoMode)}
-                                className={cn("gap-2 dark:text-white dark:border-gray-700 text-xs sm:text-sm", isAutoMode && "bg-green-600 hover:bg-green-700")}
+                                className={cn(
+                                    "gap-2 text-xs sm:text-sm transition-all duration-300",
+                                    isAutoMode
+                                        ? "bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-500 shadow-lg shadow-emerald-500/20"
+                                        : "bg-white dark:bg-zinc-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-zinc-700"
+                                )}
                             >
                                 <Sparkles size={14} />
                                 <span className="hidden sm:inline">{isAutoMode ? "Auto Answer ON" : "Auto Answer OFF"}</span>
@@ -1212,7 +1217,6 @@ export default function InterviewPage() {
                     <div className="mt-4 text-xs text-center text-gray-400">
                         {isAutoMode ? "AI will answer automatically after you stop speaking." : "Press Space to generate answer"}
                     </div>
-
                     {/* Debug Info */}
                     <div className="mt-2 text-[10px] text-gray-300 text-center">
                         Context Loaded: Resume ({interviewContext.resume.length} chars) | JD ({interviewContext.jd.length} chars)

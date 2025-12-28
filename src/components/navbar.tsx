@@ -12,6 +12,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/co
 export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     useEffect(() => {
         // Check if running in Electron desktop mode
@@ -94,56 +95,63 @@ export function Navbar() {
 
                 {/* Mobile Menu (Sheet) */}
                 <div className="md:hidden flex items-center gap-4">
-                    <Sheet>
+                    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                         <SheetTrigger asChild>
                             <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300">
                                 <Menu size={24} />
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="right" className="w-[300px] sm:w-[350px] border-l border-gray-200 dark:border-gray-800 bg-white/95 dark:bg-black/95 backdrop-blur-xl">
-                            <SheetHeader>
-                                <SheetTitle className="text-left text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                    <Image src="/favicon.png" alt="Logo" width={24} height={24} />
-                                    Menu
-                                </SheetTitle>
-                            </SheetHeader>
-                            <div className="flex flex-col gap-2 mt-8">
-                                <Link href="/dashboard">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                        Dashboard
-                                    </Button>
-                                </Link>
-                                <Link href="/dashboard/new">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                        New Interview
-                                    </Button>
-                                </Link>
-                                <Link href="/dashboard/resumes">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                        My Resumes
-                                    </Button>
-                                </Link>
-                                <Link href="/dashboard/history">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                        Interview History
-                                    </Button>
-                                </Link>
+                        <SheetContent side="right" className="w-[300px] sm:w-[350px] border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-black/95 backdrop-blur-xl p-0">
+                            <div className="flex flex-col h-full bg-white dark:bg-black">
+                                <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                                    <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                        <Image src="/favicon.png" alt="Logo" width={24} height={24} />
+                                        Menu
+                                    </h2>
+                                </div>
+                                <div className="flex flex-col gap-1 p-4 overflow-y-auto">
+                                    <Link href="/dashboard" onClick={() => setIsSheetOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            Dashboard
+                                        </Button>
+                                    </Link>
+                                    <Link href="/dashboard/new" onClick={() => setIsSheetOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            New Interview
+                                        </Button>
+                                    </Link>
+                                    <Link href="/dashboard/resumes" onClick={() => setIsSheetOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            My Resumes
+                                        </Button>
+                                    </Link>
+                                    <Link href="/dashboard/history" onClick={() => setIsSheetOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            Interview History
+                                        </Button>
+                                    </Link>
 
-                                <div className="h-px bg-gray-100 dark:bg-gray-800 my-4" />
+                                    <div className="h-px bg-gray-100 dark:bg-gray-800 my-4 mx-2" />
 
-                                <Link href="/#features">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                        How it Works
-                                    </Button>
-                                </Link>
-                                <Link href="/about">
-                                    <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                        About ZEDX AI
-                                    </Button>
-                                </Link>
+                                    <Link href="/#features" onClick={() => setIsSheetOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            How it Works
+                                        </Button>
+                                    </Link>
+                                    <Link href="/download" onClick={() => setIsSheetOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            Desktop App
+                                        </Button>
+                                    </Link>
+                                    <Link href="/about" onClick={() => setIsSheetOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            About ZEDX AI
+                                        </Button>
+                                    </Link>
 
-                                <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
-                                    <AuthButtons />
+                                    <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                                        <AuthButtons onSheetClose={() => setIsSheetOpen(false)} />
+                                    </div>
                                 </div>
                             </div>
                         </SheetContent>
@@ -154,7 +162,7 @@ export function Navbar() {
     );
 }
 
-function AuthButtons() {
+function AuthButtons({ onSheetClose }: { onSheetClose?: () => void }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userName, setUserName] = useState<string | null>(null);
     const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -297,7 +305,10 @@ function AuthButtons() {
                             {/* Menu Items */}
                             <div className="p-2">
                                 <button
-                                    onClick={handleSwitchAccount}
+                                    onClick={() => {
+                                        handleSwitchAccount();
+                                        onSheetClose?.();
+                                    }}
                                     className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-xl transition-colors"
                                 >
                                     <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -309,7 +320,10 @@ function AuthButtons() {
                                 <div className="my-2 border-t border-gray-100 dark:border-zinc-700"></div>
 
                                 <button
-                                    onClick={handleLogout}
+                                    onClick={() => {
+                                        handleLogout();
+                                        onSheetClose?.();
+                                    }}
                                     className="w-full flex items-center gap-3 px-4 py-3 text-left text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -326,17 +340,17 @@ function AuthButtons() {
     }
 
     return (
-        <>
-            <Link href="/login">
-                <Button variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+            <Link href="/login" onClick={onSheetClose}>
+                <Button variant="ghost" className="w-full sm:w-auto text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">
                     Sign in
                 </Button>
             </Link>
-            <Link href="/login">
-                <Button variant="gradient" className="shadow-lg shadow-green-900/20">
+            <Link href="/login" onClick={onSheetClose}>
+                <Button variant="gradient" className="w-full sm:w-auto shadow-lg shadow-green-900/20">
                     Try For Free
                 </Button>
             </Link>
-        </>
+        </div>
     );
 }

@@ -234,19 +234,24 @@ export default function NewInterviewPage() {
                             transition={{ duration: 0.4, delay: 0.1 }}
                             className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-lg dark:shadow-none flex-1 flex flex-col"
                         >
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+                            <div className="flex flex-col gap-6 mb-8">
                                 <div className="flex items-center gap-4 sm:gap-5">
                                     <div className="p-3 sm:p-4 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl sm:rounded-2xl text-emerald-700 dark:text-emerald-400">
                                         <ResumeIcon />
                                     </div>
-                                    <div>
-                                        <h3 className="font-semibold text-lg sm:text-2xl text-gray-900 dark:text-white">Your Resume</h3>
-                                        <p className="text-sm sm:text-base text-gray-500">Add your resume for tailored context.</p>
+                                    <div className="flex-1">
+                                        <h3 className="font-bold text-lg sm:text-2xl text-gray-900 dark:text-white">Resume</h3>
+                                        <p className="text-sm sm:text-base text-gray-500">Add your CV for tailored context and better results.</p>
                                     </div>
                                 </div>
-                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+                                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                                    <label className="h-11 sm:h-12 px-6 flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold rounded-xl cursor-pointer transition-colors w-full sm:w-auto shadow-lg shadow-emerald-500/20 order-1">
+                                        <Upload size={18} />
+                                        Upload New CV
+                                        <input type="file" className="hidden" accept=".pdf,.txt" onChange={handleFileUpload} />
+                                    </label>
                                     <select
-                                        className="h-10 sm:h-12 px-3 sm:px-4 w-full sm:w-48 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg sm:rounded-xl text-xs sm:text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-emerald-500/50 truncate"
+                                        className="h-11 sm:h-12 px-4 w-full sm:w-56 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-emerald-500/50 truncate order-2"
                                         onChange={(e) => {
                                             const r = savedResumes.find(sr => sr.id === e.target.value);
                                             if (r) setResume(r.content);
@@ -256,11 +261,6 @@ export default function NewInterviewPage() {
                                         <option value="" disabled>Saved Resumes</option>
                                         {savedResumes.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                                     </select>
-                                    <label className="h-10 sm:h-12 px-4 sm:px-6 flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold rounded-lg sm:rounded-xl cursor-pointer transition-colors w-full sm:w-auto shadow-lg shadow-emerald-500/20">
-                                        <Upload size={16} className="sm:size-[18px]" />
-                                        Upload
-                                        <input type="file" className="hidden" accept=".pdf,.txt" onChange={handleFileUpload} />
-                                    </label>
                                 </div>
                             </div>
                             <textarea

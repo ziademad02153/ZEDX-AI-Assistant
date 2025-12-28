@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen flex flex-col bg-background dark:bg-black font-sans text-foreground dark:text-gray-100 overflow-x-hidden selection:bg-emerald-500/30">
+        <div className="min-h-screen flex flex-col bg-white dark:bg-black font-sans text-gray-900 dark:text-gray-100 overflow-x-hidden selection:bg-emerald-500/30">
             <Navbar />
 
             {/* Global Background Ambience */}
@@ -36,7 +36,7 @@ export default function AboutPage() {
                         </div>
 
                         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
-                            The Future of <br />
+                            The Future of <br className="hidden sm:block" />
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 dark:from-emerald-400 dark:via-green-400 dark:to-teal-400">Career Success</span>
                         </h1>
 
@@ -101,7 +101,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* Core Features */}
-                <section className="py-24 px-4 bg-white dark:bg-black transition-colors duration-300">
+                <section className="py-24 px-4 bg-white dark:bg-zinc-900/50 transition-colors duration-300">
                     <div className="max-w-6xl mx-auto text-center mb-16">
                         <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                             Engineered for <span className="text-emerald-600 dark:text-emerald-400">Performance</span>
