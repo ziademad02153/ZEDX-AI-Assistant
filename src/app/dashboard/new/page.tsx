@@ -170,12 +170,10 @@ export default function NewInterviewPage() {
 
     return (
         <div className="min-h-screen bg-white dark:bg-black text-foreground selection:bg-emerald-500/30">
-            {/* Background Ambient Glows & Particle Wave */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
                 <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
                 <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
             </div>
-            <ParticleWave />
 
             <div className="relative z-10 w-full mx-auto px-6 py-8 sm:py-12 pb-32">
                 {/* Header */}
