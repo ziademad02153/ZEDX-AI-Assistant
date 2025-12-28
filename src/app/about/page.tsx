@@ -18,9 +18,8 @@ export default function AboutPage() {
 
             {/* Global Background Ambience */}
             <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
-                <div className="absolute top-[40%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
-                <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-green-500/5 dark:bg-green-500/10 rounded-full blur-[150px]"></div>
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-green-100/40 dark:bg-emerald-900/10 rounded-full blur-[100px] animate-float"></div>
+                <div className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] bg-teal-50/40 dark:bg-teal-900/10 rounded-full blur-[120px] animate-float-delayed"></div>
             </div>
 
             <main className="flex-grow pt-32 relative z-10">

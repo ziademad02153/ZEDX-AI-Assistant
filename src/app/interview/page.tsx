@@ -667,48 +667,20 @@ export default function InterviewPage() {
         try {
             // STEP 1: Always start Fast Live Transcript (Web Speech API)
             // This provides the immediate visual feedback the user wants
-            const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-            if (SpeechRecognition) {
+            if (recognitionRef.current) {
                 try {
-                    const recognition = new SpeechRecognition();
-                    recognition.continuous = true;
-                    recognition.interimResults = true;
-                    recognition.lang = interviewContext.lang || 'en-US';
-
-                    recognition.onresult = (event: any) => {
-                        let interim = "";
-                        for (let i = event.resultIndex; i < event.results.length; ++i) {
-                            if (event.results[i].isFinal) {
-                                const text = event.results[i][0].transcript;
-                                setTranscript(prev => (prev + " " + text).trim().slice(-MAX_TRANSCRIPT_LENGTH));
-                            } else {
-                                interim += event.results[i][0].transcript;
-                            }
-                        }
-                        setInterimTranscript(interim);
-                    };
-
-                    recognition.onerror = (e: any) => {
-                        if (e.error === 'aborted' || e.error === 'no-speech' || e.error === 'audio-capture') return;
-                        console.error("[Speech] Runtime Error:", e.error);
-                        if (e.error === 'not-allowed') {
-                            setError("Microphone access denied. Check browser settings.");
-                            setIsRecording(false);
-                        }
-                    };
-
-                    recognitionRef.current = recognition;
-                    recognition.start();
+                    // Reset transcript for new recording if needed
+                    // setTranscript(""); 
+                    recognitionRef.current.start();
                     console.log("[Speech] Fast Live Engine started successfully");
                 } catch (e) {
-                    console.error("[Speech] Failed to initialize Web Speech API:", e);
+                    console.error("[Speech] Failed to start Web Speech API:", e);
                     if (!isElectron) {
-                        setError("Browser speech recognition failed. Try Chrome/Edge.");
+                        setError("Microphone access is already in use or failed.");
                     }
                 }
             } else {
-                console.warn("[Speech] Web Speech API not verified in this browser.");
+                console.warn("[Speech] Web Speech API not initialized.");
                 if (!isElectron) {
                     setError("Your browser does not support Live Speech. Use Chrome or Edge.");
                 }
