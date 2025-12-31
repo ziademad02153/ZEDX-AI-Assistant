@@ -365,8 +365,7 @@ export default function InterviewPage() {
     const processGroqAudio = async (audioBlob: Blob) => {
         try {
             // Groq is picky about types. Ensure it's marked as webm.
-            if (audioBlob.size < 8000) {
-                console.log(`[VAD] Discarded: too small (${audioBlob.size} bytes)`);
+            if (audioBlob.size < 2000) {
                 return;
             }
 
@@ -422,9 +421,8 @@ export default function InterviewPage() {
                 const clean = newText.toLowerCase().replace(/[.,!?]/g, '').trim();
                 const wordCount = clean.split(/\s+/).length;
 
-                // Filter: too short
-                if (wordCount < 2) {
-                    console.log(`[Desktop STT] Filtered: too short (${wordCount} words): "${newText}"`);
+                // Filter: too short (Speed Mode)
+                if (wordCount < 1) {
                     return;
                 }
 
@@ -506,11 +504,11 @@ export default function InterviewPage() {
 
             const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
-            // VAD Parameters (Optimized for fast response and hallucination rejection)
-            const SPEECH_THRESHOLD = 25;        // Volume threshold
-            const SILENCE_DURATION = 1500;      // 1.5s silence = End of sentence (Faster response)
-            const MIN_SPEECH_DURATION = 1200;   // Ignore < 1.2s (Filters short noise/hiccups)
-            const MAX_RECORDING_TIME = 20000;   // Force send after 20s
+            // VAD Parameters (Ultra-Low Latency Mode)
+            const SPEECH_THRESHOLD = 15;        // More sensitive to pick up quieter voices
+            const SILENCE_DURATION = 800;       // 0.8s silence = End of sentence (Fast & snappy)
+            const MIN_SPEECH_DURATION = 500;    // Allow short sentences
+            const MAX_RECORDING_TIME = 15000;   // Force send after 15s
 
             let mediaRecorder: MediaRecorder | null = null;
             let audioChunks: Blob[] = [];
