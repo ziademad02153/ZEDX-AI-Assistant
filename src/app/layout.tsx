@@ -18,6 +18,7 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     capable: true,
   },
+  themeColor: "#16a34a",
   title: {
     default: "ZEDX AI - Free AI Interview Assistant & Copilot",
     template: "%s | ZEDX AI"
@@ -122,6 +123,18 @@ export default function RootLayout({
           }}
         />
         {/* JSON-LD Structured Data for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "ZEDX AI",
+              "alternateName": ["ZEDX", "ZEDX-AI", "zedx ai"],
+              "url": "https://zedx-ai-assistant-1.vercel.app"
+            })
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
