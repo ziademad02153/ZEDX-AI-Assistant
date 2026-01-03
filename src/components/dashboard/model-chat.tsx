@@ -77,7 +77,11 @@ export function ModelChat({ modelId, modelName, modelLogo }: ModelChatProps) {
             <div className="p-4 border-b border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-white dark:bg-black p-1 flex items-center justify-center border border-gray-100 dark:border-white/10">
-                        <img src={modelLogo} alt={modelName} className="w-full h-full object-contain" />
+                        <img
+                            src={modelLogo}
+                            alt={modelName}
+                            className={cn("w-full h-full object-contain", modelLogo.includes('openai') && "dark:invert")}
+                        />
                     </div>
                     <div>
                         <h3 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">

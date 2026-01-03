@@ -353,7 +353,13 @@ export default function NewInterviewPage() {
                                         )}
                                     >
                                         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white dark:bg-black p-1.5 sm:p-2 shadow-sm border border-gray-100 dark:border-white/10 flex items-center justify-center">
-                                            <Image src={model.logo} alt={model.name} width={40} height={40} className="w-full h-full object-contain" />
+                                            <Image
+                                                src={model.logo}
+                                                alt={model.name}
+                                                width={40}
+                                                height={40}
+                                                className={cn("w-full h-full object-contain", model.logo.includes('openai') && "dark:invert")}
+                                            />
                                         </div>
                                         <div className="flex-1">
                                             <div className="flex items-center justify-between mb-0.5 sm:mb-1">
