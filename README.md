@@ -1,115 +1,83 @@
-# 🛰️ ZEDX-AI: Professional Career Intelligence
+# ZEDX-AI: Professional Career Intelligence Systems
 
-<div align="center">
-  <img src="public/zedx-logo.png" width="180" alt="ZEDX-AI Logo" />
-  <p><strong>The Ultimate AI Interview Assistant for Real-Time Technical & Behavioral Guidance</strong></p>
-  
-  [![Release](https://img.shields.io/github/v/release/ziademad02153/zedx-ai-dist?style=for-the-badge&color=emerald)](https://github.com/ziademad02153/zedx-ai-dist/releases)
-  [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://zedx-ai-assistant-1.vercel.app)
-  [![Electron](https://img.shields.io/badge/Desktop_App-47848F?style=for-the-badge&logo=electron&logoColor=white)](https://github.com/ziademad02153/zedx-ai-dist/releases)
-  [![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)
-</div>
+## Executive Summary
+
+ZEDX-AI is a high-fidelity intelligence platform engineered for real-time career augmentation. By integrating advanced neural processing with a low-level system overlay, ZEDX-AI provides a seamless, context-aware experience designed to empower professionals during technical and behavioral evaluations. The system prioritizes low-latency interference, stealth operation, and cross-platform accessibility.
 
 ---
 
-## 🚀 Overview
+## Core Capabilities
 
-**ZEDX-AI** is a premium, high-fidelity intelligence platform engineered for real-time interview augmentation. By combining **Stealth Rendering** with **Sub-Second Neural Inference**, ZEDX-AI provides a seamless, context-aware experience that empowers professionals during critical technical evaluations.
+### Stealth Rendering Technology
+ZEDX-AI utilizes a specialized hardware-level rendering strategy. This ensures that the intelligence overlay remains strictly local to the user's physical display, making it undetectable by standard screen-capture and collaborative software algorithms.
 
-### 🌟 What's New in v1.1.1
-- **🔍 Stealth Scanner (OCR):** Capture questions from any screen area—even if text is non-copyable.
-- **💬 Manual AI Chat:** Ask follow-up questions or clarify technical points mid-interview without stopping the flow.
-- **📺 Rich Overlay 2.0:** Real-time transcriptions and AI answers rendered in a specialized stealth window.
+### Neural Transcription Engine
+The system employs a multi-channel Speech-to-Text (STT) pipeline capable of processing both ambient microphone input and internal system audio simultaneously. This ensures comprehensive capture of the interview environment with sub-second processing latency.
 
----
+### Integrated Optical Character Recognition (OCR)
+The Stealth Scanner allows for the real-time extraction of document and screen text. This feature is particularly effective for analyzing coding challenges or non-selectable text within a secure environment.
 
-## 🏗️ Architecture & Flow
-
-ZEDX-AI utilizes a sophisticated hybrid infrastructure, balancing client-side responsiveness with professional-grade cloud intelligence.
-
-```mermaid
-graph LR
-    subgraph "Capture Layer"
-        A[Mic Input] --- B[System Audio]
-        B --- C[Screen OCR]
-    end
-
-    subgraph "Processing Hub"
-        D{ZEDX Engine}
-        E[VAD Detection]
-        F[Whisper LPU]
-    end
-
-    subgraph "Intelligence"
-        G[Llama 3.3 70B]
-        H[Context Memory]
-    end
-
-    subgraph "Stealth Output"
-        I[Dynamic Overlay]
-    end
-
-    A & B & C --> D
-    D --> E --> F --> G
-    H -.-> G
-    G --> I
-```
+### Contextual Inference
+By synchronizing user-provided resumes and job descriptions, the intelligence engine tailors its responses to align the user's professional background with the specific requirements of the target role.
 
 ---
 
-## 💎 Core Capabilities
+## System Architecture
 
-### 🛡️ Untraceable Stealth Overlay
-Leverages custom hardware-level rendering to ensure the intelligence overlay remains strictly local to your view, bypassing detection from all major screen-processing algorithms (Teams, Zoom, Google Meet).
+The platform architecture is divided into four primary layers to ensure stability and performance:
 
-### 🎙️ ZEDX-Whiz Transcription
-A multi-engine STT approach that handles ambient microphone input and internal system audio with zero perceptible lag, ensuring the AI "hears" the interviewer exactly as you do.
-
-### 🧪 Stealth Scanner (OCR)
-Our precision OCR engine allows you to draw a frame over any part of your screen to extract text instantly. Perfect for coding challenges and non-selectable text.
+1.  **Capture Layer**: Manages high-definition audio streams and screen-region buffers.
+2.  **Inference Layer**: Utilizes Groq LPU (Language Processing Unit) acceleration for near-instantaneous transcription and LLM response generation.
+3.  **Context Layer**: A real-time memory engine that correlates user data with live session transcripts.
+4.  **Presentation Layer**: An isolated Electron-based overlay that renders information without interfering with standard system processes.
 
 ---
 
-## 🛠️ Infrastructure Stack
+## Technical Infrastructure
 
-| Layer | Technology | Role |
+| Component | Specification | Rationale |
 | :--- | :--- | :--- |
-| **Frontend** | Next.js 16 | Optimized reactive architecture & edge rendering. |
-| **Desktop** | Electron 39 | Low-level system access & stealth windowing. |
-| **AI Inference** | Groq LPU | Sub-second transcription & LLM responses. |
-| **Database** | Supabase | Secure cloud storage & real-time listeners. |
-| **Styling** | Tailwind 4.0 | Premium Emerald/Deep-Zinc design system. |
+| Framework | Next.js 16 | High-performance reactive architecture and edge-optimized rendering. |
+| Runtime | Electron 39 | Direct system-level access and isolated window management. |
+| AI Acceleration | Groq LPU | Maximizes throughput for real-time verbal interactions. |
+| Database | Supabase | Secure, scalable PostgreSQL backend with active RLS policies. |
+| Design System | Tailwind CSS 4.0 | Precision aesthetic control utilizing a professional Emerald palette. |
 
 ---
 
-## 🔧 Installation & Setup
+## Installation and Deployment
 
-1. **Download**: Grab the latest `.exe` from [Official Releases](https://github.com/ziademad02153/zedx-ai-dist/releases).
-2. **Setup**: Securely log in and upload your professional resume.
-3. **Configure**: Add the target job description to prime the Context Engine.
-4. **Launch**: Toggle the Stealth Overlay with `Alt+Space` and begin your session.
+### End-User Installation
+1.  Download the latest stable executable from the Official Distribution Repository.
+2.  Authenticate using secure credentials.
+3.  Upload professional documentation (Resume/CV) to initialize the Context Engine.
+4.  Activate the Stealth Overlay using the designated global shortcut (Alt+Space).
 
-### Developer Setup
+### Developer Environment Setup
+To initialize the project for development purposes, execute the following commands in the terminal:
+
 ```bash
-# Clone & Install
+# Clone the repository
 git clone https://github.com/ziademad02153/ZEDX-AI-Assistant.git
+
+# Install dependencies
 npm install
 
-# Start Development
+# Initialize development servers
 npm run dev           # Web Engine
 npm run electron:dev  # Desktop Shell
 ```
 
 ---
 
-## 🔐 Security First
-- **Zero-Logging Policy:** Your session transcripts are volatile and never stored permanently without your consent.
-- **E2E Encryption:** Military-grade encryption for all resume data and inference tokens.
-- **Proxy Isolation:** Complete separation between system processes and communication layers.
+## Security and Privacy Protocols
+
+ZEDX-AI is built on a "Privacy First" foundation:
+- **Proxy Isolation**: Complete separation between application processes and communication layers.
+- **Volatile Transcripts**: Session data is processed in real-time and is not stored permanently beyond the session duration.
+- **End-to-End Encryption**: All data in transit and at rest is secured using industry-standard encryption protocols.
 
 ---
 
-<div align="center">
-  <p><strong>Standardizing Excellence in Career Intelligence.</strong></p>
-  <p>Developed with ❤️ by <a href="https://github.com/ziademad02153">Ziad Emad</a></p>
-</div>
+**Developed and Maintained by Ziad Emad**  
+*Standardizing Excellence in Career Intelligence Systems.*
