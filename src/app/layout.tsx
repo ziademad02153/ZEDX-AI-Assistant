@@ -133,7 +133,7 @@ export default async function RootLayout({
             `,
           }}
         />
-        {/* JSON-LD Structured Data for SEO */}
+        {/* JSON-LD Structured Data for SEO - Site Identity */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -141,8 +141,31 @@ export default async function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "ZEDX AI",
-              "alternateName": ["ZEDX", "ZEDX-AI", "zedx ai"],
-              "url": "https://zedx-ai-assistant-1.vercel.app"
+              "alternateName": ["ZEDX", "ZEDX-AI", "zedx ai", "ZedX AI Assistant"],
+              "url": "https://zedx-ai-assistant-1.vercel.app",
+              "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
+              "image": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://zedx-ai-assistant-1.vercel.app/dashboard?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            })
+          }}
+        />
+        {/* Organization Schema for Logo recognition */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "ZEDX AI",
+              "url": "https://zedx-ai-assistant-1.vercel.app",
+              "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
+              "sameAs": [
+                "https://github.com/ziademad02153/ZEDX-AI-Assistant"
+              ]
             })
           }}
         />
