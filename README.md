@@ -1,131 +1,138 @@
-# ZEDX-AI: Professional Intelligence & Career Augmentation Systems
+<div align="center">
+  <img src="public/zedx-logo.png" width="220" alt="ZEDX AI logo" />
+  <h1>ZEDX AI Interview Assistant</h1>
+  <p><strong>The Industry Standard for Real-Time Professional Augmentation & Intelligence</strong></p>
 
-## System Overview
-ZEDX-AI is a multi-tier intelligence ecosystem engineered to facilitate high-fidelity professional evaluations. The platform merges cloud-based context management with a low-level desktop execution environment, ensuring real-time AI guidance with sub-second latency and zero-detection footprints.
-
----
-
-## Infrastructure Architecture
-The following diagram illustrates the high-level orchestration between the Cloud Layer, the Local Runtime, and the Neural Inference Pipeline.
-
-```mermaid
-graph TD
-    subgraph "Cloud Infrastructure (Next.js & Supabase)"
-        WEB[Web Dashboard] --> AUTH[RLS Authentication]
-        WEB --> DB[(User Data Store)]
-        WEB --> CONTEXT[Context Pre-processor]
-    end
-
-    subgraph "Desktop Execution Environment (Electron)"
-        APP[ZEDX Console] --> SCAN[Stealth Scanner OCR]
-        APP --> AUDIO[Concurrent Audio Engine]
-        APP --> OVERLAY[Stealth Visual Layer]
-    end
-
-    subgraph "Neural Processing Layer (Groq & Llama)"
-        INF[Inference Gateway] --> STT[Whisper LPU]
-        INF --> LLM[Llama 3.3 70B]
-    end
-
-    DB -- Sync --> APP
-    AUDIO & SCAN --> INF
-    LLM --> OVERLAY
-```
+  [![Release](https://img.shields.io/github/v/release/ziademad02153/zedx-ai-dist?style=for-the-badge&color=059669&label=Stable)](https://github.com/ziademad02153/zedx-ai-dist/releases)
+  [![Platform](https://img.shields.io/badge/Platform-Windows_11-blue?style=for-the-badge&logo=windows)](https://github.com/ziademad02153/zedx-ai-dist/releases)
+  [![Technology](https://img.shields.io/badge/Engine-Next.js_16-000000?style=for-the-badge&logo=nextdotjs)](https://nextjs.org)
+</div>
 
 ---
 
-## Chapter 1: ZEDX-AI Web Platform
-The web component acts as the centralized command center for professional identity and data persistence.
-
-### Context Engine and Data Ingestion
-The platform utilizes a specialized ingestion pipeline for processing professional documentation. Resumes and Job Descriptions are not merely stored; they are parsed into structured context blocks that prime the AI engine before a session begins.
-
-### Session Analytics and Persistence
-- **Military-Grade Security**: Data is protected via Supabase Row Level Security (RLS), ensuring no unauthorized access to sensitive interview transcripts.
-- **Cross-Device Sync**: Configuration and context data are seamlessly synchronized with the desktop client via secure real-time listeners.
+## On this page
+- [Executive Summary](#executive-summary)
+- [System Architecture (The Big Picture)](#system-architecture-the-big-picture)
+- [ZEDX-AI Web Platform](#zedx-ai-web-platform)
+- [ZEDX-AI Desktop Infrastructure](#zedx-ai-desktop-infrastructure)
+- [The Stealth Intelligence Engine](#the-stealth-intelligence-engine)
+- [Security & Compliance](#security--compliance)
+- [Installation Guide](#installation-guide)
 
 ---
 
-## Chapter 2: The Desktop Intelligence Console
-The desktop application is the primary execution shell for live interview augmentation.
+## Executive Summary
+ZEDX-AI is a high-fidelity intelligence ecosystem engineered specifically for critical technical evaluations. By decoupling **Web-based Context Management** from **Low-level Local Execution**, the system delivers sub-second AI reasoning while maintaining an absolute stealth footprint on the host machine.
 
-### Stealth Scanner (Optic Logic)
-The Stealth Scanner uses a localized OCR engine to capture non-selectable text from the screen.
+---
 
-```mermaid
-flowchart LR
-    A[User Selects Area] --> B[Screen Buffer Capture]
-    B --> C[Grayscale Normalization]
-    C --> D[OCR Pattern Matching]
-    D --> E[Inference Tokenization]
-    E --> F[Prompt Injection]
-```
-
-### Zero-Detection Overlay (Rendering Protocol)
-The ZEDX rendering engine employs a "Phantom Layer" strategy. By utilizing hardware-accelerated transparent windowing and bypassing standard window hooks, the overlay remains invisible to all collaboration suites (Teams, Zoom, Google Meet).
-
-### Concurrent Audio Stream Processor
-A low-level listener captures system-out (interviewer's voice) and mic-in (user's voice) simultaneously.
+## System Architecture (The Big Picture)
+The following diagram illustrates the complex data flow between the Cloud Layer, the Local Runtime, and the Neural Inference Pipeline.
 
 ```mermaid
 graph LR
-    subgraph "Input Processing"
-        MIC[Microphone Input] --> VAD[Voice Activity Detection]
-        SYS[System Audio Out] --> MIX[Stream Mixer]
+    subgraph "External World"
+        USER[Professional User]
+        INT[Interviewer / Meeting App]
     end
+
+    subgraph "ZEDX Cloud Hub (Next.js & Supabase)"
+        DASH[Web Dashboard]
+        DB[(PostgreSQL Store)]
+        VAD_W[Cloud VAD Prefs]
+        DASH --- DB
+    end
+
+    subgraph "ZEDX Local Environment (Electron Runtime)"
+        direction TB
+        CORE[ZEDX Core Process]
+        AUDIO[Concurrent Audio Muxer]
+        SCAN[Stealth OCR Engine]
+        UI[Dynamic Overlay UI]
+        
+        CORE <==> AUDIO
+        CORE <==> SCAN
+        CORE <==> UI
+    end
+
+    subgraph "Neural AI Stack (Groq LPU Array)"
+        STT[Whisper LPU]
+        LLM[Llama 3.3 70B]
+        STT --> LLM
+    end
+
+    USER -- "Uploads Context" --> DASH
+    DB -- "Auth & Sync" --> CORE
+    INT -- "Audio Stream" --> AUDIO
+    INT -- "Visual Data" --> SCAN
+    AUDIO & SCAN -- "Tokenized Streams" --> STT
+    LLM -- "Broadcast Answer" --> UI
+```
+
+---
+
+## ZEDX-AI Web Platform
+The web interface serves as the primary administrative and configuration console for your professional identity.
+
+### 🗂️ Context Management System
+- **Intelligent Parsing**: Automatically extracts technical keywords from resumes to prime the AI.
+- **Job Correlation**: Cross-references specific Job Descriptions with your background to ensure behavioral alignment.
+- **Analytics Dashboard**: Review historical session transcripts and performance metrics.
+
+---
+
+## ZEDX-AI Desktop Infrastructure
+The desktop application is where the high-stakes intelligence execution happens. It is built to operate in parallel with all major collaboration software.
+
+### 🛡️ Stealth Rendering Architecture
+The Desktop Overlay uses a "Phantom Rendering" protocol. By utilizing hardware-accelerated transparency and bypassing common OS window hooks, it remains 100% invisible to Teams, Zoom, and Google Meet.
+
+### 👁️ The Stealth Scanner (Advanced OCR)
+A high-precision capture engine that allows text extraction from non-selectable screen regions.
+
+```mermaid
+graph LR
+    START[Frame Selection] --> CAPTURE[Direct Screen Buffer]
+    CAPTURE --> PROC[Image Normalization]
+    PROC --> OCR[Tesseract Neural OCR]
+    OCR --> INJECT[Live Context Injection]
+    INJECT --> AI[Inference Pipeline]
     
-    MIX --> BUFFER[Real-time Audio Buffer]
-    BUFFER --> WHIZ[ZEDX-Whiz Engine]
-    WHIZ --> GROQ[Groq LPU Array]
+    style START fill:#10b981,stroke:#333,stroke-width:2px,color:#fff
+    style AI fill:#059669,stroke:#333,stroke-width:2px,color:#fff
 ```
 
----
-
-## Chapter 3: Neural Processing & Inference Logic
-ZEDX-AI utilizes a load-balanced inference strategy to maintain sub-second responsiveness.
-
-### Inference Lifecycle
-1.  **Tokenization**: Real-time STT converts audio buffers into text tokens via Groq-accelerated Whisper models.
-2.  **Context Resolution**: The engine injects the user's pre-loaded professional context (Resume/JD) into the current turn.
-3.  **Generative Reasoning**: Llama 3.3 70B synthesizes the response, prioritizing technical accuracy and behavioral alignment.
-4.  **Display**: The final answer is pushed to the Stealth Overlay via an IPC (Inter-Process Communication) broadcast.
+### 🎙️ Concurrent Audio Multiplexing
+Simultaneous capture of **System Output** (Interviewer) and **Microphone Input** (User) without introducing latency or feedback loops.
 
 ---
 
-## Chapter 4: Security and Privacy Protocols
-The system is architected on a foundation of absolute privacy and untraceability.
+## The Stealth Intelligence Engine
+ZEDX-AI utilizes a specialized "ZEDX-Whiz" pipeline to achieve human-speed interaction.
 
-| Protocol | Implementation | Objective |
+| Phase | Technology | Metrics |
 | :--- | :--- | :--- |
-| **Proxy Isolation** | Specialized Network Layer | Obfuscates AI traffic from system-level packet sniffers. |
-| **Volatile Buffers** | RAM-only Audio Logic | Ensures raw audio data is never written to disk. |
-| **Asymmetric Encryption** | RSA-4096 / AES-256 | Secures all context data at rest and in transit. |
-| **Hook Evasion** | Low-level API Bypass | Prevents "Screen Sharing" alerts in collaboration apps. |
+| **Transcription** | Groq Whisper LPU | < 150ms Latency |
+| **Reasoning** | Llama 3.3 70B | ~150-200 Tokens/Sec |
+| **Security** | Proxy Isolation | 100% Request Obfuscation |
 
 ---
 
-## Developer Documentation
+## Security & Compliance
+- **Zero-Logging**: Application buffers are volatile; transcripts are not stored on local disks.
+- **Military Encryption**: All context transfers are secured with AES-256 and RSA-4096.
 
-### Environment Requirements
-- **Node.js**: v20 or higher.
-- **Electron**: v39 (Native Runtime).
-- **Architecture**: Windows 10/11 (64-bit).
+---
 
-### Build Orchestration
-```bash
-# Clone and Dependency Resolution
-git clone https://github.com/ziademad02153/ZEDX-AI-Assistant.git
-npm install
-
-# Live Development Execution
-npm run dev           # Initializes the Web Infrastructure
-npm run electron:dev  # Launches the Intelligent Desktop Console
-```
+## Installation Guide
+1. **Download**: Securely fetch the latest `.exe` from the [Official Releases](https://github.com/ziademad02153/zedx-ai-dist/releases).
+2. **Authenticate**: Log in through the secure ZEDX-AI portal.
+3. **Prime**: Load your technical documents in the Web Dashboard.
+4. **Deploy**: Toggle the system overlay with `Alt+Space` and begin your session.
 
 ---
 
 <div align="center">
   <p><strong>Standardizing Excellence in Career Intelligence Systems.</strong></p>
-  <p>Engineering & Design by <strong>Ziad Emad</strong></p>
-  <p><em>Copyright © 2026 ZEDX-AI. All Rights Reserved.</em></p>
+  <p>Engineering & Vision by <strong>Ziad Emad</strong></p>
 </div>
