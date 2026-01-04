@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
-
+import { Download, Sparkles, CheckCircle2, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function DesktopNavBar() {
     const [isDesktop, setIsDesktop] = useState(false);
@@ -11,6 +12,9 @@ export function DesktopNavBar() {
     const [user, setUser] = useState<{ email?: string; user_metadata?: { avatar_url?: string; full_name?: string } } | null>(null);
     const [userAvatar, setUserAvatar] = useState<string | null>(null);
     const [userName, setUserName] = useState<string | null>(null);
+    const [updateVersion, setUpdateVersion] = useState<string | null>(null);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [isUpdateReady, setIsUpdateReady] = useState(false);
 
     useEffect(() => {
         const loadUser = async () => {
@@ -30,6 +34,20 @@ export function DesktopNavBar() {
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsDesktop(true);
             loadUser();
+
+            // Update listeners
+            const cleanupAvailable = window.electronAPI.onUpdateAvailable((version: string) => {
+                setUpdateVersion(version);
+            });
+            const cleanupReady = window.electronAPI.onUpdateReady(() => {
+                setIsUpdateReady(true);
+                setIsDownloading(false);
+            });
+
+            return () => {
+                cleanupAvailable();
+                cleanupReady();
+            };
         }
     }, []);
 
@@ -60,6 +78,15 @@ export function DesktopNavBar() {
         window.electronAPI?.hideApp();
     };
 
+    const handleDownloadUpdate = () => {
+        setIsDownloading(true);
+        window.electronAPI?.downloadUpdate();
+    };
+
+    const handleInstallUpdate = () => {
+        window.electronAPI?.installUpdate();
+    };
+
     return (
         <>
             <div
@@ -77,6 +104,44 @@ export function DesktopNavBar() {
                         <path d="M19 12H5M12 19l-7-7 7-7" />
                     </svg>
                 </button>
+
+                {/* Update Notification */}
+                {updateVersion && (
+                    <div className="flex items-center" style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}>
+                        {!isUpdateReady ? (
+                            <button
+                                onClick={handleDownloadUpdate}
+                                disabled={isDownloading}
+                                className={cn(
+                                    "flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold transition-all duration-300",
+                                    isDownloading
+                                        ? "bg-amber-500/20 text-amber-500 animate-pulse border border-amber-500/30"
+                                        : "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/30"
+                                )}
+                            >
+                                {isDownloading ? (
+                                    <>
+                                        <Loader2 size={12} className="animate-spin" />
+                                        Downloading...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Download size={12} />
+                                        Update v{updateVersion} Available
+                                    </>
+                                )}
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleInstallUpdate}
+                                className="flex items-center gap-2 px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-full shadow-lg shadow-blue-500/30 transition-all duration-300 animate-bounce"
+                            >
+                                <CheckCircle2 size={12} />
+                                Update Ready! Restart Now
+                            </button>
+                        )}
+                    </div>
+                )}
 
                 {/* Spacer */}
                 <div className="flex-1" />

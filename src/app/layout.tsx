@@ -111,11 +111,19 @@ export default async function RootLayout({
 }>) {
   const headersList = await headers();
   const xUrl = headersList.get("x-url") || "";
-  const isScanner = headersList.get("x-is-scanner") === "true" || xUrl.includes("scanner-frame");
+
+  // Robust detection: check for headers or URL patterns (fallback for dev mode issues)
+  const isScanner = headersList.get("x-is-scanner") === "true" || xUrl.toLowerCase().includes("scanner-frame");
+  const isOverlay = xUrl.toLowerCase().includes("isoverlay=true") || xUrl.toLowerCase().includes("overlay");
+  const isHideNav = isScanner || isOverlay;
 
   return (
     <html lang="en" suppressHydrationWarning className={isScanner ? "bg-transparent" : ""}>
       <head>
+        <meta name="name" content="ZEDX AI" />
+        <meta name="author" content="ZEDX AI" />
+        <meta property="og:site_name" content="ZEDX AI" />
+        <meta name="apple-mobile-web-app-title" content="ZEDX AI" />
         <meta name="msvalidate.01" content="410978477B68DFFC4D1109011EAF121F" />
         <script
           dangerouslySetInnerHTML={{
@@ -232,7 +240,7 @@ export default async function RootLayout({
         className={`${inter.variable} antialiased ${isScanner ? 'bg-transparent overflow-hidden' : ''}`}
         suppressHydrationWarning
       >
-        {!isScanner && <DesktopNavBar />}
+        {!isHideNav && <DesktopNavBar />}
         <ErrorBoundary>
           <ConfirmDialogProvider>
             {children}

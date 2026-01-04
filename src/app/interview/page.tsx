@@ -131,6 +131,9 @@ export default function InterviewPage() {
 
         const startCamera = async () => {
             try {
+                if (!navigator.mediaDevices?.getUserMedia) {
+                    throw new Error("Camera API not supported in this browser.");
+                }
                 currentStream = await navigator.mediaDevices.getUserMedia({ video: true });
                 if (videoRef.current) {
                     videoRef.current.srcObject = currentStream;
@@ -339,7 +342,9 @@ export default function InterviewPage() {
         } else {
             console.log("[Screen Audio] Requesting capture...");
             const result = await window.electronAPI?.startSystemAudioCapture();
+            console.log("[Screen Audio] Capture request result:", result);
             if (result && !result.success) {
+                console.error("[Screen Audio] Capture request failed:", result.error);
                 setError(result.error || "Failed to start screen capture.");
             }
         }
@@ -351,6 +356,9 @@ export default function InterviewPage() {
         const cleanup = window.electronAPI?.onAudioSourceReady(async (sourceId: string) => {
             console.log("[Screen Audio] Source ID received:", sourceId);
             try {
+                if (!navigator.mediaDevices?.getUserMedia) {
+                    throw new Error("System audio capture not supported.");
+                }
                 const stream = await navigator.mediaDevices.getUserMedia({
                     audio: {
                         // @ts-expect-error: mandatory is non-standard but required for Electron desktop capture
@@ -777,13 +785,21 @@ export default function InterviewPage() {
         // Skip Web Speech API in Electron - it doesn't work there and causes network errors
         // The new toggleRecording handles Web Speech API for both desktop and web.
 
-        const win = window as unknown as {
+        const win = typeof window !== 'undefined' ? window as unknown as {
             webkitSpeechRecognition?: new () => SpeechRecognition;
             SpeechRecognition?: new () => SpeechRecognition;
-        };
+        } : null;
+
+        if (!win) return;
+
         const SpeechRecognitionClass = win.webkitSpeechRecognition || win.SpeechRecognition;
         if (SpeechRecognitionClass) {
-            recognitionRef.current = new SpeechRecognitionClass();
+            try {
+                recognitionRef.current = new SpeechRecognitionClass();
+            } catch (e) {
+                console.error("[Speech] Failed to create instances:", e);
+                return;
+            }
             const rec = recognitionRef.current;
             if (rec) {
                 rec.continuous = true;

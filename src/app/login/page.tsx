@@ -15,6 +15,7 @@ export default function LoginPage() {
 
     // UI State
     const [isLoading, setIsLoading] = useState(false);
+    const [isCheckingSession, setIsCheckingSession] = useState(true);
     const [mode, setMode] = useState<"signin" | "signup" | "verify">("signin");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -57,6 +58,7 @@ export default function LoginPage() {
     useEffect(() => {
         const checkAuth = async () => {
             try {
+                setIsCheckingSession(true);
                 const { supabase } = await import("@/lib/supabase");
                 const { data } = await supabase.auth.getSession();
                 if (data.session) {
@@ -65,9 +67,12 @@ export default function LoginPage() {
                     const isSecure = window.location.protocol === 'https:';
                     document.cookie = `auth_token=${sessionId}; path=/; max-age=86400; SameSite=Lax${isSecure ? '; Secure' : ''}`;
                     window.location.href = "/dashboard";
+                } else {
+                    setIsCheckingSession(false);
                 }
             } catch (e) {
                 console.error("Auth check error:", e);
+                setIsCheckingSession(false);
             }
         };
         checkAuth();
@@ -164,6 +169,26 @@ export default function LoginPage() {
         setFormData(prev => ({ ...prev, password: newPass }));
         setShowPassword(true);
     };
+
+    if (isCheckingSession) {
+        return (
+            <div className="min-h-screen w-full flex flex-col items-center justify-center bg-white dark:bg-zinc-950">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex flex-col items-center gap-6"
+                >
+                    <div className="relative w-20 h-20">
+                        <Image src="/zedx-logo.png" alt="ZEDX-AI" fill className="object-contain animate-pulse" />
+                    </div>
+                    <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400 font-medium">
+                        <RefreshCw className="animate-spin" size={20} />
+                        <span>Verifying Session...</span>
+                    </div>
+                </motion.div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen w-full grid md:grid-cols-2">

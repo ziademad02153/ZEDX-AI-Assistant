@@ -72,5 +72,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
         return () => ipcRenderer.removeListener('scanner-state-changed', wrapper);
     },
 
+    // Updater API
+    downloadUpdate: () => ipcRenderer.send('download-update'),
+    installUpdate: () => ipcRenderer.send('install-update'),
+    onUpdateAvailable: (callback) => {
+        const wrapper = (event, version) => callback(version);
+        ipcRenderer.on('update-available', wrapper);
+        return () => ipcRenderer.removeListener('update-available', wrapper);
+    },
+    onUpdateReady: (callback) => {
+        const wrapper = () => callback();
+        ipcRenderer.on('update-ready', wrapper);
+        return () => ipcRenderer.removeListener('update-ready', wrapper);
+    },
+
     isElectron: true
 });

@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function proxy(request: NextRequest) {
+export default function middleware(request: NextRequest) {
     // Define protected routes
     const protectedPaths = ['/dashboard', '/interview'];
-    const publicPaths = ['/scanner-frame'];
+    const publicPaths = ['/scanner-frame', '/desktop/overlay'];
     if (publicPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
         const requestHeaders = new Headers(request.headers);
         requestHeaders.set('x-is-scanner', 'true');
@@ -48,5 +48,7 @@ export const config = {
     matcher: [
         '/dashboard/:path*',
         '/interview/:path*',
+        '/desktop/overlay/:path*',
+        '/scanner-frame/:path*',
     ],
 };

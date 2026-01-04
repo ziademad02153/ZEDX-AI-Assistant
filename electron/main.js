@@ -112,7 +112,8 @@ function createFloatingIcon() {
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
-            nodeIntegration: false
+            nodeIntegration: false,
+            webSecurity: false // Required for loading local images/styles in static HTML
         }
     });
 
@@ -122,7 +123,7 @@ function createFloatingIcon() {
         floatingIconWindow.setAlwaysOnTop(true, 'screen-saver', 10);
     }
 
-    floatingIconWindow.loadURL(`${APP_URL}/desktop/overlay?isOverlay=true`);
+    floatingIconWindow.loadFile(path.join(__dirname, 'floating-icon.html'));
 }
 
 function createMainAppWindow() {
@@ -140,12 +141,11 @@ function createMainAppWindow() {
         icon: ICON_PATH,
         alwaysOnTop: true,
         skipTaskbar: true, // HIDE FROM TASKBAR
-        type: 'toolbar',  // v19.0 FIX: TOOLBAR TYPE FOR ABSOLUTE TASKBAR INVISIBILITY ON WINDOWS
         resizable: true,
         movable: true,
         hasShadow: true,
         focusable: true,
-        show: false,
+        show: true,
         backgroundColor: '#18181b',
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
@@ -184,15 +184,20 @@ function createMainAppWindow() {
 
 function loadAppContent() {
     if (!mainAppWindow) return;
-    const startUrl = `${APP_URL}/login?desktop=true`;
+    const startUrl = `${APP_URL}/dashboard?desktop=true`;
     mainAppWindow.loadURL(startUrl).catch(e => console.error('[App] Load fail:', e));
 }
 
 function toggleApp() {
     if (!mainAppWindow) return;
-    mainAppWindow.show();
-    mainAppWindow.focus();
-    isAppVisible = true;
+    if (mainAppWindow.isVisible()) {
+        mainAppWindow.hide();
+        isAppVisible = false;
+    } else {
+        mainAppWindow.show();
+        mainAppWindow.focus();
+        isAppVisible = true;
+    }
 }
 
 function showApp() {
@@ -255,6 +260,10 @@ function setupIpcHandlers() {
         if (floatingIconWindow) {
             floatingIconWindow.hide();
         }
+        if (mainAppWindow) {
+            mainAppWindow.hide();
+            isAppVisible = false;
+        }
     });
 
     ipcMain.on('retry-connection', () => loadAppContent());
@@ -276,12 +285,18 @@ function setupIpcHandlers() {
     });
 
     ipcMain.handle('start-system-audio-capture', async () => {
-        const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: 0, height: 0 } });
-        if (sources.length > 0) {
-            mainAppWindow?.webContents.send('audio-source-ready', sources[0].id);
-            return { success: true, sourceId: sources[0].id };
+        try {
+            const sources = await desktopCapturer.getSources({ types: ['screen', 'window'], thumbnailSize: { width: 0, height: 0 } });
+            if (sources.length > 0) {
+                // Try to find a screen source first, then fall back to window
+                const bestSource = sources.find(s => s.id.startsWith('screen')) || sources[0];
+                mainAppWindow?.webContents.send('audio-source-ready', bestSource.id);
+                return { success: true, sourceId: bestSource.id };
+            }
+            return { success: false, error: "No screen or window sources found." };
+        } catch (err) {
+            return { success: false, error: err.message };
         }
-        return { success: false };
     });
 
     ipcMain.handle('stop-system-audio-capture', async () => {
@@ -292,6 +307,10 @@ function setupIpcHandlers() {
     ipcMain.on('answer-update', (event, text) => floatingIconWindow?.webContents.send('answer', text));
     ipcMain.on('resize-overlay', (event, { width, height }) => floatingIconWindow?.setSize(width, height));
     ipcMain.on('set-ignore-mouse-events', (event, ignore, options) => floatingIconWindow?.setIgnoreMouseEvents(ignore, options));
+
+    // Updater IPCs
+    ipcMain.on('download-update', () => autoUpdater.downloadUpdate());
+    ipcMain.on('install-update', () => autoUpdater.quitAndInstall());
 }
 
 function createTray() {
@@ -318,12 +337,28 @@ async function initialize() {
     createTray();
     setupIpcHandlers();
 
-    // v1.1.0: Auto-Updater Integration
+    // v1.1.11: Manual Update Notification
     if (!isDev) {
-        autoUpdater.checkForUpdatesAndNotify();
+        autoUpdater.autoDownload = false; // Disable automatic download
+        autoUpdater.checkForUpdates();
+
+        autoUpdater.on('update-available', (info) => {
+            console.log('[Updater] Update available:', info.version);
+            mainAppWindow?.webContents.send('update-available', info.version);
+        });
+
+        autoUpdater.on('update-downloaded', (info) => {
+            console.log('[Updater] Update downloaded');
+            mainAppWindow?.webContents.send('update-ready');
+        });
+
+        autoUpdater.on('error', (err) => {
+            console.error('[Updater] Error:', err);
+        });
+
         // Check for updates every 2 hours
         setInterval(() => {
-            autoUpdater.checkForUpdatesAndNotify();
+            autoUpdater.checkForUpdates();
         }, 1000 * 60 * 60 * 2);
     }
 }

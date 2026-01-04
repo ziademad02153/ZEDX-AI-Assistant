@@ -8,7 +8,7 @@ export default function OverlayPage() {
     const [answer, setAnswer] = useState("");
     const [isListening, setIsListening] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(true); // Start EXPANDED for better UX
+    const [isExpanded, setIsExpanded] = useState(false); // Start MINIMIZED as an icon by default
     const answerRef = useRef<HTMLDivElement>(null);
 
     // FORCE TRANSPARENT BACKGROUND
@@ -23,12 +23,6 @@ export default function OverlayPage() {
         };
     }, []);
 
-    // Initial resize to default (Expanded)
-    useEffect(() => {
-        if (window.electronAPI) {
-            window.electronAPI.resizeOverlay(420, 520);
-        }
-    }, []);
 
     // Handle Resize Effect
     useEffect(() => {
@@ -63,8 +57,9 @@ export default function OverlayPage() {
                 onClick={() => setIsExpanded(true)}
                 className="w-full h-full rounded-2xl bg-emerald-900/90 hover:bg-emerald-800 flex items-center justify-center border border-emerald-500/50 shadow-lg cursor-pointer transition-all group overflow-hidden"
             >
-                <div className="text-white font-bold text-xs group-hover:scale-110 transition-transform">
-                    ZEDX
+                <div className="text-white font-bold text-[10px] leading-tight group-hover:scale-110 transition-transform flex flex-col items-center">
+                    <span>ZEDX</span>
+                    <span className="text-emerald-400">AI</span>
                 </div>
             </button>
         );
@@ -106,6 +101,17 @@ export default function OverlayPage() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                                 </svg>
                             )}
+                        </button>
+
+                        {/* Open Main App */}
+                        <button
+                            onClick={() => window.electronAPI?.showApp()}
+                            className="p-1.5 rounded-lg bg-zinc-700/50 text-zinc-300 hover:bg-zinc-600 transition-colors"
+                            title="Open Main App"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                            </svg>
                         </button>
 
                         {/* Minimize */}

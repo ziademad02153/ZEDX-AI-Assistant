@@ -30,6 +30,11 @@ export interface ElectronAPI {
     captureScannerArea: (bounds: { x: number, y: number, width: number, height: number }) => Promise<{ success: boolean; error?: string }>;
     onProcessOcr: (callback: (data: { sourceId: string, bounds: { x: number, y: number, width: number, height: number }, scaleFactor?: number }) => void) => void;
     onScannerStateChange: (callback: (active: boolean) => void) => () => void;
+    // Updater
+    downloadUpdate: () => void;
+    installUpdate: () => void;
+    onUpdateAvailable: (callback: (version: string) => void) => () => void;
+    onUpdateReady: (callback: () => void) => () => void;
     isElectron: boolean;
 }
 
