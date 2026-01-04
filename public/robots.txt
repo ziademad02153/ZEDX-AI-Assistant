@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://zedx-ai-assistant-1.vercel.app/sitemap.xml
