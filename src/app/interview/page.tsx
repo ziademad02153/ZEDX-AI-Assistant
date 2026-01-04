@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, Video, VideoOff, Loader2, AlertCircle, Sparkles, Trash2, LogOut, Copy, RotateCcw, Monitor, MonitorOff } from "lucide-react";
+import { Mic, Video, VideoOff, Loader2, AlertCircle, Sparkles, Trash2, LogOut, Copy, RotateCcw, Monitor, MonitorOff, Scan } from "lucide-react";
+import { createWorker } from 'tesseract.js';
 import { cn } from "@/lib/utils";
 import ReactMarkdown from 'react-markdown';
 
@@ -11,14 +12,46 @@ import { SettingsDialog } from "@/components/settings-dialog";
 import { useConfirmDialog } from "@/components/confirm-dialog";
 import { interviewService } from "@/lib/interview-service";
 
+// --- Types for Web Speech API ---
+interface SpeechRecognitionEvent extends Event {
+    results: SpeechRecognitionResultList;
+    resultIndex: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+    error: string;
+    message?: string;
+}
+
+interface SpeechRecognition extends EventTarget {
+    continuous: boolean;
+    interimResults: boolean;
+    lang: string;
+    maxAlternatives: number;
+    onaudiostart: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onaudioend: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onend: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => void) | null;
+    onnomatch: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void) | null;
+    onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => void) | null;
+    onsoundstart: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onsoundend: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onspeechstart: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onspeechend: ((this: SpeechRecognition, ev: Event) => void) | null;
+    onstart: ((this: SpeechRecognition, ev: Event) => void) | null;
+    start(): void;
+    stop(): void;
+    abort(): void;
+}
+
 export default function InterviewPage() {
     const router = useRouter();
     const { showToast } = useConfirmDialog();
     const videoRef = useRef<HTMLVideoElement>(null);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const recognitionRef = useRef<any>(null);
+    const recognitionRef = useRef<SpeechRecognition | null>(null);
     const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
     const isAiSpeakingRef = useRef(false);
+    const isRecognitionActiveRef = useRef(false);
 
     // API Key no longer needed - using server-side Groq
     const [showSettings, setShowSettings] = useState(false);
@@ -31,6 +64,8 @@ export default function InterviewPage() {
     const [error, setError] = useState<string | null>(null);
     const [isCameraVisible, setIsCameraVisible] = useState(false);
     const [systemStatus, setSystemStatus] = useState({ browser: true, camera: false, mic: false });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _ignoreStatus = systemStatus;
     const [interviewContext, setInterviewContext] = useState({ type: "", jd: "", resume: "", lang: "en-US" });
     const [isAutoMode, setIsAutoMode] = useState(true); // Auto Answer ON by default
     const [lastTranscript, setLastTranscript] = useState<string>(""); // For retry functionality
@@ -44,6 +79,7 @@ export default function InterviewPage() {
     const analyserRef = useRef<AnalyserNode | null>(null);
     const micSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
     const screenSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
+    const [isScannerActive, setIsScannerActive] = useState(false);
     const [hasMounted, setHasMounted] = useState(false);
 
     // Constants
@@ -77,6 +113,15 @@ export default function InterviewPage() {
         } catch {
             // localStorage unavailable (private mode)
             setInterviewContext({ type: "General", jd: "", resume: "", lang: "en-US" });
+        }
+
+        // v18.0: Listen for scanner state changes (Atomic Sync)
+        if (typeof window !== 'undefined' && window.electronAPI?.onScannerStateChange) {
+            const cleanup = window.electronAPI.onScannerStateChange((active: boolean) => {
+                console.log('[Sync] Scanner state changed:', active);
+                setIsScannerActive(active);
+            });
+            return cleanup;
         }
     }, []);
 
@@ -205,6 +250,10 @@ export default function InterviewPage() {
             if (!text) throw new Error("Empty response from AI.");
 
             setAiResponse(text);
+            // Broadcast to Electron Overlay
+            if (window.electronAPI?.sendAnswer) {
+                window.electronAPI.sendAnswer(text);
+            }
             // Track Q&A pairs for saving to history - save question and answer together
             setAllQAPairs(prev => [...prev, { question: currentTranscript.trim(), answer: text }]);
             // Text-to-speech disabled - text only mode
@@ -286,11 +335,11 @@ export default function InterviewPage() {
 
         if (isScreenAudioActive) {
             stopScreenAudio();
-            (window as any).electronAPI.stopSystemAudioCapture();
+            window.electronAPI?.stopSystemAudioCapture();
         } else {
             console.log("[Screen Audio] Requesting capture...");
-            const result = await (window as any).electronAPI.startSystemAudioCapture();
-            if (!result.success) {
+            const result = await window.electronAPI?.startSystemAudioCapture();
+            if (result && !result.success) {
                 setError(result.error || "Failed to start screen capture.");
             }
         }
@@ -299,23 +348,25 @@ export default function InterviewPage() {
     useEffect(() => {
         if (!isElectron) return;
 
-        const cleanup = (window as any).electronAPI.onAudioSourceReady(async (sourceId: string) => {
+        const cleanup = window.electronAPI?.onAudioSourceReady(async (sourceId: string) => {
             console.log("[Screen Audio] Source ID received:", sourceId);
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
                     audio: {
+                        // @ts-expect-error: mandatory is non-standard but required for Electron desktop capture
                         mandatory: {
                             chromeMediaSource: 'desktop',
                             chromeMediaSourceId: sourceId
                         }
                     },
                     video: {
+                        // @ts-expect-error: mandatory is non-standard but required for Electron desktop capture
                         mandatory: {
                             chromeMediaSource: 'desktop',
                             chromeMediaSourceId: sourceId
                         }
                     }
-                } as any);
+                });
 
                 screenStreamRef.current = stream;
                 setIsScreenAudioActive(true);
@@ -327,8 +378,8 @@ export default function InterviewPage() {
                         screenSource.connect(analyserRef.current);
                         screenSourceRef.current = screenSource;
                         console.log("[Screen Audio] Stream mixed into active recording");
-                    } catch (e) {
-                        console.error("[Screen Audio] Failed to mix stream:", e);
+                    } catch (e: unknown) {
+                        console.error("[Screen Audio] Failed to mix stream:", e as Error);
                     }
                 }
 
@@ -338,14 +389,17 @@ export default function InterviewPage() {
                     stopScreenAudio();
                 };
 
-            } catch (err) {
-                console.error("[Screen Audio] Failed to get stream:", err);
+            } catch (err: unknown) {
+                console.error("[Screen Audio] Failed to get stream:", err as Error);
                 setIsScreenAudioActive(false);
                 setError("System audio capture failed (Permission or selection issue).");
             }
         });
 
-        return () => cleanup && cleanup();
+        return () => {
+            // onAudioSourceReady doesn't return a cleanup in some versions, check if it does
+            if (typeof cleanup === 'function') (cleanup as () => void)();
+        };
     }, [isElectron, isRecording, stopScreenAudio]);
 
     // --- DESKTOP STT (Groq Whisper with Silence Detection) ---
@@ -454,7 +508,20 @@ export default function InterviewPage() {
                 lastGroqTranscriptRef.current = clean;
                 console.log(`[Desktop STT] ✅ Heard (${langCode}): "${newText}"`);
 
-                setTranscript(prev => (prev + " " + newText).trim().slice(-MAX_TRANSCRIPT_LENGTH));
+                setTranscript(prev => {
+                    const prevTrimmed = prev.trim();
+
+
+                    // Simple check: if the last few words of the transcript match the start of the new text, skip the overlap
+                    // This is more basic than the onresult deduplication because Groq text is usually 
+                    // more complete and we want to preserve its accuracy.
+
+                    // But if the entire newText is already at the end of the transcript, skip it.
+                    if (prevTrimmed.endsWith(newText)) return prev;
+
+                    const finalTranscript = (prev + " " + newText).trim();
+                    return finalTranscript.slice(-MAX_TRANSCRIPT_LENGTH);
+                });
 
                 if ((window as unknown as { electronAPI?: { sendTranscript: (t: string) => void } }).electronAPI?.sendTranscript) {
                     (window as unknown as { electronAPI: { sendTranscript: (t: string) => void } }).electronAPI.sendTranscript(newText);
@@ -505,7 +572,7 @@ export default function InterviewPage() {
             const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
             // VAD Parameters (Ultra-Low Latency Mode)
-            const SPEECH_THRESHOLD = 15;        // More sensitive to pick up quieter voices
+            const SPEECH_THRESHOLD = 12;        // Increased sensitivity for system audio
             const SILENCE_DURATION = 800;       // 0.8s silence = End of sentence (Fast & snappy)
             const MIN_SPEECH_DURATION = 500;    // Allow short sentences
             const MAX_RECORDING_TIME = 15000;   // Force send after 15s
@@ -667,14 +734,20 @@ export default function InterviewPage() {
             // This provides the immediate visual feedback the user wants
             if (recognitionRef.current) {
                 try {
-                    // Reset transcript for new recording if needed
-                    // setTranscript(""); 
-                    recognitionRef.current.start();
-                    console.log("[Speech] Fast Live Engine started successfully");
-                } catch (e) {
-                    console.error("[Speech] Failed to start Web Speech API:", e);
-                    if (!isElectron) {
-                        setError("Microphone access is already in use or failed.");
+                    if (!isRecognitionActiveRef.current) {
+                        recognitionRef.current.start();
+                        isRecognitionActiveRef.current = true;
+                        console.log("[Speech] Fast Live Engine started successfully");
+                    }
+                } catch (e: unknown) {
+                    const err = e as Error;
+                    if (err.name === 'InvalidStateError') {
+                        isRecognitionActiveRef.current = true; // Sync state
+                    } else {
+                        console.error("[Speech] Failed to start Web Speech API:", err);
+                        if (!isElectron) {
+                            setError("Microphone access is already in use or failed.");
+                        }
                     }
                 }
             } else {
@@ -704,155 +777,271 @@ export default function InterviewPage() {
         // Skip Web Speech API in Electron - it doesn't work there and causes network errors
         // The new toggleRecording handles Web Speech API for both desktop and web.
 
-        interface SpeechRecognitionWindow extends Window {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            webkitSpeechRecognition: any;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            SpeechRecognition: any;
+        const win = window as unknown as {
+            webkitSpeechRecognition?: new () => SpeechRecognition;
+            SpeechRecognition?: new () => SpeechRecognition;
+        };
+        const SpeechRecognitionClass = win.webkitSpeechRecognition || win.SpeechRecognition;
+        if (SpeechRecognitionClass) {
+            recognitionRef.current = new SpeechRecognitionClass();
+            const rec = recognitionRef.current;
+            if (rec) {
+                rec.continuous = true;
+                rec.interimResults = true;
+                rec.lang = interviewContext.lang.startsWith('ar') ? 'ar-EG' : interviewContext.lang;
+                rec.maxAlternatives = 3;
+            }
         }
-        const win = window as unknown as SpeechRecognitionWindow;
-        const SpeechRecognition = win.webkitSpeechRecognition || win.SpeechRecognition;
-        recognitionRef.current = new SpeechRecognition();
-        recognitionRef.current.continuous = true;
-        recognitionRef.current.interimResults = true;
-        // Force ar-EG for better Egyptian recognition if generic Arabic is selected
-        recognitionRef.current.lang = interviewContext.lang.startsWith('ar') ? 'ar-EG' : interviewContext.lang;
-        recognitionRef.current.maxAlternatives = 3; // Get more alternatives for better accuracy
 
-        recognitionRef.current.onstart = () => {
-            setSystemStatus(prev => ({ ...prev, mic: true }));
-            setError(null);
-            console.log("[Speech] Recognition started");
-        };
+        if (recognitionRef.current) {
+            recognitionRef.current.onstart = () => {
+                isRecognitionActiveRef.current = true;
+                setSystemStatus(prev => ({ ...prev, mic: true }));
+                setError(null);
+                console.log("[Speech] Recognition started");
+            };
+        }
 
-        recognitionRef.current.onend = () => {
-            console.log("[Speech] Recognition ended, isRecording:", isRecording, "isAiSpeaking:", isAiSpeakingRef.current);
-            // Auto-restart ONLY if we are supposed to be recording AND AI is NOT speaking
-            if (isRecording && !isAiSpeakingRef.current) {
-                console.log("[Speech] Auto-restarting...");
-                // Use a small delay to prevent rapid restart loops
-                setTimeout(() => {
-                    if (recognitionRef.current && isRecording && !isAiSpeakingRef.current) {
-                        try {
-                            recognitionRef.current.start();
-                        } catch (err: unknown) {
-                            const error = err as Error;
-                            if (error.name !== 'InvalidStateError') {
-                                console.error("[Speech] Failed to restart:", error);
+        if (recognitionRef.current) {
+            recognitionRef.current.onend = () => {
+                isRecognitionActiveRef.current = false;
+                console.log("[Speech] Recognition ended, isRecording:", isRecording, "isAiSpeaking:", isAiSpeakingRef.current);
+                // Auto-restart ONLY if we are supposed to be recording AND AI is NOT speaking
+                if (isRecording && !isAiSpeakingRef.current) {
+                    console.log("[Speech] Auto-restarting...");
+                    // Use a small delay to prevent rapid restart loops
+                    setTimeout(() => {
+                        if (recognitionRef.current && isRecording && !isAiSpeakingRef.current && !isRecognitionActiveRef.current) {
+                            try {
+                                recognitionRef.current.start();
+                                isRecognitionActiveRef.current = true;
+                            } catch (err: unknown) {
+                                const error = err as Error;
+                                if (error.name !== 'InvalidStateError') {
+                                    console.error("[Speech] Failed to restart:", error);
+                                } else {
+                                    isRecognitionActiveRef.current = true;
+                                }
                             }
                         }
+                    }, 300); // Slightly longer delay for stability
+                }
+            };
+        }
+
+        if (recognitionRef.current) {
+            recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+                let interim = '';
+                let finalText = '';
+
+                // Process only new results
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    const result = event.results[i];
+                    const transcript = result[0].transcript;
+
+                    if (result.isFinal) {
+                        finalText += transcript;
+                    } else {
+                        interim = transcript; // Only keep the latest interim
                     }
-                }, 100);
-            }
-        };
-
-        recognitionRef.current.onresult = (event: { resultIndex: number; results: { [key: number]: { isFinal: boolean;[key: number]: { transcript: string; }; }; length: number; }; }) => {
-            let interim = '';
-            let finalText = '';
-
-            // Process only new results
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                const result = event.results[i];
-                const transcript = result[0].transcript;
-
-                if (result.isFinal) {
-                    finalText += transcript;
-                } else {
-                    interim = transcript; // Only keep the latest interim
                 }
-            }
 
-            // Add final text to transcript
-            if (finalText) {
-                const cleanedFinal = finalText.trim();
-                if (cleanedFinal) {
-                    setTranscript(prev => {
-                        // Enhanced deduplication: check if the new text overlaps with the end of existing transcript
-                        const prevTrimmed = prev.trim();
+                // Add final text to transcript
+                if (finalText) {
+                    const cleanedFinal = finalText.trim();
+                    if (cleanedFinal) {
+                        setTranscript(prev => {
+                            // Enhanced deduplication: check if the new text overlaps with the end of existing transcript
+                            const prevTrimmed = prev.trim();
 
-                        // Check if this text is a repeat of what we just added
-                        if (prevTrimmed.endsWith(cleanedFinal)) {
-                            return prev; // Skip complete duplicate
-                        }
-
-                        // Check for partial overlap (last N words match first N words of new text)
-                        const prevWords = prevTrimmed.split(' ').slice(-10); // Last 10 words
-                        const newWords = cleanedFinal.split(' ');
-
-                        // Find overlap: check if end of prev matches start of new
-                        let overlapLength = 0;
-                        for (let len = Math.min(prevWords.length, newWords.length); len > 0; len--) {
-                            const prevEnd = prevWords.slice(-len).join(' ').toLowerCase();
-                            const newStart = newWords.slice(0, len).join(' ').toLowerCase();
-                            if (prevEnd === newStart) {
-                                overlapLength = len;
-                                break;
+                            // Check if this text is a repeat of what we just added
+                            if (prevTrimmed.endsWith(cleanedFinal)) {
+                                return prev; // Skip complete duplicate
                             }
-                        }
 
-                        // Remove overlapping words from new text
-                        const textToAdd = overlapLength > 0
-                            ? newWords.slice(overlapLength).join(' ')
-                            : cleanedFinal;
+                            // Check for partial overlap (last N words match first N words of new text)
+                            const prevWords = prevTrimmed.split(' ').slice(-10); // Last 10 words
+                            const newWords = cleanedFinal.split(' ');
 
-                        if (!textToAdd.trim()) {
-                            return prev; // Nothing new to add
-                        }
+                            // Find overlap: check if end of prev matches start of new
+                            let overlapLength = 0;
+                            for (let len = Math.min(prevWords.length, newWords.length); len > 0; len--) {
+                                const prevEnd = prevWords.slice(-len).join(' ').toLowerCase();
+                                const newStart = newWords.slice(0, len).join(' ').toLowerCase();
+                                if (prevEnd === newStart) {
+                                    overlapLength = len;
+                                    break;
+                                }
+                            }
 
-                        const newTranscript = prev + (prev ? ' ' : '') + textToAdd;
-                        // Limit transcript length
-                        if (newTranscript.length > MAX_TRANSCRIPT_LENGTH) {
-                            return newTranscript.slice(-MAX_TRANSCRIPT_LENGTH); // Keep last 4000 chars
-                        }
-                        return newTranscript;
-                    });
+                            // Remove overlapping words from new text
+                            const textToAdd = overlapLength > 0
+                                ? newWords.slice(overlapLength).join(' ')
+                                : cleanedFinal;
+
+                            if (!textToAdd.trim()) {
+                                return prev; // Nothing new to add
+                            }
+
+                            const newTranscript = prev + (prev ? ' ' : '') + textToAdd;
+
+                            // Broadcast to Electron Overlay
+                            if (window.electronAPI?.sendTranscript) {
+                                window.electronAPI.sendTranscript(textToAdd);
+                            }
+
+                            // Limit transcript length
+                            if (newTranscript.length > MAX_TRANSCRIPT_LENGTH) {
+                                return newTranscript.slice(-MAX_TRANSCRIPT_LENGTH); // Keep last 4000 chars
+                            }
+                            return newTranscript;
+                        });
+                    }
+                    setInterimTranscript('');
+                } else if (interim) {
+                    setInterimTranscript(interim);
+                    // Also broadcast interim if possible for smoother UI
+                    if (window.electronAPI?.sendTranscript) {
+                        window.electronAPI.sendTranscript(interim);
+                    }
                 }
-                setInterimTranscript('');
-            } else if (interim) {
-                setInterimTranscript(interim);
-            }
-        };
+            };
 
-        recognitionRef.current.onerror = (event: { error: string; }) => {
-            console.log("[Speech] Error:", event.error);
+            recognitionRef.current.onerror = (event: { error: string; }) => {
+                console.log("[Speech] Error:", event.error);
+                if (event.error === 'not-allowed') {
+                    setError("Microphone access blocked.");
+                }
+                // Sync state on abort/end
+                if (event.error === 'aborted' || event.error === 'audio-capture') {
+                    isRecognitionActiveRef.current = false;
+                }
 
-            // Ignore these non-critical errors and auto-restart
-            if (event.error === 'no-speech' || event.error === 'aborted') {
-                // Still try to restart after no-speech error
-                if (event.error === 'no-speech' && isRecording && !isAiSpeakingRef.current) {
+                // Still try to restart after minor errors if recording is active
+                if ((event.error === 'no-speech' || event.error === 'aborted') && isRecording && !isAiSpeakingRef.current) {
+                    setTimeout(() => {
+                        if (recognitionRef.current && isRecording && !isRecognitionActiveRef.current) {
+                            try {
+                                recognitionRef.current.start();
+                                isRecognitionActiveRef.current = true;
+                            } catch { /* ignore */ }
+                        }
+                    }, 400);
+                }
+
+                // Handle network errors with auto-retry
+                if (event.error === 'network') {
+                    console.log("[Speech] Network error, will retry...");
                     setTimeout(() => {
                         if (recognitionRef.current && isRecording) {
                             try {
                                 recognitionRef.current.start();
                             } catch { /* ignore */ }
                         }
-                    }, 200);
+                    }, 1000);
+                    return;
                 }
-                return;
-            }
 
-            // Handle network errors with auto-retry
-            if (event.error === 'network') {
-                console.log("[Speech] Network error, will retry...");
-                setTimeout(() => {
-                    if (recognitionRef.current && isRecording) {
-                        try {
-                            recognitionRef.current.start();
-                        } catch { /* ignore */ }
-                    }
-                }, 1000);
-                return;
-            }
+                // v21.1: Silence transient errors that are already handled by the retry logic
+                if (event.error === 'aborted' || event.error === 'no-speech') {
+                    return;
+                }
 
-            console.error("[Speech] Recognition error:", event.error);
-            if (event.error === 'not-allowed') {
-                setIsRecording(false);
-                setError("Microphone access denied. Please allow microphone permissions.");
-                setSystemStatus(prev => ({ ...prev, mic: false }));
-            }
-        };
+                console.error("[Speech] Recognition error:", event.error);
+                if (event.error === 'not-allowed') {
+                    setIsRecording(false);
+                    setError("Microphone access denied. Please allow microphone permissions.");
+                    setSystemStatus(prev => ({ ...prev, mic: false }));
+                }
+            };
+        }
     }, [interviewContext.lang, isRecording]);
 
+
+    useEffect(() => {
+        if (!window.electronAPI) return;
+
+        const cleanup = window.electronAPI.onProcessOcr(async (data) => {
+            console.log("[Scanner] Received OCR request:", data);
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: false,
+                    video: {
+                        // @ts-expect-error: mandatory is a non-standard Chrome property for desktop capture
+                        mandatory: {
+                            chromeMediaSource: 'desktop',
+                            chromeMediaSourceId: data.sourceId
+                        }
+                    }
+                });
+
+                const video = document.createElement('video');
+                video.srcObject = stream;
+
+                // Wait for video to be ready
+                await new Promise((resolve) => {
+                    video.onloadedmetadata = () => {
+                        video.play().then(resolve);
+                    };
+                });
+
+                const canvas = document.createElement('canvas');
+                const scale = data.scaleFactor || 1;
+
+                // Set capture resolution higher for better OCR accuracy
+                canvas.width = data.bounds.width * scale;
+                canvas.height = data.bounds.height * scale;
+
+                const ctx = canvas.getContext('2d');
+
+                if (ctx) {
+                    // CRITICAL: Millimeter precision filters
+                    ctx.filter = 'grayscale(100%) contrast(150%) brightness(110%)';
+                    ctx.imageSmoothingEnabled = false;
+
+                    ctx.drawImage(video,
+                        data.bounds.x * scale, data.bounds.y * scale, data.bounds.width * scale, data.bounds.height * scale,
+                        0, 0, canvas.width, canvas.height
+                    );
+
+                    const imageData = canvas.toDataURL('image/png', 1.0);
+
+                    // Stop the stream
+                    stream.getTracks().forEach(track => track.stop());
+                    video.srcObject = null;
+
+                    // Process with Tesseract optimized for tech/code
+                    const worker = await createWorker('eng', 1, {
+                        logger: m => console.log("[Scanner] Progress:", m.status, Math.round(m.progress * 100) + "%"),
+                    });
+
+                    // Fine-tune parameters for technical/code text extraction
+                    await worker.setParameters({
+                        tessedit_pageseg_mode: '3', // PSM_AUTO
+                        preserve_interword_spaces: '1',
+                    } as unknown as Record<string, string>);
+
+                    const ret = await worker.recognize(imageData);
+                    const text = ret.data.text.trim();
+                    await worker.terminate();
+
+                    if (text) {
+                        console.log("[Scanner] Extracted text:", text);
+                        setManualQuestion(text);
+                        showToast("Text captured from screen!", "success");
+                    } else {
+                        showToast("No text detected in the area.", "info");
+                    }
+                }
+            } catch (err) {
+                console.error("[Scanner] OCR processing failed:", err);
+                showToast("Failed to process screen capture.", "error");
+            }
+        });
+
+        return cleanup;
+    }, [showToast]);
 
     // Handle End Interview - Save to history and navigate
     const handleEndInterview = async () => {
@@ -954,29 +1143,21 @@ export default function InterviewPage() {
                                 <Mic size={26} strokeWidth={isRecording ? 2.5 : 2} />
                             </button>
 
-                            {/* Camera Toggle Button */}
-                            <button
-                                onClick={() => setIsCameraOn(!isCameraOn)}
-                                className={cn(
-                                    "w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm",
-                                    isCameraOn
-                                        ? "bg-[#00D95A] text-white scale-110 shadow-green-500/40"
-                                        : "bg-black/40 text-white hover:bg-black/60 border border-white/10"
-                                )}
-                                title={isCameraOn ? "Turn Camera Off" : "Turn Camera On"}
-                            >
-                                {isCameraOn ? <Video size={26} strokeWidth={2.5} /> : <VideoOff size={26} strokeWidth={2} />}
-                            </button>
-
-                            {/* End Interview Button */}
-                            <button
-                                onClick={handleEndInterview}
-                                disabled={isSaving}
-                                className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
-                                title="End Interview"
-                            >
-                                {isSaving ? <Loader2 size={26} className="animate-spin" /> : <LogOut size={26} strokeWidth={2} />}
-                            </button>
+                            {/* Camera Toggle Button (Web Only) */}
+                            {!isElectron && (
+                                <button
+                                    onClick={() => setIsCameraOn(!isCameraOn)}
+                                    className={cn(
+                                        "w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm",
+                                        isCameraOn
+                                            ? "bg-[#00D95A] text-white scale-110 shadow-green-500/40"
+                                            : "bg-black/40 text-white hover:bg-black/60 border border-white/10"
+                                    )}
+                                    title={isCameraOn ? "Turn Camera Off" : "Turn Camera On"}
+                                >
+                                    {isCameraOn ? <Video size={26} strokeWidth={2.5} /> : <VideoOff size={26} strokeWidth={2} />}
+                                </button>
+                            )}
 
                             {/* Screen Audio Toggle Button (Electron Only) */}
                             {isElectron && (
@@ -993,6 +1174,16 @@ export default function InterviewPage() {
                                     {isScreenAudioActive ? <Monitor size={26} strokeWidth={2.5} /> : <MonitorOff size={26} strokeWidth={2} />}
                                 </button>
                             )}
+
+                            {/* End Interview Button - Far Right */}
+                            <button
+                                onClick={handleEndInterview}
+                                disabled={isSaving}
+                                className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
+                                title="End Interview"
+                            >
+                                {isSaving ? <Loader2 size={26} className="animate-spin" /> : <LogOut size={26} strokeWidth={2} />}
+                            </button>
                         </div>
                     </div>
                 )}
@@ -1014,29 +1205,21 @@ export default function InterviewPage() {
                             <Mic size={26} strokeWidth={isRecording ? 2.5 : 2} />
                         </button>
 
-                        {/* Camera Icon Button */}
-                        <button
-                            onClick={() => setIsCameraVisible(true)}
-                            className={cn(
-                                "w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
-                                isCameraOn
-                                    ? "bg-[#00D95A] text-white scale-110 shadow-green-500/30 ring-4 ring-green-100 dark:ring-green-900/30"
-                                    : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
-                            )}
-                            title={isCameraOn ? "Camera On - Show" : "Camera Off - Show"}
-                        >
-                            {isCameraOn ? <Video size={26} strokeWidth={2.5} /> : <VideoOff size={26} strokeWidth={2} />}
-                        </button>
-
-                        {/* End Interview Button */}
-                        <button
-                            onClick={handleEndInterview}
-                            disabled={isSaving}
-                            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
-                            title="End Interview"
-                        >
-                            {isSaving ? <Loader2 size={26} className="animate-spin" /> : <LogOut size={26} strokeWidth={2} />}
-                        </button>
+                        {/* Camera Icon Button (Web Only) */}
+                        {!isElectron && (
+                            <button
+                                onClick={() => setIsCameraVisible(true)}
+                                className={cn(
+                                    "w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
+                                    isCameraOn
+                                        ? "bg-[#00D95A] text-white scale-110 shadow-green-500/30 ring-4 ring-green-100 dark:ring-green-900/30"
+                                        : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                                )}
+                                title={isCameraOn ? "Camera On - Show" : "Camera Off - Show"}
+                            >
+                                {isCameraOn ? <Video size={26} strokeWidth={2.5} /> : <VideoOff size={26} strokeWidth={2} />}
+                            </button>
+                        )}
 
                         {/* Screen Audio Toggle Button (Electron Only) */}
                         {isElectron && (
@@ -1053,6 +1236,16 @@ export default function InterviewPage() {
                                 {isScreenAudioActive ? <Monitor size={26} strokeWidth={2.5} /> : <MonitorOff size={26} strokeWidth={2} />}
                             </button>
                         )}
+
+                        {/* End Interview Button - Far Right */}
+                        <button
+                            onClick={handleEndInterview}
+                            disabled={isSaving}
+                            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
+                            title="End Interview"
+                        >
+                            {isSaving ? <Loader2 size={26} className="animate-spin" /> : <LogOut size={26} strokeWidth={2} />}
+                        </button>
                     </div>
                 )}
 
@@ -1103,6 +1296,27 @@ export default function InterviewPage() {
                                 <Sparkles size={14} />
                                 <span className="hidden sm:inline">{isAutoMode ? "Auto Answer ON" : "Auto Answer OFF"}</span>
                                 <span className="sm:hidden">{isAutoMode ? "Auto ON" : "Auto OFF"}</span>
+                            </Button>
+
+                            <Button
+                                onClick={async () => {
+                                    if (window.electronAPI) {
+                                        const res = await window.electronAPI.toggleScannerFrame();
+                                        setIsScannerActive(res.active);
+                                    }
+                                }}
+                                variant={isScannerActive ? "default" : "outline"}
+                                size="sm"
+                                className={cn(
+                                    "gap-2 text-xs sm:text-sm transition-all duration-300",
+                                    isScannerActive
+                                        ? "bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/20"
+                                        : "bg-white dark:bg-zinc-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-zinc-700"
+                                )}
+                            >
+                                <Scan size={14} />
+                                <span className="hidden sm:inline">{isScannerActive ? "Close Scanner" : "Stealth Scanner"}</span>
+                                <span className="sm:hidden">{isScannerActive ? "Close" : "Scanner"}</span>
                             </Button>
                         </div>
                     </div>

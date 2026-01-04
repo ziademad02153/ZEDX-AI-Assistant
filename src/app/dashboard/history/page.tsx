@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Clock, Trash2, FileText, AlertCircle, ChevronDown, ChevronUp, Trash, Loader2 } from "lucide-react";
+import { Clock, Trash2, FileText, AlertCircle, ChevronDown, ChevronUp, Trash } from "lucide-react";
 import { interviewService, Interview } from "@/lib/interview-service";
 import { cn } from "@/lib/utils";
 import { useConfirmDialog } from "@/components/confirm-dialog";

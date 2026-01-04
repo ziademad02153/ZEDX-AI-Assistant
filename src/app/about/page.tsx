@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Shield, Zap, Mic, Globe, Cpu, Layers } from "lucide-react";
+import { Shield, Zap, Mic, Globe, Cpu, Layers } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
@@ -39,9 +39,7 @@ export default function AboutPage() {
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 dark:from-emerald-400 dark:via-green-400 dark:to-teal-400">Career Success</span>
                         </h1>
 
-                        <p className="text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-                            ZEDX AI isn't just a tool; it's your unfair advantage. Engineered for stealth, speed, and precision to help you dominate every interview.
-                        </p>
+                        ZEDX AI isn&apos;t just a tool; it&apos;s your unfair advantage. Engineered for stealth, speed, and precision to help you dominate every interview.
                     </div>
                 </section>
 

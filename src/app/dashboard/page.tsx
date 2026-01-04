@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Clock, CheckCircle, Calendar, ArrowRight, Trash2, Loader2 } from "lucide-react";
+import { Plus, Clock, CheckCircle, Calendar, ArrowRight, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { interviewService, Interview } from "@/lib/interview-service";

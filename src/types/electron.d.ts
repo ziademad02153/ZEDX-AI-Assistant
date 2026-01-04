@@ -5,8 +5,10 @@ export interface ElectronAPI {
     hideApp: () => void;
     showApp: () => void;
     closeApp: () => void;
+    quitApp: () => void;
     toggleApp: () => void;
     goBack: () => void;
+    canGoBack: () => boolean;
     isDesktopMode: () => boolean;
     // Utils
     copyToClipboard: (text: string) => void;
@@ -22,6 +24,12 @@ export interface ElectronAPI {
     // Overlay Controls
     resizeOverlay: (width: number, height: number) => void;
     setIgnoreMouseEvents: (ignore: boolean, options?: { forward?: boolean }) => void;
+    // Stealth Scanner
+    toggleScannerFrame: () => Promise<{ active: boolean }>;
+    updateScannerBounds: (bounds: { x: number, y: number, width: number, height: number }) => void;
+    captureScannerArea: (bounds: { x: number, y: number, width: number, height: number }) => Promise<{ success: boolean; error?: string }>;
+    onProcessOcr: (callback: (data: { sourceId: string, bounds: { x: number, y: number, width: number, height: number }, scaleFactor?: number }) => void) => void;
+    onScannerStateChange: (callback: (active: boolean) => void) => () => void;
     isElectron: boolean;
 }
 

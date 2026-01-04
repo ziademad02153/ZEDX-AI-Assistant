@@ -1,6 +1,7 @@
+/* global __dirname, require, console */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const sharp = require('sharp');
 const path = require('path');
-const fs = require('fs');
 
 const inputImage = path.join(__dirname, '..', 'public', 'zedx-logo.png');
 const outputDir = path.join(__dirname, '..', 'public');

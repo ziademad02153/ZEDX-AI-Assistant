@@ -3,8 +3,11 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('electronAPI', {
     // Window controls
     toggleApp: () => ipcRenderer.send('toggle-app'),
+    showApp: () => ipcRenderer.send('show-app'),
     hideApp: () => ipcRenderer.send('hide-app'),
+    closeApp: () => ipcRenderer.send('close-app'),
     goBack: () => ipcRenderer.send('go-back'),
+    canGoBack: () => ipcRenderer.sendSync('can-go-back'),
     copyToClipboard: (text) => ipcRenderer.send('copy-to-clipboard', text),
     isDesktopMode: () => ipcRenderer.sendSync('get-desktop-mode'),
 
@@ -44,12 +47,29 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
     // Error Handling & Connectivity
     retryConnection: () => ipcRenderer.send('retry-connection'),
-    quitApp: () => ipcRenderer.send('hide-app'), // Using hide-app as per main.js logic for close
+    quitApp: () => ipcRenderer.send('quit-app'),
     hideIcon: () => ipcRenderer.send('hide-icon'),
     onLoadError: (callback) => {
         const wrapper = (event, errorDescription) => callback(errorDescription);
         ipcRenderer.on('load-error', wrapper);
         return () => ipcRenderer.removeListener('load-error', wrapper);
+    },
+
+    // --- STEALTH SCANNER API ---
+    toggleScannerFrame: () => ipcRenderer.invoke('toggle-scanner-frame'),
+    updateScannerBounds: (bounds) => ipcRenderer.send('update-scanner-bounds', bounds),
+    captureScannerArea: (bounds) => ipcRenderer.invoke('capture-scanner-area', bounds),
+
+    onProcessOcr: (callback) => {
+        const wrapper = (event, data) => callback(data);
+        ipcRenderer.on('process-ocr-request', wrapper);
+        return () => ipcRenderer.removeListener('process-ocr-request', wrapper);
+    },
+
+    onScannerStateChange: (callback) => {
+        const wrapper = (event, active) => callback(active);
+        ipcRenderer.on('scanner-state-changed', wrapper);
+        return () => ipcRenderer.removeListener('scanner-state-changed', wrapper);
     },
 
     isElectron: true

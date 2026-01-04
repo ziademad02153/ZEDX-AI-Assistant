@@ -27,8 +27,13 @@ const iconsSet3 = [
     { src: "/leetcode-seeklogo.png", alt: "LeetCode" },
 ];
 
+interface PlatformIcon {
+    src: string;
+    alt: string;
+}
+
 // Reusable Marquee Row Component for perfect seamlessness
-function MarqueeRow({ icons, duration, reverse = false }: { icons: any[], duration: string, reverse?: boolean }) {
+function MarqueeRow({ icons, duration, reverse = false }: { icons: PlatformIcon[], duration: string, reverse?: boolean }) {
     return (
         <div className="relative bg-white rounded-l-full rounded-r-none py-1.5 md:py-3 px-4 md:px-6 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-[calc(100%+100px)] md:w-[calc(100%+400px)]">
             <div

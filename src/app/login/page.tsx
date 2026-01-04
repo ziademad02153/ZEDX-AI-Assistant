@@ -224,7 +224,7 @@ export default function LoginPage() {
                 </div>
 
                 <div className="relative z-10 flex items-center gap-6 text-sm text-gray-500 font-medium">
-                    <span>© 2025 ZEDX-AI Inc.</span>
+                    <span>© 2026 ZEDX AI Inc.</span>
                     <span className="w-1 h-1 rounded-full bg-gray-700"></span>
                     <span>Privacy Policy</span>
                     <span className="w-1 h-1 rounded-full bg-gray-700"></span>
@@ -258,7 +258,7 @@ export default function LoginPage() {
                                 ? "Enter your email to sign in to your accounts"
                                 : mode === "signup"
                                     ? "Create your account in seconds. No credit card required."
-                                    : `We've sent a 6-digit verification code to ${formData.email}`}
+                                    : `We've sent a verification code to ${formData.email}`}
                         </p>
                     </div>
 
@@ -382,13 +382,13 @@ export default function LoginPage() {
                                     </label>
                                     <input
                                         type="text"
-                                        placeholder="123456"
-                                        maxLength={6}
+                                        placeholder="12345678"
+                                        maxLength={8}
                                         inputMode="numeric"
-                                        pattern="[0-9]{6}"
+                                        pattern="[0-9]{6,8}"
                                         className="flex h-12 w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-4 py-3 text-sm text-gray-900 dark:text-white ring-offset-white dark:ring-offset-zinc-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-center tracking-[0.5em] font-mono text-xl transition-all"
                                         value={formData.otp}
-                                        onChange={(e) => setFormData({ ...formData, otp: e.target.value.replace(/\D/g, '').slice(0, 6) })}
+                                        onChange={(e) => setFormData({ ...formData, otp: e.target.value.replace(/\D/g, '').slice(0, 8) })}
                                         required
                                     />
                                 </div>

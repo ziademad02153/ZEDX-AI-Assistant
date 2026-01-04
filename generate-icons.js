@@ -1,3 +1,5 @@
+/* global __dirname, require, console */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');

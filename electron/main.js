@@ -1,34 +1,105 @@
 const { app, BrowserWindow, ipcMain, screen, Tray, Menu, nativeImage, clipboard, session, desktopCapturer } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const path = require('path');
 
-let floatingIconWindow = null;
-let mainAppWindow = null;
-let tray = null;
-let isAppVisible = false;
-
-const isDev = !app.isPackaged;
-// Using the live site in production ensures all APIs and Auth work perfectly without local overhead
-const APP_URL = isDev ? 'http://localhost:3000' : 'https://zedx-ai-assistant-1.vercel.app';
+const ICON_PATH = path.join(__dirname, '..', 'public', 'favicon.ico');
 
 function initStealth() {
     if (process.platform === 'win32') {
         app.setAppUserModelId('System.Helper');
     }
-
     if (process.platform === 'darwin') {
         app.dock.hide();
     }
 }
 
-function createFloatingIcon() {
-    const { width } = screen.getPrimaryDisplay().workAreaSize;
+let floatingIconWindow = null;
+let mainAppWindow = null;
+let scannerFrameWindow = null;
+let tray = null;
+let isAppVisible = false;
+let isScannerFrameOpen = false;
 
-    // Create the window
+const isDev = !app.isPackaged;
+const APP_URL = isDev ? 'http://localhost:3000' : 'https://zedx-ai-assistant-1.vercel.app';
+
+// --- STEALTH SCANNER FRAME ---
+function createScannerFrame() {
+    // v19.0 FIX: Remove listeners from old window before destroying to prevent race condition "closed" signals
+    if (scannerFrameWindow) {
+        try {
+            if (!scannerFrameWindow.isDestroyed()) {
+                scannerFrameWindow.removeAllListeners('closed');
+                scannerFrameWindow.destroy();
+            }
+        } catch (e) { }
+    }
+    scannerFrameWindow = null;
+    isScannerFrameOpen = true;
+
+    const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
+    scannerFrameWindow = new BrowserWindow({
+        width: 400,
+        height: 300,
+        x: Math.floor(width / 2 - 200),
+        y: Math.floor(height / 2 - 150),
+        frame: false,
+        transparent: true,
+        alwaysOnTop: true,
+        skipTaskbar: true,
+        resizable: false,
+        movable: true,
+        focusable: true,
+        thickFrame: false,
+        hasShadow: false,
+        backgroundColor: '#00000000',
+        icon: ICON_PATH,
+        show: true,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false,
+            webSecurity: true
+        }
+    });
+
+    if (process.platform === 'win32') {
+        scannerFrameWindow.setAlwaysOnTop(true, 'screen-saver', 1);
+    } else {
+        scannerFrameWindow.setAlwaysOnTop(true, 'floating', 1);
+    }
+
+    scannerFrameWindow.setContentProtection(true);
+    scannerFrameWindow.loadURL(`${APP_URL}/scanner-frame?isScanner=true`, {
+        extraHeaders: "x-is-scanner: true\n"
+    });
+
+    scannerFrameWindow.on('closed', () => {
+        scannerFrameWindow = null;
+        isScannerFrameOpen = false;
+        broadcastScannerState(false);
+    });
+
+    broadcastScannerState(true);
+}
+
+function broadcastScannerState(active) {
+    if (mainAppWindow && !mainAppWindow.isDestroyed()) {
+        mainAppWindow.webContents.send('scanner-state-changed', active);
+    }
+}
+
+function createFloatingIcon() {
+    const primaryDisplay = screen.getPrimaryDisplay();
+    const { width } = primaryDisplay.workAreaSize;
+    const centerX = Math.round((width / 2) - 28);
+
     floatingIconWindow = new BrowserWindow({
         width: 56,
         height: 56,
-        x: Math.floor(width / 2) - 28,
-        y: 10,
+        x: centerX,
+        y: 15,
         frame: false,
         transparent: true,
         alwaysOnTop: true,
@@ -36,7 +107,8 @@ function createFloatingIcon() {
         resizable: false,
         movable: true,
         hasShadow: false,
-        show: true, // Explicitly show the window
+        icon: ICON_PATH,
+        show: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -44,25 +116,13 @@ function createFloatingIcon() {
         }
     });
 
-    // Content Protection
     floatingIconWindow.setContentProtection(true);
 
-    if (process.platform === 'darwin') {
-        floatingIconWindow.setAlwaysOnTop(true, 'screen-saver', 1);
-        floatingIconWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
-    }
-
     if (process.platform === 'win32') {
-        floatingIconWindow.setAlwaysOnTop(true, 'screen-saver');
+        floatingIconWindow.setAlwaysOnTop(true, 'screen-saver', 10);
     }
 
-    floatingIconWindow.loadFile(path.join(__dirname, 'floating-icon.html'));
-    floatingIconWindow.setIgnoreMouseEvents(false);
-
-    // Debug: log when icon is loaded
-    floatingIconWindow.webContents.on('did-finish-load', () => {
-        console.log('[Electron] Floating icon loaded at position:', floatingIconWindow.getBounds());
-    });
+    floatingIconWindow.loadURL(`${APP_URL}/desktop/overlay?isOverlay=true`);
 }
 
 function createMainAppWindow() {
@@ -74,12 +134,13 @@ function createMainAppWindow() {
         minWidth: 400,
         minHeight: 600,
         x: Math.floor(width / 2) - 250,
-        y: 50,
+        y: 120,
         frame: false,
         transparent: false,
-        icon: path.join(__dirname, '..', 'public', 'favicon.ico'),
+        icon: ICON_PATH,
         alwaysOnTop: true,
-        skipTaskbar: true,
+        skipTaskbar: true, // HIDE FROM TASKBAR
+        type: 'toolbar',  // v19.0 FIX: TOOLBAR TYPE FOR ABSOLUTE TASKBAR INVISIBILITY ON WINDOWS
         resizable: true,
         movable: true,
         hasShadow: true,
@@ -91,95 +152,40 @@ function createMainAppWindow() {
             contextIsolation: true,
             nodeIntegration: false,
             webSecurity: true,
-            partition: 'persist:main',
-            allowRunningInsecureContent: false
+            partition: 'persist:main'
         }
     });
 
     mainAppWindow.setContentProtection(true);
 
-    // FIX: Set standard Chrome User-Agent to allow Web Speech API usage
-    // Google blocks non-standard user agents from accessing the free Speech API
     const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
     mainAppWindow.webContents.setUserAgent(userAgent);
 
-    if (process.platform === 'darwin') {
-        mainAppWindow.setAlwaysOnTop(true, 'screen-saver', 1);
-        mainAppWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+    if (process.platform === 'win32') {
+        mainAppWindow.setAlwaysOnTop(true, 'screen-saver', 5);
+    } else {
+        mainAppWindow.setAlwaysOnTop(true, 'floating', 5);
     }
-
-    // STEP 1: Load local loading screen immediately (Ensures window is never black/empty)
-    mainAppWindow.loadFile(path.join(__dirname, 'loading.html'));
-
-    // STEP 2: Attempt to load the remote app after a brief render delay
-    loadAppContent();
 
     mainAppWindow.on('close', (e) => {
         e.preventDefault();
         mainAppWindow.hide();
         isAppVisible = false;
     });
+
+    // Notify renderer if page fails to load
+    mainAppWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+        console.error(`[App] Load fail: ${errorDescription} (${errorCode})`);
+        mainAppWindow.webContents.send('load-error', errorDescription);
+    });
+
+    loadAppContent();
 }
 
 function loadAppContent() {
     if (!mainAppWindow) return;
-
     const startUrl = `${APP_URL}/login?desktop=true`;
-    console.log('[Electron] Loading Remote URL:', startUrl);
-
-    // Dynamic port detection for development
-    const tryLoad = (url) => {
-        mainAppWindow.loadURL(url).catch(e => {
-            console.error(`[Electron] Failed to load ${url}:`, e);
-            if (isDev && url.includes(':3000')) {
-                console.log('[Electron] Retrying with port 3001...');
-                tryLoad(url.replace(':3000', ':3001'));
-            } else {
-                mainAppWindow.webContents.send('load-error', e.message);
-            }
-        });
-    };
-
-    // Add a delay to ensure loading.html is fully rendered
-    setTimeout(() => {
-        tryLoad(startUrl);
-    }, 2000);
-
-    // SAFETY NET: If the page takes more than 30 seconds to load, show a timeout error
-    const safetyTimeout = setTimeout(() => {
-        console.error('[Electron] Navigation timed out (30s limit)');
-        mainAppWindow.loadFile(path.join(__dirname, 'loading.html'));
-        mainAppWindow.webContents.once('did-finish-load', () => {
-            mainAppWindow.webContents.send('load-error', 'Connection timed out. Please ensure npm run dev is running.');
-        });
-    }, 30000);
-
-    // Clear timeout if load succeeds
-    mainAppWindow.webContents.once('did-finish-load', () => {
-        clearTimeout(safetyTimeout);
-        console.log('[Electron] Remote content loaded successfully');
-    });
-
-    // Handle network failures during navigation (e.g. DNS error, Timeout)
-    mainAppWindow.webContents.once('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
-        clearTimeout(safetyTimeout);
-        // Ignore expected aborts (e.g. user clicking retry quickly)
-        if (errorCode === -3) return;
-
-        console.error('[Electron] Page failed to load:', errorCode, errorDescription);
-
-        // Reload loading.html and send error
-        mainAppWindow.loadFile(path.join(__dirname, 'loading.html'));
-        mainAppWindow.webContents.once('did-finish-load', () => {
-            mainAppWindow.webContents.send('load-error', errorDescription);
-        });
-    });
-
-    mainAppWindow.on('close', (e) => {
-        e.preventDefault();
-        mainAppWindow.hide();
-        isAppVisible = false;
-    });
+    mainAppWindow.loadURL(startUrl).catch(e => console.error('[App] Load fail:', e));
 }
 
 function toggleApp() {
@@ -189,18 +195,54 @@ function toggleApp() {
     isAppVisible = true;
 }
 
-// Dedicated function to only show/focus without hiding
 function showApp() {
     if (!mainAppWindow) return;
     mainAppWindow.show();
     mainAppWindow.focus();
-    isAppVisible = true;
 }
 
 function setupIpcHandlers() {
-    ipcMain.on('toggle-app', () => {
-        showApp(); // Changed from toggleApp to showApp to prevent accidental hiding
+    ipcMain.on('update-scanner-bounds', (event, { x, y, width, height }) => {
+        if (scannerFrameWindow && !scannerFrameWindow.isDestroyed()) {
+            scannerFrameWindow.setBounds({
+                x: Math.round(x),
+                y: Math.round(y),
+                width: Math.round(width),
+                height: Math.round(height)
+            });
+        }
     });
+
+    ipcMain.handle('toggle-scanner-frame', async () => {
+        if (isScannerFrameOpen) {
+            isScannerFrameOpen = false;
+            // v19.0: Atomic close with broadcase
+            if (scannerFrameWindow) {
+                try { scannerFrameWindow.close(); } catch (e) { }
+                scannerFrameWindow = null;
+            }
+            return { active: false };
+        } else {
+            createScannerFrame();
+            return { active: true };
+        }
+    });
+
+    ipcMain.handle('capture-scanner-area', async (event, bounds) => {
+        try {
+            if (!mainAppWindow) return { success: false };
+            const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: 0, height: 0 } });
+            if (sources.length === 0) return { success: false };
+            const scaleFactor = screen.getPrimaryDisplay().scaleFactor;
+            mainAppWindow.webContents.send('process-ocr-request', { sourceId: sources[0].id, bounds, scaleFactor });
+            return { success: true };
+        } catch (err) {
+            return { success: false };
+        }
+    });
+
+    ipcMain.on('toggle-app', () => toggleApp());
+    ipcMain.on('show-app', () => showApp());
 
     ipcMain.on('hide-app', () => {
         if (mainAppWindow) {
@@ -213,219 +255,79 @@ function setupIpcHandlers() {
         if (floatingIconWindow) {
             floatingIconWindow.hide();
         }
+    });
+
+    ipcMain.on('retry-connection', () => loadAppContent());
+    ipcMain.on('quit-app', () => app.quit());
+    ipcMain.on('go-back', () => mainAppWindow?.webContents.goBack());
+    ipcMain.on('close-app', () => {
         if (mainAppWindow) {
             mainAppWindow.hide();
             isAppVisible = false;
         }
     });
+    ipcMain.on('copy-to-clipboard', (event, text) => clipboard.writeText(text));
+    ipcMain.on('get-desktop-mode', (event) => { event.returnValue = true; });
+    ipcMain.on('can-go-back', (event) => { event.returnValue = mainAppWindow?.webContents.canGoBack() || false; });
 
-    ipcMain.on('retry-connection', () => {
-        loadAppContent();
-    });
-
-    ipcMain.on('quit-app', () => {
-        app.quit();
-    });
-
-
-    ipcMain.on('go-back', () => {
-        if (mainAppWindow && mainAppWindow.webContents.canGoBack()) {
-            mainAppWindow.webContents.goBack();
-        }
-    });
-
-    ipcMain.on('copy-to-clipboard', (event, text) => {
-        clipboard.writeText(text);
-    });
-
-    ipcMain.on('get-desktop-mode', (event) => {
-        event.returnValue = true;
-    });
-
-    ipcMain.on('can-go-back', (event) => {
-        event.returnValue = mainAppWindow ? mainAppWindow.webContents.canGoBack() : false;
-    });
-
-    // System Audio Capture handlers
     ipcMain.handle('get-system-audio-source', async () => {
-        try {
-            const sources = await desktopCapturer.getSources({
-                types: ['screen'],
-                thumbnailSize: { width: 0, height: 0 }
-            });
-
-            if (sources.length > 0) {
-                return { success: true, sourceId: sources[0].id };
-            }
-            return { success: false, error: 'No screen sources found' };
-        } catch (error) {
-            return { success: false, error: error.message };
-        }
+        const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: 0, height: 0 } });
+        return sources.length > 0 ? { success: true, sourceId: sources[0].id } : { success: false };
     });
 
     ipcMain.handle('start-system-audio-capture', async () => {
-        try {
-            const sources = await desktopCapturer.getSources({
-                types: ['screen'],
-                thumbnailSize: { width: 0, height: 0 }
-            });
-
-            if (sources.length > 0) {
-                if (mainAppWindow) {
-                    mainAppWindow.webContents.send('audio-source-ready', sources[0].id);
-                }
-                return { success: true, sourceId: sources[0].id };
-            }
-            return { success: false, error: 'No screen sources found' };
-        } catch (error) {
-            return { success: false, error: error.message };
+        const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: 0, height: 0 } });
+        if (sources.length > 0) {
+            mainAppWindow?.webContents.send('audio-source-ready', sources[0].id);
+            return { success: true, sourceId: sources[0].id };
         }
+        return { success: false };
     });
 
     ipcMain.handle('stop-system-audio-capture', async () => {
         return { success: true };
     });
 
-    // IPC Relay: Main Window -> Overlay
-    ipcMain.on('transcript-update', (event, text) => {
-        if (floatingIconWindow && !floatingIconWindow.isDestroyed()) {
-            // Note: overlay logic seems to be in floatingIconWindow (or overlayWindow if separate)
-            // The user's page.tsx refers to 'OverlayPage', usually loaded in floatingIconWindow or separate.
-            // Based on context, floatingIconWindow.loadFile('floating-icon.html'). 
-            // Wait, floating-icon.html might not be the overlay. 
-            // Let's assume overlay is separate or it is the floating icon expanded.
-            // Actually, usually Overlay is a separate window. 
-            // But looking at main.js, we only have `floatingIconWindow` and `mainAppWindow`. 
-            // The floating icon expands?
-            // Let's safe-send to floatingIconWindow just in case, or if there is an overlayWindow variable I missed.
-            // Looking at line 4: `let floatingIconWindow = null;`
-            // There is no `overlayWindow`.
-            // So the "Overlay" must be the floating window expanded or I am missing something. 
-            // But valid `preload.js` works for `floatingIconWindow` too.
-            floatingIconWindow.webContents.send('transcript', text);
-        }
-    });
-
-    ipcMain.on('answer-update', (event, text) => {
-        if (floatingIconWindow && !floatingIconWindow.isDestroyed()) {
-            floatingIconWindow.webContents.send('answer', text);
-        }
-    });
-
-    // Handle Overlay Resizing (Expand/Collapse)
-    ipcMain.on('resize-overlay', (event, { width, height }) => {
-        if (floatingIconWindow && !floatingIconWindow.isDestroyed()) {
-            floatingIconWindow.setSize(width, height);
-            console.log(`[Electron] Resized Overlay to ${width}x${height}`);
-        }
-    });
-
-    // Make window clickable or click-through
-    ipcMain.on('set-ignore-mouse-events', (event, ignore, options) => {
-        if (floatingIconWindow && !floatingIconWindow.isDestroyed()) {
-            const win = floatingIconWindow; // capture ref
-            win.setIgnoreMouseEvents(ignore, options);
-        }
-    });
+    ipcMain.on('transcript-update', (event, text) => floatingIconWindow?.webContents.send('transcript', text));
+    ipcMain.on('answer-update', (event, text) => floatingIconWindow?.webContents.send('answer', text));
+    ipcMain.on('resize-overlay', (event, { width, height }) => floatingIconWindow?.setSize(width, height));
+    ipcMain.on('set-ignore-mouse-events', (event, ignore, options) => floatingIconWindow?.setIgnoreMouseEvents(ignore, options));
 }
 
 function createTray() {
     try {
-        const iconPath = path.join(__dirname, '..', 'public', 'favicon.ico');
-        let icon = nativeImage.createEmpty();
-
-        try {
-            const loadedIcon = nativeImage.createFromPath(iconPath);
-            if (!loadedIcon.isEmpty()) {
-                icon = loadedIcon;
-            }
-        } catch (e) {
-            console.log('Tray icon not found, using empty icon');
-        }
-
-        tray = new Tray(icon.resize({ width: 16, height: 16 }));
-
+        const icon = nativeImage.createFromPath(ICON_PATH).resize({ width: 16, height: 16 });
+        tray = new Tray(icon);
         const contextMenu = Menu.buildFromTemplate([
-            {
-                label: 'Show/Hide ZEDX AI',
-                click: () => toggleApp()
-            },
+            { label: 'Open Assistant', click: () => toggleApp() },
             { type: 'separator' },
-            {
-                label: 'Quit',
-                click: () => {
-                    mainAppWindow = null;
-                    app.quit();
-                }
-            }
+            { label: 'Quit Entirely', click: () => app.quit() }
         ]);
-
         tray.setToolTip('ZEDX AI');
         tray.setContextMenu(contextMenu);
-
-        tray.on('click', () => {
-            toggleApp();
-        });
-    } catch (error) {
-        console.error('Failed to create tray:', error);
-    }
+        tray.on('click', () => toggleApp());
+    } catch (e) { }
 }
 
 async function initialize() {
     initStealth();
-
-    // Grant permissions for Web Speech API
-    session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
-        const allowedPermissions = ['media', 'audioCapture', 'speech'];
-        if (allowedPermissions.includes(permission)) {
-            callback(true);
-        } else {
-            callback(false);
-        }
-    });
-
-    // Also grant permissions check handler
-    session.defaultSession.setPermissionCheckHandler((webContents, permission) => {
-        const allowedPermissions = ['media', 'audioCapture', 'speech'];
-        return allowedPermissions.includes(permission);
-    });
-
+    session.defaultSession.setPermissionRequestHandler((wc, p, cb) => cb(['media', 'audioCapture', 'speech'].includes(p)));
+    session.defaultSession.setPermissionCheckHandler((wc, p) => ['media', 'audioCapture', 'speech'].includes(p));
     createFloatingIcon();
     createMainAppWindow();
     createTray();
     setupIpcHandlers();
 
-    // Auto-Updater Logic
+    // v1.1.0: Auto-Updater Integration
     if (!isDev) {
-        const { autoUpdater } = require('electron-updater');
         autoUpdater.checkForUpdatesAndNotify();
-
-        autoUpdater.on('update-available', () => {
-            if (mainAppWindow) mainAppWindow.webContents.send('update-available');
-        });
-
-        autoUpdater.on('update-downloaded', () => {
-            if (mainAppWindow) mainAppWindow.webContents.send('update-downloaded');
-            // Silent restart after download
-            // autoUpdater.quitAndInstall(); 
-        });
+        // Check for updates every 2 hours
+        setInterval(() => {
+            autoUpdater.checkForUpdatesAndNotify();
+        }, 1000 * 60 * 60 * 2);
     }
 }
 
 app.whenReady().then(initialize);
-
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
-
-app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-        initialize();
-    }
-});
-
-app.on('before-quit', () => {
-    mainAppWindow = null;
-});
+app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+app.on('before-quit', () => { mainAppWindow = null; });

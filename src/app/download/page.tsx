@@ -3,7 +3,7 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { Check, Download, Monitor, Shield, Zap, Info } from "lucide-react";
+import { Check, Download, Monitor, Shield, Zap, Info, ScanLine, MessageSquare } from "lucide-react";
 import Link from "next/link";
 
 export default function DownloadPage() {
@@ -28,7 +28,7 @@ export default function DownloadPage() {
                             "price": "0",
                             "priceCurrency": "USD"
                         },
-                        "downloadUrl": "https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.0.6/ZEDX.AI.Setup.1.0.6.exe",
+                        "downloadUrl": "https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.1/ZEDX.AI.Setup.1.1.1.exe",
                         "featureList": "Real-time Interview Assistance, System Audio Capture, Resume Analysis, Stealth Mode, AI Copilot",
                         "author": {
                             "@type": "Organization",
@@ -57,7 +57,7 @@ export default function DownloadPage() {
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400">ZEDX Desktop</span>
                         </h1>
                         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                            Don't rely on your browser microphone. The desktop app captures <strong>System Audio</strong> directly, so you can hear the interviewer clearly without them knowing.
+                            Don&apos;t rely on your browser microphone. The desktop app captures <strong>System Audio</strong> directly, so you can hear the interviewer clearly without them knowing.
                         </p>
                     </div>
 
@@ -131,13 +131,29 @@ export default function DownloadPage() {
                                     <div className="mt-1 bg-emerald-500/20 p-1 rounded-full">
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
+                                    <span className="text-gray-700 dark:text-gray-200 font-medium">
+                                        <strong>Stealth Scanner (OCR):</strong> Extract questions from non-copyable screen areas instantly.
+                                    </span>
+                                </li>
+                                <li className="flex gap-3 items-start">
+                                    <div className="mt-1 bg-emerald-500/20 p-1 rounded-full">
+                                        <Check size={14} className="text-emerald-500" />
+                                    </div>
+                                    <span className="text-gray-700 dark:text-gray-200 font-medium">
+                                        <strong>Manual AI Chat:</strong> Ask follow-up questions or clarify technical points mid-interview.
+                                    </span>
+                                </li>
+                                <li className="flex gap-3 items-start">
+                                    <div className="mt-1 bg-emerald-500/20 p-1 rounded-full">
+                                        <Check size={14} className="text-emerald-500" />
+                                    </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">Global Keyboard Shortcuts (Alt+Space)</span>
                                 </li>
                             </ul>
 
                             <div className="space-y-3">
                                 <Link
-                                    href="https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.0.6/ZEDX.AI.Setup.1.0.6.exe"
+                                    href="https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.1/ZEDX.AI.Setup.1.1.1.exe"
                                     className="block"
                                 >
                                     <Button className="w-full rounded-xl py-7 text-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/25 group relative overflow-hidden">
@@ -151,7 +167,7 @@ export default function DownloadPage() {
                                     </Button>
                                 </Link>
                                 <p className="text-center text-xs text-gray-400">
-                                    v1.0.6 Stable • Windows 10/11 • 64-bit
+                                    v1.1.1 Stable • Windows 10/11 • 64-bit
                                 </p>
                             </div>
 
@@ -160,8 +176,8 @@ export default function DownloadPage() {
                                 <Info size={20} className="text-blue-500 shrink-0 mt-0.5" />
                                 <div className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
                                     <strong className="text-gray-900 dark:text-white block mb-1">Security Note:</strong>
-                                    Windows might show a "Protected your PC" warning because ZEDX AI is currently an independent developer app.
-                                    To install, simply click <strong>"More info"</strong> and then <strong>"Run anyway"</strong>.
+                                    Windows might show a &quot;Protected your PC&quot; warning because ZEDX AI is currently an independent developer app.
+                                    To install, simply click <strong>&quot;More info&quot;</strong> and then <strong>&quot;Run anyway&quot;</strong>.
                                 </div>
                             </div>
                         </div>

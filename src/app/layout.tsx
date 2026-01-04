@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ErrorBoundary from "@/components/error-boundary";
@@ -18,7 +19,6 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     capable: true,
   },
-  themeColor: "#16a34a",
   title: {
     default: "ZEDX AI - Free AI Interview Assistant & Copilot",
     template: "%s | ZEDX AI"
@@ -97,13 +97,23 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export default function RootLayout({
+export const viewport = {
+  themeColor: "#16a34a",
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const xUrl = headersList.get("x-url") || "";
+  const isScanner = headersList.get("x-is-scanner") === "true" || xUrl.includes("scanner-frame");
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={isScanner ? "bg-transparent" : ""}>
       <head>
         <meta name="msvalidate.01" content="410978477B68DFFC4D1109011EAF121F" />
         <script
@@ -195,10 +205,10 @@ export default function RootLayout({
 
       </head>
       <body
-        className={`${inter.variable} antialiased`}
+        className={`${inter.variable} antialiased ${isScanner ? 'bg-transparent overflow-hidden' : ''}`}
         suppressHydrationWarning
       >
-        <DesktopNavBar />
+        {!isScanner && <DesktopNavBar />}
         <ErrorBoundary>
           <ConfirmDialogProvider>
             {children}

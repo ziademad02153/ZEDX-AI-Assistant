@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Upload, AlertCircle, Sparkles, Zap, MessageSquare, Loader2 } from "lucide-react";
+import { ArrowLeft, Upload, AlertCircle, Sparkles, Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -88,7 +88,6 @@ export default function NewInterviewPage() {
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [savedResumes, setSavedResumes] = useState<Resume[]>([]);
-    const [showChat, setShowChat] = useState(true); // Default show chat for better engagement
 
     // Load saved resumes
     useEffect(() => {
@@ -96,7 +95,7 @@ export default function NewInterviewPage() {
             try {
                 const data = await resumeService.getUserResumes();
                 setSavedResumes(data);
-            } catch (e: unknown) {
+            } catch {
                 // Silent catch
             }
         };
@@ -160,7 +159,7 @@ export default function NewInterviewPage() {
         }
 
         setTimeout(() => {
-            router.push("/interview");
+            router.push("/dashboard/new/how-to-use");
         }, 800);
     };
 
