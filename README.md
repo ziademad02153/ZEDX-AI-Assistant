@@ -1,83 +1,102 @@
-# ZEDX-AI: Professional Career Intelligence Systems
+# ZEDX-AI: Professional Intelligence Systems
 
-## Executive Summary
-
-ZEDX-AI is a high-fidelity intelligence platform engineered for real-time career augmentation. By integrating advanced neural processing with a low-level system overlay, ZEDX-AI provides a seamless, context-aware experience designed to empower professionals during technical and behavioral evaluations. The system prioritizes low-latency interference, stealth operation, and cross-platform accessibility.
-
----
-
-## Core Capabilities
-
-### Stealth Rendering Technology
-ZEDX-AI utilizes a specialized hardware-level rendering strategy. This ensures that the intelligence overlay remains strictly local to the user's physical display, making it undetectable by standard screen-capture and collaborative software algorithms.
-
-### Neural Transcription Engine
-The system employs a multi-channel Speech-to-Text (STT) pipeline capable of processing both ambient microphone input and internal system audio simultaneously. This ensures comprehensive capture of the interview environment with sub-second processing latency.
-
-### Integrated Optical Character Recognition (OCR)
-The Stealth Scanner allows for the real-time extraction of document and screen text. This feature is particularly effective for analyzing coding challenges or non-selectable text within a secure environment.
-
-### Contextual Inference
-By synchronizing user-provided resumes and job descriptions, the intelligence engine tailors its responses to align the user's professional background with the specific requirements of the target role.
+<div align="center">
+  <img src="public/zedx-logo.png" width="160" alt="ZEDX-AI Logo" />
+  <p><strong>Advanced Career Intelligence & Real-Time Professional Augmentation</strong></p>
+</div>
 
 ---
 
-## System Architecture
-
-The platform architecture is divided into four primary layers to ensure stability and performance:
-
-1.  **Capture Layer**: Manages high-definition audio streams and screen-region buffers.
-2.  **Inference Layer**: Utilizes Groq LPU (Language Processing Unit) acceleration for near-instantaneous transcription and LLM response generation.
-3.  **Context Layer**: A real-time memory engine that correlates user data with live session transcripts.
-4.  **Presentation Layer**: An isolated Electron-based overlay that renders information without interfering with standard system processes.
-
----
-
-## Technical Infrastructure
-
-| Component | Specification | Rationale |
-| :--- | :--- | :--- |
-| Framework | Next.js 16 | High-performance reactive architecture and edge-optimized rendering. |
-| Runtime | Electron 39 | Direct system-level access and isolated window management. |
-| AI Acceleration | Groq LPU | Maximizes throughput for real-time verbal interactions. |
-| Database | Supabase | Secure, scalable PostgreSQL backend with active RLS policies. |
-| Design System | Tailwind CSS 4.0 | Precision aesthetic control utilizing a professional Emerald palette. |
+## On this page
+- [System Overview](#system-overview)
+- [ZEDX-AI Web Platform](#zedx-ai-web-platform)
+- [ZEDX-AI Desktop Application](#zedx-ai-desktop-application)
+- [Core Intelligence Engine](#core-intelligence-engine)
+- [Stealth & Security Infrastructure](#stealth--security-infrastructure)
+- [Developer & Integration Guide](#developer--integration-guide)
 
 ---
 
-## Installation and Deployment
+## System Overview
+ZEDX-AI is a dual-tier intelligence ecosystem designed to facilitate high-stakes professional evaluations. The system synchronizes a cross-platform web interface with a low-level system application to provide real-time, context-aware guidance. 
 
-### End-User Installation
-1.  Download the latest stable executable from the Official Distribution Repository.
-2.  Authenticate using secure credentials.
-3.  Upload professional documentation (Resume/CV) to initialize the Context Engine.
-4.  Activate the Stealth Overlay using the designated global shortcut (Alt+Space).
+The architecture is built on three pillars: **Sub-second Inference**, **Absolute Stealth**, and **Contextual Precision**.
 
-### Developer Environment Setup
-To initialize the project for development purposes, execute the following commands in the terminal:
+---
 
+## ZEDX-AI Web Platform
+The web platform serves as the centralized management hub and the primary interface for initial user engagement.
+
+### Dashboard & Profile Management
+- **Professional Context Integration**: Users upload technical resumes and job descriptions which are parsed and indexed into a vector-ready format for the AI engine.
+- **Session Analytics**: Historical transcript review and AI response optimization tools.
+- **Authentication Gateway**: Secured via Supabase Row Level Security (RLS) and OAuth2 protocols.
+
+### Public Facing Interface
+- **Optimized Landing Page**: High-performance UI built with Next.js 16, focusing on conversion and technical authority.
+- **Self-Service Distribution**: Automated download routing for the desktop binaries (Windows/EXE).
+
+---
+
+## ZEDX-AI Desktop Application
+The ZEDX-AI Desktop Console is a high-performance Electron-based application that manages the "Live Intelligence" phase.
+
+### Stealth Scanner (OCR Engine)
+- **High-Precision Capture**: Utilizes a specialized Tesseract implementation to extract text from non-copyable screen regions.
+- **Detection Bypass**: The scanning process operates without traditional window hooks, ensuring invisibility to monitoring or collaboration software.
+
+### Real-Time Stealth Overlay
+- **Isolated Rendering**: Information is rendered in a specialized window layer that is physically invisible to all screen-sharing algorithms (Teams, Zoom, Google Meet).
+- **Dynamic Synchronization**: Latency-optimized IPC communication between the background process and the UI thread.
+
+### Manual AI Chat & Transcription
+- **Contextual Follow-up**: Allows users to interact with the AI mid-session to clarify or expand on generated answers without breaking the transcription flow.
+- **System Audio Capture**: Direct-to-buffer audio processing that extracts verbal input from both microphone and system-out channels.
+
+---
+
+## Core Intelligence Engine
+The "ZEDX-Whiz" engine powers the underlying neural interactions.
+
+### LLM & STT Pipeline
+- **Accelerator**: Powered by Groq LPU (Language Processing Unit) to achieve transcription and response generation speeds of <0.5 seconds.
+- **Models**: Dynamically routes between Llama 3.3 70B for complex technical reasoning and specialized smaller models for tactical speed.
+
+---
+
+## Stealth & Security Infrastructure
+- **Proxy Isolation Layer**: All outbound AI traffic is routed through a specialized proxy to isolate the application environment from the target monitoring software.
+- **Local-First Processing**: Sensitive audio data is processed and tokenized locally; raw audio never exits the local environment.
+- **Anti-Detection Heuristics**: Custom window management policies ensure no standard API hooks are exposed during an active session.
+
+---
+
+## Developer & Integration Guide
+
+### Project Structure
+- `electron/`: Main process logic, IPC handlers, and system-level integrations.
+- `src/app/desktop/`: Next.js components specifically for the Electron rendering environment (Overlay, Scanner).
+- `src/app/download/`: Web distribution and versioning logic.
+- `src/proxy.ts`: Network isolation and bypass implementation.
+
+### Local Development
 ```bash
-# Clone the repository
+# Repository Initialization
 git clone https://github.com/ziademad02153/ZEDX-AI-Assistant.git
-
-# Install dependencies
 npm install
 
-# Initialize development servers
-npm run dev           # Web Engine
-npm run electron:dev  # Desktop Shell
+# Service Initialization
+npm run dev           # Initializes the Web Framework
+npm run electron:dev  # Launches the Desktop Shell
 ```
 
 ---
 
-## Security and Privacy Protocols
-
-ZEDX-AI is built on a "Privacy First" foundation:
-- **Proxy Isolation**: Complete separation between application processes and communication layers.
-- **Volatile Transcripts**: Session data is processed in real-time and is not stored permanently beyond the session duration.
-- **End-to-End Encryption**: All data in transit and at rest is secured using industry-standard encryption protocols.
+<div align="center">
+  <p><em>Standardizing Excellence in Career Intelligence.</em></p>
+  <p>Built with ❤️ by <strong>Ziad Emad</strong></p>
+  <p><strong>Powered by ZEDX-AI Engine</strong></p>
+</div>
 
 ---
-
-**Developed and Maintained by Ziad Emad**  
-*Standardizing Excellence in Career Intelligence Systems.*
+*This documentation was updated on Jan 04, 2026. ZEDX-AI remains the intellectual property of Ziad Emad.*
