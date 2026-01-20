@@ -212,7 +212,10 @@ export default function InterviewPage() {
            - IF the language is 'ar-EG', only Egyptian Arabic is allowed.
 
         2. Answer the question DIRECTLY. Do not say "Here is how I would answer". Just answer.
-        3. USE THE RESUME DATA. Do not use placeholders like "[insert date]" or "[mention project]". If the specific detail is missing, estimate it reasonably or speak generally, but NEVER output bracketed placeholders.
+        3. **KNOWLEDGE USAGE:**
+           - **FOR PERSONAL EXPERIENCE QUESTIONS** (e.g., "Tell me about your time at X"): Stick STRICTLY to the provided Resume context.
+           - **FOR TECHNICAL/GENERAL QUESTIONS** (e.g., "What is React?", "How do you handle conflict?"): If the answer is NOT in the resume, **YOU MUST** answer using your general professional knowledge (Global Best Practices). Do NOT limit yourself to the resume if it doesn't cover the technical topic.
+           - NEVER use placeholders like "[insert date]". Use general estimates if needed.
         4. Keep answers concise (2-3 sentences max) and conversational.
 
         DETAILED LANGUAGE SPECS:
