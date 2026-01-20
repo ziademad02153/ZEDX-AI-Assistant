@@ -40,6 +40,12 @@ The web component acts as the centralized command center for professional identi
 ### Context Engine and Data Ingestion
 The platform utilizes a specialized ingestion pipeline for processing professional documentation. Resumes and Job Descriptions are not merely stored; they are parsed into structured context blocks that prime the AI engine before a session begins.
 
+### Key Features
+- **Stealth Scanner & Overlay**: Capture interview questions via screenshot or live transcription without detection.
+- **Real-Time AI Answers**: Get instant suggestions for coding, behavioral, and technical questions.
+- **Voice-to-Text**: High-accuracy speech recognition supports various accents and dialects.
+- **Resume Parsing**: Analyze your resume to tailor responses specifically for you.
+
 ### Session Analytics and Persistence
 - **Military-Grade Security**: Data is protected via Supabase Row Level Security (RLS), ensuring no unauthorized access to sensitive interview transcripts.
 - **Cross-Device Sync**: Configuration and context data are seamlessly synchronized with the desktop client via secure real-time listeners.
