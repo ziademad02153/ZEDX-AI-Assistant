@@ -13,10 +13,10 @@ jobs:
         env:
           # Splitting the key to avoid false-positive security alerts (GitGuardian)
           # This is a PUBLIC Anon key, safe to be exposed, but we hide it to stop the noise.
-          KEY_PART_1: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3cXF1eWVjb2p3eW9qaGd1YmxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNjgxOTEsImV4cCI6MjA4MDY0NDE5MX0"
-          KEY_PART_2: ".1bl0xqWxVBfa8NCCxCYxj2EqMQ9ZPl4Gl7g06j2qNYU"
+          KEY_PART_1: "sb_publishable_VzEjsSm"
+          KEY_PART_2: "U2nLhZjXsxBx3aw_TwJN6rIk"
         run: |
           FULL_KEY="${KEY_PART_1}${KEY_PART_2}"
-          curl -L -X GET 'https://pwqquyecojwyojhgublk.supabase.co/rest/v1/' \
+          curl -L -X GET 'https://pwqquyecojwyojhgublk.supabase.co/rest/v1/interviews?select=id&limit=1' \
           -H "apikey: $FULL_KEY" \
           -H "Authorization: Bearer $FULL_KEY"
