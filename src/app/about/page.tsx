@@ -6,9 +6,9 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
-    title: "About ZEDX AI - The Ultimate Interview Copilot",
-    description: "Discover ZEDX AI, the next-gen interview assistant. Features system audio capture, stealth overlay, and real-time AI coaching to help you land your dream job.",
-    keywords: ["ZEDX AI", "interview copilot", "AI interview assistant", "stealth overlay", "system audio capture"],
+    title: "About ZEDX Copilot - The Ultimate Meeting Assistant",
+    description: "Discover ZEDX Copilot, the next-gen meeting assistant. Features system audio capture, transcription overlay, and real-time AI context to help you master every meeting.",
+    keywords: ["ZEDX Copilot", "meeting copilot", "AI accessibility", "transcription overlay", "system audio capture"],
 };
 
 export default function AboutPage() {
@@ -31,15 +31,15 @@ export default function AboutPage() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                             </span>
-                            Revolutionizing Interview Prep
+                            Revolutionizing Meeting Accessibility
                         </div>
 
                         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
                             The Future of <br className="hidden sm:block" />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 dark:from-emerald-400 dark:via-green-400 dark:to-teal-400">Career Success</span>
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 dark:from-emerald-400 dark:via-green-400 dark:to-teal-400">Professional Collaboration</span>
                         </h1>
 
-                        ZEDX AI isn&apos;t just a tool; it&apos;s your unfair advantage. Engineered for stealth, speed, and precision to help you dominate every interview.
+                        ZEDX Copilot isn&apos;t just a transcription tool; it&apos;s your cognitive assistant. Engineered for speed, accuracy, and accessibility to help you master every meeting.
                     </div>
                 </section>
 
@@ -49,14 +49,14 @@ export default function AboutPage() {
                     <div className="max-w-5xl mx-auto relative z-10 grid md:grid-cols-2 gap-12 items-center">
                         <div>
                             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                                Beyond Standard Assistants
+                                Beyond Standard Transcription
                             </h2>
                             <div className="space-y-6 text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
                                 <p>
-                                    Most interview tools rely on browser extensions that can be detected or fail to capture audio correctly. <strong className="text-gray-900 dark:text-white">ZEDX AI is different.</strong>
+                                    Most meeting tools rely on bots that join calls awkwardly or fail to capture direct audio streams correctly. <strong className="text-gray-900 dark:text-white">ZEDX Copilot is different.</strong>
                                 </p>
                                 <p>
-                                    We built a native desktop application that captures <span className="text-emerald-600 dark:text-emerald-400 font-medium">System Audio</span> directly from the visible sound stream, meaning it works with headphones and is completely invisible to screen-sharing detection agents.
+                                    We built a native desktop application that captures <span className="text-emerald-600 dark:text-emerald-400 font-medium">System Audio</span> directly from the OS soundcard, ensuring absolute clarity and privacy without sending bots into video calls.
                                 </p>
                             </div>
                         </div>
@@ -78,8 +78,8 @@ export default function AboutPage() {
                                             <Shield size={24} />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-gray-900 dark:text-white">Undetectable Overlay</h3>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">Safe for all conferencing tools.</p>
+                                            <h3 className="font-bold text-gray-900 dark:text-white">Clean Workspace Overlay</h3>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">Minimal UI for focused meetings.</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4 p-4 bg-zinc-50/80 dark:bg-zinc-950/40 rounded-xl border border-zinc-100 dark:border-white/5">
@@ -110,8 +110,8 @@ export default function AboutPage() {
 
                     <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
                         {[
-                            { icon: <Mic />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures questions instantly." },
-                            { icon: <Layers />, title: "Context Aware", desc: "Analyzes your resume and job description to tailor answers specifically to you." },
+                            { icon: <Mic />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures key meeting moments instantly." },
+                            { icon: <Layers />, title: "Context Aware", desc: "Analyzes uploaded meeting agendas to tailor summaries specifically to your project." },
                             { icon: <Globe />, title: "Multi-Language", desc: "Native support for English, Arabic, Spanish, and 30+ other global languages." },
                             { icon: <Zap />, title: "Instant Transcription", desc: "Powered by Groq™ for ultra-fast speech-to-text conversion with 99% accuracy." },
                             { icon: <Shield />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers." },
@@ -136,10 +136,10 @@ export default function AboutPage() {
 
                             <div className="relative z-10">
                                 <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
-                                    Ready to upgrade your career?
+                                    Ready to empower your workflow?
                                 </h2>
                                 <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-xl mx-auto">
-                                    Join thousands of engineers, managers, and executives using ZEDX AI to secure their next role.
+                                    Join thousands of professionals using ZEDX Copilot to elevate their meeting productivity.
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                     <Link href="/download">

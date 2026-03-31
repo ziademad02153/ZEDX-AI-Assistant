@@ -3,7 +3,7 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { Check, Download, Monitor, Shield, Zap, Info, ScanLine, MessageSquare } from "lucide-react";
+import { Check, Download, Monitor, Shield, Zap, Info } from "lucide-react";
 import Link from "next/link";
 
 export default function DownloadPage() {
@@ -29,7 +29,7 @@ export default function DownloadPage() {
                             "priceCurrency": "USD"
                         },
                         "downloadUrl": "https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.1/ZEDX.AI.Setup.1.1.1.exe",
-                        "featureList": "Real-time Interview Assistance, System Audio Capture, Resume Analysis, Stealth Mode, AI Copilot",
+                        "featureList": "Real-time Meeting Transcription, System Audio Capture, Context Analysis, Accessibility Overlay, AI Copilot",
                         "author": {
                             "@type": "Organization",
                             "name": "ZEDX AI"
@@ -57,7 +57,7 @@ export default function DownloadPage() {
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400">ZEDX Desktop</span>
                         </h1>
                         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                            Don&apos;t rely on your browser microphone. The desktop app captures <strong>System Audio</strong> directly, so you can hear the interviewer clearly without them knowing.
+                            Don&apos;t rely on low-quality browser microphones. The desktop app captures <strong className="text-emerald-500">System Audio</strong> securely, so you get flawless meeting transcriptions instantly.
                         </p>
                     </div>
 
@@ -81,8 +81,8 @@ export default function DownloadPage() {
                                     <span>No installation needed</span>
                                 </li>
                                 <li className="flex gap-3 opacity-50">
-                                    <Shield className="text-red-400 shrink-0" />
-                                    <span><strong>Risk:</strong> Visible in Screen Share</span>
+                                    <Shield className="text-orange-400 shrink-0" />
+                                    <span><strong>Limitation:</strong> Restrained by Browser Sandboxing</span>
                                 </li>
                                 <li className="flex gap-3 opacity-50">
                                     <Monitor className="text-red-400 shrink-0" />
@@ -116,7 +116,7 @@ export default function DownloadPage() {
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Stealth Overlay:</strong> Runs invisibly over Zoom/Teams. Safe for Screen Sharing.
+                                        <strong>Accessibility Overlay:</strong> Runs cleanly alongside Zoom/Teams for fast reading.
                                     </span>
                                 </li>
                                 <li className="flex gap-3 items-start">
@@ -124,7 +124,7 @@ export default function DownloadPage() {
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>System Audio Capture:</strong> Hear the interviewer perfectly even with headphones.
+                                        <strong>System Audio Capture:</strong> Transcribe meeting participants flawlessly, even with headphones.
                                     </span>
                                 </li>
                                 <li className="flex gap-3 items-start">
@@ -132,7 +132,7 @@ export default function DownloadPage() {
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Stealth Scanner (OCR):</strong> Extract questions from non-copyable screen areas instantly.
+                                        <strong>Screen Capture (OCR):</strong> Extract presentation text from shared screens instantly.
                                     </span>
                                 </li>
                                 <li className="flex gap-3 items-start">
@@ -140,7 +140,7 @@ export default function DownloadPage() {
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Manual AI Chat:</strong> Ask follow-up questions or clarify technical points mid-interview.
+                                        <strong>Manual AI Chat:</strong> Ask follow-up/context questions mid-meeting without interrupting.
                                     </span>
                                 </li>
                                 <li className="flex gap-3 items-start">

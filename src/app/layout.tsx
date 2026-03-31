@@ -13,24 +13,22 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://zedx-ai-assistant-1.vercel.app"),
-  applicationName: "ZEDX AI",
+  applicationName: "ZEDX Copilot",
   appleWebApp: {
-    title: "ZEDX AI",
+    title: "ZEDX Copilot",
     statusBarStyle: "default",
     capable: true,
   },
   title: {
-    default: "ZEDX AI - Free AI Interview Assistant & Copilot",
-    template: "%s | ZEDX AI"
+    default: "ZEDX Copilot - Live Meeting & Accessibility Assistant",
+    template: "%s | ZEDX Copilot"
   },
-  description: "ZEDX AI is the best free AI interview assistant & copilot. Get real-time answers for coding, behavioral, and technical questions. Ace your Zoom, Teams, or Google Meet interviews.",
+  description: "ZEDX Copilot is a real-time AI meeting assistant providing live transcriptions, contextual summaries, and cognitive accessibility during professional meetings.",
   keywords: [
-    "ZEDX", "ZEDX AI", "ZEDX-AI", "zedx", "zedx ai", "zed x ai",
-    "AI Interview Assistant", "AI for Interview", "Interview Copilot", "Interview AI",
-    "Real-time Interview Helper", "AI Interview Cheat Sheet", "Coding Interview AI",
-    "Free AI Interview Tool", "Live Interview Assistant", "Job Interview Copilot",
-    "Technical Interview AI", "AI Resume Copilot",
-    "مساعد المقابلات", "ذكاء اصطناعي للمقابلات", "حل اسئلة الانترفيو"
+    "ZEDX", "ZEDX AI", "ZEDX Copilot", "Meeting Assistant", "Live Transcription",
+    "Accessibility Tool", "Meeting Copilot", "AI Meeting Notes", "Real-time AI Assistant",
+    "Hearing Impaired Assistant", "Zoom Copilot", "Teams Assistant", "Google Meet Copilot",
+    "مساعد اجتماعات", "تفريغ صوتي مباشر", "ذكاء اصطناعي", "مساعد ذوي الهمم"
   ],
   authors: [{ name: "ZEDX AI Team", url: "https://zedx-ai-assistant-1.vercel.app" }],
   creator: "ZEDX AI",
@@ -50,28 +48,28 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://zedx-ai-assistant-1.vercel.app",
-    siteName: "ZEDX AI",
-    title: "ZEDX AI - Free AI Interview Assistant",
-    description: "Your free AI-powered interview copilot. Get real-time answers and ace your next interview with ZEDX AI.",
+    siteName: "ZEDX Copilot",
+    title: "ZEDX Copilot - Live Meeting Assistant",
+    description: "Your live meeting transcription and cognitive accessibility assistant.",
     images: [
       {
         url: "/zedx-cyberpunk-banner.png",
         width: 1200,
         height: 630,
-        alt: "ZEDX AI - AI Interview Assistant",
+        alt: "ZEDX Copilot - Meeting Assistant",
       },
       {
         url: "/zedx-logo.png",
         width: 512,
         height: 512,
-        alt: "ZEDX AI Logo",
+        alt: "ZEDX Copilot Logo",
       }
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ZEDX AI - Free AI Interview Assistant",
-    description: "Your free AI-powered interview copilot. Get real-time answers and ace your next interview.",
+    title: "ZEDX Copilot - Live Meeting Assistant",
+    description: "Real-time AI meeting transcription and accessibility insights.",
     images: ["/zedx-cyberpunk-banner.png"],
     creator: "@zedx_ai",
   },
@@ -120,10 +118,10 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={isScanner ? "bg-transparent" : ""}>
       <head>
-        <meta name="name" content="ZEDX AI" />
-        <meta name="author" content="ZEDX AI" />
-        <meta property="og:site_name" content="ZEDX AI" />
-        <meta name="apple-mobile-web-app-title" content="ZEDX AI" />
+        <meta name="name" content="ZEDX Copilot" />
+        <meta name="author" content="Ziad Emad" />
+        <meta property="og:site_name" content="ZEDX Copilot" />
+        <meta name="apple-mobile-web-app-title" content="ZEDX Copilot" />
         <meta name="msvalidate.01" content="410978477B68DFFC4D1109011EAF121F" />
         <script
           dangerouslySetInnerHTML={{
@@ -148,8 +146,8 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "name": "ZEDX AI",
-              "alternateName": ["ZEDX", "ZEDX-AI", "zedx ai", "ZedX AI Assistant"],
+              "name": "ZEDX Copilot",
+              "alternateName": ["ZEDX", "ZEDX Copilot", "ZedX AI Assistant"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
               "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
               "image": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
@@ -168,7 +166,7 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "ZEDX AI",
+              "name": "ZEDX Copilot",
               "url": "https://zedx-ai-assistant-1.vercel.app",
               "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
               "sameAs": [
@@ -183,10 +181,10 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              "name": "ZEDX AI",
-              "alternateName": ["ZEDX", "ZEDX-AI", "zedx ai", "zedx", "ZedX AI", "Zedx", "zed x ai"],
+              "name": "ZEDX Copilot",
+              "alternateName": ["ZEDX Copilot", "ZEDX"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
-              "description": "ZEDX AI is your free AI-powered interview copilot. Get real-time AI answers during job interviews, practice with AI, and ace your next interview.",
+              "description": "ZEDX Copilot is a real-time AI meeting assistant providing live transcriptions and accessibility features.",
               "applicationCategory": "BusinessApplication",
               "operatingSystem": "Web Browser",
               "offers": {
@@ -201,14 +199,14 @@ export default async function RootLayout({
               },
               "author": {
                 "@type": "Organization",
-                "name": "ZEDX AI",
+                "name": "ZEDX Copilot",
                 "url": "https://zedx-ai-assistant-1.vercel.app",
                 "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png"
               },
               "brand": {
                 "@type": "Brand",
-                "name": "ZEDX AI",
-                "alternateName": ["ZEDX", "zedx", "zedx ai"]
+                "name": "ZEDX Copilot",
+                "alternateName": ["ZEDX", "zedx"]
               },
               "sameAs": [
                 "https://www.producthunt.com/posts/zedx-ai"
@@ -223,11 +221,11 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "ZEDX AI",
-              "alternateName": ["ZEDX", "zedx", "zedx ai", "ZedX"],
+              "name": "ZEDX Copilot",
+              "alternateName": ["ZEDX", "ZEDX Copilot"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
               "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
-              "description": "ZEDX AI - Free AI Interview Assistant & Copilot. Get real-time answers during job interviews.",
+              "description": "ZEDX Copilot - Free Real-Time Meeting & Accessibility Assistant.",
               "sameAs": [
                 "https://www.producthunt.com/posts/zedx-ai"
               ]

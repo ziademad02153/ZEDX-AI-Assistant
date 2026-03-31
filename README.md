@@ -1,137 +1,57 @@
-# ZEDX-AI: Professional Intelligence & Career Augmentation Systems
-
-## System Overview
-ZEDX-AI is a multi-tier intelligence ecosystem engineered to facilitate high-fidelity professional evaluations. The platform merges cloud-based context management with a low-level desktop execution environment, ensuring real-time AI guidance with sub-second latency and zero-detection footprints.
-
----
-
-## Infrastructure Architecture
-The following diagram illustrates the high-level orchestration between the Cloud Layer, the Local Runtime, and the Neural Inference Pipeline.
-
-```mermaid
-graph TD
-    subgraph "Cloud Infrastructure (Next.js & Supabase)"
-        WEB[Web Dashboard] --> AUTH[RLS Authentication]
-        WEB --> DB[(User Data Store)]
-        WEB --> CONTEXT[Context Pre-processor]
-    end
-
-    subgraph "Desktop Execution Environment (Electron)"
-        APP[ZEDX Console] --> SCAN[Stealth Scanner OCR]
-        APP --> AUDIO[Concurrent Audio Engine]
-        APP --> OVERLAY[Stealth Visual Layer]
-    end
-
-    subgraph "Neural Processing Layer (Groq & Llama)"
-        INF[Inference Gateway] --> STT[Whisper LPU]
-        INF --> LLM[Llama 3.3 70B]
-    end
-
-    DB -- Sync --> APP
-    AUDIO & SCAN --> INF
-    LLM --> OVERLAY
-```
-
----
-
-## Chapter 1: ZEDX-AI Web Platform
-The web component acts as the centralized command center for professional identity and data persistence.
-
-### Context Engine and Data Ingestion
-The platform utilizes a specialized ingestion pipeline for processing professional documentation. Resumes and Job Descriptions are not merely stored; they are parsed into structured context blocks that prime the AI engine before a session begins.
-
-### Key Features
-- **Stealth Scanner & Overlay**: Capture interview questions via screenshot or live transcription without detection.
-- **Real-Time AI Answers**: Get instant suggestions for coding, behavioral, and technical questions.
-- **Voice-to-Text**: High-accuracy speech recognition supports various accents and dialects.
-- **Resume Parsing**: Analyze your resume to tailor responses specifically for you.
-
-### Session Analytics and Persistence
-- **Military-Grade Security**: Data is protected via Supabase Row Level Security (RLS), ensuring no unauthorized access to sensitive interview transcripts.
-- **Cross-Device Sync**: Configuration and context data are seamlessly synchronized with the desktop client via secure real-time listeners.
-
----
-
-## Chapter 2: The Desktop Intelligence Console
-The desktop application is the primary execution shell for live interview augmentation.
-
-### Stealth Scanner (Optic Logic)
-The Stealth Scanner uses a localized OCR engine to capture non-selectable text from the screen.
-
-```mermaid
-flowchart LR
-    A[User Selects Area] --> B[Screen Buffer Capture]
-    B --> C[Grayscale Normalization]
-    C --> D[OCR Pattern Matching]
-    D --> E[Inference Tokenization]
-    E --> F[Prompt Injection]
-```
-
-### Zero-Detection Overlay (Rendering Protocol)
-The ZEDX rendering engine employs a "Phantom Layer" strategy. By utilizing hardware-accelerated transparent windowing and bypassing standard window hooks, the overlay remains invisible to all collaboration suites (Teams, Zoom, Google Meet).
-
-### Concurrent Audio Stream Processor
-A low-level listener captures system-out (interviewer's voice) and mic-in (user's voice) simultaneously.
-
-```mermaid
-graph LR
-    subgraph "Input Processing"
-        MIC[Microphone Input] --> VAD[Voice Activity Detection]
-        SYS[System Audio Out] --> MIX[Stream Mixer]
-    end
-    
-    MIX --> BUFFER[Real-time Audio Buffer]
-    BUFFER --> WHIZ[ZEDX-Whiz Engine]
-    WHIZ --> GROQ[Groq LPU Array]
-```
-
----
-
-## Chapter 3: Neural Processing & Inference Logic
-ZEDX-AI utilizes a load-balanced inference strategy to maintain sub-second responsiveness.
-
-### Inference Lifecycle
-1.  **Tokenization**: Real-time STT converts audio buffers into text tokens via Groq-accelerated Whisper models.
-2.  **Context Resolution**: The engine injects the user's pre-loaded professional context (Resume/JD) into the current turn.
-3.  **Generative Reasoning**: Llama 3.3 70B synthesizes the response, prioritizing technical accuracy and behavioral alignment.
-4.  **Display**: The final answer is pushed to the Stealth Overlay via an IPC (Inter-Process Communication) broadcast.
-
----
-
-## Chapter 4: Security and Privacy Protocols
-The system is architected on a foundation of absolute privacy and untraceability.
-
-| Protocol | Implementation | Objective |
-| :--- | :--- | :--- |
-| **Proxy Isolation** | Specialized Network Layer | Obfuscates AI traffic from system-level packet sniffers. |
-| **Volatile Buffers** | RAM-only Audio Logic | Ensures raw audio data is never written to disk. |
-| **Asymmetric Encryption** | RSA-4096 / AES-256 | Secures all context data at rest and in transit. |
-| **Hook Evasion** | Low-level API Bypass | Prevents "Screen Sharing" alerts in collaboration apps. |
-
----
-
-## Developer Documentation
-
-### Environment Requirements
-- **Node.js**: v20 or higher.
-- **Electron**: v39 (Native Runtime).
-- **Architecture**: Windows 10/11 (64-bit).
-
-### Build Orchestration
-```bash
-# Clone and Dependency Resolution
-git clone https://github.com/ziademad02153/ZEDX-AI-Assistant.git
-npm install
-
-# Live Development Execution
-npm run dev           # Initializes the Web Infrastructure
-npm run electron:dev  # Launches the Intelligent Desktop Console
-```
-
----
-
 <div align="center">
-  <p><strong>Standardizing Excellence in Career Intelligence Systems.</strong></p>
-  <p>Engineering & Design by <strong>Ziad Emad</strong></p>
-  <p><em>Copyright © 2026 ZEDX-AI. All Rights Reserved.</em></p>
+  <img src="public/zedx-logo.png" alt="ZEDX Copilot Logo" width="200"/>
+
+  # ZEDX Copilot
+  ### Real-Time Meeting & Accessibility Assistant
 </div>
+
+## Overview
+**ZEDX Copilot** is a high-performance, real-time audio processing and transcription assistant designed to make online meetings accessible, productive, and inclusive. By bridging local desktop environments with powerful cloud-based Large Language Models (LLMs), ZEDX Copilot provides instant captions, contextual insights, and meeting summaries specifically tailored to aid users with hearing impairments or those operating in fast-paced professional environments.
+
+Built using a hybrid architecture of a Next.js (React) front-end wrapped inside a custom Electron.js container, ZEDX provides deep system integration for seamless, secure, and unobtrusive operation across Windows and macOS platforms.
+
+---
+
+## Key Capabilities
+
+### 🎙️ Live Audio Processing (STT Engine)
+Powered by an optimized, low-latency implementation of Groq's Whisper API and local Web Speech API fallbacks:
+- **Zero-Latency Transcription:** Transcribes system audio and microphone input instantly.
+- **Multilingual Support:** Native processing for English, Arabic (including dialects like Egyptian), Spanish, and 30+ other languages.
+- **VAD (Voice Activity Detection):** Smart silence-trimming (tuned to 12ms thresholds) to prevent API payload bloat and ensure crisp context windows.
+
+### 🧠 Real-Time Cognitive Parsing (LLM Engine)
+Integrates tightly with LLaMA 3.1 architectures to process spoken text live:
+- **Meeting Context Awareness:** Analyzes incoming transcripts against pre-loaded meeting agendas or context documents to provide relevant insights.
+- **Global Best Practices Retrieval:** Answers technical queries or meeting topics by pulling strictly verified information dynamically without hallucination.
+- **Accessibility Auto-Summarization:** Generates instant bulleted summaries of loud, fast-paced discussions for users requiring cognitive assistance.
+
+### 🛡️ Enterprise-Grade Security
+- **Data Sovereignty:** Fully isolated API requests using ephemeral tokens. No data is stored persistently outside of user-controlled bounds.
+- **Row-Level Security (RLS):** Meeting transcripts and user data are secured via strict Supabase RLS policies ensuring complete isolation between organizational accounts.
+- **Opaque Token Authentication:** Upgraded from legacy JWTs to mathematically secure Publishable API integrations to prevent token sniffing.
+
+---
+
+## System Architecture
+
+ZEDX Copilot employs a sophisticated Micro-Frontend / IPC (Inter-Process Communication) topology:
+
+1. **The Core (Next.js 16 + React 19):** Hosts the heavy React logic, managing `Zustand` state models for audio streams, UI updates, and API lifecycles.
+2. **The Wrapper (Electron.js):** Acts as the bridge to system-level APIs. Using `desktopCapturer` and deeply isolated `preload.js` scripts, it enables the app to intercept desktop audio cleanly and provides the "Live Accessibility Overlay".
+3. **The IPC Bridge:** Connects React's web context to Node.js hardware access (microphone permissions, screen constraints, auto-updater mechanisms) without compromising browser sandbox security.
+
+## Engineering Challenges Overcome
+- **Audio Device Partitioning:** Resolving sync race conditions between Chrome's `MediaDevices` API and Electron's strict media permissions.
+- **Micro-Latency API Handling:** Implementing `TransformStream` pipelines in Next.js Edge Runtime to stream Server-Sent Events (SSE) back to the client word-by-word.
+- **React Hydration in Node:** Maintaining a "White-Screen Free" boot sequence by isolating state management from `window` objects during Next.js SSR passes.
+
+---
+
+## Future Roadmap (MLH Milestones)
+- **Offline Transcription Models:** Integrated ONNX WebAssembly (WASM) models to allow 100% offline, privacy-first transcription.
+- **Speaker Diarization:** AI-powered voice clustering to label "Speaker 1" and "Speaker 2" dynamically in multi-party meetings.
+- **Sign-Language Avatar Integration:** Forward-looking research for WebGL integration.
+
+### Developed by Ziad Emad
+*Committed to engineering software that bridges the gap between complex AI and daily human accessibility.*

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
-import { Download, Sparkles, CheckCircle2, Loader2 } from "lucide-react";
+import { Download, CheckCircle2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function DesktopNavBar() {
@@ -173,7 +173,7 @@ export function DesktopNavBar() {
                                     onClick={() => { window.location.href = '/interview'; setIsDropdownOpen(false); }}
                                     className="w-full px-3 py-2 text-left text-sm text-zinc-300 hover:bg-zinc-800 transition-colors"
                                 >
-                                    Interview Setup
+                                    Meeting Setup
                                 </button>
                                 <button
                                     onClick={() => { window.location.href = '/dashboard'; setIsDropdownOpen(false); }}

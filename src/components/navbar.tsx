@@ -84,7 +84,7 @@ export function Navbar() {
                         className="text-lg font-bold transition-colors"
                     >
                         <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all shadow-sm text-gray-700 dark:text-gray-200">
-                            About ZEDX AI
+                            About ZEDX Copilot
                         </span>
                     </Link>
 
@@ -117,17 +117,17 @@ export function Navbar() {
                                     </Link>
                                     <Link href="/dashboard/new" onClick={() => setIsSheetOpen(false)}>
                                         <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            New Interview
+                                            New Meeting
                                         </Button>
                                     </Link>
                                     <Link href="/dashboard/resumes" onClick={() => setIsSheetOpen(false)}>
                                         <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            My Resumes
+                                            My Context Files
                                         </Button>
                                     </Link>
                                     <Link href="/dashboard/history" onClick={() => setIsSheetOpen(false)}>
                                         <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            Interview History
+                                            Meeting History
                                         </Button>
                                     </Link>
 
@@ -145,7 +145,7 @@ export function Navbar() {
                                     </Link>
                                     <Link href="/about" onClick={() => setIsSheetOpen(false)}>
                                         <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            About ZEDX AI
+                                            About ZEDX Copilot
                                         </Button>
                                     </Link>
 

@@ -1,7 +1,7 @@
 {
   "name": "zedx-ai-desktop",
   "version": "1.1.2",
-  "description": "ZEDX AI - The ultimate AI Interview Assistant for real-time technical and behavioral guidance.",
+  "description": "Real-time AI meeting assistant",
   "author": "Ziad Emad",
   "private": true,
   "main": "electron/main.js",

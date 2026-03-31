@@ -58,7 +58,7 @@ export default function InterviewPage() {
     const [isRecording, setIsRecording] = useState(false);
     const [transcript, setTranscript] = useState("");
     const [interimTranscript, setInterimTranscript] = useState("");
-    const [aiResponse, setAiResponse] = useState("## Ready to Interview\n\nI am your AI Copilot. I will listen to your interview and provide real-time answers.\n\n**Instructions:**\n1. Click the microphone to start listening.\n2. Speak your interview question.\n3. When you need an answer, click **Get Answer**.");
+    const [aiResponse, setAiResponse] = useState("## Ready to Assist\n\nI am your AI Copilot. I will listen to your meeting and provide real-time context.\n\n**Instructions:**\n1. Click the microphone to start listening.\n2. Speak your question or discussion point.\n3. When you need context, click **Get Answer**.");
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -202,8 +202,8 @@ export default function InterviewPage() {
             // Construct the prompt (Unified for all providers)
             const systemPrompt = `
         SYSTEM INSTRUCTION:
-        You are the candidate in a job interview. You are NOT a coach. You are NOT an assistant.
-        Your name is Ziad (or whatever name is in the resume).
+        You are a smart meeting assistant acting on behalf of the user. You are NOT a coach.
+        Your name is (whatever name is in the context file).
 
         CRITICAL RULES:
         1. LANGUAGE INSTRUCTION: Answer strictly in the language: ${interviewContext.lang}. 
@@ -213,8 +213,8 @@ export default function InterviewPage() {
 
         2. Answer the question DIRECTLY. Do not say "Here is how I would answer". Just answer.
         3. **KNOWLEDGE USAGE:**
-           - **FOR PERSONAL EXPERIENCE QUESTIONS** (e.g., "Tell me about your time at X"): Stick STRICTLY to the provided Resume context.
-           - **FOR TECHNICAL/GENERAL QUESTIONS** (e.g., "What is React?", "How do you handle conflict?"): If the answer is NOT in the resume, **YOU MUST** answer using your general professional knowledge (Global Best Practices). Do NOT limit yourself to the resume if it doesn't cover the technical topic.
+           - **FOR PERSONAL EXPERIENCE QUESTIONS** (e.g., "Tell me about your time at X"): Stick STRICTLY to the provided context file.
+           - **FOR TECHNICAL/GENERAL QUESTIONS** (e.g., "What is React?", "How do you handle conflict?"): If the answer is NOT in the context file, **YOU MUST** answer using your general professional knowledge (Global Best Practices). Do NOT limit yourself to the context if it doesn't cover the technical topic.
            - NEVER use placeholders like "[insert date]". Use general estimates if needed.
         4. Keep answers concise (2-3 sentences max) and conversational.
 
@@ -226,9 +226,9 @@ export default function InterviewPage() {
         - If 'en-US', answer in English.
 
         CONTEXT:
-        - Interview Type: ${interviewContext.type}
-        - Job Description: ${interviewContext.jd || "Not provided"}
-        - Candidate Resume: ${interviewContext.resume || "Not provided"}
+        - Meeting Type: ${interviewContext.type}
+        - Meeting Notes/Agenda: ${interviewContext.jd || "Not provided"}
+        - User Context File: ${interviewContext.resume || "Not provided"}
         `;
 
             // Construct the prompt (Unified for all providers)
@@ -444,9 +444,9 @@ export default function InterviewPage() {
 
             // Add prompt to help Whisper understand the expected language
             if (langCode === 'en') {
-                formData.append('prompt', 'This is an English job interview conversation.');
+                formData.append('prompt', 'This is an English professional meeting conversation.');
             } else if (langCode === 'ar') {
-                formData.append('prompt', 'هذه محادثة مقابلة عمل باللغة العربية.');
+                formData.append('prompt', 'هذه محادثة اجتماع عمل باللغة العربية.');
             }
 
             console.log(`[Desktop STT] Sending audio with language: ${langCode}`);
@@ -1073,8 +1073,8 @@ export default function InterviewPage() {
         setIsSaving(true);
         try {
             const title = interviewContext.type
-                ? `${interviewContext.type} Interview`
-                : "Interview Session";
+                ? `${interviewContext.type} Meeting`
+                : "Meeting Session";
 
             // Calculate interview duration in minutes
             const durationMinutes = Math.round((new Date().getTime() - interviewStartTime.getTime()) / 60000);
@@ -1096,7 +1096,7 @@ export default function InterviewPage() {
                     questions: allQAPairs.map(qa => qa.question)
                 }
             );
-            showToast("Interview saved to history", "success");
+            showToast("Meeting saved to history", "success");
         } catch (error) {
             console.error("Failed to save interview:", error);
             // Still navigate even if save fails
@@ -1199,7 +1199,7 @@ export default function InterviewPage() {
                                 onClick={handleEndInterview}
                                 disabled={isSaving}
                                 className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg backdrop-blur-sm bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
-                                title="End Interview"
+                                title="End Meeting"
                             >
                                 {isSaving ? <Loader2 size={26} className="animate-spin" /> : <LogOut size={26} strokeWidth={2} />}
                             </button>
@@ -1261,7 +1261,7 @@ export default function InterviewPage() {
                             onClick={handleEndInterview}
                             disabled={isSaving}
                             className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-md bg-red-500 hover:bg-red-600 text-white disabled:opacity-50"
-                            title="End Interview"
+                            title="End Meeting"
                         >
                             {isSaving ? <Loader2 size={26} className="animate-spin" /> : <LogOut size={26} strokeWidth={2} />}
                         </button>
@@ -1334,7 +1334,7 @@ export default function InterviewPage() {
                                 )}
                             >
                                 <Scan size={14} />
-                                <span className="hidden sm:inline">{isScannerActive ? "Close Scanner" : "Stealth Scanner"}</span>
+                                <span className="hidden sm:inline">{isScannerActive ? "Close Scanner" : "Screen Capture"}</span>
                                 <span className="sm:hidden">{isScannerActive ? "Close" : "Scanner"}</span>
                             </Button>
                         </div>
@@ -1422,7 +1422,7 @@ export default function InterviewPage() {
                     </div>
                     {/* Debug Info */}
                     <div className="mt-2 text-[10px] text-gray-300 text-center">
-                        Context Loaded: Resume ({interviewContext.resume.length} chars) | JD ({interviewContext.jd.length} chars)
+                        Context Loaded: User File ({interviewContext.resume.length} chars) | Agenda ({interviewContext.jd.length} chars)
                     </div>
 
                 </div>
