@@ -2,56 +2,90 @@
   <img src="public/zedx-logo.png" alt="ZEDX Copilot Logo" width="200"/>
 
   # ZEDX Copilot
-  ### Real-Time Meeting & Accessibility Assistant
+  ### Professional AI Meeting & Accessibility Infrastructure
 </div>
 
-## Overview
-**ZEDX Copilot** is a high-performance, real-time audio processing and transcription assistant designed to make online meetings accessible, productive, and inclusive. By bridging local desktop environments with powerful cloud-based Large Language Models (LLMs), ZEDX Copilot provides instant captions, contextual insights, and meeting summaries specifically tailored to aid users with hearing impairments or those operating in fast-paced professional environments.
-
-Built using a hybrid architecture of a Next.js (React) front-end wrapped inside a custom Electron.js container, ZEDX provides deep system integration for seamless, secure, and unobtrusive operation across Windows and macOS platforms.
+## System Overview
+**ZEDX Copilot** is a high-availability, real-time audio processing and transcription ecosystem engineered to optimize online professional meetings. The platform interfaces directly with operating system audio layers and cloud-based Large Language Models (LLMs), executing deterministic transcriptions and contextual analysis with sub-second latency while maintaining an unobtrusive, accessible workspace environment.
 
 ---
 
-## Key Capabilities
+## Infrastructure Architecture
+The following topology illustrates the orchestration between the Cloud Layer, the Local Runtime Environment, and the Neural Inference Pipeline.
 
-### 🎙️ Live Audio Processing (STT Engine)
-Powered by an optimized, low-latency implementation of Groq's Whisper API and local Web Speech API fallbacks:
-- **Zero-Latency Transcription:** Transcribes system audio and microphone input instantly.
-- **Multilingual Support:** Native processing for English, Arabic (including dialects like Egyptian), Spanish, and 30+ other languages.
-- **VAD (Voice Activity Detection):** Smart silence-trimming (tuned to 12ms thresholds) to prevent API payload bloat and ensure crisp context windows.
+```mermaid
+graph TD
+    subgraph "Cloud Infrastructure (Next.js & Supabase)"
+        WEB[Application Dashboard] --> AUTH[RLS Authentication Gateway]
+        WEB --> DB[(Distributed Data Store)]
+        WEB --> CONTEXT[Context Pre-processor Node]
+    end
 
-### 🧠 Real-Time Cognitive Parsing (LLM Engine)
-Integrates tightly with LLaMA 3.1 architectures to process spoken text live:
-- **Meeting Context Awareness:** Analyzes incoming transcripts against pre-loaded meeting agendas or context documents to provide relevant insights.
-- **Global Best Practices Retrieval:** Answers technical queries or meeting topics by pulling strictly verified information dynamically without hallucination.
-- **Accessibility Auto-Summarization:** Generates instant bulleted summaries of loud, fast-paced discussions for users requiring cognitive assistance.
+    subgraph "Local Execution Environment (Electron Engine)"
+        SYS[System Audio Intercept] --> VAD[Voice Activity Detection Layer]
+        MIC[Hardware Microphone Allocation] --> VAD
+        VAD -- "Audio Chunks (WebM Format)" --> STT[Whisper Transcriber Module]
+        SCREEN[Secure Accessibility Overlay] --> OCR[Tesseract.js OCR Service]
+    end
 
-### 🛡️ Enterprise-Grade Security
-- **Data Sovereignty:** Fully isolated API requests using ephemeral tokens. No data is stored persistently outside of user-controlled bounds.
-- **Row-Level Security (RLS):** Meeting transcripts and user data are secured via strict Supabase RLS policies ensuring complete isolation between organizational accounts.
-- **Opaque Token Authentication:** Upgraded from legacy JWTs to mathematically secure Publishable API integrations to prevent token sniffing.
+    subgraph "Neural Processing Pipeline"
+        STT -- "Raw Data Streams" --> LLM[LLaMA-3.1 Inference Engine]
+        CONTEXT -- "Meeting Agenda Context" --> LLM
+        OCR -- "Extracted Screen Text" --> LLM
+        LLM -- "Actionable Insights" --> SCREEN
+    end
+
+    classDef cloud fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff;
+    classDef local fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#fff;
+    classDef neural fill:#312e81,stroke:#6366f1,stroke-width:2px,color:#fff;
+
+    class WEB,AUTH,DB,CONTEXT cloud;
+    class SYS,MIC,VAD,STT,SCREEN,OCR local;
+    class LLM neural;
+```
 
 ---
 
-## System Architecture
+## Core Operational Modules
 
-ZEDX Copilot employs a sophisticated Micro-Frontend / IPC (Inter-Process Communication) topology:
+### Live Audio Processing (STT Engine)
+Powered by an optimized, low-latency deployment of Groq Whisper API utilizing local Web Speech API fallbacks for robust redundancy:
+- **Zero-Latency Transcription:** Transcribes system-level audio and discrete microphone inputs systematically.
+- **Multilingual Support:** Native processing for English, Arabic (including complex regional dialects), Spanish, and 30+ international languages.
+- **VAD (Voice Activity Detection):** Implements heuristic silence-trimming calibrated to 12ms thresholds to mitigate API payload bloat and preserve isolated context continuous streams.
 
-1. **The Core (Next.js 16 + React 19):** Hosts the heavy React logic, managing `Zustand` state models for audio streams, UI updates, and API lifecycles.
-2. **The Wrapper (Electron.js):** Acts as the bridge to system-level APIs. Using `desktopCapturer` and deeply isolated `preload.js` scripts, it enables the app to intercept desktop audio cleanly and provides the "Live Accessibility Overlay".
-3. **The IPC Bridge:** Connects React's web context to Node.js hardware access (microphone permissions, screen constraints, auto-updater mechanisms) without compromising browser sandbox security.
+### Real-Time Cognitive Parsing (LLM Engine)
+Integrates highly performant LLaMA 3.1 architectures to process and index spoken dialogue actively:
+- **Meeting Context Awareness:** Cross-validates incoming transcription streams against pre-loaded meeting agendas or context documentation dynamically.
+- **Global Best Practices Retrieval:** Fetches and synthesizes verifiable technical query responses instantly by indexing verified professional methodologies.
+- **Accessibility Auto-Summarization:** Generates chronologically segmented bulleted summaries extracted from high-velocity discussions to support users requiring immediate cognitive reinforcement.
+
+### Enterprise-Grade Security
+- **Data Sovereignty Governance:** Forces isolated API request execution utilizing ephemeral, short-lived tokens. No conversational data is persisted in long-term storage outside user bounds.
+- **Row-Level Security (RLS):** All transcribed sessions and operational logs are secured via stringent Supabase RLS policies achieving complete cryptographic isolation between organizational accounts.
+- **Opaque Token Authentication:** Upgraded legacy JWT structures to mathematically secure Publishable API integration patterns mitigating token-sniffing vulnerabilities.
+
+---
+
+## Architectural Deep Dive
+
+ZEDX Copilot is structured around a sophisticated Micro-Frontend / IPC (Inter-Process Communication) topology:
+
+1. **The Core (Next.js 16 + React 19):** Hosts the computational React logic, orchestrating strict `Zustand` state models for managing distributed audio streams, UI rendering lifecycles, and API synchronicity.
+2. **The Wrapper (Electron.js):** Functions as the secure hardware bridge. Leveraging `desktopCapturer` configurations and deeply sandboxed `preload.js` scripts, the application intercepts target desktop audio streams and renders the "Live Accessibility Overlay" cleanly without intruding upon video conferencing protocol agents.
+3. **The IPC Bridge:** Facilitates secure communication pipelines connecting the React web context to native Node.js hardware access protocols (microphone allocations, screen dimension boundaries, auto-updater mechanisms) while maintaining absolute browser security sandboxing.
 
 ## Engineering Challenges Overcome
-- **Audio Device Partitioning:** Resolving sync race conditions between Chrome's `MediaDevices` API and Electron's strict media permissions.
-- **Micro-Latency API Handling:** Implementing `TransformStream` pipelines in Next.js Edge Runtime to stream Server-Sent Events (SSE) back to the client word-by-word.
-- **React Hydration in Node:** Maintaining a "White-Screen Free" boot sequence by isolating state management from `window` objects during Next.js SSR passes.
+- **Audio Device Partitioning:** Engineered custom arbitration layers to resolve asynchronous race conditions between the Chrome `MediaDevices` API standard and Electron’s strict media allocation permissions.
+- **Micro-Latency API Handling:** Implemented bidirectional `TransformStream` pipelines leveraging the Next.js Edge Runtime to parse and render Server-Sent Events (SSE) packet-by-packet.
+- **React Hydration in Node Environments:** Achieved a zero-flicker "White-Screen Free" initialization sequence by structurally isolating global state mechanisms from `window` objects during Next.js SSR compilation passes.
 
 ---
 
-## Future Roadmap (MLH Milestones)
-- **Offline Transcription Models:** Integrated ONNX WebAssembly (WASM) models to allow 100% offline, privacy-first transcription.
-- **Speaker Diarization:** AI-powered voice clustering to label "Speaker 1" and "Speaker 2" dynamically in multi-party meetings.
-- **Sign-Language Avatar Integration:** Forward-looking research for WebGL integration.
+## Future Blueprint (MLH Technical Milestones)
+- **Offline Transcription Models:** Deployment of ONNX WebAssembly (WASM) models to execute intensive transcriptions statically within a 100% offline, privacy-first topology.
+- **Speaker Diarization Vectors:** AI-driven biometric voice clustering to assign and tag distinct "Speaker 1" and "Speaker 2" labels dynamically across congested multi-party environments.
+- **Sign-Language Avatar Integration:** Forward-looking infrastructure research for WebGL computational rendering modules.
 
 ### Developed by Ziad Emad
-*Committed to engineering software that bridges the gap between complex AI and daily human accessibility.*
+*Committed to engineering software that bridges the gap between complex AI systems and daily human scalability.*
