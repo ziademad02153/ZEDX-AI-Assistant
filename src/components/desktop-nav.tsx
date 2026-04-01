@@ -169,12 +169,12 @@ export function DesktopNavBar() {
                                     <p className="text-white text-sm font-medium truncate">{userName}</p>
                                     <p className="text-zinc-400 text-xs truncate">{user.email}</p>
                                 </div>
-                                <button
-                                    onClick={() => { window.location.href = '/interview'; setIsDropdownOpen(false); }}
-                                    className="w-full px-3 py-2 text-left text-sm text-zinc-300 hover:bg-zinc-800 transition-colors"
-                                >
-                                    Meeting Setup
-                                </button>
+                                    <button
+                                        onClick={() => { window.location.href = '/interview'; setIsDropdownOpen(false); }}
+                                        className="w-full px-3 py-2 text-left text-sm text-zinc-300 hover:bg-zinc-800 transition-colors"
+                                    >
+                                        Simulation Setup
+                                    </button>
                                 <button
                                     onClick={() => { window.location.href = '/dashboard'; setIsDropdownOpen(false); }}
                                     className="w-full px-3 py-2 text-left text-sm text-zinc-300 hover:bg-zinc-800 transition-colors"

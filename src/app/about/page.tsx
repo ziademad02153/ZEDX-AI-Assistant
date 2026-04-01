@@ -6,9 +6,9 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
-    title: "About ZEDX Copilot - The Ultimate Meeting Assistant",
-    description: "Discover ZEDX Copilot, the next-gen meeting assistant. Features system audio capture, transcription overlay, and real-time AI context to help you master every meeting.",
-    keywords: ["ZEDX Copilot", "meeting copilot", "AI accessibility", "transcription overlay", "system audio capture"],
+    title: "About ZEDX Copilot - The Ultimate Interview Training Assistant",
+    description: "Discover ZEDX Copilot, the next-gen interview simulation assistant. Features system audio capture, transcription overlay, and real-time AI context to help you master every interview.",
+    keywords: ["ZEDX Copilot", "mock interview copilot", "AI training", "transcription overlay", "system audio capture"],
 };
 
 export default function AboutPage() {
@@ -31,15 +31,15 @@ export default function AboutPage() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                             </span>
-                            Revolutionizing Meeting Accessibility
+                            Revolutionizing Interview Training
                         </div>
 
                         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
                             The Future of <br className="hidden sm:block" />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 dark:from-emerald-400 dark:via-green-400 dark:to-teal-400">Professional Collaboration</span>
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 dark:from-emerald-400 dark:via-green-400 dark:to-teal-400">Interview Simulation</span>
                         </h1>
 
-                        ZEDX Copilot isn&apos;t just a transcription tool; it&apos;s your cognitive assistant. Engineered for speed, accuracy, and accessibility to help you master every meeting.
+                        ZEDX Copilot isn&apos;t just a transcription tool; it&apos;s your personal interview coach. Engineered for fresh graduates and job seekers to verify answers and master every mock interview.
                     </div>
                 </section>
 
@@ -53,10 +53,10 @@ export default function AboutPage() {
                             </h2>
                             <div className="space-y-6 text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
                                 <p>
-                                    Most meeting tools rely on bots that join calls awkwardly or fail to capture direct audio streams correctly. <strong className="text-gray-900 dark:text-white">ZEDX Copilot is different.</strong>
+                                    Most training tools rely on rigid generic questionnaires or bots that join calls awkwardly. <strong className="text-gray-900 dark:text-white">ZEDX Copilot is different.</strong>
                                 </p>
                                 <p>
-                                    We built a native desktop application that captures <span className="text-emerald-600 dark:text-emerald-400 font-medium">System Audio</span> directly from the OS soundcard, ensuring absolute clarity and privacy without sending bots into video calls.
+                                    We built a native desktop application that captures <span className="text-emerald-600 dark:text-emerald-400 font-medium">System Audio</span> directly from the OS soundcard, ensuring absolute clarity and privacy while you simulate your interviews without needing any bots.
                                 </p>
                             </div>
                         </div>
@@ -110,8 +110,8 @@ export default function AboutPage() {
 
                     <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
                         {[
-                            { icon: <Mic />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures key meeting moments instantly." },
-                            { icon: <Layers />, title: "Context Aware", desc: "Analyzes uploaded meeting agendas to tailor summaries specifically to your project." },
+                            { icon: <Mic />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures key interview questions instantly." },
+                            { icon: <Layers />, title: "Context Aware", desc: "Analyzes your uploaded CV and job descriptions to tailor answers specifically to your profile." },
                             { icon: <Globe />, title: "Multi-Language", desc: "Native support for English, Arabic, Spanish, and 30+ other global languages." },
                             { icon: <Zap />, title: "Instant Transcription", desc: "Powered by Groq™ for ultra-fast speech-to-text conversion with 99% accuracy." },
                             { icon: <Shield />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers." },
@@ -139,7 +139,7 @@ export default function AboutPage() {
                                     Ready to empower your workflow?
                                 </h2>
                                 <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-xl mx-auto">
-                                    Join thousands of professionals using ZEDX Copilot to elevate their meeting productivity.
+                                    Join thousands of job seekers and fresh graduates using ZEDX Copilot to elevate their interview skills.
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                     <Link href="/download">

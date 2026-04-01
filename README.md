@@ -1,7 +1,7 @@
 <div align="center">
   <img src="public/zedx-logo.png" alt="ZEDX Copilot Logo" width="180"/>
   <h1>ZEDX Copilot</h1>
-  <h3>Professional AI Meeting & Accessibility Infrastructure</h3>
+  <h3>Professional AI Mock Interview & Training Infrastructure</h3>
 
   <!-- Tech Stack Badges -->
   <p>
@@ -15,9 +15,9 @@
 </div>
 
 ## Executive Summary
-**ZEDX Copilot** represents a breakthrough in distributed real-time audio computation, offering a sophisticated cognitive accessibility layer for professional environments. Designed to seamlessly parse, process, and contextualize high-velocity multilingual conversations, the system leverages a micro-latency Speech-to-Text (STT) parsing engine and real-time Large Language Model (LLM) inference. 
+**ZEDX Copilot** represents a breakthrough in distributed real-time audio computation, offering an advanced mock interview and real-time training simulation platform for professional evaluation. Designed to seamlessly parse, process, and contextualize high-velocity simulated interview questions, the system leverages a micro-latency Speech-to-Text (STT) parsing engine and real-time Large Language Model (LLM) inference. 
 
-By employing a meticulously engineered Inter-Process Communication (IPC) bridge within an Electron shell, the application securely intercepts native OS hardware streams, operating as a strict, context-aware "Copilot" for professionals requiring immediate conversational transcription and cognitive reinforcement.
+By employing a meticulously engineered Inter-Process Communication (IPC) bridge within an Electron shell, the application securely intercepts native OS hardware streams, operating as a strict, context-aware "Copilot" for job seekers and fresh graduates requiring immediate interview feedback, benchmark answers, and cognitive reinforcement during training sessions.
 
 ---
 
@@ -136,7 +136,7 @@ graph LR
 ---
 
 ## 4. Security Subsystem & State Persistence
-Enterprise meeting contexts require absolute "Data Sovereignty Governance". ZEDX enforces rigorous database abstraction arrays out-of-the-box.
+Enterprise-grade interview simulation requires absolute "Data Sovereignty Governance". ZEDX enforces rigorous privacy for user CVs and training session records out-of-the-box.
 
 ```mermaid
 flowchart TD

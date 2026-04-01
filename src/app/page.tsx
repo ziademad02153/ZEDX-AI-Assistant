@@ -26,17 +26,17 @@ export default function Home() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              ZEDX Copilot: Live Meeting Assistant
+              ZEDX Copilot: Live Interview Simulation
             </div>
 
             <h1 className="text-[2.25rem] xs:text-4xl sm:text-5xl md:text-[5.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.15] md:leading-[1.1] max-w-[90rem] mx-auto px-4">
-              The #1 Real-Time Meeting <br className="xs:hidden" />
-              <span className="text-gradient-fusion">& Accessibility Assistant.</span>
+              Master Your Interviews with <br className="xs:hidden" />
+              <span className="text-gradient-fusion">Real-Time AI Simulation.</span>
             </h1>
 
             <p className="text-[0.95rem] md:text-xl text-gray-500 dark:text-gray-400 mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed font-medium px-6 md:px-0">
-              Transform your professional meetings. Get live transcriptions, contextual summaries, <br className="hidden md:block" />
-              and cognitive accessibility tools directly on your screen.
+              Upload your CV, simulate live interview questions, and receive instant AI-generated <br className="hidden md:block" />
+              benchmark answers to train and verify your performance in real-time.
             </p>
 
             <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4">
@@ -58,7 +58,7 @@ export default function Home() {
                   </div>
                   <div className="mx-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 px-3 py-1 md:px-4 md:py-1 rounded-full text-[10px] md:text-[12px] text-gray-500 font-bold flex items-center gap-2 md:gap-2.5">
                     <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    Live Meeting Analysis
+                    Live Interview Simulation
                   </div>
                 </div>
                 <div className="p-4 md:p-14 bg-white dark:bg-zinc-900 min-h-[320px] md:min-h-[440px] flex flex-col items-center justify-center relative overflow-hidden">
@@ -72,7 +72,7 @@ export default function Home() {
                         <Image src="/IIcon1.jpg" alt="Manager" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
                       <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
-                        Let&apos;s review the Q3 system metrics. What was the bottleneck in the database query?
+                        Let&apos;s review your CV. Can you explain the bottleneck you resolved in the database query?
                       </div>
                     </div>
 
@@ -118,7 +118,7 @@ export default function Home() {
                 </div>
                 <div className="mx-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 px-3 py-1 md:px-4 md:py-1 rounded-full text-[10px] md:text-[12px] text-gray-500 font-bold flex items-center gap-2 md:gap-2.5">
                   <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500 animate-pulse"></div>
-                  Technical Meeting - Architecture Review
+                  Mock Interview - Architecture Review
                 </div>
               </div>
               <div className="p-4 md:p-14 bg-white dark:bg-zinc-900 min-h-[380px] md:min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden">
@@ -220,7 +220,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-                  Upload meeting agendas or technical reports to get highly contextual live insights during your calls.
+                  Upload your CV or technical reports to get highly contextual benchmark answers during your practice sessions.
                 </p>
               </div>
 
@@ -228,25 +228,25 @@ export default function Home() {
               <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
                 <div className="mb-4">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-teal-100 text-teal-800 text-xs font-bold tracking-wider uppercase">
-                    Live Accessibility
+                    Live Verification
                   </span>
                 </div>
-                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Instant Transcriptions</h3>
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Instant Feedback</h3>
 
                 {/* Visual: Chat Bubble */}
                 <div className="flex-grow flex items-center justify-center mb-8 w-full">
                   <div className="space-y-3 w-full max-w-[280px]">
                     <div className="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-600 dark:text-gray-300 w-3/4">
-                      Did we align on the deployment schedule?
+                      Can you explain your experience with React?
                     </div>
                     <div className="bg-teal-50 dark:bg-teal-900/30 border border-teal-100 dark:border-teal-800 p-3 rounded-2xl rounded-tr-none shadow-sm text-sm text-gray-800 dark:text-gray-200 w-3/4 ml-auto">
-                      Yes, scheduled for Thursday 2 PM.
+                      I used React to build scalable web applications...
                     </div>
                   </div>
                 </div>
 
                 <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-                  ZEDX Copilot provides real-time captions and instantly summarizes long conversations for cognitive ease.
+                  ZEDX Copilot provides real-time verification and instantly generates the benchmark answer so you can check yours.
                 </p>
               </div>
 
@@ -280,7 +280,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-                  Real-time meeting transcriptions in any language - bridge communication barriers instantly, wherever you meet.
+                  Simulate interview questions in any language - practice your professional communication wherever you are.
                 </p>
               </div>
 
@@ -288,20 +288,20 @@ export default function Home() {
               <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
                 <div className="mb-4">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-[#84cc16] dark:bg-green-700 text-black dark:text-white text-xs font-bold tracking-wider uppercase">
-                    Summary
+                    Analysis
                   </span>
                 </div>
-                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">AI Summary &amp; Analysis</h3>
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Performance Analysis</h3>
 
                 {/* Visual: Summary Card Mockup */}
                 <div className="flex-grow flex items-center justify-center mb-8">
                   <div className="w-full max-w-[280px] bg-white dark:bg-zinc-800 border border-gray-100 dark:border-zinc-700 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-5 relative overflow-hidden">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center text-white font-bold text-xs">A</div>
+                        <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center text-white font-bold text-xs">P</div>
                         <div>
-                          <div className="text-xs font-bold text-gray-900 dark:text-white">Acme</div>
-                          <div className="text-[10px] text-gray-400">Meeting Analysis</div>
+                          <div className="text-xs font-bold text-gray-900 dark:text-white">Training</div>
+                          <div className="text-[10px] text-gray-400">Interview Analysis</div>
                         </div>
                       </div>
                       <div className="flex gap-0.5">
@@ -321,7 +321,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-                  After each meeting, get detailed automated minutes and AI-powered action items to keep your team aligned.
+                  After each practice session, get detailed automated feedback and AI-powered action items to improve your answers.
                 </p>
               </div>
 

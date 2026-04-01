@@ -117,7 +117,7 @@ export function Navbar() {
                                     </Link>
                                     <Link href="/dashboard/new" onClick={() => setIsSheetOpen(false)}>
                                         <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            New Meeting
+                                            New Simulation
                                         </Button>
                                     </Link>
                                     <Link href="/dashboard/resumes" onClick={() => setIsSheetOpen(false)}>
@@ -127,7 +127,7 @@ export function Navbar() {
                                     </Link>
                                     <Link href="/dashboard/history" onClick={() => setIsSheetOpen(false)}>
                                         <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            Meeting History
+                                            Training History
                                         </Button>
                                     </Link>
 

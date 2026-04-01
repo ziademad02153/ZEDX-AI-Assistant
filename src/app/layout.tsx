@@ -20,15 +20,15 @@ export const metadata: Metadata = {
     capable: true,
   },
   title: {
-    default: "ZEDX Copilot - Live Meeting & Accessibility Assistant",
+    default: "ZEDX Copilot - Interview Simulation & Training Assistant",
     template: "%s | ZEDX Copilot"
   },
-  description: "ZEDX Copilot is a real-time AI meeting assistant providing live transcriptions, contextual summaries, and cognitive accessibility during professional meetings.",
+  description: "ZEDX Copilot is a real-time AI interview simulation assistant providing live transcriptions, benchmark answers, and feedback for job seekers and fresh graduates.",
   keywords: [
-    "ZEDX", "ZEDX AI", "ZEDX Copilot", "Meeting Assistant", "Live Transcription",
-    "Accessibility Tool", "Meeting Copilot", "AI Meeting Notes", "Real-time AI Assistant",
-    "Hearing Impaired Assistant", "Zoom Copilot", "Teams Assistant", "Google Meet Copilot",
-    "مساعد اجتماعات", "تفريغ صوتي مباشر", "ذكاء اصطناعي", "مساعد ذوي الهمم"
+    "ZEDX", "ZEDX AI", "ZEDX Copilot", "Mock Interview Assistant", "Live Transcription",
+    "Interview Simulation", "Mock Interview Copilot", "AI Interview Notes", "Real-time AI Assistant",
+    "Training Assistant", "Interview Practice", "Job Seeker Assistant", "AI Coach",
+    "محاكاة مقابلات", "تفريغ صوتي مباشر", "تدريب انترفيو", "ذكاء اصطناعي", "مساعد شخصي"
   ],
   authors: [{ name: "ZEDX AI Team", url: "https://zedx-ai-assistant-1.vercel.app" }],
   creator: "ZEDX AI",
@@ -49,14 +49,14 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://zedx-ai-assistant-1.vercel.app",
     siteName: "ZEDX Copilot",
-    title: "ZEDX Copilot - Live Meeting Assistant",
-    description: "Your live meeting transcription and cognitive accessibility assistant.",
+    title: "ZEDX Copilot - Interview Simulation Assistant",
+    description: "Your live interview simulation and training assistant.",
     images: [
       {
         url: "/zedx-cyberpunk-banner.png",
         width: 1200,
         height: 630,
-        alt: "ZEDX Copilot - Meeting Assistant",
+        alt: "ZEDX Copilot - Interview Simulation Assistant",
       },
       {
         url: "/zedx-logo.png",
@@ -68,8 +68,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ZEDX Copilot - Live Meeting Assistant",
-    description: "Real-time AI meeting transcription and accessibility insights.",
+    title: "ZEDX Copilot - Interview Simulation Assistant",
+    description: "Real-time AI interview simulation and verification insights.",
     images: ["/zedx-cyberpunk-banner.png"],
     creator: "@zedx_ai",
   },
@@ -124,6 +124,7 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-title" content="ZEDX Copilot" />
         <meta name="msvalidate.01" content="410978477B68DFFC4D1109011EAF121F" />
         <script
+          key="theme-script"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -141,6 +142,7 @@ export default async function RootLayout({
         />
         {/* JSON-LD Structured Data for SEO - Site Identity */}
         <script
+          key="schema-site-identity"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -161,6 +163,7 @@ export default async function RootLayout({
         />
         {/* Organization Schema for Logo recognition */}
         <script
+          key="schema-org-logo"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -176,6 +179,7 @@ export default async function RootLayout({
           }}
         />
         <script
+          key="schema-webapp"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -184,7 +188,7 @@ export default async function RootLayout({
               "name": "ZEDX Copilot",
               "alternateName": ["ZEDX Copilot", "ZEDX"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
-              "description": "ZEDX Copilot is a real-time AI meeting assistant providing live transcriptions and accessibility features.",
+              "description": "ZEDX Copilot is a real-time AI interview simulation assistant providing live transcriptions and answer verification.",
               "applicationCategory": "BusinessApplication",
               "operatingSystem": "Web Browser",
               "offers": {
@@ -216,6 +220,7 @@ export default async function RootLayout({
         />
         {/* Organization Schema for Brand Recognition */}
         <script
+          key="schema-org-brand"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -225,7 +230,7 @@ export default async function RootLayout({
               "alternateName": ["ZEDX", "ZEDX Copilot"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
               "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
-              "description": "ZEDX Copilot - Free Real-Time Meeting & Accessibility Assistant.",
+              "description": "ZEDX Copilot - Free Real-Time Interview Simulation & Training Assistant.",
               "sameAs": [
                 "https://www.producthunt.com/posts/zedx-ai"
               ]
