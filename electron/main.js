@@ -50,7 +50,7 @@ function createScannerFrame() {
         skipTaskbar: true,
         resizable: false,
         movable: true,
-        focusable: true,
+        focusable: false, // GHOST MODE: Prevent focus stealing
         thickFrame: false,
         hasShadow: false,
         backgroundColor: '#00000000',
@@ -107,6 +107,7 @@ function createFloatingIcon() {
         resizable: false,
         movable: true,
         hasShadow: false,
+        focusable: false, // GHOST MODE: Prevent focus stealing
         icon: ICON_PATH,
         show: true,
         webPreferences: {
@@ -144,7 +145,7 @@ function createMainAppWindow() {
         resizable: true,
         movable: true,
         hasShadow: true,
-        focusable: true,
+        focusable: false, // GHOST MODE: Prevent focus stealing
         show: true,
         backgroundColor: '#18181b',
         webPreferences: {
@@ -194,16 +195,14 @@ function toggleApp() {
         mainAppWindow.hide();
         isAppVisible = false;
     } else {
-        mainAppWindow.show();
-        mainAppWindow.focus();
+        mainAppWindow.showInactive(); // GHOST MODE: Show without stealing focus
         isAppVisible = true;
     }
 }
 
 function showApp() {
     if (!mainAppWindow) return;
-    mainAppWindow.show();
-    mainAppWindow.focus();
+    mainAppWindow.showInactive(); // GHOST MODE: Show without stealing focus
 }
 
 function setupIpcHandlers() {
