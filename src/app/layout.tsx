@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "ZEDX", "ZEDX AI", "ZEDX AI Simulator", "Mock Interview Assistant", "Live Transcription",
     "Interview Simulation", "Mock Interview Assessor", "AI Interview Notes", "Real-time AI Assistant",
     "Training Assistant", "Interview Practice", "Job Seeker Assistant", "AI Coach",
-    "محاكاة مقابلات", "تفريغ صوتي مباشر", "تدريب انترفيو", "ذكاء اصطناعي", "مساعد شخصي"
+    "interview simulator", "live transcription", "interview training", "artificial intelligence", "personal assistant"
   ],
   authors: [{ name: "ZEDX AI Team", url: "https://zedx-ai-assistant-1.vercel.app" }],
   creator: "ZEDX AI",

@@ -512,7 +512,7 @@ export default function InterviewPage() {
                 }
 
                 lastGroqTranscriptRef.current = clean;
-                console.log(`[Desktop STT] ✅ Heard (${langCode}): "${newText}"`);
+                console.log(`[Desktop STT] Heard (${langCode}): "${newText}"`);
 
                 setTranscript(prev => {
                     const prevTrimmed = prev.trim();
@@ -609,7 +609,7 @@ export default function InterviewPage() {
                         isSpeaking = true;
                         speechStart = Date.now();
                         audioChunks = [];
-                        console.log("[VAD] ⚡ Speech detected!");
+                        console.log("[VAD] Speech detected!");
 
                         // Create a mixed stream for the MediaRecorder
                         const dest = audioContext.createMediaStreamDestination();

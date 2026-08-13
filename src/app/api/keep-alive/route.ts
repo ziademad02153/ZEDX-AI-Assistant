@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 
 /**
  * Keep-Alive Cron Job
- * يُرسل طلباً بسيطاً لـ Supabase كل 3 أيام لمنع إيقاف المشروع تلقائياً
- * يتم استدعاؤه عبر Vercel Cron Jobs (vercel.json)
+ * Sends a simple request to Supabase every 3 days to prevent automatic project pausing
+ * Called via Vercel Cron Jobs (vercel.json)
  */
 export async function GET() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -22,7 +22,7 @@ export async function GET() {
   try {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // إرسال طلب بسيط لإبقاء المشروع نشطاً
+    // Send a simple request to keep the project active
     const { error } = await supabase.from('interviews').select('id').limit(1);
 
     if (error) {

@@ -34,4 +34,3 @@ The transcription system is divided into two operational modes:
 ---
 Engineering Excellence. 
 Professional Dominance.
-🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️🛡️ (في الشات بس!)
