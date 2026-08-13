@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import React, { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { interviewService, Interview } from "@/lib/interview-service";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2, Target, MessageSquare, Brain, CheckCircle, AlertTriangle } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+
 
 // Define the expected structure of our AI scorecard
 interface Scorecard {
@@ -102,10 +102,10 @@ ${data.analysis?.ai_responses?.join("\n\n") || "None."}
             
             // Clean up the JSON if the LLM added markdown backticks
             let jsonString = resData.content.trim();
-            if (jsonString.startsWith("\`\`\`json")) {
-                jsonString = jsonString.replace(/\`\`\`json/g, "").replace(/\`\`\`/g, "").trim();
-            } else if (jsonString.startsWith("\`\`\`")) {
-                jsonString = jsonString.replace(/\`\`\`/g, "").trim();
+            if (jsonString.startsWith("```json")) {
+                jsonString = jsonString.replace(/```json/g, "").replace(/```/g, "").trim();
+            } else if (jsonString.startsWith("```")) {
+                jsonString = jsonString.replace(/```/g, "").trim();
             }
 
             const parsedScorecard = JSON.parse(jsonString);
