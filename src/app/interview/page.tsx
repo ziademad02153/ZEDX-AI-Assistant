@@ -213,6 +213,7 @@ export default function InterviewPage() {
            - **NEVER USE MARKDOWN TABLES.** They are impossible to read during a live interview.
            - Keep your answer extremely concise, focused, and conversational (max 3-4 short bullet points or a short paragraph).
            - This is a live interview, so your answer must be easy to read at a glance.
+           - **CODING EXCEPTION:** If the question is a programming/coding problem (e.g., LeetCode, algorithms), you MUST provide the FULL code solution in a code block, but keep the explanation before/after the code extremely brief.
            - Do not write long essays or exhaustive comparisons. Provide just enough depth to prove expertise without being overwhelming.
         4. **INTERVIEW STRATEGY**: Provide the "Benchmark Answer". Focus on what makes a candidate stand out: problem-solving, impact, and clarity.
         5. **LANGUAGE**: Strictly use ${interviewContext.lang}.
