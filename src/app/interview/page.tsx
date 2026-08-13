@@ -1079,7 +1079,7 @@ export default function InterviewPage() {
                 ? allQAPairs.map((qa, idx) => `Q${idx + 1}: ${qa.question}\n\nA${idx + 1}: ${qa.answer}`).join('\n\n---\n\n')
                 : transcript;
 
-            await interviewService.saveInterview(
+            const savedInterview = await interviewService.saveInterview(
                 title,
                 formattedTranscript,
                 {
@@ -1092,12 +1092,13 @@ export default function InterviewPage() {
                 }
             );
             showToast("Meeting saved to history", "success");
+            router.push(`/dashboard/report/${savedInterview.id}`);
         } catch (error) {
             console.error("Failed to save interview:", error);
             // Still navigate even if save fails
+            router.push("/dashboard");
         } finally {
             setIsSaving(false);
-            router.push("/dashboard");
         }
     };
 

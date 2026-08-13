@@ -12,6 +12,7 @@ export interface SessionAnalysis {
     ai_responses?: string[];
     duration_minutes?: number;
     questions?: string[];
+    scorecard?: Record<string, any>;
 }
 
 /**
@@ -70,6 +71,34 @@ export const interviewService = {
         } catch (error) {
             if (error instanceof InterviewServiceError) throw error;
             throw new InterviewServiceError("Unexpected error fetching sessions", error);
+        }
+    },
+
+    /**
+     * Retrieves a single session by its ID.
+     */
+    getInterviewById: async (id: string): Promise<Interview> => {
+        try {
+            const { data: { user }, error: authError } = await supabase.auth.getUser();
+            if (authError || !user) {
+                throw new InterviewServiceError("User not authenticated", authError);
+            }
+
+            const { data, error } = await supabase
+                .from('interviews')
+                .select('*')
+                .eq('id', id)
+                .eq('user_id', user.id)
+                .single();
+
+            if (error) {
+                throw new InterviewServiceError("Failed to fetch meeting session", error);
+            }
+            
+            return data as Interview;
+        } catch (error) {
+            if (error instanceof InterviewServiceError) throw error;
+            throw new InterviewServiceError("Unexpected error fetching session", error);
         }
     },
 
@@ -138,6 +167,35 @@ export const interviewService = {
         } catch (error) {
             if (error instanceof InterviewServiceError) throw error;
             throw new InterviewServiceError("Unexpected error deleting session", error);
+        }
+    },
+
+    /**
+     * Updates an existing session (e.g., adding a scorecard).
+     */
+    updateInterview: async (id: string, updates: Partial<Interview>): Promise<Interview> => {
+        try {
+            const { data: { user }, error: authError } = await supabase.auth.getUser();
+            if (authError || !user) {
+                throw new InterviewServiceError("User not authenticated", authError);
+            }
+
+            const { data, error } = await supabase
+                .from('interviews')
+                .update(updates)
+                .eq('id', id)
+                .eq('user_id', user.id)
+                .select()
+                .single();
+
+            if (error) {
+                throw new InterviewServiceError("Failed to update meeting session", error);
+            }
+            
+            return data as Interview;
+        } catch (error) {
+            if (error instanceof InterviewServiceError) throw error;
+            throw new InterviewServiceError("Unexpected error updating session", error);
         }
     }
 };
