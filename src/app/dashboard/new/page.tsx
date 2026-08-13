@@ -187,7 +187,7 @@ export default function NewInterviewPage() {
                             <h1 className="text-2xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400 mb-1 sm:mb-2">
                                 Setup Interview
                             </h1>
-                            <p className="text-sm sm:text-lg text-gray-500 dark:text-gray-400">Configure your AI copilot for the perfect session.</p>
+                            <p className="text-sm sm:text-lg text-gray-500 dark:text-gray-400">Configure your AI simulator for the perfect session.</p>
                         </div>
                     </div>
                 </div>

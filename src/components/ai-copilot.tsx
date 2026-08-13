@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export function AiCopilot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<{ role: "user" | "ai", content: string }[]>([
-        { role: "ai", content: "Hello! I'm your silent interview copilot. Ask me anything, and I'll help you discreetly." }
+        { role: "ai", content: "Welcome! I am your AI Mock Interviewer. Provide your answers and I will evaluate them professionally." }
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -83,7 +83,7 @@ export function AiCopilot() {
                     <div className="p-3 border-b border-white/10 flex justify-between items-center bg-white/5">
                         <div className="flex items-center gap-2 text-sm font-medium text-gray-800 dark:text-white">
                             <Sparkles size={16} className="text-yellow-400" />
-                            AI Copilot
+                            AI Assessor
                         </div>
                         <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full hover:bg-white/10" onClick={() => setIsOpen(false)}>
                             <X size={14} />

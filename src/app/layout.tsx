@@ -13,20 +13,20 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://zedx-ai-assistant-1.vercel.app"),
-  applicationName: "ZEDX Copilot",
+  applicationName: "ZEDX Interview Simulator",
   appleWebApp: {
-    title: "ZEDX Copilot",
+    title: "ZEDX Interview Simulator",
     statusBarStyle: "default",
     capable: true,
   },
   title: {
-    default: "ZEDX Copilot - Interview Simulation & Training Assistant",
-    template: "%s | ZEDX Copilot"
+    default: "ZEDX Interview Simulator & Training Assistant",
+    template: "%s | ZEDX Interview Simulator"
   },
-  description: "ZEDX Copilot is a real-time AI interview simulation assistant providing live transcriptions, benchmark answers, and feedback for job seekers and fresh graduates.",
+  description: "ZEDX Interview Simulator is a real-time AI interview simulation assistant providing live transcriptions, benchmark answers, and feedback for job seekers and fresh graduates.",
   keywords: [
-    "ZEDX", "ZEDX AI", "ZEDX Copilot", "Mock Interview Assistant", "Live Transcription",
-    "Interview Simulation", "Mock Interview Copilot", "AI Interview Notes", "Real-time AI Assistant",
+    "ZEDX", "ZEDX AI", "ZEDX Simulator", "Mock Interview Assistant", "Live Transcription",
+    "Interview Simulation", "Mock Interview Assessor", "AI Interview Notes", "Real-time AI Assistant",
     "Training Assistant", "Interview Practice", "Job Seeker Assistant", "AI Coach",
     "محاكاة مقابلات", "تفريغ صوتي مباشر", "تدريب انترفيو", "ذكاء اصطناعي", "مساعد شخصي"
   ],
@@ -48,27 +48,27 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://zedx-ai-assistant-1.vercel.app",
-    siteName: "ZEDX Copilot",
-    title: "ZEDX Copilot - Interview Simulation Assistant",
+    siteName: "ZEDX Interview Simulator",
+    title: "ZEDX Interview Simulator - Assessment Assistant",
     description: "Your live interview simulation and training assistant.",
     images: [
       {
         url: "/zedx-cyberpunk-banner.png",
         width: 1200,
         height: 630,
-        alt: "ZEDX Copilot - Interview Simulation Assistant",
+        alt: "ZEDX Interview Simulator - Assessment Assistant",
       },
       {
         url: "/zedx-logo.png",
         width: 512,
         height: 512,
-        alt: "ZEDX Copilot Logo",
+        alt: "ZEDX Simulator Logo",
       }
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ZEDX Copilot - Interview Simulation Assistant",
+    title: "ZEDX Interview Simulator - Assessment Assistant",
     description: "Real-time AI interview simulation and verification insights.",
     images: ["/zedx-cyberpunk-banner.png"],
     creator: "@zedx_ai",
@@ -118,10 +118,10 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={isScanner ? "bg-transparent" : ""}>
       <head>
-        <meta name="name" content="ZEDX Copilot" />
+        <meta name="name" content="ZEDX Interview Simulator" />
         <meta name="author" content="Ziad Emad" />
-        <meta property="og:site_name" content="ZEDX Copilot" />
-        <meta name="apple-mobile-web-app-title" content="ZEDX Copilot" />
+        <meta property="og:site_name" content="ZEDX Interview Simulator" />
+        <meta name="apple-mobile-web-app-title" content="ZEDX Interview Simulator" />
         <meta name="msvalidate.01" content="410978477B68DFFC4D1109011EAF121F" />
         <script
           key="theme-script"
@@ -148,8 +148,8 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "name": "ZEDX Copilot",
-              "alternateName": ["ZEDX", "ZEDX Copilot", "ZedX AI Assistant"],
+              "name": "ZEDX Interview Simulator",
+              "alternateName": ["ZEDX", "ZEDX Simulator", "ZedX AI Assistant"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
               "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
               "image": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
@@ -169,7 +169,7 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "ZEDX Copilot",
+              "name": "ZEDX Interview Simulator",
               "url": "https://zedx-ai-assistant-1.vercel.app",
               "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
               "sameAs": [
@@ -185,10 +185,10 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              "name": "ZEDX Copilot",
-              "alternateName": ["ZEDX Copilot", "ZEDX"],
+              "name": "ZEDX Interview Simulator",
+              "alternateName": ["ZEDX Simulator", "ZEDX"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
-              "description": "ZEDX Copilot is a real-time AI interview simulation assistant providing live transcriptions and answer verification.",
+              "description": "ZEDX Interview Simulator is a real-time AI interview simulation assistant providing live transcriptions and answer verification.",
               "applicationCategory": "BusinessApplication",
               "operatingSystem": "Web Browser",
               "offers": {
@@ -203,13 +203,13 @@ export default async function RootLayout({
               },
               "author": {
                 "@type": "Organization",
-                "name": "ZEDX Copilot",
+                "name": "ZEDX Interview Simulator",
                 "url": "https://zedx-ai-assistant-1.vercel.app",
                 "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png"
               },
               "brand": {
                 "@type": "Brand",
-                "name": "ZEDX Copilot",
+                "name": "ZEDX Interview Simulator",
                 "alternateName": ["ZEDX", "zedx"]
               },
               "sameAs": [
@@ -226,11 +226,11 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "ZEDX Copilot",
-              "alternateName": ["ZEDX", "ZEDX Copilot"],
+              "name": "ZEDX Interview Simulator",
+              "alternateName": ["ZEDX", "ZEDX Simulator"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
               "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
-              "description": "ZEDX Copilot - Free Real-Time Interview Simulation & Training Assistant.",
+              "description": "ZEDX Interview Simulator - Free Real-Time Interview Simulation & Training Assistant.",
               "sameAs": [
                 "https://www.producthunt.com/posts/zedx-ai"
               ]

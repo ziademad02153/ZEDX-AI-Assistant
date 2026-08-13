@@ -38,7 +38,7 @@ export default function HowToUsePage() {
             border: "border-emerald-500/20"
         },
         {
-            title: isElectron ? "System Audio (Screen Sharing)" : "Interview Context",
+            title: isElectron ? "Internal Audio Routing" : "Interview Context",
             description: isElectron
                 ? "Capture the interviewer's voice directly from your system. Best for high-quality transcription in noiseless environments."
                 : "The AI uses your JD and Resume to provide the most relevant answers for your specific background.",
@@ -48,7 +48,7 @@ export default function HowToUsePage() {
             border: "border-teal-500/20"
         },
         {
-            title: "Stealth Scanner",
+            title: "Assessment Overlay",
             description: "Use the scanner for code snippets or text you can't copy. The AI will analyze the screenshot in real-time.",
             icon: <Scan className="w-8 h-8" />,
             color: "from-green-600 to-emerald-700",
@@ -100,7 +100,7 @@ export default function HowToUsePage() {
                     className="text-center mb-8 sm:mb-16 px-4"
                 >
                     <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-emerald-600 to-gray-900 dark:from-white dark:via-emerald-400 dark:to-white pb-4 leading-[1.2] sm:leading-tight">
-                        Mastering the Copilot
+                        Mastering the Simulator
                     </h1>
                     <p className="text-gray-500 dark:text-gray-400 text-base sm:text-xl max-w-2xl mx-auto">
                         Quick guide to ensure a flawless interview session with maximum precision.
@@ -151,7 +151,7 @@ export default function HowToUsePage() {
 
                     <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-medium">
                         <CheckCircle2 size={18} />
-                        <span>Setup Complete • Stealth Mode Active</span>
+                        <span>Setup Complete • Simulation Mode Active</span>
                     </div>
                 </motion.div>
             </div>

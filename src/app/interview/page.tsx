@@ -58,7 +58,7 @@ export default function InterviewPage() {
     const [isRecording, setIsRecording] = useState(false);
     const [transcript, setTranscript] = useState("");
     const [interimTranscript, setInterimTranscript] = useState("");
-    const [aiResponse, setAiResponse] = useState("## Ready to Assist\n\nI am your AI Copilot. I will listen to your meeting and provide real-time context.\n\n**Instructions:**\n1. Click the microphone to start listening.\n2. Speak your question or discussion point.\n3. When you need context, click **Get Answer**.");
+    const [aiResponse, setAiResponse] = useState("## Ready to Assist\n\nI am your Mock Assessor. I will listen to your session and provide real-time feedback.\n\n**Instructions:**\n1. Click the microphone to start listening.\n2. Speak your question or discussion point.\n3. When you need feedback, click **Get Feedback**.");
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -355,7 +355,7 @@ export default function InterviewPage() {
             console.log("[Screen Audio] Source ID received:", sourceId);
             try {
                 if (!navigator.mediaDevices?.getUserMedia) {
-                    throw new Error("System audio capture not supported.");
+                    throw new Error("Internal audio routing not supported.");
                 }
                 const stream = await navigator.mediaDevices.getUserMedia({
                     audio: {
@@ -398,7 +398,7 @@ export default function InterviewPage() {
             } catch (err: unknown) {
                 console.error("[Screen Audio] Failed to get stream:", err as Error);
                 setIsScreenAudioActive(false);
-                setError("System audio capture failed (Permission or selection issue).");
+                setError("Internal audio routing failed (Permission or selection issue).");
             }
         });
 
@@ -578,7 +578,7 @@ export default function InterviewPage() {
             const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
             // VAD Parameters (Ultra-Low Latency Mode)
-            const SPEECH_THRESHOLD = 12;        // Increased sensitivity for system audio
+            const SPEECH_THRESHOLD = 12;        // Increased sensitivity for internal audio
             const SILENCE_DURATION = 800;       // 0.8s silence = End of sentence (Fast & snappy)
             const MIN_SPEECH_DURATION = 500;    // Allow short sentences
             const MAX_RECORDING_TIME = 15000;   // Force send after 15s
@@ -1183,7 +1183,7 @@ export default function InterviewPage() {
                                             ? "bg-blue-500 text-white scale-110 shadow-blue-500/40"
                                             : "bg-black/40 text-white hover:bg-black/60 border border-white/10"
                                     )}
-                                    title={isScreenAudioActive ? "Stop System Audio" : "Start System Audio (Screen Sharing)"}
+                                    title={isScreenAudioActive ? "Stop Internal Audio" : "Start Internal Audio Routing"}
                                 >
                                     {isScreenAudioActive ? <Monitor size={26} strokeWidth={2.5} /> : <MonitorOff size={26} strokeWidth={2} />}
                                 </button>
@@ -1245,7 +1245,7 @@ export default function InterviewPage() {
                                         ? "bg-blue-500 text-white scale-110 shadow-blue-500/30 ring-4 ring-blue-100 dark:ring-blue-900/30"
                                         : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
                                 )}
-                                title={isScreenAudioActive ? "Stop System Audio" : "Start System Audio (Screen Sharing)"}
+                                title={isScreenAudioActive ? "Stop Internal Audio" : "Start Internal Audio Routing"}
                             >
                                 {isScreenAudioActive ? <Monitor size={26} strokeWidth={2.5} /> : <MonitorOff size={26} strokeWidth={2} />}
                             </button>
@@ -1293,7 +1293,7 @@ export default function InterviewPage() {
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
                         <h3 className="font-bold flex items-center gap-2 text-lg text-gray-900 dark:text-white">
                             <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-                            AI Copilot
+                            Mock Assessor
                         </h3>
                         <div className="flex flex-wrap gap-2">
                             <Button

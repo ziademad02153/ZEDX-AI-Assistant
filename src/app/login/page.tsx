@@ -242,7 +242,7 @@ export default function LoginPage() {
                             </div>
                             <div>
                                 <h3 className="font-bold text-lg text-white">Private & Secure</h3>
-                                <p className="text-gray-400 leading-relaxed">Your data is encrypted and your preparation is completely discreet.</p>
+                                <p className="text-gray-400 leading-relaxed">Your data is encrypted and your assessment data is completely secure.</p>
                             </div>
                         </div>
                     </div>

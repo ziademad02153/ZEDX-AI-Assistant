@@ -4,7 +4,7 @@ const path = require('path');
 
 const ICON_PATH = path.join(__dirname, '..', 'public', 'favicon.ico');
 
-function initStealth() {
+function initOverlaySystem() {
     if (process.platform === 'win32') {
         app.setAppUserModelId('System.Helper');
     }
@@ -23,7 +23,7 @@ let isScannerFrameOpen = false;
 const isDev = !app.isPackaged;
 const APP_URL = isDev ? 'http://localhost:3000' : 'https://zedx-ai-assistant-1.vercel.app';
 
-// --- STEALTH SCANNER FRAME ---
+// --- ASSESSMENT OVERLAY FRAME ---
 function createScannerFrame() {
     // v19.0 FIX: Remove listeners from old window before destroying to prevent race condition "closed" signals
     if (scannerFrameWindow) {
@@ -140,7 +140,7 @@ function createMainAppWindow() {
         transparent: false,
         icon: ICON_PATH,
         alwaysOnTop: true,
-        skipTaskbar: true, // HIDE FROM TASKBAR
+        skipTaskbar: true, // HUD BACKGROUND MODE
         resizable: true,
         movable: true,
         hasShadow: true,
@@ -249,14 +249,14 @@ function setupIpcHandlers() {
     ipcMain.on('toggle-app', () => toggleApp());
     ipcMain.on('show-app', () => showApp());
 
-    ipcMain.on('hide-app', () => {
+    ipcMain.on('minimize-to-background', () => {
         if (mainAppWindow) {
             mainAppWindow.hide();
             isAppVisible = false;
         }
     });
 
-    ipcMain.on('hide-icon', () => {
+    ipcMain.on('minimize-icon', () => {
         if (floatingIconWindow) {
             floatingIconWindow.hide();
         }
@@ -329,7 +329,7 @@ function createTray() {
 }
 
 async function initialize() {
-    initStealth();
+    initOverlaySystem();
     session.defaultSession.setPermissionRequestHandler((wc, p, cb) => cb(['media', 'audioCapture', 'speech'].includes(p)));
     session.defaultSession.setPermissionCheckHandler((wc, p) => ['media', 'audioCapture', 'speech'].includes(p));
     createFloatingIcon();

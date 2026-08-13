@@ -29,7 +29,7 @@ export default function DownloadPage() {
                             "priceCurrency": "USD"
                         },
                         "downloadUrl": "https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.1/ZEDX.AI.Setup.1.1.1.exe",
-                        "featureList": "Real-time Meeting Transcription, System Audio Capture, Context Analysis, Accessibility Overlay, AI Copilot",
+                        "featureList": "Real-time Meeting Transcription, Internal Audio Routing, Context Analysis, Accessibility Overlay, AI Simulator",
                         "author": {
                             "@type": "Organization",
                             "name": "ZEDX AI"
@@ -57,7 +57,7 @@ export default function DownloadPage() {
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400">ZEDX Desktop</span>
                         </h1>
                         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                            Don&apos;t rely on low-quality browser microphones. The desktop app captures <strong className="text-emerald-500">System Audio</strong> securely, so you get flawless meeting transcriptions instantly.
+                            Don&apos;t rely on low-quality browser microphones. The desktop app utilizes <strong className="text-emerald-500">Internal Audio Routing</strong> securely, so you get flawless meeting transcriptions instantly.
                         </p>
                     </div>
 
@@ -86,7 +86,7 @@ export default function DownloadPage() {
                                 </li>
                                 <li className="flex gap-3 opacity-50">
                                     <Monitor className="text-red-400 shrink-0" />
-                                    <span>Cannot capture System Audio (Headphones)</span>
+                                    <span>Cannot route internal audio (Headphones)</span>
                                 </li>
                             </ul>
                             <Link href="/dashboard" className="block">
@@ -124,7 +124,7 @@ export default function DownloadPage() {
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>System Audio Capture:</strong> Transcribe meeting participants flawlessly, even with headphones.
+                                        <strong>Internal Audio Routing:</strong> Transcribe meeting participants flawlessly, even with headphones.
                                     </span>
                                 </li>
                                 <li className="flex gap-3 items-start">

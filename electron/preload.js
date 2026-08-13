@@ -4,7 +4,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Window controls
     toggleApp: () => ipcRenderer.send('toggle-app'),
     showApp: () => ipcRenderer.send('show-app'),
-    hideApp: () => ipcRenderer.send('hide-app'),
+    hideApp: () => ipcRenderer.send('minimize-to-background'),
     closeApp: () => ipcRenderer.send('close-app'),
     goBack: () => ipcRenderer.send('go-back'),
     canGoBack: () => ipcRenderer.sendSync('can-go-back'),
@@ -48,14 +48,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Error Handling & Connectivity
     retryConnection: () => ipcRenderer.send('retry-connection'),
     quitApp: () => ipcRenderer.send('quit-app'),
-    hideIcon: () => ipcRenderer.send('hide-icon'),
+    hideIcon: () => ipcRenderer.send('minimize-icon'),
     onLoadError: (callback) => {
         const wrapper = (event, errorDescription) => callback(errorDescription);
         ipcRenderer.on('load-error', wrapper);
         return () => ipcRenderer.removeListener('load-error', wrapper);
     },
 
-    // --- STEALTH SCANNER API ---
+    // --- ASSESSMENT OVERLAY API ---
     toggleScannerFrame: () => ipcRenderer.invoke('toggle-scanner-frame'),
     updateScannerBounds: (bounds) => ipcRenderer.send('update-scanner-bounds', bounds),
     captureScannerArea: (bounds) => ipcRenderer.invoke('capture-scanner-area', bounds),

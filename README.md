@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="public/zedx-logo.png" alt="ZEDX Copilot Logo" width="180"/>
-  <h1>ZEDX Copilot</h1>
+  <img src="public/zedx-logo.png" alt="ZEDX Simulator Logo" width="180"/>
+  <h1>ZEDX Simulator</h1>
   <h3>Professional AI Mock Interview & Training Infrastructure</h3>
 
   <!-- Tech Stack Badges -->
@@ -15,14 +15,14 @@
 </div>
 
 ## Executive Summary
-**ZEDX Copilot** represents a breakthrough in distributed real-time audio computation, offering an advanced mock interview and real-time training simulation platform for professional evaluation. Designed to seamlessly parse, process, and contextualize high-velocity simulated interview questions, the system leverages a micro-latency Speech-to-Text (STT) parsing engine and real-time Large Language Model (LLM) inference. 
+**ZEDX Simulator** represents a breakthrough in distributed real-time audio computation, offering an advanced mock interview and real-time training simulation platform for professional evaluation. Designed to seamlessly parse, process, and contextualize high-velocity interview answers, the system leverages a micro-latency Speech-to-Text (STT) parsing engine and real-time Large Language Model (LLM) inference. 
 
-By employing a meticulously engineered Inter-Process Communication (IPC) bridge within an Electron shell, the application securely intercepts native OS hardware streams, operating as a strict, context-aware "Copilot" for job seekers and fresh graduates requiring immediate interview feedback, benchmark answers, and cognitive reinforcement during training sessions.
+By employing a meticulously engineered Inter-Process Communication (IPC) bridge within an Electron shell, the application securely captures user microphone input, operating as a strict, context-aware "Interviewer and Assessor" for job seekers and fresh graduates requiring rigorous interview practice, instant performance feedback, and cognitive reinforcement during training sessions.
 
 ---
 
 ##  Performance Metrics & System Benchmarks
-ZEDX Copilot is engineered for uncompromised speed. The following metrics are continuously validated under standard operational loads:
+ZEDX Simulator is engineered for uncompromised speed. The following metrics are continuously validated under standard operational loads:
 
 | Subsystem Component | Metric | Deterministic Output | Operational Benefit |
 | :--- | :--- | :--- | :--- |
@@ -45,7 +45,7 @@ graph TD
     end
 
     subgraph "Local Execution Layer (Electron OS Engine)"
-        SYS[Desktop System Audio Intercept] --> VAD[Voice Activity Detection Layer]
+        SYS[Local Microphone Audio Capture] --> VAD[Voice Activity Detection Layer]
         MIC[Hardware Microphone Allocation] --> VAD
         IPC[IPC Secure Bridge] --> API
     end
@@ -78,7 +78,7 @@ sequenceDiagram
     participant VAD as VAD Middleware (Web Worker)
     participant STT as Whisper API Endpoint
     
-    UI->>OSE: Request Exclusive System Audio Hook
+    UI->>OSE: Request Internal Audio Routing Hook
     OSE-->>UI: Grant MediaStream Track constraints
     loop Continuous Buffering Loop
         UI->>VAD: Stream raw 16kHz byte-chunks
@@ -98,7 +98,7 @@ sequenceDiagram
 ---
 
 ## 3. Cognitive Context Injection (LLM Logic Flow)
-ZEDX Copilot dynamically replicates strict Retrieval-Augmented Generation (RAG) paradigms in-memory via high-velocity edge components. 
+ZEDX Simulator dynamically replicates strict Retrieval-Augmented Generation (RAG) paradigms in-memory via high-velocity edge components. 
 
 ```mermaid
 graph LR
@@ -158,7 +158,7 @@ flowchart TD
 
 ##  Codebase Directory Architecture (Separation of Concerns)
 
-ZEDX Copilot enforces a modular, highly uncoupled Directory structure for enterprise scaling:
+ZEDX Simulator enforces a modular, highly uncoupled Directory structure for enterprise scaling:
 ```text
 ZEDX-AI-Assistant/
 ├── electron/                   # Native hardware bridge (IPC, DesktopCapturer, Window Constraints)
@@ -177,7 +177,7 @@ ZEDX-AI-Assistant/
 
 ##  Environment Strategy & Pipeline Requirements
 
-To operate ZEDX Copilot securely within a local developer environment, the following configuration parameters must be mounted in `.env.local`:
+To operate ZEDX Simulator securely within a local developer environment, the following configuration parameters must be mounted in `.env.local`:
 
 | Variable Key | System Purpose | Validation Constraint |
 | :--- | :--- | :--- |

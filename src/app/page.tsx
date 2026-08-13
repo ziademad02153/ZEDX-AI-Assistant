@@ -26,7 +26,7 @@ export default function Home() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              ZEDX Copilot: Live Interview Simulation
+              ZEDX Simulator: Live Interview Simulation
             </div>
 
             <h1 className="text-[2.25rem] xs:text-4xl sm:text-5xl md:text-[5.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.15] md:leading-[1.1] max-w-[90rem] mx-auto px-4">
@@ -35,8 +35,8 @@ export default function Home() {
             </h1>
 
             <p className="text-[0.95rem] md:text-xl text-gray-500 dark:text-gray-400 mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed font-medium px-6 md:px-0">
-              Upload your CV, simulate live interview questions, and receive instant AI-generated <br className="hidden md:block" />
-              benchmark answers to train and verify your performance in real-time.
+              Upload your CV, practice with live interview questions, and receive instant AI-generated <br className="hidden md:block" />
+              assessment and feedback to train and improve your performance in real-time.
             </p>
 
             <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4">
@@ -72,7 +72,7 @@ export default function Home() {
                         <Image src="/IIcon1.jpg" alt="Manager" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
                       <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
-                        Let&apos;s review your CV. Can you explain the bottleneck you resolved in the database query?
+                        &quot;I noticed the PostgreSQL join logic was causing a 4-second delay, so I added a composite index...&quot;
                       </div>
                     </div>
 
@@ -81,9 +81,9 @@ export default function Home() {
                         <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
                           <Sparkles className="w-4 h-4 md:w-6 md:h-6 text-green-500 fill-green-500" />
                         </div>
-                        <p className="font-extrabold text-green-600 mb-1.5 md:mb-2.5 text-[9px] md:text-sm uppercase tracking-widest">Live Insight</p>
+                        <p className="font-extrabold text-green-600 mb-1.5 md:mb-2.5 text-[9px] md:text-sm uppercase tracking-widest">Instant Feedback</p>
                         <p className="leading-relaxed">
-                          &quot;Based on last month&apos;s report, the PostgreSQL join logic on the analytics table was causing a 4-second delay. Adding a composite index decreased execution time by 85%...&quot;
+                          Great technical explanation! However, to make this answer stronger, mention the exact percentage of time saved (e.g., decreased execution time by 85%).
                         </p>
                       </div>
                       <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
@@ -132,7 +132,7 @@ export default function Home() {
                       <Image src="/IIcon1.jpg" alt="CTO" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
                     <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
-                      How would you implement a custom React hook to track the previous value of a prop?
+                      &quot;I would use a combination of useState and useEffect to store the old prop when the component re-renders...&quot;
                     </div>
                   </div>
 
@@ -141,7 +141,7 @@ export default function Home() {
                       <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
                         <Sparkles className="w-4 h-4 md:w-6 md:h-6 text-green-500 fill-green-500" />
                       </div>
-                      <p className="font-extrabold text-green-600 mb-1.5 md:mb-2.5 text-[9px] md:text-sm uppercase tracking-widest">AI Code Suggestion</p>
+                      <p className="font-extrabold text-green-600 mb-1.5 md:mb-2.5 text-[9px] md:text-sm uppercase tracking-widest">Mock Reviewer</p>
                       <div className="bg-gray-900/5 dark:bg-white/5 rounded-xl p-2.5 md:p-4 mb-3 md:mb-4 font-mono text-[9px] md:text-sm leading-relaxed overflow-x-auto border border-black/5 dark:border-white/5">
                         <pre className="text-emerald-900 dark:text-emerald-200">
                           {`const usePrevious = (value) => {
@@ -154,7 +154,7 @@ export default function Home() {
                         </pre>
                       </div>
                       <p className="leading-relaxed text-[0.85rem] md:text-[1rem] text-gray-700 dark:text-gray-200">
-                        This hook utilizes <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useRef</code> to persist the value and <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useEffect</code> to update it.
+                        Using <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useState</code> here will cause an extra render! The correct approach is to utilize <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useRef</code> to persist the value.
                       </p>
                     </div>
                     <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
@@ -220,7 +220,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-                  Upload your CV or technical reports to get highly contextual benchmark answers during your practice sessions.
+                  Upload your CV or technical reports to get highly contextual interview questions and personalized feedback during practice.
                 </p>
               </div>
 
@@ -246,7 +246,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-                  ZEDX Copilot provides real-time verification and instantly generates the benchmark answer so you can check yours.
+                  ZEDX Simulator listens to your answers and instantly generates real-time feedback and corrections to help you improve.
                 </p>
               </div>
 

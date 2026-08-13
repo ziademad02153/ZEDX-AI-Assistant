@@ -192,7 +192,7 @@ export function DesktopNavBar() {
                                         onClick={handleClose}
                                         className="w-full px-3 py-2 text-left text-sm text-zinc-300 hover:bg-zinc-800 transition-colors"
                                     >
-                                        Hide App
+                                        Background Mode
                                     </button>
                                     <button
                                         onClick={handleSignOut}

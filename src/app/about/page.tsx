@@ -6,9 +6,9 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
-    title: "About ZEDX Copilot - The Ultimate Interview Training Assistant",
-    description: "Discover ZEDX Copilot, the next-gen interview simulation assistant. Features system audio capture, transcription overlay, and real-time AI context to help you master every interview.",
-    keywords: ["ZEDX Copilot", "mock interview copilot", "AI training", "transcription overlay", "system audio capture"],
+    title: "About ZEDX Simulator - The Ultimate Interview Training Assistant",
+    description: "Discover ZEDX Simulator, the next-gen interview simulation assistant. Features internal audio routing, assessment overlay, and real-time AI context to help you master every interview.",
+    keywords: ["ZEDX Simulator", "mock interview assessor", "AI training", "assessment overlay", "internal audio routing"],
 };
 
 export default function AboutPage() {
@@ -39,7 +39,7 @@ export default function AboutPage() {
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 dark:from-emerald-400 dark:via-green-400 dark:to-teal-400">Interview Simulation</span>
                         </h1>
 
-                        ZEDX Copilot isn&apos;t just a transcription tool; it&apos;s your personal interview coach. Engineered for fresh graduates and job seekers to verify answers and master every mock interview.
+                        ZEDX Simulator isn&apos;t just a transcription tool; it&apos;s your personal interview coach. Engineered for fresh graduates and job seekers to verify answers and master every mock interview.
                     </div>
                 </section>
 
@@ -53,10 +53,10 @@ export default function AboutPage() {
                             </h2>
                             <div className="space-y-6 text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
                                 <p>
-                                    Most training tools rely on rigid generic questionnaires or bots that join calls awkwardly. <strong className="text-gray-900 dark:text-white">ZEDX Copilot is different.</strong>
+                                    Most training tools rely on rigid generic questionnaires or bots that join calls awkwardly. <strong className="text-gray-900 dark:text-white">ZEDX Simulator is different.</strong>
                                 </p>
                                 <p>
-                                    We built a native desktop application that captures <span className="text-emerald-600 dark:text-emerald-400 font-medium">System Audio</span> directly from the OS soundcard, ensuring absolute clarity and privacy while you simulate your interviews without needing any bots.
+                                    We built a native desktop application that utilizes <span className="text-emerald-600 dark:text-emerald-400 font-medium">Internal Audio Routing</span> directly from the OS soundcard, ensuring absolute clarity and privacy while you simulate your interviews without needing any bots.
                                 </p>
                             </div>
                         </div>
@@ -87,7 +87,7 @@ export default function AboutPage() {
                                             <Cpu size={24} />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-gray-900 dark:text-white">System Audio Core</h3>
+                                            <h3 className="font-bold text-gray-900 dark:text-white">Internal Audio Routing</h3>
                                             <p className="text-sm text-gray-500 dark:text-gray-400">Captures output directly from OS.</p>
                                         </div>
                                     </div>
@@ -139,7 +139,7 @@ export default function AboutPage() {
                                     Ready to empower your workflow?
                                 </h2>
                                 <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-xl mx-auto">
-                                    Join thousands of job seekers and fresh graduates using ZEDX Copilot to elevate their interview skills.
+                                    Join thousands of job seekers and fresh graduates using ZEDX Simulator to elevate their interview skills.
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                     <Link href="/download">

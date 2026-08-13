@@ -24,7 +24,7 @@ export interface ElectronAPI {
     // Overlay Controls
     resizeOverlay: (width: number, height: number) => void;
     setIgnoreMouseEvents: (ignore: boolean, options?: { forward?: boolean }) => void;
-    // Stealth Scanner
+    // Assessment Overlay
     toggleScannerFrame: () => Promise<{ active: boolean }>;
     updateScannerBounds: (bounds: { x: number, y: number, width: number, height: number }) => void;
     captureScannerArea: (bounds: { x: number, y: number, width: number, height: number }) => Promise<{ success: boolean; error?: string }>;
