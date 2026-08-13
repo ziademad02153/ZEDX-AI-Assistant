@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="public/zedx-logo.png" alt="ZEDX Simulator Logo" width="180"/>
-  <h1>ZEDX Simulator</h1>
+  <img src="public/zedx-logo.png" alt="ZEDX AI Simulator Logo" width="180"/>
+  <h1>ZEDX AI Simulator</h1>
   <h3>Professional AI Mock Interview & Training Infrastructure</h3>
 
   <!-- Tech Stack Badges -->
@@ -15,14 +15,14 @@
 </div>
 
 ## Executive Summary
-**ZEDX Simulator** represents a breakthrough in distributed real-time audio computation, offering an advanced mock interview and real-time training simulation platform for professional evaluation. Designed to seamlessly parse, process, and contextualize high-velocity interview answers, the system leverages a micro-latency Speech-to-Text (STT) parsing engine and real-time Large Language Model (LLM) inference. 
+**ZEDX AI Simulator** represents a breakthrough in distributed real-time audio computation, offering an advanced mock interview and real-time training simulation platform for professional evaluation. Designed to seamlessly parse, process, and contextualize high-velocity interview answers, the system leverages a micro-latency Speech-to-Text (STT) parsing engine and real-time Large Language Model (LLM) inference. 
 
 By employing a meticulously engineered Inter-Process Communication (IPC) bridge within an Electron shell, the application securely captures user microphone input, operating as a strict, context-aware "Interviewer and Assessor" for job seekers and fresh graduates requiring rigorous interview practice, instant performance feedback, and cognitive reinforcement during training sessions.
 
 ---
 
 ##  Performance Metrics & System Benchmarks
-ZEDX Simulator is engineered for uncompromised speed. The following metrics are continuously validated under standard operational loads:
+ZEDX AI Simulator is engineered for uncompromised speed. The following metrics are continuously validated under standard operational loads:
 
 | Subsystem Component | Metric | Deterministic Output | Operational Benefit |
 | :--- | :--- | :--- | :--- |
@@ -98,7 +98,7 @@ sequenceDiagram
 ---
 
 ## 3. Cognitive Context Injection (LLM Logic Flow)
-ZEDX Simulator dynamically replicates strict Retrieval-Augmented Generation (RAG) paradigms in-memory via high-velocity edge components. 
+ZEDX AI Simulator dynamically replicates strict Retrieval-Augmented Generation (RAG) paradigms in-memory via high-velocity edge components. 
 
 ```mermaid
 graph LR
@@ -158,7 +158,7 @@ flowchart TD
 
 ##  Codebase Directory Architecture (Separation of Concerns)
 
-ZEDX Simulator enforces a modular, highly uncoupled Directory structure for enterprise scaling:
+ZEDX AI Simulator enforces a modular, highly uncoupled Directory structure for enterprise scaling:
 ```text
 ZEDX-AI-Assistant/
 ├── electron/                   # Native hardware bridge (IPC, DesktopCapturer, Window Constraints)
@@ -177,7 +177,7 @@ ZEDX-AI-Assistant/
 
 ##  Environment Strategy & Pipeline Requirements
 
-To operate ZEDX Simulator securely within a local developer environment, the following configuration parameters must be mounted in `.env.local`:
+To operate ZEDX AI Simulator securely within a local developer environment, the following configuration parameters must be mounted in `.env.local`:
 
 | Variable Key | System Purpose | Validation Constraint |
 | :--- | :--- | :--- |

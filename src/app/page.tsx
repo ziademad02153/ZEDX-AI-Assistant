@@ -26,7 +26,7 @@ export default function Home() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              ZEDX Simulator: Live Interview Simulation
+              ZEDX AI Simulator: Live Interview Simulation
             </div>
 
             <h1 className="text-[2.25rem] xs:text-4xl sm:text-5xl md:text-[5.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.15] md:leading-[1.1] max-w-[90rem] mx-auto px-4">
@@ -246,7 +246,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-                  ZEDX Simulator listens to your answers and instantly generates real-time feedback and corrections to help you improve.
+                  ZEDX AI Simulator listens to your answers and instantly generates real-time feedback and corrections to help you improve.
                 </p>
               </div>
 
