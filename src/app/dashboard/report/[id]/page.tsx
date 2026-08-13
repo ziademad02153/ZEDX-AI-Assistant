@@ -44,7 +44,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                     // Generate it!
                     generateScorecard(data);
                 }
-            } catch (err: any) {
+            } catch (err: unknown) {
                 console.error(err);
                 setError("Failed to load interview report.");
             } finally {
@@ -166,7 +166,7 @@ ${data.analysis?.ai_responses?.join("\n\n") || "None."}
     }
 
     // Helper for circular progress
-    const CircularProgress = ({ value, label, icon: Icon, colorClass }: { value: number, label: string, icon: any, colorClass: string }) => (
+    const CircularProgress = ({ value, label, icon: Icon, colorClass }: { value: number, label: string, icon: React.ElementType, colorClass: string }) => (
         <div className="flex flex-col items-center p-6 bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-gray-100 dark:border-zinc-800 relative overflow-hidden group hover:shadow-lg transition-all">
             <div className={\`absolute top-0 right-0 w-32 h-32 opacity-5 rounded-bl-full \${colorClass}\`}></div>
             <div className="relative w-28 h-28 mb-4">
