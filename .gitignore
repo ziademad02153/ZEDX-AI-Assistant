@@ -45,3 +45,4 @@ yarn-error.log*
 
 # Binaries & Large files (Setup files shouldn't be in git)
 public/*.exe
+*.7z
