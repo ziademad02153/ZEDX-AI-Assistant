@@ -1,6 +1,6 @@
 <div align="center">
   <img src="public/zedx-logo.png" alt="ZEDX Simulator Logo" width="180"/>
-  <h1>ZEDX Simulator</h1>
+  <h1>ZEDX AI Simulator</h1>
   <h3>Professional AI Mock Interview & Training Infrastructure</h3>
 
   <!-- Tech Stack Badges -->
