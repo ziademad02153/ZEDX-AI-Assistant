@@ -209,10 +209,11 @@ export default function InterviewPage() {
         2. **CONTEXT AWARENESS**: 
            - Use the provided context (Resume/JD) for personal questions.
            - For technical or general questions, provide industry-leading, expert-level insights.
-        3. **DYNAMIC LENGTH (CRITICAL)**:
-           - Adjust your length based on the question. 
-           - If the question is simple or introductory, be brief and punchy.
-           - If the question is technical, architectural, or complex, provide a detailed, logical, and well-structured explanation that demonstrates deep expertise.
+        3. **CONCISE & SPOKEN FORMAT (CRITICAL)**:
+           - **NEVER USE MARKDOWN TABLES.** They are impossible to read during a live interview.
+           - Keep your answer extremely concise, focused, and conversational (max 3-4 short bullet points or a short paragraph).
+           - This is a live interview, so your answer must be easy to read at a glance.
+           - Do not write long essays or exhaustive comparisons. Provide just enough depth to prove expertise without being overwhelming.
         4. **INTERVIEW STRATEGY**: Provide the "Benchmark Answer". Focus on what makes a candidate stand out: problem-solving, impact, and clarity.
         5. **LANGUAGE**: Strictly use ${interviewContext.lang}.
            - If 'ar-EG', use professional Egyptian Arabic (Ammiya) but keep technical terms in English where appropriate. Avoid overly formal Fusha.
