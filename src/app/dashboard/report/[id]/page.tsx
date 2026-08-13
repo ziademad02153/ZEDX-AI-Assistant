@@ -168,7 +168,7 @@ ${data.analysis?.ai_responses?.join("\n\n") || "None."}
     // Helper for circular progress
     const CircularProgress = ({ value, label, icon: Icon, colorClass }: { value: number, label: string, icon: React.ElementType, colorClass: string }) => (
         <div className="flex flex-col items-center p-6 bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-gray-100 dark:border-zinc-800 relative overflow-hidden group hover:shadow-lg transition-all">
-            <div className={\`absolute top-0 right-0 w-32 h-32 opacity-5 rounded-bl-full \${colorClass}\`}></div>
+            <div className={`absolute top-0 right-0 w-32 h-32 opacity-5 rounded-bl-full ${colorClass}`}></div>
             <div className="relative w-28 h-28 mb-4">
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                     <path
@@ -179,9 +179,9 @@ ${data.analysis?.ai_responses?.join("\n\n") || "None."}
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
                     <path
-                        className={\`\${colorClass} transition-all duration-1000 ease-out\`}
+                        className={`${colorClass} transition-all duration-1000 ease-out`}
                         strokeWidth="3"
-                        strokeDasharray={\`\${value}, 100\`}
+                        strokeDasharray={`${value}, 100`}
                         strokeLinecap="round"
                         stroke="currentColor"
                         fill="none"
