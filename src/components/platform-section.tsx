@@ -88,7 +88,7 @@ function MarqueeRow({ icons, duration, reverse = false }: { icons: PlatformIcon[
 export function PlatformSection() {
     return (
         <section className="py-20 relative z-10 overflow-hidden">
-            <div className="container mx-auto px-4 max-w-5xl">
+            <div className="container mx-auto px-4 max-w-6xl">
                 {/* Premium Green Card */}
                 <div className="relative bg-gradient-to-br from-[#22c55e] to-[#14532d] rounded-[2.5rem] p-10 md:p-14 overflow-hidden shadow-2xl min-h-[450px] border border-white/10 flex items-center">
 
@@ -119,22 +119,23 @@ export function PlatformSection() {
                             <MarqueeRow icons={iconsSet2} duration="18s" reverse />
                             <MarqueeRow icons={iconsSet3} duration="20s" />
                         </div>
+                    </div>
 
-                        {/* Static ZEDX Robot Mascot - Pinned to Bottom (Parakeet match) */}
-                        <div className="absolute bottom-0 -right-4 sm:-right-10 md:-right-20 w-72 h-72 sm:w-80 sm:h-80 md:w-[480px] md:h-[480px] z-20 pointer-events-none">
-                            <div className="relative w-full h-full flex items-end">
-                                <Image
-                                    src="/zedx-logo-for-v.png"
-                                    alt="ZEDX AI Robot Mascot"
-                                    width={480}
-                                    height={480}
-                                    className="object-contain object-bottom drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] relative z-10 transition-transform hover:scale-105 duration-700"
-                                    unoptimized
-                                    priority
-                                />
-                            </div>
+                    {/* Static ZEDX Robot Mascot - Pinned to Bottom (Parakeet match) */}
+                    <div className="absolute bottom-0 -right-4 sm:-right-10 md:-right-14 w-72 h-72 sm:w-80 sm:h-80 md:w-[480px] md:h-[480px] z-20 pointer-events-none">
+                        <div className="relative w-full h-full flex items-end">
+                            <Image
+                                src="/zedx-logo-for-v.png"
+                                alt="ZEDX AI Robot Mascot"
+                                width={480}
+                                height={480}
+                                className="object-contain object-bottom drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] relative z-10 transition-transform hover:scale-105 duration-700 transform-origin-bottom"
+                                unoptimized
+                                priority
+                            />
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
