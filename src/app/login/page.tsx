@@ -232,8 +232,8 @@ export default function LoginPage() {
                                 <Trophy className="text-emerald-400" size={24} />
                             </div>
                             <div>
-                                <h3 className="font-bold text-lg text-white">Unfair Advantage</h3>
-                                <p className="text-gray-400 leading-relaxed">Access a curated database of top-tier answers tailored specifically to your resume.</p>
+                                <h3 className="font-bold text-lg text-white">Competitive Edge</h3>
+                                <p className="text-gray-400 leading-relaxed">Access a curated database of top-tier example answers to train and prepare effectively.</p>
                             </div>
                         </div>
                         <div className="flex items-start gap-4">
