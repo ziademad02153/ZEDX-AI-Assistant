@@ -28,7 +28,7 @@ export default function DownloadPage() {
                             "price": "0",
                             "priceCurrency": "USD"
                         },
-                        "downloadUrl": "https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.1/ZEDX.AI.Setup.1.1.1.exe",
+                        "downloadUrl": "https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.3/ZEDX.AI.Setup.1.1.3.exe",
                         "featureList": "Real-time Meeting Transcription, Internal Audio Routing, Context Analysis, Assessment Interface, AI Simulator",
                         "author": {
                             "@type": "Organization",
@@ -153,7 +153,7 @@ export default function DownloadPage() {
 
                             <div className="space-y-3">
                                 <Link
-                                    href="https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.1/ZEDX.AI.Setup.1.1.1.exe"
+                                    href="https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.3/ZEDX.AI.Setup.1.1.3.exe"
                                     className="block"
                                 >
                                     <Button className="w-full rounded-xl py-7 text-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/25 group relative overflow-hidden">
@@ -167,7 +167,7 @@ export default function DownloadPage() {
                                     </Button>
                                 </Link>
                                 <p className="text-center text-xs text-gray-400">
-                                    v1.1.1 Stable • Windows 10/11 • 64-bit
+                                    v1.1.3 Stable • Windows 10/11 • 64-bit
                                 </p>
                             </div>
 
