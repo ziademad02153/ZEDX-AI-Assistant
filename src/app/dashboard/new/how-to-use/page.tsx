@@ -48,7 +48,7 @@ export default function HowToUsePage() {
             border: "border-teal-500/20"
         },
         {
-            title: "Assessment Overlay",
+            title: "Assessment Interface",
             description: "Use the scanner for code snippets or text you can't copy. The AI will analyze the screenshot in real-time.",
             icon: <Scan className="w-8 h-8" />,
             color: "from-green-600 to-emerald-700",

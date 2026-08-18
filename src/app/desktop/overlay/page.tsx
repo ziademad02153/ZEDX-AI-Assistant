@@ -78,7 +78,7 @@ export default function OverlayPage() {
                     <div className="flex items-center gap-2">
                         {/* Status Dot */}
                         <div className={`w-2.5 h-2.5 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'} shadow-lg`} />
-                        <span className="text-zinc-100 font-bold text-sm tracking-wide">ZEDX ASSISTANT</span>
+                        <span className="text-zinc-100 font-bold text-sm tracking-wide">ZEDX SIMULATOR</span>
                     </div>
 
                     <div className="flex items-center gap-2" style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}>
