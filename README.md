@@ -165,7 +165,7 @@ ZEDX-AI-Assistant/
 ├── src/
 │   ├── app/                    # Next.js App Router (Server & Client Pages)
 │   │   ├── api/                # Edge API Routes (LLM Streaming & STT Processing)
-│   │   ├── interview/          # Core System execution environment & UX Overlays
+│   │   ├── interview/          # Core System execution environment & UX Interfaces
 │   │   └── dashboard/          # Authentication & historical data visualizations
 │   ├── components/             # Reusable UI React primitives (Tailwind/Zustand bindings)
 │   ├── lib/                    # Strongly-typed Data Access Layers (Supabase, Auth)

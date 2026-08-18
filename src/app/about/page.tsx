@@ -6,9 +6,9 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
-    title: "About ZEDX AI Simulator - The Ultimate Interview Training Assistant",
-    description: "Discover ZEDX AI Simulator, the next-gen interview simulation assistant. Features internal audio routing, assessment overlay, and real-time AI context to help you master every interview.",
-    keywords: ["ZEDX AI Simulator", "mock interview assessor", "AI training", "assessment overlay", "internal audio routing"],
+    title: "About ZEDX AI Simulator - The Ultimate Interview Training Coach",
+    description: "Learn about the mission behind ZEDX AI Simulator, a free tool designed to help developers and job seekers master real-time interviews with privacy-first AI.",
+    keywords: ["ZEDX AI Simulator", "mock interview coach", "AI training", "assessment interface", "internal audio routing"],
 };
 
 export default function AboutPage() {
@@ -70,7 +70,7 @@ export default function AboutPage() {
                                         </div>
                                         <div>
                                             <h3 className="font-bold text-gray-900 dark:text-white">Real-Time Intelligence</h3>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">Zero latency answers streaming.</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">Instant coaching and explanations during simulation.</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4 p-4 bg-zinc-50/80 dark:bg-zinc-950/40 rounded-xl border border-zinc-100 dark:border-white/5">
@@ -78,8 +78,8 @@ export default function AboutPage() {
                                             <Shield size={24} />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-gray-900 dark:text-white">Clean Workspace Overlay</h3>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">Minimal UI for focused meetings.</p>
+                                            <h3 className="font-bold text-gray-900 dark:text-white">Focused Practice Workspace</h3>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">Minimal UI for focused practice sessions.</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4 p-4 bg-zinc-50/80 dark:bg-zinc-950/40 rounded-xl border border-zinc-100 dark:border-white/5">

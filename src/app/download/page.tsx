@@ -29,7 +29,7 @@ export default function DownloadPage() {
                             "priceCurrency": "USD"
                         },
                         "downloadUrl": "https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.1/ZEDX.AI.Setup.1.1.1.exe",
-                        "featureList": "Real-time Meeting Transcription, Internal Audio Routing, Context Analysis, Accessibility Overlay, AI Simulator",
+                        "featureList": "Real-time Meeting Transcription, Internal Audio Routing, Context Analysis, Assessment Interface, AI Simulator",
                         "author": {
                             "@type": "Organization",
                             "name": "ZEDX AI"
@@ -116,7 +116,7 @@ export default function DownloadPage() {
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Accessibility Overlay:</strong> Runs cleanly alongside Zoom/Teams for fast reading.
+                                        <strong>Assessment Interface:</strong> Runs cleanly alongside Zoom/Teams for fast reading.
                                     </span>
                                 </li>
                                 <li className="flex gap-3 items-start">

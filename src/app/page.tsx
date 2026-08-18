@@ -30,13 +30,15 @@ export default function Home() {
             </div>
 
             <h1 className="text-[2.25rem] xs:text-4xl sm:text-5xl md:text-[5.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.15] md:leading-[1.1] max-w-[90rem] mx-auto px-4">
-              Master Your Interviews with <br className="xs:hidden" />
-              <span className="text-gradient-fusion">Real-Time AI Simulation.</span>
+              Practice Real Interviews <br className="xs:hidden" />
+              <span className="text-gradient-fusion">Before They Happen.</span>
             </h1>
 
-            <p className="text-[0.95rem] md:text-xl text-gray-500 dark:text-gray-400 mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed font-medium px-6 md:px-0">
-              Upload your CV, practice with live interview questions, and receive instant AI-generated <br className="hidden md:block" />
-              assessment and feedback to train and improve your performance in real-time.
+            <p className="text-[0.95rem] md:text-xl text-gray-500 dark:text-gray-400 mb-4 max-w-4xl mx-auto leading-relaxed font-medium px-6 md:px-0">
+              AI helps you practice. Independent Mode proves you've learned.
+            </p>
+            <p className="text-[0.85rem] md:text-lg text-emerald-600 dark:text-emerald-400 mb-8 md:mb-12 max-w-4xl mx-auto font-bold tracking-wide px-6 md:px-0">
+              Simulate → Coach → Retry → Practice Independently → Measure Improvement
             </p>
 
             <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4">
@@ -87,7 +89,7 @@ export default function Home() {
                         </p>
                       </div>
                       <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
-                        <Image src="/AI.jpg" alt="ZEDX AI Assistant" width={52} height={52} className="object-cover w-full h-full" />
+                        <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
                     </div>
                   </div>
@@ -158,7 +160,7 @@ export default function Home() {
                       </p>
                     </div>
                     <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
-                      <Image src="/AI.jpg" alt="ZEDX AI Assistant" width={52} height={52} className="object-cover w-full h-full" />
+                      <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
                   </div>
                 </div>
@@ -185,7 +187,7 @@ export default function Home() {
                 Everything you need to <span className="text-gradient-fusion">succeed</span>
               </h2>
               <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-                Powerful tools designed to give you the unfair advantage.
+                Turn difficult questions into learning opportunities.
               </p>
             </div>
 

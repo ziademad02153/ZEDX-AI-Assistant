@@ -192,6 +192,19 @@ export default function NewInterviewPage() {
                     </div>
                 </div>
 
+                {/* Practice Mode Alert */}
+                <div className="mb-8 p-4 sm:p-5 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 flex items-start sm:items-center gap-4 animate-fade-in-up">
+                    <div className="p-2 bg-amber-100 dark:bg-amber-500/20 rounded-lg text-amber-600 dark:text-amber-400 shrink-0">
+                        <AlertCircle size={24} />
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-amber-800 dark:text-amber-400 mb-1">PRACTICE MODE</h3>
+                        <p className="text-amber-700/80 dark:text-amber-400/80 text-sm">
+                            This is a simulated interview environment designed to help you practice, build confidence, and improve your performance.
+                        </p>
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[calc(100vh-250px)]">
                     {/* Left Column: Configuration (8 cols) */}
                     <div className="lg:col-span-7 flex flex-col gap-8 h-full">

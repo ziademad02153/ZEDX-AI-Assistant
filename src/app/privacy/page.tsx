@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Privacy Policy - ZEDX AI",
-    description: "Privacy Policy for ZEDX AI Interview Assistant. Learn how we collect, use, and protect your personal information.",
+    title: "Privacy Policy | ZEDX AI Simulator",
+    description: "Privacy Policy for ZEDX AI Interview Simulator. Learn how we collect, use, and protect your personal information.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -23,7 +23,7 @@ export default function PrivacyPolicyPage() {
                         </p>
                         <ul className="list-disc ml-6 mt-4 space-y-2 text-gray-600 dark:text-gray-300">
                             <li>Visit our website at zedx-ai-assistant-1.vercel.app, or any website of ours that links to this Privacy Notice</li>
-                            <li>Use our AI-powered interview assistant application</li>
+                            <li>Use our AI-powered interview simulation and coaching application</li>
                             <li>Engage with us in other related ways, including any sales, marketing, or events</li>
                         </ul>
                         <p className="mt-4 text-gray-600 dark:text-gray-300">
@@ -106,7 +106,7 @@ export default function PrivacyPolicyPage() {
                         <p className="text-gray-600 dark:text-gray-300 mb-2">We process your personal information for a variety of reasons, including:</p>
                         <ul className="list-disc ml-6 space-y-2 text-gray-600 dark:text-gray-300">
                             <li><strong>To facilitate account creation and authentication</strong> and otherwise manage user accounts.</li>
-                            <li><strong>To provide AI-powered interview assistance</strong> using your resume and job description to generate relevant answers.</li>
+                            <li><strong>To provide AI-powered interview simulation</strong> using your resume and job description to generate benchmark learning answers.</li>
                             <li><strong>To save your interview history</strong> for your future reference and improvement.</li>
                             <li><strong>To respond to user inquiries</strong> and offer support to users.</li>
                             <li><strong>To send administrative information</strong> about our products and services, changes to our terms and policies.</li>
@@ -162,7 +162,7 @@ export default function PrivacyPolicyPage() {
                             <em>In Short: We offer products powered by artificial intelligence and machine learning technologies.</em>
                         </p>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
-                            As part of our Services, we offer products, features, or tools powered by artificial intelligence, machine learning, or similar technologies (collectively, &quot;AI Products&quot;). These tools are designed to enhance your interview experience and provide you with AI-generated answers.
+                            As part of our Services, we offer products, features, or tools powered by artificial intelligence, machine learning, or similar technologies (collectively, &quot;AI Products&quot;). These tools are designed to enhance your interview practice experience and provide you with AI-generated benchmark answers.
                         </p>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
                             <strong>Use of AI Technologies:</strong> We provide AI Products through third-party service providers (&quot;AI Service Providers&quot;), including OpenAI, Google AI, and Groq. Your input, output, and personal information will be shared with and processed by these AI Service Providers to enable your use of our AI Products.

@@ -56,7 +56,7 @@ export default function HowToUsePage() {
             border: "border-green-600/20"
         },
         {
-            title: "AI Auto Answer",
+            title: "AI Coaching Suggestions",
             description: "Enable Auto-Answer to get suggestions instantly after the question ends. Precision is key.",
             icon: <Sparkles className="w-8 h-8" />,
             color: "from-lime-500 to-emerald-500",

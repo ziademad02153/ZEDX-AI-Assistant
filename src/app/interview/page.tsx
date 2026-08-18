@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, Video, VideoOff, Loader2, AlertCircle, Sparkles, Trash2, LogOut, Copy, RotateCcw, Monitor, MonitorOff, Scan } from "lucide-react";
+import { Mic, Video, VideoOff, Loader2, AlertCircle, Sparkles, Trash2, LogOut, Copy, RotateCcw, Monitor, MonitorOff, Scan, CheckCircle2 } from "lucide-react";
 import { createWorker } from 'tesseract.js';
 import { cn } from "@/lib/utils";
 import ReactMarkdown from 'react-markdown';
@@ -81,6 +81,10 @@ export default function InterviewPage() {
     const screenSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
     const [isScannerActive, setIsScannerActive] = useState(false);
     const [hasMounted, setHasMounted] = useState(false);
+
+    // Independent Mode State
+    const [isIndependentModeActive, setIsIndependentModeActive] = useState(false);
+    const [independentEvaluation, setIndependentEvaluation] = useState<string | null>(null);
 
     // Constants
     const MAX_TRANSCRIPT_LENGTH = 4000; // Limit transcript to prevent API issues
@@ -298,6 +302,64 @@ export default function InterviewPage() {
     const handleManualSubmit = () => {
         if (!manualQuestion.trim()) return;
         getAiAnswer(manualQuestion);
+    };
+
+    const handleIndependentSubmit = async () => {
+        if (!transcript.trim() || !lastTranscript) return;
+        
+        const independentTranscript = transcript.slice(0, MAX_TRANSCRIPT_LENGTH);
+        setIsLoading(true);
+        setError(null);
+        setIsIndependentModeActive(false);
+
+        try {
+            let selectedModel = "llama-3.1-8b-instant";
+            try { selectedModel = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant"; } catch {}
+
+            const systemPrompt = `
+        SYSTEM INSTRUCTION:
+        You are an expert Interview Performance Coach. The candidate has just tried to answer an interview question independently after receiving coaching.
+        
+        Original Question (from interviewer): "${lastTranscript}"
+        Candidate's Independent Answer: "${independentTranscript}"
+
+        CRITICAL RULES:
+        1. Evaluate the answer strictly and fairly.
+        2. Provide feedback exactly in this format using markdown bullet points:
+           - **Answer Quality**: [Score]/100
+           - **Technical Accuracy**: [Score]/100
+           - **Communication**: [Score]/100
+           - **Confidence**: [Score]/100
+           - **Improvement**: You improved to [Final Score]% without AI assistance!
+           
+           **Brief Feedback**: [1-2 sentences explaining what was good and what to improve]
+        3. Do not add any conversational filler. Just the metrics.
+        `;
+
+            const response = await fetch("/api/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    model: selectedModel,
+                    systemPrompt: systemPrompt,
+                    messages: [{ role: "user", content: "Evaluate my independent answer." }]
+                })
+            });
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error?.message || "Failed to evaluate");
+            
+            setIndependentEvaluation(data.content);
+            setTranscript("");
+            
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error(error);
+            setError("Failed to generate independent evaluation.");
+            setIsIndependentModeActive(true); // Allow retry
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     // Silence Detection for Auto-Answer
@@ -1296,7 +1358,7 @@ export default function InterviewPage() {
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
                         <h3 className="font-bold flex items-center gap-2 text-lg text-gray-900 dark:text-white">
                             <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-                            Mock Assessor
+                            Example of a Strong Answer
                         </h3>
                         <div className="flex flex-wrap gap-2">
                             <Button
@@ -1311,8 +1373,8 @@ export default function InterviewPage() {
                                 )}
                             >
                                 <Sparkles size={14} />
-                                <span className="hidden sm:inline">{isAutoMode ? "Auto Answer ON" : "Auto Answer OFF"}</span>
-                                <span className="sm:hidden">{isAutoMode ? "Auto ON" : "Auto OFF"}</span>
+                                <span className="hidden sm:inline">{isAutoMode ? "Coaching Suggestions ON" : "Coaching Suggestions OFF"}</span>
+                                <span className="sm:hidden">{isAutoMode ? "Suggestions ON" : "Suggestions OFF"}</span>
                             </Button>
 
                             <Button
@@ -1412,6 +1474,81 @@ export default function InterviewPage() {
                         <div className="leading-loose text-lg">
                             <ReactMarkdown>{aiResponse}</ReactMarkdown>
                         </div>
+                        
+                        {/* Independent Mode Trigger */}
+                        {lastTranscript && aiResponse && !aiResponse.includes("Ready to Assist") && !isIndependentModeActive && !independentEvaluation && (
+                            <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-6 animate-fade-in-up">
+                                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 border border-blue-100 dark:border-blue-800/50">
+                                    <div className="flex-1">
+                                        <h4 className="font-bold text-blue-800 dark:text-blue-400 mb-1">Independent Practice</h4>
+                                        <p className="text-sm text-blue-700/80 dark:text-blue-300/80">You've learned this question. Now try answering it again without AI assistance to measure your improvement.</p>
+                                    </div>
+                                    <Button 
+                                        onClick={() => {
+                                            setIsIndependentModeActive(true);
+                                            setTranscript(""); // Clear transcript to let them speak
+                                        }}
+                                        className="bg-blue-600 hover:bg-blue-700 text-white shrink-0 shadow-md transition-all hover:scale-105"
+                                    >
+                                        Try Independently
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                        
+                        {/* Independent Mode Active State */}
+                        {isIndependentModeActive && (
+                            <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-6 animate-fade-in-up">
+                                <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-200 dark:border-indigo-800/50">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <span className="relative flex h-3 w-3">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                                        </span>
+                                        <h4 className="font-bold text-indigo-900 dark:text-indigo-300">Independent Mode Active</h4>
+                                    </div>
+                                    <p className="text-sm text-indigo-700/80 dark:text-indigo-300/80 mb-4">
+                                        Speak your answer now. When finished, submit to receive your performance score.
+                                    </p>
+                                    <div className="flex justify-end gap-3">
+                                        <Button variant="ghost" size="sm" onClick={() => setIsIndependentModeActive(false)} className="text-gray-500">Cancel</Button>
+                                        <Button 
+                                            size="sm"
+                                            onClick={handleIndependentSubmit}
+                                            disabled={isLoading || !transcript.trim()}
+                                            className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                                        >
+                                            Submit for Evaluation
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Independent Mode Evaluation Result */}
+                        {independentEvaluation && (
+                            <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-6 animate-fade-in-up">
+                                <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-6 border border-emerald-200 dark:border-emerald-800/50">
+                                    <h4 className="font-bold text-emerald-800 dark:text-emerald-400 mb-4 flex items-center gap-2">
+                                        <CheckCircle2 size={18} />
+                                        Performance Analysis
+                                    </h4>
+                                    <div className="prose prose-sm dark:prose-invert max-w-none prose-emerald">
+                                        <ReactMarkdown>{independentEvaluation}</ReactMarkdown>
+                                    </div>
+                                    <div className="mt-6 flex justify-end">
+                                        <Button 
+                                            size="sm" 
+                                            variant="outline" 
+                                            onClick={() => setIndependentEvaluation(null)}
+                                            className="border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40"
+                                        >
+                                            Dismiss
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Debug Info */}

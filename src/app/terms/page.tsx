@@ -10,17 +10,17 @@ export default function TermsOfServicePage() {
                 <div className="space-y-6 text-gray-700 dark:text-gray-300">
                     <section>
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">1. Acceptance of Terms</h2>
-                        <p>By accessing and using ZEDX-AI Assistant, you accept and agree to be bound by the terms and conditions of this agreement.</p>
+                        <p>By accessing and using ZEDX AI Simulator, you accept and agree to be bound by the terms and conditions of this agreement.</p>
                     </section>
 
                     <section>
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">2. Description of Service</h2>
-                        <p>ZEDX-AI Assistant is an AI-powered interview preparation tool that provides:</p>
+                        <p>ZEDX AI Simulator is an AI-powered interview preparation tool that provides:</p>
                         <ul className="list-disc ml-6 mt-2 space-y-1">
-                            <li>Real-time interview assistance</li>
+                            <li>Real-time interview simulation</li>
                             <li>Resume-based response generation</li>
                             <li>Interview transcript storage</li>
-                            <li>AI-powered answer suggestions</li>
+                            <li>AI-powered benchmark learning answers</li>
                         </ul>
                     </section>
 
@@ -37,12 +37,12 @@ export default function TermsOfServicePage() {
 
                     <section>
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">4. AI Service</h2>
-                        <p>ZEDX-AI Assistant uses server-side AI processing powered by Groq. The AI service is provided free of charge and is subject to availability and rate limits.</p>
+                        <p>ZEDX AI Simulator uses server-side AI processing powered by Groq. The AI service is provided free of charge and is subject to availability and rate limits.</p>
                     </section>
 
                     <section>
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">5. Limitation of Liability</h2>
-                        <p>ZEDX-AI Assistant is provided &quot;as is&quot; without warranties of any kind. We are not responsible for:</p>
+                        <p>ZEDX AI Simulator is provided &quot;as is&quot; without warranties of any kind. We are not responsible for:</p>
                         <ul className="list-disc ml-6 mt-2 space-y-1">
                             <li>Interview outcomes or job offers</li>
                             <li>Accuracy of AI-generated responses</li>

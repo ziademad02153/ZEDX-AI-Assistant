@@ -16,7 +16,7 @@ export function Footer() {
                     <div className="space-y-4 col-span-1 md:col-span-4 text-center">
                         <h3 className="font-bold text-lg text-gray-900 dark:text-white">ZEDX AI</h3>
                         <p className="text-sm text-gray-600 dark:text-gray-400 max-w-md mx-auto">
-                            Your real-time AI interview assistant. Ace your next interview with confidence.
+                            Your Real-Time AI Interview Coach for Practice. Ace your next interview with confidence.
                         </p>
 
                         {/* Social Media Links */}

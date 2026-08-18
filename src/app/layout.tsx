@@ -20,15 +20,15 @@ export const metadata: Metadata = {
     capable: true,
   },
   title: {
-    default: "ZEDX AI Interview Simulator & Training Assistant",
+    default: "ZEDX AI Interview Simulator",
     template: "%s | ZEDX AI Interview Simulator"
   },
-  description: "ZEDX AI Interview Simulator is a real-time AI interview simulation assistant providing live transcriptions, benchmark answers, and feedback for job seekers and fresh graduates.",
+  description: "ZEDX AI Interview Simulator is a real-time AI interview simulation coach providing live transcriptions, example answers, and feedback for job seekers and fresh graduates.",
   keywords: [
-    "ZEDX", "ZEDX AI", "ZEDX AI Simulator", "Mock Interview Assistant", "Live Transcription",
-    "Interview Simulation", "Mock Interview Assessor", "AI Interview Notes", "Real-time AI Assistant",
-    "Training Assistant", "Interview Practice", "Job Seeker Assistant", "AI Coach",
-    "interview simulator", "live transcription", "interview training", "artificial intelligence", "personal assistant"
+    "ZEDX", "ZEDX AI", "ZEDX AI Simulator", "Mock Interview Coach", "Live Transcription",
+    "Interview Simulation", "Mock Interview Coach", "AI Interview Notes", "Real-time AI Coach",
+    "Training Coach", "Interview Practice", "Job Seeker Coach", "AI Coach",
+    "interview simulator", "live transcription", "interview training", "artificial intelligence", "personal coach"
   ],
   authors: [{ name: "ZEDX AI Team", url: "https://zedx-ai-assistant-1.vercel.app" }],
   creator: "ZEDX AI",
@@ -49,14 +49,14 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://zedx-ai-assistant-1.vercel.app",
     siteName: "ZEDX AI Interview Simulator",
-    title: "ZEDX AI Interview Simulator - Assessment Assistant",
-    description: "Your live interview simulation and training assistant.",
+    title: "ZEDX AI Interview Simulator",
+    description: "Your live interview simulation and training coach.",
     images: [
       {
         url: "/zedx-cyberpunk-banner.png",
         width: 1200,
         height: 630,
-        alt: "ZEDX AI Interview Simulator - Assessment Assistant",
+        alt: "ZEDX AI Interview Simulator",
       },
       {
         url: "/zedx-logo.png",
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ZEDX AI Interview Simulator - Assessment Assistant",
+    title: "ZEDX AI Interview Simulator",
     description: "Real-time AI interview simulation and verification insights.",
     images: ["/zedx-cyberpunk-banner.png"],
     creator: "@zedx_ai",
@@ -149,7 +149,7 @@ export default async function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "ZEDX AI Interview Simulator",
-              "alternateName": ["ZEDX", "ZEDX AI Simulator", "ZedX AI Assistant"],
+              "alternateName": ["ZEDX", "ZEDX AI Simulator", "ZedX AI Coach"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
               "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
               "image": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
@@ -188,7 +188,7 @@ export default async function RootLayout({
               "name": "ZEDX AI Interview Simulator",
               "alternateName": ["ZEDX AI Simulator", "ZEDX"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
-              "description": "ZEDX AI Interview Simulator is a real-time AI interview simulation assistant providing live transcriptions and answer verification.",
+              "description": "ZEDX AI Interview Simulator is a real-time AI interview simulation coach providing live transcriptions and answer verification.",
               "applicationCategory": "BusinessApplication",
               "operatingSystem": "Web Browser",
               "offers": {
@@ -230,7 +230,7 @@ export default async function RootLayout({
               "alternateName": ["ZEDX", "ZEDX AI Simulator"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
               "logo": "https://zedx-ai-assistant-1.vercel.app/zedx-logo.png",
-              "description": "ZEDX AI Interview Simulator - Free Real-Time Interview Simulation & Training Assistant.",
+              "description": "ZEDX AI Interview Simulator - Free Real-Time Interview Simulation & Training Coach.",
               "sameAs": [
                 "https://www.producthunt.com/posts/zedx-ai"
               ]
