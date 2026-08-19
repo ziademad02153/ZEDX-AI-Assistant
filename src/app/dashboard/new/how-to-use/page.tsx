@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { GoogleStyleMicIcon } from "@/components/premium-icons";
 
 export default function HowToUsePage() {
     const router = useRouter();
@@ -73,8 +74,8 @@ export default function HowToUsePage() {
         },
         {
             title: "Smart Silence Detection",
-            description: "Speak naturally. If you pause for more than 5 seconds, ZEDX will automatically submit your answer and move to the next question.",
-            icon: <Mic className="w-8 h-8 text-emerald-500" />,
+            description: "Speak naturally. If you pause for more than 3 seconds, ZEDX will automatically submit your answer and move to the next question.",
+            icon: <GoogleStyleMicIcon width={40} height={40} className="drop-shadow-sm" />,
             color: "bg-white dark:bg-[#111] shadow-none",
             bg: "bg-emerald-500/10",
             border: "border-emerald-500/20"
@@ -82,7 +83,7 @@ export default function HowToUsePage() {
         {
             title: "Performance Scorecard",
             description: "After finishing, you will receive a granular benchmark report scoring your exact verbal answers against industry standards.",
-            icon: <CheckCircle2 className="w-8 h-8 text-blue-500" />,
+            icon: <Image src="/Granular Scorecards.png" alt="Granular Scorecards" width={56} height={56} className="object-contain drop-shadow-sm" />,
             color: "bg-white dark:bg-[#111] shadow-none",
             bg: "bg-blue-500/10",
             border: "border-blue-500/20"
@@ -90,8 +91,8 @@ export default function HowToUsePage() {
         {
             title: "End Session",
             description: "Use the End Interview button to safely finalize your session and generate your scorecard.",
-            icon: <LogOut className="w-8 h-8" />,
-            color: "from-red-500 to-rose-500 text-white",
+            icon: <LogOut className="w-12 h-12 text-red-600 dark:text-red-500" />,
+            color: "bg-transparent shadow-none from-transparent to-transparent",
             bg: "bg-red-500/10",
             border: "border-red-500/20"
         }

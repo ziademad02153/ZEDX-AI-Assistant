@@ -18,7 +18,7 @@
 **ZEDX AI Simulator** is a dedicated interview simulation and training platform designed for professional evaluation. Originally built as an Electron desktop app, ZEDX has evolved into a comprehensive **Dual-Mode** platform (Web & Desktop) that utilizes advanced Speech-to-Text (STT), Large Language Model (LLM) inference, and highly-optimized Text-to-Speech (TTS) engines.
 
 ZEDX bridges the gap between preparation and execution by offering two distinct training modes:
-1. **Mock Interviewer Mode (Web):** An autonomous Voice-to-Voice AI Agent that conducts hyper-realistic, multi-lingual mock interviews. It dynamically generates technical questions based on your resume and target Job Description, listens to your verbal responses with strict 5-second silence detection, and generates a granular JSON scorecard.
+1. **The Smart Mock Interviewer (Web):** An autonomous, highly intelligent Voice-to-Voice AI Agent that conducts hyper-realistic mock interviews in **29 supported languages**. Unlike static script-readers, this AI acts as a true conversational partner. It analyzes your resume and Job Description, listens to your answers, and dynamically generates deep, probing follow-up questions from varying angles (e.g., leadership, technical depth) to ensure no two interviews are ever the same. 
 2. **Advanced Sandbox Simulator (Desktop):** A secure Electron shell utilizing an Inter-Process Communication (IPC) bridge and native OS Audio Routing. This mode provides a distraction-free, high-fidelity environment for power users to practice against complex technical prompts using internal system audio, mimicking the exact software ecosystem of a real remote interview without relying on standard browser constraints.
 
 ---
@@ -113,41 +113,45 @@ sequenceDiagram
 
 ---
 
-## 3. Cognitive Context Injection (LLM Logic Flow)
-ZEDX AI Simulator dynamically replicates strict Dynamic Context Injection paradigms in-memory via high-velocity edge components. 
+## 3. Cognitive Context Injection (The Smart AI Interviewer)
+ZEDX AI Simulator dynamically replicates strict Dynamic Context Injection paradigms in-memory via high-velocity edge components. The system cures "LLM Amnesia" by injecting memory payloads and dynamic conversation angles to simulate a highly intelligent human interviewer.
 
 ```mermaid
 graph LR
     subgraph "Context Assembly Line"
-        TRANSCRIPT[Active Transcription Buffer]
-        AGENDA[Meeting Agenda Meta]
+        HISTORY[Interview History & Memory]
+        JD[Job Description Meta]
         RESUME[User Reference File / Data]
+        ANGLE[Randomized Interview Angle]
     end
 
     subgraph "Prompt Synthesis Engine"
         COMPILER[Dynamic System Prompt Compiler]
-        TRANSCRIPT --> COMPILER
-        AGENDA --> COMPILER
+        HISTORY --> COMPILER
+        JD --> COMPILER
         RESUME --> COMPILER
+        ANGLE --> COMPILER
     end
 
     subgraph "Execution & Resolution"
-        LLAMA[Llama 3.1 70B Instruct]
+        LLAMA[Llama 3.1 / Qwen Engine]
         UI[Secure React Practice Interface]
-        COMPILER -- "Injected Semantic Prompt" --> LLAMA
+        COMPILER -- "Conversational Semantic Prompt" --> LLAMA
         LLAMA -- "Server-Sent Events (SSE)" --> UI
     end
     
     classDef data fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
     classDef engine fill:#701a75,stroke:#e879f9,stroke-width:2px,color:#fff;
     
-    class TRANSCRIPT,AGENDA,RESUME data;
+    class HISTORY,JD,RESUME,ANGLE data;
     class COMPILER,LLAMA,UI engine;
 ```
 
-### Engineering Highlights:
-- **TransformStream Pipelines:** Employs the Next.js Edge Runtime to decode the streamed Llama 3.1 inference response into Server-Sent Events (SSE). Users consume insights incrementally as frames generate, virtually eliminating synchronous request blocking.
-- **Multilingual Dialect Mapping:** The LLM constraint protocol forces context-matching to output strictly in the user's localized dialect constraint (e.g., Cairo Egyptian Arabic), optimizing cognitive assimilation.
+### Advanced AI Capabilities:
+- **Conversational Adaptability:** The AI does not read from a static script. It is engineered to analyze the candidate's previous response in real-time, crafting highly specific follow-up questions that probe deeper into weak answers or smoothly transition topics when a point is proven.
+- **Memory Injection:** The system inherently tracks all previously asked questions and injects them as a negative constraint boundary during prompt synthesis, guaranteeing that no two questions are ever repeated and eliminating standard LLM predictability.
+- **True Multilingual Native Fluidity:** Supporting exactly **29 major languages**, the system routes raw ISO-639-1 BCP-47 tags directly to Whisper for maximum transcription accuracy, while standardizing TTS outputs via ElevenLabs `multilingual_v2` for hyper-realistic native accents.
+- **TransformStream Pipelines:** Employs the Next.js Edge Runtime to decode the streamed LLM inference response into Server-Sent Events (SSE). Users consume insights incrementally as frames generate, virtually eliminating synchronous request blocking.
 
 ---
 

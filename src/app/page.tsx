@@ -259,7 +259,7 @@ export default function Home() {
                     Multilingual
                   </span>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">52 Languages</h3>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">29 Languages</h3>
 
                 {/* Visual: Language Globe */}
                 <div className="flex-grow flex items-center justify-center mb-8 relative">

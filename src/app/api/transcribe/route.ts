@@ -45,7 +45,9 @@ export async function POST(request: Request) {
                 groqFormData.append("temperature", "0");
 
                 if (formData.get("language")) {
-                    groqFormData.append("language", formData.get("language") as string);
+                    const fullLang = formData.get("language") as string;
+                    const iso6391 = fullLang.split('-')[0]; // e.g. "en-US" -> "en"
+                    groqFormData.append("language", iso6391);
                 }
 
                 const userPrompt = formData.get("prompt")?.toString();

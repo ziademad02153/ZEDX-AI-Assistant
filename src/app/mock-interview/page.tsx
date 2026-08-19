@@ -6,6 +6,7 @@ import { Mic, MicOff, Video, AlertCircle, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { SUPPORTED_LANGUAGES } from "@/lib/languages";
 
 export default function MockInterviewPage() {
     const router = useRouter();
@@ -123,12 +124,19 @@ export default function MockInterviewPage() {
             
             recognition.onresult = (event: any) => {
                 let interimTranscript = "";
+                let hasValidSpeech = false;
                 
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    const result = event.results[i][0];
+                    // Filter out obvious background noise (low confidence)
+                    if (event.results[i].isFinal && result.confidence < 0.5) continue;
+                    
                     if (event.results[i].isFinal) {
-                        finalTranscriptRef.current += event.results[i][0].transcript;
+                        finalTranscriptRef.current += result.transcript;
+                        hasValidSpeech = true;
                     } else {
-                        interimTranscript += event.results[i][0].transcript;
+                        interimTranscript += result.transcript;
+                        if (result.transcript.trim().length > 3) hasValidSpeech = true;
                     }
                 }
                 
@@ -138,11 +146,16 @@ export default function MockInterviewPage() {
                 // Reset Silence Timer
                 if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
                 
-                // If they spoke something, start the 5 second silence countdown
-                if (currentText.trim().length > 0) {
+                // If they spoke something meaningful, start the 3 second silence countdown
+                if (currentText.trim().length > 0 && hasValidSpeech) {
                     silenceTimerRef.current = setTimeout(() => {
                         handleUserFinishedSpeaking(currentText);
-                    }, 5000); // 5 seconds of silence = auto submit
+                    }, 3000); // 3 seconds of silence = auto submit
+                } else if (currentText.trim().length > 0) {
+                    // Fallback for very short noises so it doesn't hang forever if it was actually speech
+                    silenceTimerRef.current = setTimeout(() => {
+                        handleUserFinishedSpeaking(currentText);
+                    }, 6000);
                 }
             };
             
@@ -222,63 +235,66 @@ export default function MockInterviewPage() {
         // Determine if this question should focus on JD or Resume (50/50)
         const focusArea = index % 2 === 0 ? "Job Description" : "Resume";
         
-        let systemPrompt = `You are ZEDX, an expert AI interviewer. 
+        const systemPrompt = `You are ZEDX, an expert AI interviewer. 
 You are conducting a professional mock interview.
 Difficulty Level: ${difficulty}.
 Language: ${language}.
 Always reply ONLY with the spoken question text. Do not include markdown, thinking, or tips. Just the exact text you will speak.`;
 
-        let prompt = ``;
+        const langObj = SUPPORTED_LANGUAGES.find(l => l.code === language) || SUPPORTED_LANGUAGES[0];
+        let nextQuestionText = "";
+
         if (index === 0) {
-            prompt = `This is the start of the interview. 
-Candidate Resume: ${resume.substring(0, 500)}...
-Job Description: ${jd.substring(0, 500)}...
-
-Your ONLY task is to output the following greeting EXACTLY, filling in the bracketed info based on the provided texts:
-"Welcome [Candidate's First Name], I am ZEDX. I will be conducting your mock interview today for the [Position Name] position. Are you ready to begin?"
-
-Do NOT add any other text. Do NOT ask any interview questions yet.`;
+            nextQuestionText = langObj.q1;
         } else if (index === 1) {
-            prompt = `The candidate just answered your readiness question with: "${history[0].a}".
-Your ONLY task is to output the following EXACTLY, perhaps with a brief 1-word acknowledgment if they said yes:
-"Great! Let's start. Could you please tell me a little bit about yourself?"
-
-Do NOT add any other text.`;
+            nextQuestionText = langObj.q2;
         } else {
             const previousQ = history[index - 1].q;
             const previousA = history[index - 1].a;
-            prompt = `The candidate just answered your previous question ("${previousQ}") with: "${previousA}".
-Briefly acknowledge their answer (1 short sentence), then ask the next question.
-Focus this next question specifically on the: ${focusArea}.
+            
+            const askedQuestions = history.map(h => h.q).join(" | ");
+            const randomAngle = ["leadership skills", "problem solving", "technical depth", "past challenges", "teamwork and communication", "adaptability"][Math.floor(Math.random() * 6)];
+
+            const prompt = `The candidate just answered your previous question ("${previousQ}") with: "${previousA}".
+First, analyze their answer. Then, craft your next question.
+You are a highly intelligent, conversational interviewer. Do NOT just read off a script. 
+Either ask a smart follow-up question that probes deeper into what they just said, OR smoothly transition to a new topic focusing on their ${focusArea} (framed around ${randomAngle}).
+Keep it conversational and natural.
+CRITICAL RULE: DO NOT ask any of these previously asked questions again: [${askedQuestions}].
+IMPORTANT: DO NOT ask the candidate if they have any questions for you. Only ask questions that test the candidate's qualifications.
 Job Description Context: ${jd.substring(0, 500)}...
 Resume Context: ${resume.substring(0, 500)}...`;
-        }
 
-        try {
-            const res = await fetch("/api/generate", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    model: model,
-                    systemPrompt,
-                    prompt
-                })
-            });
-            const data = await res.json();
-            const nextQuestionText = data.content || "Could you tell me more about your background?";
-            
-            // Save to history
-            const newHistory = [...history, { q: nextQuestionText, a: "" }];
-            setQuestionsAsked(newHistory);
-            setCurrentQuestionIndex(index);
-            
-            // Play TTS
-            await speakText(nextQuestionText);
-            
-        } catch (err) {
-            console.error("Failed to generate question", err);
-            speakText("I had a network issue. Can you please tell me about your recent project?");
+            try {
+                const res = await fetch("/api/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        model: model,
+                        systemPrompt,
+                        prompt
+                    })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    throw new Error(data.error?.message || "API request failed");
+                }
+                
+                nextQuestionText = data.content;
+            } catch (err) {
+                console.error("AI Generation Failed:", err);
+                nextQuestionText = "I apologize, but I have lost connection to my AI servers. Please check your Groq API key and rate limits.";
+                // Optional: We could forcefully end the interview here
+            }
         }
+        
+        // Save to history
+        const newHistory = [...history, { q: nextQuestionText, a: "" }];
+        setQuestionsAsked(newHistory);
+        setCurrentQuestionIndex(index);
+        
+        // Play TTS
+        await speakText(nextQuestionText);
     };
 
     const speakText = async (text: string) => {

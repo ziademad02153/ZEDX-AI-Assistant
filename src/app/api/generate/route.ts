@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 
-// Groq Models Fallback Chain
+// Fallback models in case the selected one fails
 const GROQ_MODELS = [
-    "llama-3.1-8b-instant",
-    "llama-3.3-70b-versatile",
-    "qwen/qwen3-32b",
-    "openai/gpt-oss-120b"
+    "openai/gpt-oss-20b",
+    "openai/gpt-oss-120b",
+    "qwen/qwen3.6-27b"
 ];
 
 // Debug GET handler to verify endpoint reaches the server
@@ -63,8 +62,8 @@ export async function POST(request: Request) {
                     body: JSON.stringify({
                         model: targetModel,
                         messages: finalMessages,
-                        max_tokens: 1024,
-                        temperature: 0.7
+                        max_tokens: 4096,
+                        temperature: 0.85
                     }),
                     signal: controller.signal
                 });

@@ -123,7 +123,7 @@ export function ModelChat({ modelId, modelName, modelLogo }: ModelChatProps) {
                                 "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
                                 msg.role === "user" ? "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400" : "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/70"
                             )}>
-                                {msg.role === "user" ? <User size={14} /> : <Sparkles size={14} />}
+                                {msg.role === "user" ? <User size={14} /> : <Image src="/Instant Transcription.png" alt="AI" width={20} height={20} className="object-contain" />}
                             </div>
                             <div className={cn(
                                 "p-3 rounded-2xl text-sm leading-relaxed",

@@ -11,6 +11,7 @@ import { SUPPORTED_LANGUAGES } from "@/lib/languages";
 import { resumeService, Resume } from "@/lib/resume-service";
 import { ModelChat } from "@/components/dashboard/model-chat";
 import { motion } from "framer-motion";
+import { AnimatedOrb } from "@/components/animated-orb";
 
 // Custom SVG Icons
 const BriefcaseIcon = () => (
@@ -41,37 +42,29 @@ const GlobeIcon = () => (
 // Available AI Models with brand logo images
 const AI_MODELS = [
     {
-        id: "llama-3.1-8b-instant",
-        name: "Llama 3.1 8B",
+        id: "openai/gpt-oss-20b",
+        name: "GPT-OSS 20B",
         description: "Fast, efficient",
-        logo: "/meta.png",
+        logo: "/openai-logo.png",
         gradient: "from-blue-500/20 to-cyan-500/20",
         border: "group-hover:border-blue-500/50"
     },
     {
-        id: "llama-3.3-70b-versatile",
-        name: "Llama 3.3 70B",
-        description: "Smart reasoning",
-        logo: "/meta.png",
-        gradient: "from-purple-500/20 to-pink-500/20",
-        border: "group-hover:border-purple-500/50"
-    },
-    {
-        id: "qwen/qwen3-32b",
-        name: "Qwen 32B",
-        description: "Multilingual pro",
-        logo: "/qwen.png",
-        gradient: "from-indigo-500/20 to-violet-500/20",
-        border: "group-hover:border-indigo-500/50"
-    },
-    {
         id: "openai/gpt-oss-120b",
         name: "GPT-OSS 120B",
-        description: "Max power",
+        description: "Max power reasoning",
         logo: "/openai-logo.png",
         gradient: "from-emerald-500/20 to-green-500/20",
         border: "group-hover:border-emerald-500/50"
     },
+    {
+        id: "qwen/qwen3.6-27b",
+        name: "Qwen 3.6 27B",
+        description: "Multilingual pro",
+        logo: "/qwen.png",
+        gradient: "from-indigo-500/20 to-violet-500/20",
+        border: "group-hover:border-indigo-500/50"
+    }
 ];
 
 // ParticleWave removed to improve mobile performance/clarity
@@ -85,7 +78,7 @@ export default function NewInterviewPage() {
     const [language, setLanguage] = useState("en-US");
     const [difficulty, setDifficulty] = useState("Intermediate");
     const [questionCount, setQuestionCount] = useState("10");
-    const [selectedModel, setSelectedModel] = useState("llama-3.1-8b-instant");
+    const [selectedModel, setSelectedModel] = useState("openai/gpt-oss-20b");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -213,8 +206,8 @@ export default function NewInterviewPage() {
                             <div className="relative bg-white dark:bg-[#151515] rounded-[22px] p-6 sm:p-10 flex-1 flex flex-col">
                                 <div className="flex items-center justify-between mb-6 sm:mb-8">
                                     <div className="flex items-center gap-4 sm:gap-5">
-                                        <div className="p-3 sm:p-4 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl sm:rounded-2xl text-emerald-700 dark:text-emerald-400">
-                                            <BriefcaseIcon />
+                                        <div className="flex items-center justify-center shrink-0">
+                                            <Image src="/Job description.png" alt="Job Description" width={56} height={56} className="object-contain dark:invert drop-shadow-[0_0_12px_rgba(16,185,129,0.3)] transition-all" />
                                         </div>
                                         <div>
                                             <h3 className="font-bold text-lg sm:text-2xl text-gray-900 dark:text-white mb-0.5 sm:mb-1">Job Description</h3>
@@ -241,8 +234,8 @@ export default function NewInterviewPage() {
                         >
                             <div className="flex flex-col gap-6 mb-8">
                                 <div className="flex items-center gap-4 sm:gap-5">
-                                    <div className="p-3 sm:p-4 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl sm:rounded-2xl text-emerald-700 dark:text-emerald-400">
-                                        <ResumeIcon />
+                                    <div className="flex items-center justify-center shrink-0">
+                                        <Image src="/cv.png" alt="Resume CV" width={56} height={56} className="object-contain drop-shadow-[0_0_12px_rgba(16,185,129,0.3)] transition-all" />
                                     </div>
                                     <div className="flex-1">
                                         <h3 className="font-bold text-lg sm:text-2xl text-gray-900 dark:text-white">Resume</h3>
@@ -291,7 +284,10 @@ export default function NewInterviewPage() {
                         >
                             <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
                                 <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
-                                    <Target size={18} className="text-emerald-500 dark:text-emerald-400 sm:size-[20px]" /> Interview Type
+                                    <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+                                        <Image src="/Interview-Logo.png" alt="Interview Type" width={28} height={28} className="object-contain dark:invert transition-all" />
+                                    </div>
+                                    Interview Type
                                 </label>
                                 <select
                                     className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
@@ -306,7 +302,10 @@ export default function NewInterviewPage() {
                             </div>
                             <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
                                 <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
-                                    <div className="text-emerald-600 dark:text-emerald-500"><GlobeIcon /></div> Language
+                                    <div className="text-emerald-600 dark:text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+                                        <Image src="/Multi-Language.png" alt="Language Globe" width={28} height={28} className="object-contain" />
+                                    </div> 
+                                    Language
                                 </label>
                                 <select
                                     className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
@@ -320,7 +319,10 @@ export default function NewInterviewPage() {
                             </div>
                             <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
                                 <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
-                                    <Gauge size={18} className="text-emerald-500 dark:text-emerald-400 sm:size-[20px]" /> Difficulty
+                                    <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+                                        <Image src="/Granular Scorecards.png" alt="Difficulty Scorecard" width={28} height={28} className="object-contain" />
+                                    </div> 
+                                    Difficulty
                                 </label>
                                 <select
                                     className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
@@ -334,7 +336,10 @@ export default function NewInterviewPage() {
                             </div>
                             <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
                                 <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
-                                    <div className="text-emerald-600 dark:text-emerald-500"><AlertCircle size={18} className="sm:size-[20px]" /></div> Questions
+                                    <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+                                        <Image src="/question.png" alt="Questions" width={36} height={36} className="object-contain scale-110" />
+                                    </div> 
+                                    Questions
                                 </label>
                                 <select
                                     className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
