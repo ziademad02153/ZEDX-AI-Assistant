@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import {
     Mic,
     Monitor,
@@ -12,7 +13,8 @@ import {
     ArrowRight,
     CheckCircle2,
     Video,
-    Info
+    Info,
+    Bot
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,48 +31,42 @@ export default function HowToUsePage() {
     }, []);
 
     const instructions = [
-        {
+        ...(isElectron ? [{
             title: "Smart Mic Control",
             description: "Listen when the interviewer asks, then STOP the mic when you start answering. This prevents the AI from hearing your own voice and getting confused.",
             icon: <Mic className="w-8 h-8" />,
             color: "from-emerald-500 to-green-500",
             bg: "bg-emerald-500/10",
             border: "border-emerald-500/20"
-        },
+        }] : []),
         {
-            title: isElectron ? "Internal Audio Routing" : "Interview Context",
+            title: isElectron ? "Internal Audio Routing" : "AI Interviewer Role",
             description: isElectron
                 ? "Capture the interviewer's voice directly from your system. Best for high-quality transcription in noiseless environments."
-                : "The AI uses your JD and Resume to provide the most relevant answers for your specific background.",
-            icon: isElectron ? <Monitor className="w-8 h-8" /> : <Info className="w-8 h-8" />,
-            color: "from-teal-500 to-emerald-600",
+                : "The AI acts as your recruiter, analyzing your Resume and Job Description to ask highly targeted and professional questions.",
+            icon: isElectron ? <Monitor className="w-8 h-8" /> : <Image src="/zedx-logo.png" alt="ZEDX Logo" width={48} height={48} className="object-contain" />,
+            color: isElectron ? "from-teal-500 to-emerald-600" : "bg-transparent shadow-none from-transparent to-transparent",
             bg: "bg-teal-500/10",
             border: "border-teal-500/20"
         },
-        {
-            title: "Assessment Interface",
-            description: "Use the scanner for code snippets or text you can't copy. The AI will analyze the screenshot in real-time.",
-            icon: <Scan className="w-8 h-8" />,
-            color: "from-green-600 to-emerald-700",
-            bg: "bg-green-600/10",
-            border: "border-green-600/20"
-        },
-        {
-            title: "AI Coaching Suggestions",
-            description: "Enable Auto-Answer to get suggestions instantly after the question ends. Precision is key.",
-            icon: <Sparkles className="w-8 h-8" />,
-            color: "from-lime-500 to-emerald-500",
-            bg: "bg-lime-500/10",
-            border: "border-lime-500/20"
-        },
-        ...(isElectron ? [] : [{
-            title: "Practice Camera",
-            description: "The camera is available here for training purposes. In the desktop app, focus on the interview platform's camera.",
-            icon: <Video className="w-8 h-8" />,
-            color: "from-emerald-400 to-teal-400",
-            bg: "bg-emerald-400/10",
-            border: "border-emerald-400/20"
-        }]),
+        ...(isElectron ? [
+            {
+                title: "Assessment Interface",
+                description: "Use the scanner for code snippets or text you can't copy. The AI will analyze the screenshot in real-time.",
+                icon: <Scan className="w-8 h-8" />,
+                color: "from-green-600 to-emerald-700",
+                bg: "bg-green-600/10",
+                border: "border-green-600/20"
+            },
+            {
+                title: "AI Coaching Suggestions",
+                description: "Enable Auto-Answer to get suggestions instantly after the question ends. Precision is key.",
+                icon: <Sparkles className="w-8 h-8" />,
+                color: "from-lime-500 to-emerald-500",
+                bg: "bg-lime-500/10",
+                border: "border-lime-500/20"
+            }
+        ] : []),
         {
             title: "End Session",
             description: "Always use the End Interview button to safely clean up and save your session data.",
@@ -82,7 +78,11 @@ export default function HowToUsePage() {
     ];
 
     const handleStart = () => {
-        router.push("/interview");
+        if (isElectron) {
+            router.push("/interview");
+        } else {
+            router.push("/mock-interview");
+        }
     };
 
     return (

@@ -96,7 +96,7 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="space-y-8">
+        <div className="flex-1 flex flex-col space-y-8">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
                 </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl">
@@ -134,10 +134,9 @@ export default function DashboardPage() {
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 sm:p-8 transition-colors">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 sm:p-8 transition-colors flex-1 flex flex-col">
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white">Recent History</h3>
                     {recentSessions.length > 0 && (
@@ -164,7 +163,7 @@ export default function DashboardPage() {
                         ))}
                     </div>
                 ) : recentSessions.length === 0 ? (
-                    <div className="text-center py-8">
+                    <div className="text-center py-8 flex-1 flex flex-col items-center justify-center">
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">No interviews yet</h3>
                         <p className="text-gray-500 dark:text-gray-400">Start your first mock interview to see your history and analytics here.</p>
                     </div>

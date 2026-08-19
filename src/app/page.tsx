@@ -19,7 +19,7 @@ export default function Home() {
         </div>
 
         {/* Hero Section */}
-        <section className="py-20 md:py-32 text-center container mx-auto px-4 relative z-10">
+        <section className="py-12 md:py-20 text-center container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
             <div className="mb-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-zinc-800 border border-green-100 dark:border-green-800 shadow-sm text-green-700 dark:text-green-400 font-semibold text-sm animate-fade-in-up">
               <span className="relative flex h-2 w-2">
@@ -29,7 +29,7 @@ export default function Home() {
               ZEDX AI Simulator: Real-Time Interview Simulation
             </div>
 
-            <h1 className="text-[2.25rem] xs:text-4xl sm:text-5xl md:text-[5.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.15] md:leading-[1.1] max-w-[90rem] mx-auto px-4">
+            <h1 className="text-[2.25rem] xs:text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.15] md:leading-[1.1] max-w-[90rem] mx-auto px-4">
               Practice Real Interviews <br className="xs:hidden" />
               <span className="text-gradient-fusion">Before They Happen.</span>
             </h1>
@@ -43,15 +43,15 @@ export default function Home() {
 
             <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4">
               <Link href="/dashboard" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto text-lg md:text-2xl px-8 py-6 md:px-12 md:py-8 rounded-full bg-gray-900 hover:bg-gray-800 text-white shadow-xl shadow-gray-900/20 transition-all hover:scale-105">
+                <Button className="w-full sm:w-auto text-base md:text-lg px-8 py-4 md:px-10 md:py-6 rounded-full bg-gray-900 hover:bg-gray-800 text-white shadow-xl shadow-gray-900/20 transition-all hover:scale-105">
                   Get Started for Free
                 </Button>
               </Link>
             </div>
 
             {/* Hero Visual: Realistic UI Mockup (Reverted) */}
-            <div className="relative w-full max-w-[1180px] mx-auto perspective-1000 px-4">
-              <div className="bg-white dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2.25rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-zinc-700 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
+            <div className="relative w-full max-w-[900px] mx-auto perspective-1000 px-4">
+              <div className="bg-white dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-zinc-700 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
                 <div className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-700 p-3 md:p-4 flex items-center gap-2 md:gap-2.5">
                   <div className="flex gap-1.5 md:gap-2">
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-400"></div>
@@ -63,7 +63,7 @@ export default function Home() {
                     Real-Time Interview Simulation
                   </div>
                 </div>
-                <div className="p-4 md:p-14 bg-white dark:bg-zinc-900 min-h-[320px] md:min-h-[440px] flex flex-col items-center justify-center relative overflow-hidden">
+                <div className="p-4 md:p-10 bg-white dark:bg-zinc-900 min-h-[320px] md:min-h-[350px] flex flex-col items-center justify-center relative overflow-hidden">
                   {/* Background Grid */}
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:3rem_3rem] md:bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
 
@@ -101,17 +101,17 @@ export default function Home() {
 
           </div>
 
-          <div className="mt-20 md:mt-32 relative w-full max-w-[1180px] mx-auto perspective-1000 px-4">
+          <div className="mt-16 md:mt-24 relative w-full max-w-[900px] mx-auto perspective-1000 px-4">
             <div className="text-center mb-10 md:mb-16">
               <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] md:text-xs font-extrabold tracking-widest uppercase mb-4">
                 Advanced Coding
               </span>
-              <h2 className="text-2xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
+              <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
                 Technical <span className="text-gradient-fusion">Precision.</span>
               </h2>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2.25rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-zinc-700 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
+            <div className="bg-white dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-zinc-700 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
               <div className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-700 p-3 md:p-4 flex items-center gap-2 md:gap-2.5">
                 <div className="flex gap-1.5 md:gap-2">
                   <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-400"></div>
@@ -123,7 +123,7 @@ export default function Home() {
                   Mock Interview - Architecture Review
                 </div>
               </div>
-              <div className="p-4 md:p-14 bg-white dark:bg-zinc-900 min-h-[380px] md:min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden">
+              <div className="p-4 md:p-10 bg-white dark:bg-zinc-900 min-h-[320px] md:min-h-[350px] flex flex-col items-center justify-center relative overflow-hidden">
                 {/* Background Grid */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:3rem_3rem] md:bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
 
@@ -183,7 +183,7 @@ export default function Home() {
         <section id="features" className="py-24 relative z-10">
           <div className="container mx-auto px-4">
             <div className="text-center mb-20">
-              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
                 Everything you need to <span className="text-gradient-fusion">succeed</span>
               </h2>
               <p className="text-lg text-gray-500 max-w-2xl mx-auto">
@@ -200,7 +200,7 @@ export default function Home() {
                     Context
                   </span>
                 </div>
-                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Upload Context Documents</h3>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">Upload Context Documents</h3>
 
                 {/* Visual: Context File */}
                 <div className="flex-grow flex items-center justify-center mb-8">
@@ -233,7 +233,7 @@ export default function Home() {
                     Instant Verification
                   </span>
                 </div>
-                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Instant Feedback</h3>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">Instant Feedback</h3>
 
                 {/* Visual: Chat Bubble */}
                 <div className="flex-grow flex items-center justify-center mb-8 w-full">
@@ -259,7 +259,7 @@ export default function Home() {
                     Multilingual
                   </span>
                 </div>
-                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">52 Languages</h3>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">52 Languages</h3>
 
                 {/* Visual: Language Globe */}
                 <div className="flex-grow flex items-center justify-center mb-8 relative">
@@ -293,7 +293,7 @@ export default function Home() {
                     Analysis
                   </span>
                 </div>
-                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Performance Analysis</h3>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">Performance Analysis</h3>
 
                 {/* Visual: Summary Card Mockup */}
                 <div className="flex-grow flex items-center justify-center mb-8">

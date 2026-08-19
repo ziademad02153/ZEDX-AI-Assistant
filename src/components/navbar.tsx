@@ -35,66 +35,37 @@ export function Navbar() {
         <nav
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-                scrolled
-                    ? "py-3 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm"
-                    : "py-4 bg-transparent"
+                scrolled ? "py-3" : "py-4"
             )}
         >
-            <div className="w-full max-w-full md:max-w-[75vw] mx-auto px-4 sm:px-6 flex items-center justify-between">
+            {/* Seamless Fade-out Glass Background */}
+            <div 
+                className={cn(
+                    "absolute inset-0 -bottom-8 pointer-events-none transition-opacity duration-300",
+                    scrolled ? "opacity-100" : "opacity-0"
+                )}
+            >
+                <div className="absolute inset-0 bg-white/60 dark:bg-black/40 backdrop-blur-xl [mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]" />
+            </div>
+
+            <div className="relative z-10 w-full max-w-full md:max-w-[75vw] mx-auto px-4 sm:px-6 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center group">
                     <Image
                         src="/zedx-logo.png"
                         alt="ZEDX-AI Logo"
-                        width={110}
-                        height={110}
-                        className="object-contain w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-[110px] lg:h-[110px] transition-transform group-hover:scale-105"
+                        width={90}
+                        height={90}
+                        className="object-contain w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-[85px] lg:h-[85px] transition-transform group-hover:scale-105"
                         style={{ height: 'auto' }}
                         priority
                     />
                 </Link>
 
-                {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center space-x-5">
-                    <Link
-                        href="/#features"
-                        className="flex items-center gap-1.5 text-lg font-bold text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
-                        onClick={(e) => {
-                            if (window.location.pathname === '/') {
-                                e.preventDefault();
-                                document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-                            }
-                        }}
-                    >
-                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all shadow-sm">
-                            How it Works
-                        </span>
-                    </Link>
-                    <Link
-                        href="/download"
-                        className="flex items-center gap-1.5 text-lg font-bold text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors group relative"
-                    >
-                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all shadow-sm flex items-center gap-2">
-                            Desktop App
-                            <span className="bg-emerald-500 text-white text-xs font-extra-bold px-2.5 py-1 rounded-full animate-pulse shadow-md shadow-emerald-500/20">NEW</span>
-                        </span>
-                    </Link>
-                    <Link
-                        href="/about"
-                        className="text-lg font-bold transition-colors"
-                    >
-                        <span className="px-6 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-750 transition-all shadow-sm text-gray-700 dark:text-gray-200">
-                            About ZEDX AI Simulator
-                        </span>
-                    </Link>
 
-                    <div className="pl-4 border-l border-gray-200 dark:border-gray-700">
-                        <AuthButtons />
-                    </div>
-                </div>
 
-                {/* Mobile Menu (Sheet) */}
-                <div className="md:hidden flex items-center gap-4">
+                {/* Mobile & Desktop Menu (Sheet) */}
+                <div className="flex items-center gap-4">
                     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                         <SheetTrigger asChild>
                             <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300">
@@ -109,45 +80,47 @@ export function Navbar() {
                                         Menu
                                     </h2>
                                 </div>
-                                <div className="flex flex-col gap-1 p-4 overflow-y-auto">
-                                    <Link href="/dashboard" onClick={() => setIsSheetOpen(false)}>
-                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            Dashboard
-                                        </Button>
-                                    </Link>
-                                    <Link href="/dashboard/new" onClick={() => setIsSheetOpen(false)}>
-                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            New Simulation
-                                        </Button>
-                                    </Link>
-                                    <Link href="/dashboard/resumes" onClick={() => setIsSheetOpen(false)}>
-                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            My Context Files
-                                        </Button>
-                                    </Link>
-                                    <Link href="/dashboard/history" onClick={() => setIsSheetOpen(false)}>
-                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            Training History
-                                        </Button>
-                                    </Link>
+                                <div className="flex flex-col flex-1 gap-1 p-4 overflow-y-auto justify-between">
+                                    <div className="flex flex-col gap-2">
+                                        <Link href="/dashboard" onClick={() => setIsSheetOpen(false)}>
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                                Dashboard
+                                            </Button>
+                                        </Link>
+                                        <Link href="/dashboard/new" onClick={() => setIsSheetOpen(false)}>
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                                New Simulation
+                                            </Button>
+                                        </Link>
+                                        <Link href="/dashboard/resumes" onClick={() => setIsSheetOpen(false)}>
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                                My Context Files
+                                            </Button>
+                                        </Link>
+                                        <Link href="/dashboard/history" onClick={() => setIsSheetOpen(false)}>
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                                Training History
+                                            </Button>
+                                        </Link>
 
-                                    <div className="h-px bg-gray-100 dark:bg-gray-800 my-4 mx-2" />
+                                        <div className="h-px bg-gray-100 dark:bg-gray-800 my-4 mx-2" />
 
-                                    <Link href="/#features" onClick={() => setIsSheetOpen(false)}>
-                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            How it Works
-                                        </Button>
-                                    </Link>
-                                    <Link href="/download" onClick={() => setIsSheetOpen(false)}>
-                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            Desktop App
-                                        </Button>
-                                    </Link>
-                                    <Link href="/about" onClick={() => setIsSheetOpen(false)}>
-                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
-                                            About ZEDX AI Simulator
-                                        </Button>
-                                    </Link>
+                                        <Link href="/#features" onClick={() => setIsSheetOpen(false)}>
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                                How it Works
+                                            </Button>
+                                        </Link>
+                                        <Link href="/download" onClick={() => setIsSheetOpen(false)}>
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                                Desktop App
+                                            </Button>
+                                        </Link>
+                                        <Link href="/about" onClick={() => setIsSheetOpen(false)}>
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                                About ZEDX AI Simulator
+                                            </Button>
+                                        </Link>
+                                    </div>
 
                                     <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
                                         <AuthButtons onSheetClose={() => setIsSheetOpen(false)} />
@@ -245,96 +218,59 @@ function AuthButtons({ onSheetClose }: { onSheetClose?: () => void }) {
 
     if (isLoggedIn) {
         return (
-            <div className="relative user-dropdown">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="flex items-center gap-2 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
-                    >
-                        <div className="w-10.5 h-10.5 rounded-full overflow-hidden border-2 border-green-500 shadow-md">
-                            {userAvatar ? (
-                                <Image
-                                    src={userAvatar}
-                                    alt="User Avatar"
-                                    width={42}
-                                    height={42}
-                                    className="w-full h-full object-cover"
-                                    style={{ height: 'auto' }}
-                                />
-                            ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold text-lg">
-                                    {userName?.charAt(0).toUpperCase() || userEmail?.charAt(0).toUpperCase() || 'U'}
-                                </div>
-                            )}
-                        </div>
-                    </button>
-
-                    {/* Dropdown Menu */}
-                    {isDropdownOpen && (
-                        <div className="absolute right-0 top-full mt-2 w-72 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl shadow-black/20 border border-gray-200 dark:border-zinc-700 overflow-hidden z-[100] animate-in fade-in slide-in-from-top-2 duration-200">
-                            {/* User Info Header */}
-                            <div className="p-4 bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-700">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-green-500">
-                                        {userAvatar ? (
-                                            <Image
-                                                src={userAvatar}
-                                                alt="User Avatar"
-                                                width={48}
-                                                height={48}
-                                                className="w-full h-full object-cover"
-                                                style={{ height: 'auto' }}
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold text-xl">
-                                                {userName?.charAt(0).toUpperCase() || userEmail?.charAt(0).toUpperCase() || 'U'}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="font-semibold text-gray-900 dark:text-white truncate">
-                                            {userName || 'User'}
-                                        </p>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                                            {userEmail}
-                                        </p>
-                                    </div>
-                                </div>
+            <div className="w-full flex flex-col gap-2">
+                <div className="flex items-center gap-3 p-2 mb-2 bg-gray-50 dark:bg-zinc-800 rounded-2xl">
+                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-green-500 shrink-0">
+                        {userAvatar ? (
+                            <Image
+                                src={userAvatar}
+                                alt="User Avatar"
+                                width={48}
+                                height={48}
+                                className="w-full h-full object-cover"
+                                style={{ height: 'auto' }}
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold text-xl">
+                                {userName?.charAt(0).toUpperCase() || userEmail?.charAt(0).toUpperCase() || 'U'}
                             </div>
-
-                            {/* Menu Items */}
-                            <div className="p-2">
-                                <button
-                                    onClick={() => {
-                                        handleSwitchAccount();
-                                        onSheetClose?.();
-                                    }}
-                                    className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-xl transition-colors"
-                                >
-                                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                    </svg>
-                                    Switch Account
-                                </button>
-
-                                <div className="my-2 border-t border-gray-100 dark:border-zinc-700"></div>
-
-                                <button
-                                    onClick={() => {
-                                        handleLogout();
-                                        onSheetClose?.();
-                                    }}
-                                    className="w-full flex items-center gap-3 px-4 py-3 text-left text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors"
-                                >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Sign Out
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-gray-900 dark:text-white truncate">
+                            {userName || 'User'}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                            {userEmail}
+                        </p>
+                    </div>
                 </div>
+
+                <button
+                    onClick={() => {
+                        handleSwitchAccount();
+                        onSheetClose?.();
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-xl transition-colors font-medium"
+                >
+                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                    </svg>
+                    Switch Account
+                </button>
+
+                <button
+                    onClick={() => {
+                        handleLogout();
+                        onSheetClose?.();
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-left text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors font-medium"
+                >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Sign Out
+                </button>
             </div>
         );
     }

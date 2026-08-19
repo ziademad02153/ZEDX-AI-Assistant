@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Upload, AlertCircle, Sparkles, Loader2 } from "lucide-react";
+import { ArrowLeft, Upload, AlertCircle, Sparkles, Loader2, Target, Gauge } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -83,6 +83,8 @@ export default function NewInterviewPage() {
     const [resume, setResume] = useState("");
     const [interviewType, setInterviewType] = useState("Technical");
     const [language, setLanguage] = useState("en-US");
+    const [difficulty, setDifficulty] = useState("Intermediate");
+    const [questionCount, setQuestionCount] = useState("10");
     const [selectedModel, setSelectedModel] = useState("llama-3.1-8b-instant");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -153,6 +155,8 @@ export default function NewInterviewPage() {
             localStorage.setItem("interview_context_resume", resume);
             localStorage.setItem("interview_context_type", interviewType);
             localStorage.setItem("interview_context_lang", language);
+            localStorage.setItem("interview_context_difficulty", difficulty);
+            localStorage.setItem("interview_context_question_count", questionCount);
             localStorage.setItem("selected_ai_model", selectedModel);
         } catch (e) {
             console.warn(e);
@@ -192,18 +196,7 @@ export default function NewInterviewPage() {
                     </div>
                 </div>
 
-                {/* Practice Mode Alert */}
-                <div className="mb-8 p-4 sm:p-5 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 flex items-start sm:items-center gap-4 animate-fade-in-up">
-                    <div className="p-2 bg-amber-100 dark:bg-amber-500/20 rounded-lg text-amber-600 dark:text-amber-400 shrink-0">
-                        <AlertCircle size={24} />
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-amber-800 dark:text-amber-400 mb-1">PRACTICE MODE</h3>
-                        <p className="text-amber-700/80 dark:text-amber-400/80 text-sm">
-                            This is a simulated interview environment designed to help you practice, build confidence, and improve your performance.
-                        </p>
-                    </div>
-                </div>
+
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[calc(100vh-250px)]">
                     {/* Left Column: Configuration (8 cols) */}
@@ -298,7 +291,7 @@ export default function NewInterviewPage() {
                         >
                             <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
                                 <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
-                                    <Sparkles size={18} className="text-emerald-500 dark:text-emerald-400 sm:size-[20px]" /> Interview Type
+                                    <Target size={18} className="text-emerald-500 dark:text-emerald-400 sm:size-[20px]" /> Interview Type
                                 </label>
                                 <select
                                     className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
@@ -323,6 +316,35 @@ export default function NewInterviewPage() {
                                     {SUPPORTED_LANGUAGES.map(lang => (
                                         <option key={lang.code} value={lang.code}>{lang.native}</option>
                                     ))}
+                                </select>
+                            </div>
+                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
+                                <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
+                                    <Gauge size={18} className="text-emerald-500 dark:text-emerald-400 sm:size-[20px]" /> Difficulty
+                                </label>
+                                <select
+                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
+                                    value={difficulty}
+                                    onChange={(e) => setDifficulty(e.target.value)}
+                                >
+                                    <option value="Beginner">Beginner</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Expert">Expert</option>
+                                </select>
+                            </div>
+                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
+                                <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
+                                    <div className="text-emerald-600 dark:text-emerald-500"><AlertCircle size={18} className="sm:size-[20px]" /></div> Questions
+                                </label>
+                                <select
+                                    className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
+                                    value={questionCount}
+                                    onChange={(e) => setQuestionCount(e.target.value)}
+                                >
+                                    <option value="5">5 Questions</option>
+                                    <option value="10">10 Questions</option>
+                                    <option value="15">15 Questions</option>
+                                    <option value="20">20 Questions</option>
                                 </select>
                             </div>
                         </motion.div>
