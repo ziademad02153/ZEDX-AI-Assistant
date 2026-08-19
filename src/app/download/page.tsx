@@ -116,7 +116,7 @@ export default function DownloadPage() {
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Assessment Interface:</strong> Runs cleanly alongside Zoom/Teams for fast reading.
+                                        <strong>Practice Interface:</strong> Runs seamlessly for realistic interview simulations.
                                     </span>
                                 </li>
                                 <li className="flex gap-3 items-start">
@@ -124,7 +124,7 @@ export default function DownloadPage() {
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Internal Audio Routing:</strong> Transcribe meeting participants flawlessly, even with headphones.
+                                        <strong>Internal Audio Routing:</strong> Capture simulated interviewer audio flawlessly during practice sessions.
                                     </span>
                                 </li>
                                 <li className="flex gap-3 items-start">
@@ -132,7 +132,7 @@ export default function DownloadPage() {
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Screen Capture (OCR):</strong> Extract presentation text from shared screens instantly.
+                                        <strong>Screen Capture (OCR):</strong> Analyze shared content during simulated technical interviews.
                                     </span>
                                 </li>
                                 <li className="flex gap-3 items-start">
@@ -140,7 +140,7 @@ export default function DownloadPage() {
                                         <Check size={14} className="text-emerald-500" />
                                     </div>
                                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Manual AI Chat:</strong> Ask follow-up/context questions mid-meeting without interrupting.
+                                        <strong>Manual AI Chat:</strong> Ask follow-up questions during your practice session without interrupting the flow.
                                     </span>
                                 </li>
                                 <li className="flex gap-3 items-start">
