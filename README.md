@@ -24,6 +24,20 @@ By employing a secure Inter-Process Communication (IPC) bridge within an Electro
 
 ---
 
+## Why ZEDX?
+
+| Traditional Interview Prep | ZEDX AI Simulator |
+| :--- | :--- |
+| Read static sample questions | Simulate realistic dynamic interviews |
+| Receive generic advice | Get context-aware, resume-tailored feedback |
+| Practice repeatedly without measurement | Track performance and measure improvement |
+| Rely completely on AI | **Independent Mode** verifies actual learning |
+
+**The Independent Mode Advantage:**
+ZEDX is not designed to create AI dependency. We utilize AI during training sessions, then remove the assistance to measure whether the candidate has actually improved. This ensures candidates are truly prepared for real-world scenarios.
+
+---
+
 ## Performance Metrics & System Benchmarks
 ZEDX AI Simulator is engineered for uncompromised speed during practice sessions. The following metrics represent typical performance under standard operational loads:
 
@@ -31,8 +45,8 @@ ZEDX AI Simulator is engineered for uncompromised speed during practice sessions
 | :--- | :--- | :--- | :--- |
 | **STT Processing Phase** | Audio-to-Blob Latency | `Near-real-time` | Fast transcription for fluid simulation. |
 | **VAD Network Pipeline** | Payload Truncation Ratio | `~85% reduction` | Preserves API limits; isolates clear dialog. |
-| **LLM Inference Stream** | Time To First Token (TTFT) | `~120ms (optimized network)` | Fast visual readout utilizing SSE routing. |
-| **React UI Hydration** | Overpaint Latency | `Zero-Flicker` | Uninterrupted cognitive flow on screen bounds. |
+| **LLM Inference Stream** | Time To First Token (TTFT) | `~120ms (observed under optimized network conditions)` | Fast visual readout utilizing SSE routing. |
+| **React UI Hydration** | UI Rendering | `Stable Streaming Render` | Smooth incremental feedback display. |
 
 ---
 
@@ -84,7 +98,7 @@ sequenceDiagram
     UI->>OSE: Request Internal Audio Capture
     OSE-->>UI: Grant MediaStream Track constraints
     loop Continuous Buffering Loop
-        UI->>VAD: Stream raw 16kHz byte-chunks
+        UI->>VAD: Stream compressed WebM chunks
         alt Audio Intensity > Threshold Limit
             VAD->>STT: Dispatch Blob Transduction Buffer
             STT-->>UI: Return Parsed JSON Transcript Payload
@@ -122,7 +136,7 @@ graph LR
         LLAMA[Llama 3.1 70B Instruct]
         UI[Secure React Practice Interface]
         COMPILER -- "Injected Semantic Prompt" --> LLAMA
-        LLAMA -- "Server-Sent Events (SSE HTTP/2)" --> UI
+        LLAMA -- "Server-Sent Events (SSE)" --> UI
     end
     
     classDef data fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
@@ -133,7 +147,7 @@ graph LR
 ```
 
 ### Engineering Highlights:
-- **TransformStream Pipelines:** Employs the Next.js Edge Runtime to decode the Llama 3.1 inference vector into Server-Sent Events (SSE). Users consume insights incrementally as frames generate, virtually eliminating synchronous request blocking.
+- **TransformStream Pipelines:** Employs the Next.js Edge Runtime to decode the streamed Llama 3.1 inference response into Server-Sent Events (SSE). Users consume insights incrementally as frames generate, virtually eliminating synchronous request blocking.
 - **Multilingual Dialect Mapping:** The LLM constraint protocol forces context-matching to output strictly in the user's localized dialect constraint (e.g., Cairo Egyptian Arabic), optimizing cognitive assimilation.
 
 ---
