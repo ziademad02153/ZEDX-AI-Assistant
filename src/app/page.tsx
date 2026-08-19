@@ -230,7 +230,7 @@ export default function Home() {
               <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
                 <div className="mb-4">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-teal-100 text-teal-800 text-xs font-bold tracking-wider uppercase">
-                    Live Verification
+                    Instant Verification
                   </span>
                 </div>
                 <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Instant Feedback</h3>

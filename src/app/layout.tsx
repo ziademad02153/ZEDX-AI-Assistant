@@ -23,12 +23,12 @@ export const metadata: Metadata = {
     default: "ZEDX AI Interview Simulator",
     template: "%s | ZEDX AI Interview Simulator"
   },
-  description: "ZEDX AI Interview Simulator is a real-time AI interview simulation coach providing live transcriptions, example answers, and feedback for job seekers and fresh graduates.",
+  description: "ZEDX AI Interview Simulator is a real-time AI interview simulation coach providing real-time transcriptions, example answers, and feedback for job seekers and fresh graduates.",
   keywords: [
-    "ZEDX", "ZEDX AI", "ZEDX AI Simulator", "Mock Interview Coach", "Live Transcription",
+    "ZEDX", "ZEDX AI", "ZEDX AI Simulator", "Mock Interview Coach", "Real-Time Transcription",
     "Interview Simulation", "Mock Interview Coach", "AI Interview Notes", "Real-time AI Coach",
     "Training Coach", "Interview Practice", "Job Seeker Coach", "AI Coach",
-    "interview simulator", "live transcription", "interview training", "artificial intelligence", "personal coach"
+    "interview simulator", "real-time transcription", "interview training", "artificial intelligence", "personal coach"
   ],
   authors: [{ name: "ZEDX AI Team", url: "https://zedx-ai-assistant-1.vercel.app" }],
   creator: "ZEDX AI",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     url: "https://zedx-ai-assistant-1.vercel.app",
     siteName: "ZEDX AI Interview Simulator",
     title: "ZEDX AI Interview Simulator",
-    description: "Your live interview simulation and training coach.",
+    description: "Your real-time interview simulation and training coach.",
     images: [
       {
         url: "/zedx-cyberpunk-banner.png",
@@ -188,7 +188,7 @@ export default async function RootLayout({
               "name": "ZEDX AI Interview Simulator",
               "alternateName": ["ZEDX AI Simulator", "ZEDX"],
               "url": "https://zedx-ai-assistant-1.vercel.app",
-              "description": "ZEDX AI Interview Simulator is a real-time AI interview simulation coach providing live transcriptions and answer verification.",
+              "description": "ZEDX AI Interview Simulator is a real-time AI interview simulation coach providing real-time transcriptions and answer verification.",
               "applicationCategory": "BusinessApplication",
               "operatingSystem": "Web Browser",
               "offers": {

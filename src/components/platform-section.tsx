@@ -100,13 +100,13 @@ export function PlatformSection() {
                         {/* Left: Text Content (45%) */}
                         <div className="w-full md:w-[45%] flex flex-col justify-center text-left">
                             <h2 className="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-2 tracking-tight">
-                                Practice with the
+                                Simulate the
                             </h2>
                             <h2 className="text-3xl md:text-5xl font-extrabold text-lime-300 leading-tight mb-6 tracking-tight">
-                                interview and coding environments you already use
+                                environments you'll face
                             </h2>
                             <p className="text-white/80 text-base md:text-lg leading-relaxed max-w-sm mb-4">
-                                Train with realistic interview and coding scenarios using platforms such as Zoom, Google Meet, HackerRank, and LeetCode.
+                                Recreate realistic interview scenarios by practicing alongside platforms such as Zoom, Google Meet, HackerRank, and LeetCode.
                             </p>
                             <p className="text-lime-300 font-bold text-lg">
                                 Practice. Improve. Perform Independently.
