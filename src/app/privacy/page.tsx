@@ -12,7 +12,7 @@ export default function PrivacyPolicyPage() {
             <div className="max-w-4xl mx-auto">
                 <div className="mb-12">
                     <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Privacy Policy</h1>
-                    <p className="text-gray-500 dark:text-gray-400">Last Updated: December 22, 2024</p>
+                    <p className="text-gray-500 dark:text-gray-400">Last Updated: August 19, 2026</p>
                 </div>
 
                 <div className="prose prose-gray dark:prose-invert max-w-none">
@@ -36,7 +36,7 @@ export default function PrivacyPolicyPage() {
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Summary of Key Points</h2>
                         <ul className="space-y-3 text-gray-600 dark:text-gray-300">
                             <li><strong>What personal information do we process?</strong> When you use our Services, we may process personal information depending on how you interact with us and the Services.</li>
-                            <li><strong>Do we process any sensitive personal information?</strong> We do not process sensitive personal information.</li>
+                            <li><strong>Do we process any sensitive personal information?</strong> We do not intentionally request sensitive personal information. However, user-provided documents or interview transcripts may contain personal information.</li>
                             <li><strong>Do we collect any information from third parties?</strong> We may collect limited information from Google when you use social login.</li>
                             <li><strong>How do we process your information?</strong> We process your information to provide, improve, and administer our Services, communicate with you, for security and fraud prevention, and to comply with law.</li>
                             <li><strong>How do we keep your information safe?</strong> We have adequate organizational and technical processes in place to protect your personal information.</li>
@@ -138,7 +138,7 @@ export default function PrivacyPolicyPage() {
                         </p>
                         <p className="text-gray-600 dark:text-gray-300 mb-2">We may share your personal information in the following situations:</p>
                         <ul className="list-disc ml-6 space-y-2 text-gray-600 dark:text-gray-300">
-                            <li><strong>With AI Service Providers.</strong> We share your input (resume, job description, interview questions) with AI providers (such as OpenAI, Google, Groq) to generate benchmark learning answers. These providers process your data according to their privacy policies.</li>
+                            <li><strong>With AI Service Providers.</strong> We share your input (resume, job description, interview questions) with AI providers (such as Groq) to generate benchmark learning answers. These providers process your data according to their privacy policies.</li>
                             <li><strong>With Service Providers.</strong> We share your data with Supabase for database storage and authentication.</li>
                             <li><strong>Business Transfers.</strong> We may share or transfer your information in connection with any merger, sale of company assets, or acquisition.</li>
                         </ul>
@@ -165,7 +165,7 @@ export default function PrivacyPolicyPage() {
                             As part of our Services, we offer products, features, or tools powered by artificial intelligence, machine learning, or similar technologies (collectively, &quot;AI Products&quot;). These tools are designed to enhance your interview practice experience and provide you with AI-generated benchmark answers.
                         </p>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
-                            <strong>Use of AI Technologies:</strong> We provide AI Products through third-party service providers (&quot;AI Service Providers&quot;), including OpenAI, Google AI, and Groq. Your input, output, and personal information will be shared with and processed by these AI Service Providers to enable your use of our AI Products.
+                            <strong>Use of AI Technologies:</strong> We provide AI Products through third-party service providers (&quot;AI Service Providers&quot;), including Groq. Your input, output, and personal information will be shared with and processed by these AI Service Providers to enable your use of our AI Products.
                         </p>
                         <p className="text-gray-600 dark:text-gray-300">
                             <strong>Our AI Products are designed for:</strong>

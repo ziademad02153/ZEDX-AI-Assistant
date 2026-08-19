@@ -5,7 +5,7 @@ export default function TermsOfServicePage() {
         <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 py-12 px-4">
             <div className="max-w-3xl mx-auto bg-white dark:bg-zinc-800 rounded-2xl shadow-sm p-8">
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Terms of Service</h1>
-                <p className="text-gray-500 text-sm mb-8">Last updated: December 2024</p>
+                <p className="text-gray-500 text-sm mb-8">Last updated: August 19, 2026</p>
 
                 <div className="space-y-6 text-gray-700 dark:text-gray-300">
                     <section>
