@@ -17,10 +17,7 @@
 ## Executive Summary
 **ZEDX AI Simulator** is a dedicated interview simulation and training platform designed for professional evaluation. Built on a modern tech stack (Electron, Next.js, and Supabase), it processes simulated interview questions and responses in near-real-time using advanced Speech-to-Text (STT) and Large Language Model (LLM) inference.
 
-By employing a secure Inter-Process Communication (IPC) bridge within an Electron shell, the application captures user microphone input to act as a strict, context-aware "Interviewer and Coach" for job seekers requiring rigorous practice, instant feedback, and skill development.
-
-> **⚠️ Important Disclaimer:**  
-> ZEDX is designed **exclusively** for simulated interviews, practice sessions, and skill assessment. It is **not** intended to provide AI assistance during live hiring interviews or real-world assessments.
+By employing a secure Inter-Process Communication (IPC) bridge within an Electron shell, the application captures user microphone input to act as a strict, context-aware "Interviewer and Coach" for job seekers requiring rigorous practice, instant feedback, and skill development. ZEDX is built for interview simulation, practice, and skill assessment—not for assistance during live hiring interviews or real-world assessments.
 
 ---
 
