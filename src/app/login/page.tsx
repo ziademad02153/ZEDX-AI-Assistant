@@ -219,8 +219,8 @@ export default function LoginPage() {
                     </h2>
                     <div className="space-y-6">
                         <div className="flex items-start gap-4">
-                            <div className="p-2 bg-emerald-500/10 rounded-lg">
-                                <Zap className="text-emerald-400" size={24} />
+                            <div className="p-2 bg-emerald-500/10 rounded-lg shrink-0 flex items-center justify-center">
+                                <Image src="/Instant Transcription.png" alt="Instant Transcription" width={32} height={32} className="object-contain drop-shadow-sm" />
                             </div>
                             <div>
                                 <h3 className="font-bold text-lg text-white">Real-Time Intelligence</h3>
@@ -228,8 +228,8 @@ export default function LoginPage() {
                             </div>
                         </div>
                         <div className="flex items-start gap-4">
-                            <div className="p-2 bg-emerald-500/10 rounded-lg">
-                                <Trophy className="text-emerald-400" size={24} />
+                            <div className="p-2 bg-emerald-500/10 rounded-lg shrink-0 flex items-center justify-center">
+                                <Image src="/zedx-logo-for-v.png" alt="ZEDX Edge" width={32} height={32} className="object-contain drop-shadow-sm" />
                             </div>
                             <div>
                                 <h3 className="font-bold text-lg text-white">Competitive Edge</h3>
@@ -237,8 +237,8 @@ export default function LoginPage() {
                             </div>
                         </div>
                         <div className="flex items-start gap-4">
-                            <div className="p-2 bg-emerald-500/10 rounded-lg">
-                                <Shield className="text-emerald-400" size={24} />
+                            <div className="p-2 bg-emerald-500/10 rounded-lg shrink-0 flex items-center justify-center">
+                                <Image src="/Privacy First.png" alt="Privacy First" width={32} height={32} className="object-contain drop-shadow-sm" />
                             </div>
                             <div>
                                 <h3 className="font-bold text-lg text-white">Private & Secure</h3>
