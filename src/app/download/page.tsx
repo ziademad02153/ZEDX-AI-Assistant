@@ -29,7 +29,7 @@ export default function DownloadPage() {
                             "priceCurrency": "USD"
                         },
                         "downloadUrl": "https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.3/ZEDX.AI.Setup.1.1.3.exe",
-                        "featureList": "Real-time Meeting Transcription, Internal Audio Routing, Context Analysis, Assessment Interface, AI Simulator",
+                        "featureList": "Real-time Meeting Simulation, Internal Audio Routing, Context Analysis, Practice Interface, AI Simulator",
                         "author": {
                             "@type": "Organization",
                             "name": "ZEDX AI"
@@ -57,7 +57,7 @@ export default function DownloadPage() {
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400">ZEDX Desktop</span>
                         </h1>
                         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                            Don&apos;t rely on low-quality browser microphones. The desktop app utilizes <strong className="text-emerald-500">Internal Audio Routing</strong> securely, so you get flawless meeting transcriptions instantly.
+                            Don&apos;t rely on low-quality browser microphones. The desktop app utilizes <strong className="text-emerald-500">Internal Audio Routing</strong> securely, so you get flawless audio capture during practice instantly.
                         </p>
                     </div>
 

@@ -138,7 +138,7 @@ export default function PrivacyPolicyPage() {
                         </p>
                         <p className="text-gray-600 dark:text-gray-300 mb-2">We may share your personal information in the following situations:</p>
                         <ul className="list-disc ml-6 space-y-2 text-gray-600 dark:text-gray-300">
-                            <li><strong>With AI Service Providers.</strong> We share your input (resume, job description, interview questions) with AI providers (such as OpenAI, Google, Groq) to generate interview answers. These providers process your data according to their privacy policies.</li>
+                            <li><strong>With AI Service Providers.</strong> We share your input (resume, job description, interview questions) with AI providers (such as OpenAI, Google, Groq) to generate benchmark learning answers. These providers process your data according to their privacy policies.</li>
                             <li><strong>With Service Providers.</strong> We share your data with Supabase for database storage and authentication.</li>
                             <li><strong>Business Transfers.</strong> We may share or transfer your information in connection with any merger, sale of company assets, or acquisition.</li>
                         </ul>
@@ -172,7 +172,7 @@ export default function PrivacyPolicyPage() {
                         </p>
                         <ul className="list-disc ml-6 space-y-1 text-gray-600 dark:text-gray-300">
                             <li>Natural language processing of interview questions</li>
-                            <li>Generating contextual interview answers based on your resume</li>
+                            <li>Generating contextual answers and explanations for interview practice based on your resume</li>
                             <li>Speech-to-text transcription of interview conversations</li>
                         </ul>
                     </section>
