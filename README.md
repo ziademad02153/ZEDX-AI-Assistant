@@ -1,7 +1,7 @@
 <div align="center">
   <img src="public/zedx-logo.png" alt="ZEDX AI Simulator Logo" width="180"/>
   <h1>ZEDX AI Simulator</h1>
-  <h3>Professional AI Mock Interview & Training Infrastructure</h3>
+  <h3>Professional AI Interview Simulation & Training Infrastructure</h3>
 
   <!-- Tech Stack Badges -->
   <p>
@@ -15,31 +15,34 @@
 </div>
 
 ## Executive Summary
-**ZEDX AI Simulator** represents a breakthrough in distributed real-time audio computation, offering an advanced mock interview and real-time training simulation platform for professional evaluation. Designed to seamlessly parse, process, and contextualize high-velocity interview answers, the system leverages a micro-latency Speech-to-Text (STT) parsing engine and real-time Large Language Model (LLM) inference. 
+**ZEDX AI Simulator** is a dedicated interview simulation and training platform designed for professional evaluation. Built on a modern tech stack (Electron, Next.js, and Supabase), it processes simulated interview questions and responses in near-real-time using advanced Speech-to-Text (STT) and Large Language Model (LLM) inference.
 
-By employing a meticulously engineered Inter-Process Communication (IPC) bridge within an Electron shell, the application securely captures user microphone input, operating as a strict, context-aware "Interviewer and Assessor" for job seekers and fresh graduates requiring rigorous interview practice, instant performance feedback, and cognitive reinforcement during training sessions.
+By employing a secure Inter-Process Communication (IPC) bridge within an Electron shell, the application captures user microphone input to act as a strict, context-aware "Interviewer and Coach" for job seekers requiring rigorous practice, instant feedback, and skill development.
+
+> **⚠️ Important Disclaimer:**  
+> ZEDX is designed **exclusively** for simulated interviews, practice sessions, and skill assessment. It is **not** intended to provide AI assistance during live hiring interviews or real-world assessments.
 
 ---
 
-##  Performance Metrics & System Benchmarks
-ZEDX AI Simulator is engineered for uncompromised speed. The following metrics are continuously validated under standard operational loads:
+## Performance Metrics & System Benchmarks
+ZEDX AI Simulator is engineered for uncompromised speed during practice sessions. The following metrics represent typical performance under standard operational loads:
 
-| Subsystem Component | Metric | Deterministic Output | Operational Benefit |
+| Subsystem Component | Metric | Observed Output | Operational Benefit |
 | :--- | :--- | :--- | :--- |
-| **STT Processing Phase** | Audio-to-Blob Latency | `< 450ms` | Absolute zero-lag transcription. |
-| **VAD Network Pipeline** | Payload Truncation Ratio | `85% reduction` | Preserves API limits; isolates clear dialog. |
-| **LLM Inference Stream** | Time To First Token (TTFT) | `< 120ms` | Instant visual readout utilizing SSE routing. |
+| **STT Processing Phase** | Audio-to-Blob Latency | `Near-real-time` | Fast transcription for fluid simulation. |
+| **VAD Network Pipeline** | Payload Truncation Ratio | `~85% reduction` | Preserves API limits; isolates clear dialog. |
+| **LLM Inference Stream** | Time To First Token (TTFT) | `~120ms (optimized network)` | Fast visual readout utilizing SSE routing. |
 | **React UI Hydration** | Overpaint Latency | `Zero-Flicker` | Uninterrupted cognitive flow on screen bounds. |
 
 ---
 
 ## 1. Global Infrastructure Topology
-The core architecture employs a bifurcated processing model to ensure minimal resource consumption on the client hardware while executing massive tensor computations on cloud GPUs.
+The core architecture employs a bifurcated processing model to ensure minimal resource consumption on the client hardware while executing LLM computations on cloud GPUs.
 
 ```mermaid
 graph TD
     subgraph "Cloud Layer (Next.js Edge & Supabase)"
-        AUTH[Opaque Auth Gateway] --> DB[(Encrypted Data Store)]
+        AUTH[Opaque Auth Gateway] --> DB[(Protected Storage with RLS)]
         API[Edge API Serverless Routes] --> CONTEXT_SERVER[Context Aggregation Node]
         CONTEXT_SERVER --> DB
     end
@@ -52,7 +55,7 @@ graph TD
 
     subgraph "Neural Inference Layer (Groq & LLaMA 3)"
         VAD -- "WebM Chunk Streaming" --> WHISPER[Whisper V3 Engine]
-        WHISPER -- "Raw Parsed Transcripts" --> LLM[LLaMA-3.1 70B Vectors]
+        WHISPER -- "Raw Parsed Transcripts" --> LLM[Llama 3.1 70B Instruct]
         CONTEXT_SERVER -- "Agenda/Document Meta" --> LLM
         LLM -- "Actionable SSE Stream" --> IPC
     end
@@ -78,11 +81,11 @@ sequenceDiagram
     participant VAD as VAD Middleware (Web Worker)
     participant STT as Whisper API Endpoint
     
-    UI->>OSE: Request Internal Audio Routing Hook
+    UI->>OSE: Request Internal Audio Capture
     OSE-->>UI: Grant MediaStream Track constraints
     loop Continuous Buffering Loop
         UI->>VAD: Stream raw 16kHz byte-chunks
-        alt Audio Intensity > Threshold Limit (12ms poll)
+        alt Audio Intensity > Threshold Limit
             VAD->>STT: Dispatch Blob Transduction Buffer
             STT-->>UI: Return Parsed JSON Transcript Payload
         else Absolute Silence Delta Reached
@@ -93,12 +96,12 @@ sequenceDiagram
 
 ### Engineering Highlights:
 - **Asymmetric Audio Device Partitioning:** Engineered custom arbitration layers to eliminate synchronous race conditions between Chromium's internal `MediaDevices` API and standard Windows/macOS mixer configurations.
-- **Payload Truncation Algorithms:** By deploying heuristic 12ms silence-trimming, ZEDX reduces the base audio payload size by ~85%, accelerating inference processing over traditional continuous transcription polling.
+- **Payload Truncation Algorithms:** By deploying heuristic VAD silence-trimming, ZEDX reduces the base audio payload size by ~85%, accelerating inference processing over traditional continuous transcription polling.
 
 ---
 
 ## 3. Cognitive Context Injection (LLM Logic Flow)
-ZEDX AI Simulator dynamically replicates strict Retrieval-Augmented Generation (RAG) paradigms in-memory via high-velocity edge components. 
+ZEDX AI Simulator dynamically replicates strict Dynamic Context Injection paradigms in-memory via high-velocity edge components. 
 
 ```mermaid
 graph LR
@@ -116,8 +119,8 @@ graph LR
     end
 
     subgraph "Execution & Resolution"
-        LLAMA[LLaMA-3.1 70B Core]
-        UI[Secure React Output Overlay]
+        LLAMA[Llama 3.1 70B Instruct]
+        UI[Secure React Practice Interface]
         COMPILER -- "Injected Semantic Prompt" --> LLAMA
         LLAMA -- "Server-Sent Events (SSE HTTP/2)" --> UI
     end
@@ -130,7 +133,7 @@ graph LR
 ```
 
 ### Engineering Highlights:
-- **TransformStream Pipelines:** Employs the Next.js Edge Runtime to decode the LLaMA 3.1 inference vector into Server-Sent Events (SSE). Users consume insights incrementally as frames generate, virtually eliminating synchronous request blocking.
+- **TransformStream Pipelines:** Employs the Next.js Edge Runtime to decode the Llama 3.1 inference vector into Server-Sent Events (SSE). Users consume insights incrementally as frames generate, virtually eliminating synchronous request blocking.
 - **Multilingual Dialect Mapping:** The LLM constraint protocol forces context-matching to output strictly in the user's localized dialect constraint (e.g., Cairo Egyptian Arabic), optimizing cognitive assimilation.
 
 ---
@@ -152,20 +155,20 @@ flowchart TD
 
 ### Engineering Highlights:
 - **Strict TypeScript Interfaces:** Implementation of absolute horizontal type-safety (`SessionAnalysis`, `InterviewServiceError`) through the data-access layers, drastically mitigating runtime state mutations and providing pristine vertical maintainability.
-- **Row-Level Security (RLS) Vaulting:** Zero application-layer DB access is permitted; all transactions bind mathematically to verified user sessions to prohibit lateral account escalation.
+- **Row-Level Security (RLS) Vaulting:** Users cannot directly access other users' rows; all transactions bind mathematically to verified user sessions to prohibit lateral account escalation.
 
 ---
 
-##  Codebase Directory Architecture (Separation of Concerns)
+## Codebase Directory Architecture (Separation of Concerns)
 
 ZEDX AI Simulator enforces a modular, highly uncoupled Directory structure for enterprise scaling:
 ```text
-ZEDX-AI-Assistant/
+ZEDX-AI-Simulator/
 ├── electron/                   # Native hardware bridge (IPC, DesktopCapturer, Window Constraints)
 ├── src/
 │   ├── app/                    # Next.js App Router (Server & Client Pages)
 │   │   ├── api/                # Edge API Routes (LLM Streaming & STT Processing)
-│   │   ├── interview/          # Core System execution environment & UX Interfaces
+│   │   ├── interview/          # Core System execution environment & Practice Interfaces
 │   │   └── dashboard/          # Authentication & historical data visualizations
 │   ├── components/             # Reusable UI React primitives (Tailwind/Zustand bindings)
 │   ├── lib/                    # Strongly-typed Data Access Layers (Supabase, Auth)
@@ -175,7 +178,7 @@ ZEDX-AI-Assistant/
 
 ---
 
-##  Environment Strategy & Pipeline Requirements
+## Environment Strategy & Pipeline Requirements
 
 To operate ZEDX AI Simulator securely within a local developer environment, the following configuration parameters must be mounted in `.env.local`:
 
