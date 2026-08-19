@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Loader2, ArrowLeft, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
+import { ArrowLeft, AlertTriangle, Target, Award, ChevronRight, Mic } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface ReportItem {
     question: string;
@@ -79,134 +81,186 @@ The JSON must be an array of objects, where each object has:
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center p-6">
-                <Loader2 className="w-16 h-16 text-emerald-500 animate-spin mb-6" />
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Analyzing Your Performance</h2>
-                <p className="text-gray-500 dark:text-gray-400 max-w-md text-center">
-                    ZEDX is evaluating your answers, checking technical accuracy, and generating your personalized scorecard...
-                </p>
+            <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 relative overflow-hidden">
+                <div className="absolute inset-0 z-0 flex items-center justify-center">
+                    <div className="w-[40vw] h-[40vw] bg-emerald-900/20 rounded-full blur-[100px] animate-pulse"></div>
+                </div>
+                <div className="z-10 flex flex-col items-center">
+                    <motion.div
+                        animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="relative w-24 h-24 mb-8"
+                    >
+                        <Image src="/zedx-logo.png" alt="ZEDX" fill className="object-contain filter drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
+                    </motion.div>
+                    <h2 className="text-2xl tracking-widest uppercase font-light text-white mb-3">Analyzing Performance</h2>
+                    <div className="w-64 h-1 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div 
+                            className="h-full bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.8)]"
+                            initial={{ width: "0%" }}
+                            animate={{ width: "100%" }}
+                            transition={{ duration: 15, ease: "linear" }}
+                        />
+                    </div>
+                </div>
             </div>
         );
     }
 
     if (error || !report) {
         return (
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center p-6">
+            <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-white">
                 <AlertTriangle className="w-16 h-16 text-red-500 mb-6" />
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Oops!</h2>
-                <p className="text-gray-500 dark:text-gray-400 mb-8">{error}</p>
+                <h2 className="text-2xl font-bold mb-2">Analysis Interrupted</h2>
+                <p className="text-gray-400 mb-8 max-w-md text-center">{error}</p>
                 <Link href="/dashboard">
-                    <Button>Return to Dashboard</Button>
+                    <Button variant="outline" className="border-white/20 hover:bg-white/10">Return to Dashboard</Button>
                 </Link>
             </div>
         );
     }
 
     const averageScore = Math.round(report.reduce((acc, curr) => acc + curr.score, 0) / report.length);
+    const getPerformanceTier = (score: number) => {
+        if (score >= 9) return { label: "Exceptional", color: "text-emerald-400", border: "border-emerald-500/50" };
+        if (score >= 7) return { label: "Proficient", color: "text-teal-400", border: "border-teal-500/50" };
+        if (score >= 5) return { label: "Developing", color: "text-yellow-400", border: "border-yellow-500/50" };
+        return { label: "Needs Focus", color: "text-rose-400", border: "border-rose-500/50" };
+    };
+
+    const overallTier = getPerformanceTier(averageScore);
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 sm:p-12">
-            <div className="max-w-4xl mx-auto">
-                <div className="flex items-center gap-4 mb-8">
-                    <Link href="/dashboard">
-                        <Button variant="ghost" size="icon" className="rounded-full">
-                            <ArrowLeft className="w-6 h-6" />
-                        </Button>
-                    </Link>
-                    <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Interview Scorecard</h1>
+        <div className="min-h-screen bg-[#0a0a0a] text-white p-6 sm:p-12 relative">
+            {/* Background Accents */}
+            <div className="fixed top-0 left-0 w-full h-[500px] bg-gradient-to-b from-emerald-900/20 to-transparent pointer-events-none"></div>
+
+            <div className="max-w-5xl mx-auto relative z-10">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-12">
+                    <div className="flex items-center gap-4">
+                        <Link href="/dashboard">
+                            <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
+                                <ArrowLeft className="w-6 h-6" />
+                            </Button>
+                        </Link>
+                        <div>
+                            <h1 className="text-3xl font-light tracking-tight text-white">Interview <span className="font-bold">Scorecard</span></h1>
+                            <p className="text-sm text-emerald-500/80 uppercase tracking-widest mt-1 font-medium">ZEDX AI Assessment</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="bg-white dark:bg-[#111] rounded-3xl p-8 mb-8 shadow-xl border border-gray-100 dark:border-white/5 flex flex-col sm:flex-row items-center gap-8">
-                    <div className="relative w-32 h-32 flex items-center justify-center">
-                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                {/* Score Summary Card */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-black/40 backdrop-blur-2xl rounded-3xl p-8 sm:p-12 mb-12 shadow-2xl border border-white/10 flex flex-col sm:flex-row items-center gap-12"
+                >
+                    <div className="relative w-40 h-40 flex items-center justify-center shrink-0">
+                        <svg className="w-full h-full transform -rotate-90 drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]" viewBox="0 0 36 36">
                             <path
-                                className="text-gray-200 dark:text-gray-800"
+                                className="text-white/5"
                                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                 fill="none"
                                 stroke="currentColor"
-                                strokeWidth="3"
+                                strokeWidth="2"
                             />
-                            <path
+                            <motion.path
+                                initial={{ strokeDasharray: "0, 100" }}
+                                animate={{ strokeDasharray: `${averageScore * 10}, 100` }}
+                                transition={{ duration: 1.5, ease: "easeOut" }}
                                 className="text-emerald-500"
-                                strokeDasharray={`${averageScore * 10}, 100`}
                                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                 fill="none"
                                 stroke="currentColor"
-                                strokeWidth="3"
+                                strokeWidth="2"
+                                strokeLinecap="round"
                             />
                         </svg>
                         <div className="absolute flex flex-col items-center">
-                            <span className="text-3xl font-bold text-gray-900 dark:text-white">{averageScore}/10</span>
+                            <span className="text-5xl font-light text-white">{averageScore}<span className="text-2xl text-gray-500">/10</span></span>
                         </div>
                     </div>
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                            {averageScore >= 8 ? "Excellent Performance! 🎉" : averageScore >= 5 ? "Good Effort! 👍" : "Needs Practice 📚"}
-                        </h2>
-                        <p className="text-gray-500 dark:text-gray-400">
-                            You completed {report.length} questions. Review your feedback below to see where you excelled and where you can improve for the real thing.
+                    <div className="flex-1 text-center sm:text-left">
+                        <div className={cn("inline-flex items-center px-4 py-1.5 rounded-full border bg-black/50 text-sm tracking-widest uppercase font-bold mb-4", overallTier.border, overallTier.color)}>
+                            {overallTier.label} Performance
+                        </div>
+                        <p className="text-gray-400 text-lg leading-relaxed max-w-2xl font-light">
+                            You completed <strong className="text-white font-medium">{report.length}</strong> questions. Your technical articulation and response structures have been mapped against ideal industry benchmarks. Review the detailed breakdown below to optimize your delivery.
                         </p>
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="space-y-6">
-                    {report.map((item, index) => (
-                        <motion.div 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            key={index} 
-                            className="bg-white dark:bg-[#111] rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-white/5"
-                        >
-                            <div className="flex items-start justify-between gap-4 mb-6">
-                                <div>
-                                    <span className="text-sm font-bold text-emerald-500 mb-2 block">QUESTION {index + 1}</span>
-                                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">{item.question}</h3>
-                                </div>
-                                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center font-bold text-lg text-emerald-500 border border-emerald-500/20">
-                                    {item.score}
-                                </div>
-                            </div>
-
-                            <div className="bg-gray-50 dark:bg-white/5 rounded-2xl p-4 sm:p-5 mb-6">
-                                <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-2 block">Your Answer</span>
-                                <p className="text-gray-700 dark:text-gray-300 italic">"{item.answer || '(No answer provided)'}"</p>
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div>
-                                    <div className="flex items-center gap-2 mb-2 text-emerald-600 dark:text-emerald-400 font-bold">
-                                        <CheckCircle2 className="w-5 h-5" /> Feedback
+                {/* Detailed Analysis */}
+                <div className="space-y-8">
+                    {report.map((item, index) => {
+                        const tier = getPerformanceTier(item.score);
+                        return (
+                            <motion.div 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2 + (index * 0.1) }}
+                                key={index} 
+                                className="bg-black/20 backdrop-blur-xl rounded-3xl p-6 sm:p-10 border border-white/5 hover:border-white/10 transition-colors group"
+                            >
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8">
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <span className="text-xs font-bold text-gray-500 tracking-widest uppercase bg-white/5 px-3 py-1 rounded-full">
+                                                Question {index + 1}
+                                            </span>
+                                            <span className={cn("text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full border bg-black/40", tier.border, tier.color)}>
+                                                Score: {item.score}/10
+                                            </span>
+                                        </div>
+                                        <h3 className="text-xl sm:text-2xl font-medium text-white leading-snug">{item.question}</h3>
                                     </div>
-                                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{item.feedback}</p>
                                 </div>
-                                <div>
-                                    <div className="flex items-center gap-2 mb-2 text-blue-600 dark:text-blue-400 font-bold">
-                                        <SparklesIcon className="w-5 h-5" /> Ideal Answer
+
+                                <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 mb-8 relative overflow-hidden group-hover:bg-white/[0.04] transition-colors">
+                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gray-600"></div>
+                                    <span className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                        <Mic className="w-3 h-3" /> Transcript
+                                    </span>
+                                    <p className="text-gray-300 font-light text-lg leading-relaxed">
+                                        {item.answer ? `"${item.answer}"` : <span className="italic text-gray-600">(No audio captured)</span>}
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10">
+                                    <div>
+                                        <div className="flex items-center gap-3 mb-4 text-emerald-400">
+                                            <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                                                <Target className="w-4 h-4" />
+                                            </div>
+                                            <span className="text-sm font-bold tracking-widest uppercase">ZEDX Analysis</span>
+                                        </div>
+                                        <p className="text-gray-400 text-base leading-relaxed font-light">{item.feedback}</p>
                                     </div>
-                                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{item.ideal_answer}</p>
+                                    <div>
+                                        <div className="flex items-center gap-3 mb-4 text-blue-400">
+                                            <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                                                <Award className="w-4 h-4" />
+                                            </div>
+                                            <span className="text-sm font-bold tracking-widest uppercase">Ideal Benchmark</span>
+                                        </div>
+                                        <p className="text-gray-400 text-base leading-relaxed font-light">{item.ideal_answer}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
+                            </motion.div>
+                        );
+                    })}
                 </div>
                 
-                <div className="mt-12 flex justify-center">
+                <div className="mt-16 mb-20 flex justify-center">
                     <Link href="/dashboard">
-                        <Button className="h-14 px-8 text-lg font-bold rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200">
-                            Back to Dashboard
+                        <Button className="h-16 px-10 text-lg font-medium tracking-wide rounded-2xl bg-white text-black hover:bg-gray-200 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all">
+                            Finish & Return to Dashboard <ChevronRight className="ml-2 w-5 h-5" />
                         </Button>
                     </Link>
                 </div>
             </div>
         </div>
     );
-}
-
-function SparklesIcon(props: any) {
-    return (
-        <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-        </svg>
-    )
 }

@@ -1,9 +1,22 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Shield, Zap, Mic, Globe, Cpu, Layers } from "lucide-react";
+import { Shield, Mic, Timer, MessageSquare, BarChart, Zap } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { AnimatedOrb } from "@/components/animated-orb";
+import { 
+    GoogleStyleMicIcon, 
+    PrivacyShieldIcon, 
+    PremiumContextAwareIcon, 
+    PremiumMultiLangIcon, 
+    PremiumInstantTransIcon, 
+    PremiumModelAgnosticIcon,
+    PremiumGranularScorecardsIcon,
+    PremiumSmartSilenceDetectionIcon,
+    PremiumFocusedPracticeWorkspaceIcon,
+    PremiumVoiceToVoiceSimulationIcon
+} from "@/components/premium-icons";
 
 export const metadata: Metadata = {
     title: "About ZEDX AI Simulator - The Ultimate Interview Training Coach",
@@ -45,18 +58,18 @@ export default function AboutPage() {
 
                 {/* Mission Section */}
                 <section className="py-20 px-4 relative">
-                    <div className="absolute inset-0 bg-zinc-50/50 dark:bg-zinc-900/60 border-y border-gray-100 dark:border-white/5"></div>
+                    <div className="absolute inset-0 bg-zinc-50/50 dark:bg-zinc-900/60 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]"></div>
                     <div className="max-w-5xl mx-auto relative z-10 grid md:grid-cols-2 gap-12 items-center">
                         <div>
                             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                                Beyond Standard Transcription
+                                A Comprehensive Dual-Mode Platform
                             </h2>
                             <div className="space-y-6 text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
                                 <p>
                                     Most training tools rely on rigid generic questionnaires or bots that join calls awkwardly. <strong className="text-gray-900 dark:text-white">ZEDX AI Simulator is different.</strong>
                                 </p>
                                 <p>
-                                    We built a native desktop application that utilizes <span className="text-emerald-600 dark:text-emerald-400 font-medium">Internal Audio Routing</span> directly from the OS soundcard, ensuring absolute clarity and privacy while you simulate your interviews without needing any bots.
+                                    We built a complete suite featuring a <span className="text-emerald-600 dark:text-emerald-400 font-medium">native desktop application</span> for high-fidelity Sandbox training using Internal Audio Routing, AND an advanced <span className="text-emerald-600 dark:text-emerald-400 font-medium">Web-based Voice-to-Voice Simulator</span> for rigorous, multi-lingual mock interviews.
                                 </p>
                             </div>
                         </div>
@@ -65,8 +78,8 @@ export default function AboutPage() {
                             <div className="relative bg-white/70 dark:bg-zinc-900/80 border border-white/40 dark:border-white/10 rounded-3xl p-8 shadow-xl dark:shadow-2xl backdrop-blur-xl">
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-4 p-4 bg-zinc-50/80 dark:bg-black/40 rounded-xl border border-zinc-100 dark:border-white/5">
-                                        <div className="p-3 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-lg">
-                                            <Zap size={24} />
+                                        <div className="flex items-center justify-center p-2">
+                                            <AnimatedOrb className="w-16 h-16 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
                                         </div>
                                         <div>
                                             <h3 className="font-bold text-gray-900 dark:text-white">Real-Time Intelligence</h3>
@@ -74,8 +87,8 @@ export default function AboutPage() {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4 p-4 bg-zinc-50/80 dark:bg-zinc-950/40 rounded-xl border border-zinc-100 dark:border-white/5">
-                                        <div className="p-3 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-lg">
-                                            <Shield size={24} />
+                                        <div className="flex items-center justify-center p-2 w-20 h-20 -ml-2 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                                            <PremiumFocusedPracticeWorkspaceIcon />
                                         </div>
                                         <div>
                                             <h3 className="font-bold text-gray-900 dark:text-white">Focused Practice Workspace</h3>
@@ -83,12 +96,12 @@ export default function AboutPage() {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4 p-4 bg-zinc-50/80 dark:bg-zinc-950/40 rounded-xl border border-zinc-100 dark:border-white/5">
-                                        <div className="p-3 bg-teal-100 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400 rounded-lg">
-                                            <Cpu size={24} />
+                                        <div className="flex items-center justify-center p-2 group-hover:scale-105 transition-transform">
+                                            <PremiumVoiceToVoiceSimulationIcon />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-gray-900 dark:text-white">Internal Audio Routing</h3>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">Captures output directly from OS.</p>
+                                            <h3 className="font-bold text-gray-900 dark:text-white">Voice-to-Voice Simulation</h3>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">Autonomous Web Agent powered by ElevenLabs.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -96,10 +109,66 @@ export default function AboutPage() {
                         </div>
                     </div>
                 </section>
+                {/* Dedicated Robot Section */}
+                <section className="py-24 px-4 relative">
+                    <div className="absolute inset-0 bg-zinc-50 dark:bg-zinc-900/30 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]"></div>
+                    <div className="max-w-5xl mx-auto relative z-10">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                                Meet Your AI Interviewer
+                            </h2>
+                            <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
+                                The Web-based Mock Interview Simulator isn't just a text bot. It's a fully autonomous Voice-to-Voice AI recruiter designed to push your limits.
+                            </p>
+                        </div>
+
+                        <div className="grid md:grid-cols-3 gap-8">
+                            <div className="bg-white dark:bg-[#111] p-8 rounded-3xl border border-gray-100 dark:border-white/5 shadow-xl hover:border-emerald-500/30 transition-all duration-300 group">
+                                <div className="mb-6 flex items-center justify-start relative">
+                                    <div className="absolute w-16 h-16 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
+                                    <div className="relative z-10">
+                                        <PremiumSmartSilenceDetectionIcon />
+                                    </div>
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Smart Silence Detection</h3>
+                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    Speak naturally. The AI actively listens and waits for you to finish. If you pause for 5 seconds, it automatically assumes you've completed your answer and moves to the next question.
+                                </p>
+                            </div>
+
+                            <div className="bg-white dark:bg-[#111] p-8 rounded-3xl border border-gray-100 dark:border-white/5 shadow-xl hover:border-emerald-500/30 transition-all duration-300 group relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition-colors"></div>
+                                <div className="relative z-10">
+                                    <div className="mb-6 group-hover:scale-110 transition-transform duration-500">
+                                        <AnimatedOrb className="w-20 h-20 -ml-2 drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Multi-Lingual Voice (TTS)</h3>
+                                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                        Powered by ElevenLabs Multilingual V2, the robot speaks to you with human-like intonation in over 29 languages, adapting to the language you choose for your interview.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="bg-white dark:bg-[#111] p-8 rounded-3xl border border-gray-100 dark:border-white/5 shadow-xl hover:border-emerald-500/30 transition-all duration-300 group">
+                                <div className="mb-6 flex items-center justify-start relative">
+                                    <div className="absolute w-16 h-16 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
+                                    <div className="relative z-10">
+                                        <PremiumGranularScorecardsIcon />
+                                    </div>
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Granular Scorecards</h3>
+                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    At the end of the session, the AI evaluates your exact spoken transcript, scoring each answer out of 10 and providing you with an ideal benchmark response.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 {/* Core Features */}
-                <section className="py-24 px-4 bg-white dark:bg-zinc-900/50 transition-colors duration-300">
-                    <div className="max-w-6xl mx-auto text-center mb-16">
+                <section className="py-24 px-4 relative transition-colors duration-300">
+                    <div className="absolute inset-0 bg-white dark:bg-zinc-900/50 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]"></div>
+                    <div className="max-w-6xl mx-auto text-center mb-16 relative z-10">
                         <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                             Engineered for <span className="text-emerald-600 dark:text-emerald-400">Performance</span>
                         </h2>
@@ -108,18 +177,21 @@ export default function AboutPage() {
                         </p>
                     </div>
 
-                    <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
+                    <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6 relative z-10">
                         {[
-                            { icon: <Mic />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures key interview questions instantly." },
-                            { icon: <Layers />, title: "Context Aware", desc: "Analyzes your uploaded CV and job descriptions to tailor answers specifically to your profile." },
-                            { icon: <Globe />, title: "Multi-Language", desc: "Native support for English, Arabic, Spanish, and 30+ other global languages." },
-                            { icon: <Zap />, title: "Instant Transcription", desc: "Powered by Groq™ for ultra-fast speech-to-text conversion with 99% accuracy." },
-                            { icon: <Shield />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers." },
-                            { icon: <Cpu />, title: "Model Agnostic", desc: "Switch between Llama 3, GPT-4, and Qwen models on the fly for best results." }
+                            { icon: <GoogleStyleMicIcon />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures key interview questions instantly." },
+                            { icon: <PremiumContextAwareIcon />, title: "Context Aware", desc: "Analyzes your uploaded CV and job descriptions to tailor answers specifically to your profile." },
+                            { icon: <PremiumMultiLangIcon />, title: "Multi-Language", desc: "Native support for English, Arabic, Spanish, and 30+ other global languages." },
+                            { icon: <PremiumInstantTransIcon />, title: "Instant Transcription", desc: "Powered by Groq™ for ultra-fast speech-to-text conversion with 99% accuracy." },
+                            { icon: <PrivacyShieldIcon />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers." },
+                            { icon: <PremiumModelAgnosticIcon />, title: "Model Agnostic", desc: "Switch between Llama 3, GPT-4, and Qwen models on the fly for best results." }
                         ].map((item, i) => (
                             <div key={i} className="group p-8 rounded-3xl bg-zinc-50/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-white/10 hover:border-emerald-500/30 dark:hover:border-emerald-500/30 hover:shadow-lg dark:hover:bg-zinc-900 transition-all duration-300 backdrop-blur-sm">
-                                <div className="w-12 h-12 rounded-2xl bg-white dark:bg-black border border-gray-200 dark:border-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 group-hover:scale-110 transition-transform shadow-sm dark:shadow-emerald-900/20">
-                                    {item.icon}
+                                <div className="mb-8 flex items-center justify-start relative">
+                                    <div className="absolute w-16 h-16 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
+                                    <div className="relative z-10">
+                                        {item.icon}
+                                    </div>
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{item.title}</h3>
                                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{item.desc}</p>

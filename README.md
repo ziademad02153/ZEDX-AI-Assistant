@@ -15,9 +15,11 @@
 </div>
 
 ## Executive Summary
-**ZEDX AI Simulator** is a dedicated interview simulation and training platform designed for professional evaluation. Built on a modern tech stack (Electron, Next.js, and Supabase), it processes simulated interview questions and responses in near-real-time using advanced Speech-to-Text (STT) and Large Language Model (LLM) inference.
+**ZEDX AI Simulator** is a dedicated interview simulation and training platform designed for professional evaluation. Originally built as an Electron desktop app, ZEDX has evolved into a comprehensive **Dual-Mode** platform (Web & Desktop) that utilizes advanced Speech-to-Text (STT), Large Language Model (LLM) inference, and highly-optimized Text-to-Speech (TTS) engines.
 
-By employing a secure Inter-Process Communication (IPC) bridge within an Electron shell, the application captures user microphone input to act as a strict, context-aware "Interviewer and Coach" for job seekers requiring rigorous practice, instant feedback, and skill development. ZEDX is built for interview simulation, practice, and skill assessment—not for assistance during live hiring interviews or real-world assessments.
+ZEDX bridges the gap between preparation and execution by offering two distinct training modes:
+1. **Mock Interviewer Mode (Web):** An autonomous Voice-to-Voice AI Agent that conducts hyper-realistic, multi-lingual mock interviews. It dynamically generates technical questions based on your resume and target Job Description, listens to your verbal responses with strict 5-second silence detection, and generates a granular JSON scorecard.
+2. **Advanced Sandbox Simulator (Desktop):** A secure Electron shell utilizing an Inter-Process Communication (IPC) bridge and native OS Audio Routing. This mode provides a distraction-free, high-fidelity environment for power users to practice against complex technical prompts using internal system audio, mimicking the exact software ecosystem of a real remote interview without relying on standard browser constraints.
 
 ---
 

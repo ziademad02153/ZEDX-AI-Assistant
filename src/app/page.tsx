@@ -30,15 +30,15 @@ export default function Home() {
             </div>
 
             <h1 className="text-[2.25rem] xs:text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.15] md:leading-[1.1] max-w-[90rem] mx-auto px-4">
-              Practice Real Interviews <br className="xs:hidden" />
-              <span className="text-gradient-fusion">Before They Happen.</span>
+              Master Your Next Interview <br className="xs:hidden" />
+              <span className="text-gradient-fusion">Before It Happens.</span>
             </h1>
 
             <p className="text-[0.95rem] md:text-xl text-gray-500 dark:text-gray-400 mb-4 max-w-4xl mx-auto leading-relaxed font-medium px-6 md:px-0">
-              AI helps you practice. Independent Mode proves you've learned.
+              The ultimate training platform featuring a <strong>Voice-to-Voice AI Recruiter</strong> for rigorous mock interviews, and an <strong>Advanced Desktop Sandbox</strong> for high-fidelity technical practice.
             </p>
             <p className="text-[0.85rem] md:text-lg text-emerald-600 dark:text-emerald-400 mb-8 md:mb-12 max-w-4xl mx-auto font-bold tracking-wide px-6 md:px-0">
-              Simulate → Coach → Retry → Practice Independently → Measure Improvement
+              Mock Interview Simulator (Web) • Advanced Practice Sandbox (Desktop)
             </p>
 
             <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4">
@@ -270,8 +270,14 @@ export default function Home() {
                     <div className="absolute inset-8 border border-green-300/50 rounded-full animate-[spin_20s_linear_infinite]"></div>
 
                     {/* Center Icon */}
-                    <div className="w-16 h-16 bg-white dark:bg-zinc-800 rounded-full shadow-sm flex items-center justify-center z-10 relative">
-                      <Globe size={32} className="text-gray-700 dark:text-gray-300" strokeWidth={1.5} />
+                    <div className="w-20 h-20 bg-transparent rounded-full flex items-center justify-center z-10 relative">
+                      <Image 
+                        src="/Multi-Language.png" 
+                        alt="Multi-Language Globe" 
+                        width={80} 
+                        height={80} 
+                        className="rounded-full object-contain drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse" 
+                      />
                     </div>
 
                     {/* Floating Flags (represented as dots/badges) */}

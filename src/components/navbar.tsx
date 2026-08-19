@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 
 export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -68,37 +68,37 @@ export function Navbar() {
                 <div className="flex items-center gap-4">
                     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                         <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300">
+                            <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full active:scale-90 transition-all">
                                 <Menu size={24} />
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="right" className="w-[300px] sm:w-[350px] border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-black/95 backdrop-blur-xl p-0">
-                            <div className="flex flex-col h-full bg-white dark:bg-black">
-                                <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                                    <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <SheetContent side="right" className="w-[85vw] sm:w-[350px] border-l border-gray-200/50 dark:border-white/10 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-3xl p-0 rounded-l-[2rem] shadow-2xl">
+                            <div className="flex flex-col h-full">
+                                <div className="p-6 border-b border-gray-200/30 dark:border-white/5 flex items-center justify-between">
+                                    <SheetTitle className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                         <Image src="/favicon.png" alt="Logo" width={24} height={24} />
                                         Menu
-                                    </h2>
+                                    </SheetTitle>
                                 </div>
-                                <div className="flex flex-col flex-1 gap-1 p-4 overflow-y-auto justify-between">
-                                    <div className="flex flex-col gap-2">
+                                <div className="flex flex-col flex-1 gap-2 p-4 overflow-y-auto justify-between">
+                                    <div className="flex flex-col gap-1.5">
                                         <Link href="/dashboard" onClick={() => setIsSheetOpen(false)}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 Dashboard
                                             </Button>
                                         </Link>
                                         <Link href="/dashboard/new" onClick={() => setIsSheetOpen(false)}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 New Simulation
                                             </Button>
                                         </Link>
                                         <Link href="/dashboard/resumes" onClick={() => setIsSheetOpen(false)}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 My Context Files
                                             </Button>
                                         </Link>
                                         <Link href="/dashboard/history" onClick={() => setIsSheetOpen(false)}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 Training History
                                             </Button>
                                         </Link>
@@ -106,17 +106,17 @@ export function Navbar() {
                                         <div className="h-px bg-gray-100 dark:bg-gray-800 my-4 mx-2" />
 
                                         <Link href="/#features" onClick={() => setIsSheetOpen(false)}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 How it Works
                                             </Button>
                                         </Link>
                                         <Link href="/download" onClick={() => setIsSheetOpen(false)}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 Desktop App
                                             </Button>
                                         </Link>
                                         <Link href="/about" onClick={() => setIsSheetOpen(false)}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 About ZEDX AI Simulator
                                             </Button>
                                         </Link>

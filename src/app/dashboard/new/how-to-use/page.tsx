@@ -38,40 +38,60 @@ export default function HowToUsePage() {
             color: "from-emerald-500 to-green-500",
             bg: "bg-emerald-500/10",
             border: "border-emerald-500/20"
-        }] : []),
+        },
         {
-            title: isElectron ? "Internal Audio Routing" : "AI Interviewer Role",
-            description: isElectron
-                ? "Capture the interviewer's voice directly from your system. Best for high-quality transcription in noiseless environments."
-                : "The AI acts as your recruiter, analyzing your Resume and Job Description to ask highly targeted and professional questions.",
-            icon: isElectron ? <Monitor className="w-8 h-8" /> : <Image src="/zedx-logo.png" alt="ZEDX Logo" width={48} height={48} className="object-contain" />,
-            color: isElectron ? "from-teal-500 to-emerald-600" : "bg-transparent shadow-none from-transparent to-transparent",
+            title: "Internal Audio Routing",
+            description: "Capture the interviewer's voice directly from your system. Best for high-quality transcription in noiseless environments.",
+            icon: <Monitor className="w-8 h-8" />,
+            color: "from-teal-500 to-emerald-600",
             bg: "bg-teal-500/10",
             border: "border-teal-500/20"
         },
-        ...(isElectron ? [
-            {
-                title: "Assessment Interface",
-                description: "Use the scanner for code snippets or text you can't copy. The AI will analyze the screenshot in real-time.",
-                icon: <Scan className="w-8 h-8" />,
-                color: "from-green-600 to-emerald-700",
-                bg: "bg-green-600/10",
-                border: "border-green-600/20"
-            },
-            {
-                title: "AI Coaching Suggestions",
-                description: "Enable Auto-Answer to get suggestions instantly after the question ends. Precision is key.",
-                icon: <Sparkles className="w-8 h-8" />,
-                color: "from-lime-500 to-emerald-500",
-                bg: "bg-lime-500/10",
-                border: "border-lime-500/20"
-            }
-        ] : []),
+        {
+            title: "Assessment Interface",
+            description: "Use the scanner for code snippets or text you can't copy. The AI will analyze the screenshot in real-time.",
+            icon: <Scan className="w-8 h-8" />,
+            color: "from-green-600 to-emerald-700",
+            bg: "bg-green-600/10",
+            border: "border-green-600/20"
+        },
+        {
+            title: "AI Coaching Suggestions",
+            description: "Enable Auto-Answer to get suggestions instantly after the question ends. Precision is key.",
+            icon: <Sparkles className="w-8 h-8" />,
+            color: "from-lime-500 to-emerald-500",
+            bg: "bg-lime-500/10",
+            border: "border-lime-500/20"
+        }] : [
+        {
+            title: "Voice-to-Voice AI Recruiter",
+            description: "The AI conducts the interview verbally in your selected language. Listen carefully to the question before answering.",
+            icon: <Image src="/zedx-logo.png" alt="ZEDX Logo" width={48} height={48} className="object-contain" />,
+            color: "bg-transparent shadow-none from-transparent to-transparent",
+            bg: "bg-teal-500/10",
+            border: "border-teal-500/20"
+        },
+        {
+            title: "Smart Silence Detection",
+            description: "Speak naturally. If you pause for more than 5 seconds, ZEDX will automatically submit your answer and move to the next question.",
+            icon: <Mic className="w-8 h-8 text-emerald-500" />,
+            color: "bg-white dark:bg-[#111] shadow-none",
+            bg: "bg-emerald-500/10",
+            border: "border-emerald-500/20"
+        },
+        {
+            title: "Performance Scorecard",
+            description: "After finishing, you will receive a granular benchmark report scoring your exact verbal answers against industry standards.",
+            icon: <CheckCircle2 className="w-8 h-8 text-blue-500" />,
+            color: "bg-white dark:bg-[#111] shadow-none",
+            bg: "bg-blue-500/10",
+            border: "border-blue-500/20"
+        }]),
         {
             title: "End Session",
-            description: "Always use the End Interview button to safely clean up and save your session data.",
+            description: "Use the End Interview button to safely finalize your session and generate your scorecard.",
             icon: <LogOut className="w-8 h-8" />,
-            color: "from-red-500 to-rose-500",
+            color: "from-red-500 to-rose-500 text-white",
             bg: "bg-red-500/10",
             border: "border-red-500/20"
         }
