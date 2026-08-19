@@ -19,7 +19,7 @@
 
 ZEDX bridges the gap between preparation and execution by offering two distinct training modes:
 1. **The Smart Mock Interviewer (Web):** An autonomous, highly intelligent Voice-to-Voice AI Agent that conducts hyper-realistic mock interviews in **29 supported languages**. Unlike static script-readers, this AI acts as a true conversational partner. It analyzes your resume and Job Description, listens to your answers, and dynamically generates deep, probing follow-up questions from varying angles (e.g., leadership, technical depth) to ensure no two interviews are ever the same. 
-2. **Advanced Sandbox Simulator (Desktop):** A secure Electron shell utilizing an Inter-Process Communication (IPC) bridge and native OS Audio Routing. This mode provides a distraction-free, high-fidelity environment for power users to practice against complex technical prompts using internal system audio, mimicking the exact software ecosystem of a real remote interview without relying on standard browser constraints.
+2. **Advanced Practice Sandbox (Desktop):** A dedicated desktop environment for intensive interview practice, technical scenario simulation, and distraction-free skill development.
 
 ---
 
