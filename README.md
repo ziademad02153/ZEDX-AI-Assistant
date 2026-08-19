@@ -83,7 +83,7 @@ graph TD
 ---
 
 ## 2. Audio Telemetry & Sub-Second STT Engine
-A severe technical barrier in Chromium/Electron composites is handling garbage collection across continuous MediaStreams. ZEDX utilizes a deterministically partitioned Voice Activity Detection (VAD) matrix.
+A severe technical barrier in Chromium/Electron composites is handling garbage collection across continuous MediaStreams. ZEDX uses a lightweight Voice Activity Detection (VAD) pipeline to identify active speech and minimize unnecessary audio transmission.
 
 ```mermaid
 sequenceDiagram
@@ -107,7 +107,7 @@ sequenceDiagram
 
 ### Engineering Highlights:
 - **Asymmetric Audio Device Partitioning:** Engineered custom arbitration layers to eliminate synchronous race conditions between Chromium's internal `MediaDevices` API and standard Windows/macOS mixer configurations.
-- **Payload Truncation Algorithms:** By deploying heuristic VAD silence-trimming, ZEDX reduces the base audio payload size by ~85%, accelerating inference processing over traditional continuous transcription polling.
+- **Heuristic VAD Filtering:** ZEDX reduces unnecessary audio payloads by approximately 85% in typical practice sessions, based on internal measurements. This accelerates inference processing over traditional continuous transcription polling.
 
 ---
 
@@ -150,7 +150,7 @@ graph LR
 ---
 
 ## 4. Security Subsystem & State Persistence
-Enterprise-grade interview simulation requires absolute "Data Sovereignty Governance". ZEDX enforces rigorous privacy for user CVs and training session records out-of-the-box.
+Privacy-focused interview simulation requires secure handling of user CVs and training session data. ZEDX enforces rigorous privacy out-of-the-box.
 
 ```mermaid
 flowchart TD
@@ -158,8 +158,8 @@ flowchart TD
     NEXT -->|JWT Verification Cycle| SUPA[Supabase Engine]
     SUPA --> RLS{Row-Level Security Evaluator}
     
-    RLS -- Valid UUID ownership bounds --> ALLOW(Permit Write to Local User Pool)
-    RLS -- Cryptographic Identity Mismatch --> DENY(Force Connection Drop / API Lockout)
+    RLS -- Valid UUID ownership bounds --> ALLOW(Permit Access to User-Owned Records)
+    RLS -- Cryptographic Identity Mismatch --> DENY(Reject Unauthorized Access)
 
     ALLOW --> DB[(Secure Transaction Logs & Transcripts)]
 ```
