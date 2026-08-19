@@ -218,8 +218,8 @@ export default function LoginPage() {
                         Master Your Next Interview with <br /> Absolute Confidence.
                     </h2>
                     <div className="space-y-6">
-                        <div className="flex items-start gap-4">
-                            <div className="shrink-0 flex items-center justify-center">
+                        <div className="flex items-center gap-4">
+                            <div className="w-16 shrink-0 flex items-center justify-center">
                                 <Image src="/Instant Transcription.png" alt="Instant Transcription" width={40} height={40} className="object-contain drop-shadow-sm" />
                             </div>
                             <div>
@@ -227,17 +227,17 @@ export default function LoginPage() {
                                 <p className="text-gray-400 leading-relaxed">Get instant, AI-driven feedback on your tone, pace, and content while you speak.</p>
                             </div>
                         </div>
-                        <div className="flex items-start gap-4">
-                            <div className="shrink-0 flex items-center justify-center -ml-2">
+                        <div className="flex items-center gap-4">
+                            <div className="w-16 shrink-0 flex items-center justify-center">
                                 <Image src="/zedx-logo-for-v.png" alt="ZEDX Edge" width={64} height={64} className="object-contain drop-shadow-sm" />
                             </div>
-                            <div className="mt-1">
+                            <div>
                                 <h3 className="font-bold text-lg text-white">Competitive Edge</h3>
                                 <p className="text-gray-400 leading-relaxed">Access a curated database of top-tier example answers to train and prepare effectively.</p>
                             </div>
                         </div>
-                        <div className="flex items-start gap-4">
-                            <div className="shrink-0 flex items-center justify-center">
+                        <div className="flex items-center gap-4">
+                            <div className="w-16 shrink-0 flex items-center justify-center">
                                 <Image src="/Privacy First.png" alt="Privacy First" width={40} height={40} className="object-contain drop-shadow-sm" />
                             </div>
                             <div>
