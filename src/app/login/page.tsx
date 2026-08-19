@@ -219,8 +219,8 @@ export default function LoginPage() {
                     </h2>
                     <div className="space-y-6">
                         <div className="flex items-start gap-4">
-                            <div className="p-2 bg-emerald-500/10 rounded-lg shrink-0 flex items-center justify-center">
-                                <Image src="/Instant Transcription.png" alt="Instant Transcription" width={32} height={32} className="object-contain drop-shadow-sm" />
+                            <div className="shrink-0 flex items-center justify-center">
+                                <Image src="/Instant Transcription.png" alt="Instant Transcription" width={40} height={40} className="object-contain drop-shadow-sm" />
                             </div>
                             <div>
                                 <h3 className="font-bold text-lg text-white">Real-Time Intelligence</h3>
@@ -228,17 +228,17 @@ export default function LoginPage() {
                             </div>
                         </div>
                         <div className="flex items-start gap-4">
-                            <div className="p-2 bg-emerald-500/10 rounded-lg shrink-0 flex items-center justify-center">
-                                <Image src="/zedx-logo-for-v.png" alt="ZEDX Edge" width={32} height={32} className="object-contain drop-shadow-sm" />
+                            <div className="shrink-0 flex items-center justify-center -ml-2">
+                                <Image src="/zedx-logo-for-v.png" alt="ZEDX Edge" width={64} height={64} className="object-contain drop-shadow-sm" />
                             </div>
-                            <div>
+                            <div className="mt-1">
                                 <h3 className="font-bold text-lg text-white">Competitive Edge</h3>
                                 <p className="text-gray-400 leading-relaxed">Access a curated database of top-tier example answers to train and prepare effectively.</p>
                             </div>
                         </div>
                         <div className="flex items-start gap-4">
-                            <div className="p-2 bg-emerald-500/10 rounded-lg shrink-0 flex items-center justify-center">
-                                <Image src="/Privacy First.png" alt="Privacy First" width={32} height={32} className="object-contain drop-shadow-sm" />
+                            <div className="shrink-0 flex items-center justify-center">
+                                <Image src="/Privacy First.png" alt="Privacy First" width={40} height={40} className="object-contain drop-shadow-sm" />
                             </div>
                             <div>
                                 <h3 className="font-bold text-lg text-white">Private & Secure</h3>
