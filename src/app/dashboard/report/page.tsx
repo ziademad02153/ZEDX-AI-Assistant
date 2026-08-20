@@ -156,9 +156,9 @@ The JSON must be an array of objects, where each object has:
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <div className="min-h-screen bg-zinc-50 dark:bg-black flex flex-col items-center justify-center p-6 relative overflow-hidden">
                 <div className="absolute inset-0 z-0 flex items-center justify-center">
-                    <div className="w-[40vw] h-[40vw] bg-emerald-900/20 rounded-full blur-[100px] animate-pulse"></div>
+                    <div className="w-[40vw] h-[40vw] bg-emerald-500/10 dark:bg-emerald-900/20 rounded-full blur-[100px] animate-pulse"></div>
                 </div>
                 <div className="z-10 flex flex-col items-center">
                     <motion.div
@@ -168,8 +168,8 @@ The JSON must be an array of objects, where each object has:
                     >
                         <Image src="/zedx-logo.png" alt="ZEDX" fill className="object-contain filter drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
                     </motion.div>
-                    <h2 className="text-2xl tracking-widest uppercase font-light text-white mb-3">Analyzing Performance</h2>
-                    <div className="w-64 h-1 bg-white/10 rounded-full overflow-hidden">
+                    <h2 className="text-2xl tracking-widest uppercase font-light text-gray-900 dark:text-white mb-3">Analyzing Performance</h2>
+                    <div className="w-64 h-1 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
                         <motion.div 
                             className="h-full bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.8)]"
                             initial={{ width: "0%" }}
@@ -184,12 +184,12 @@ The JSON must be an array of objects, where each object has:
 
     if (error || !report) {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-white">
+            <div className="min-h-screen bg-zinc-50 dark:bg-black flex flex-col items-center justify-center p-6 text-gray-900 dark:text-white">
                 <AlertTriangle className="w-16 h-16 text-red-500 mb-6" />
                 <h2 className="text-2xl font-bold mb-2">Analysis Interrupted</h2>
-                <p className="text-gray-400 mb-8 max-w-md text-center">{error}</p>
+                <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md text-center">{error}</p>
                 <Link href="/dashboard">
-                    <Button variant="outline" className="border-white/20 hover:bg-white/10">Return to Dashboard</Button>
+                    <Button variant="outline" className="border-gray-300 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-white/10 text-gray-900 dark:text-white">Return to Dashboard</Button>
                 </Link>
             </div>
         );
@@ -329,8 +329,8 @@ The JSON must be an array of objects, where each object has:
                 </div>
                 
                 <div className="mt-16 mb-20 flex flex-col sm:flex-row justify-center items-center gap-4 print:hidden">
-                    <Button onClick={() => window.print()} className="h-16 px-10 text-lg font-medium tracking-wide rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700 shadow-[0_0_30px_rgba(16,185,129,0.2)] hover:shadow-[0_0_40px_rgba(16,185,129,0.4)] transition-all">
-                        استخراج المقابلة في ملف PDF منظم
+                    <Button onClick={() => window.print()} className="h-16 px-10 text-lg font-medium tracking-wide rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700 shadow-[0_0_30px_rgba(16,185,129,0.2)] hover:shadow-[0_0_40px_rgba(16,185,129,0.4)] transition-all flex items-center gap-2">
+                        Export PDF Report
                     </Button>
                     <Link href="/dashboard">
                         <Button className="h-16 px-10 text-lg font-medium tracking-wide rounded-2xl bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 shadow-xl transition-all">
