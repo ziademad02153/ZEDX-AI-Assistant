@@ -17,9 +17,9 @@
 ## Executive Summary
 **ZEDX AI Simulator** is a dedicated interview simulation and training platform designed for professional evaluation. Originally built as an Electron desktop app, ZEDX has evolved into a comprehensive **Dual-Mode** platform (Web & Desktop) that utilizes advanced Speech-to-Text (STT), Large Language Model (LLM) inference, and highly-optimized Text-to-Speech (TTS) engines.
 
-ZEDX bridges the gap between preparation and execution by offering two distinct training modes:
-1. **The Smart Mock Interviewer (Web):** An autonomous, highly intelligent Voice-to-Voice AI Agent that conducts hyper-realistic mock interviews in **29 supported languages**. Unlike static script-readers, this AI acts as a true conversational partner. It analyzes your resume and Job Description, listens to your answers, and dynamically generates deep, probing follow-up questions from varying angles (e.g., leadership, technical depth) to ensure no two interviews are ever the same. 
-2. **Advanced Practice Sandbox (Desktop):** A dedicated desktop environment for intensive interview practice, technical scenario simulation, and distraction-free skill development.
+ZEDX bridges the gap between preparation and execution by offering two distinct tools:
+1. **The Web Simulator (Rigorous Testing):** Designed for advanced candidates who want a strict, realistic interview environment. An autonomous, highly intelligent Voice-to-Voice AI Agent conducts mock interviews in **30+ supported languages**. It acts as a true conversational partner, dynamically generating deep, probing questions to ensure no two interviews are the same. No hints, no help—just you and the AI evaluating your every word.
+2. **The Desktop Sandbox (Assisted Learning):** Designed for skill improvement. This is a dedicated Windows environment where the AI acts as your copilot. Utilizing **Internal Audio Routing** and **Screen Capture (OCR)**, the AI analyzes your shared screen and provides suggested answers in real-time, helping you build confidence and improve your technical interview skills before entering the rigorous Web Simulator.
 
 ---
 

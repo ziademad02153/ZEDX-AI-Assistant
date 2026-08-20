@@ -122,23 +122,23 @@ export const PremiumGranularScorecardsIcon = () => (
 
 // 8. Smart Silence Detection
 export const PremiumSmartSilenceDetectionIcon = () => (
-  <Image 
-    src="/Smart Silence Detection.png" 
-    alt="Smart Silence Detection" 
-    width={64} 
-    height={64} 
-    className={iconClasses + " object-contain"} 
+  <Image
+    src="/Smart Silence Detection.png"
+    alt="Smart Silence Detection"
+    width={64}
+    height={64}
+    className={iconClasses + " object-contain"}
   />
 );
 
 // 9. Focused Practice Workspace
 export const PremiumFocusedPracticeWorkspaceIcon = () => (
-  <Image 
-    src="/Focused Practice Workspace.png" 
-    alt="Focused Practice Workspace" 
-    width={80} 
-    height={80} 
-    className={iconClasses + " object-contain"} 
+  <Image
+    src="/Focused Practice Workspace.png"
+    alt="Focused Practice Workspace"
+    width={80}
+    height={80}
+    className={iconClasses + " object-contain"}
   />
 );
 
@@ -146,28 +146,28 @@ export const PremiumFocusedPracticeWorkspaceIcon = () => (
 export const PremiumVoiceToVoiceSimulationIcon = () => (
   <div className="flex flex-col items-center justify-center gap-1.5">
     <div className="relative flex items-center justify-center w-10 h-10">
-      <Image 
-        src="/AI2.png" 
-        alt="AI Agent" 
-        width={44} 
-        height={44} 
-        className="absolute object-cover drop-shadow-[0_0_10px_rgba(16,185,129,0.4)] scale-[1.5]" 
-        style={{ 
+      <Image
+        src="/AI2.png"
+        alt="AI Agent"
+        width={44}
+        height={44}
+        className="absolute object-cover drop-shadow-[0_0_10px_rgba(16,185,129,0.4)] scale-[1.5]"
+        style={{
           maskImage: 'radial-gradient(circle at center, black 40%, transparent 65%)',
           WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 65%)'
         }}
       />
     </div>
-    
+
     {/* Animated Wave */}
     <div className="flex items-center gap-[3px] h-4 px-1">
       {[...Array(5)].map((_, i) => (
-        <div 
-          key={i} 
+        <div
+          key={i}
           className="w-1 bg-emerald-500 rounded-full animate-[pulse_1s_ease-in-out_infinite]"
-          style={{ 
+          style={{
             height: i % 2 === 0 ? '100%' : '50%',
-            animationDelay: `${i * 0.15}s` 
+            animationDelay: `${i * 0.15}s`
           }}
         />
       ))}

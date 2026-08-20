@@ -16,6 +16,7 @@ export default function MockInterviewPage() {
     const [jd, setJd] = useState("");
     const [resume, setResume] = useState("");
     const [difficulty, setDifficulty] = useState("Intermediate");
+    const [interviewType, setInterviewType] = useState("Technical");
     const [questionCount, setQuestionCount] = useState(10);
     const [language, setLanguage] = useState("en-US");
     const [model, setModel] = useState("llama-3.1-8b-instant");
@@ -58,6 +59,7 @@ export default function MockInterviewPage() {
         const _jd = localStorage.getItem("interview_context_jd") || "";
         const _resume = localStorage.getItem("interview_context_resume") || "";
         const _diff = localStorage.getItem("interview_context_difficulty") || "Intermediate";
+        const _type = localStorage.getItem("interview_context_type") || "Technical";
         const _count = parseInt(localStorage.getItem("interview_context_question_count") || "10", 10);
         const _lang = localStorage.getItem("interview_context_lang") || "en-US";
         const _model = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
@@ -70,6 +72,7 @@ export default function MockInterviewPage() {
         setJd(_jd);
         setResume(_resume);
         setDifficulty(_diff);
+        setInterviewType(_type);
         setQuestionCount(_count);
         setLanguage(_lang);
         setModel(_model);
@@ -237,6 +240,8 @@ export default function MockInterviewPage() {
         
         const systemPrompt = `You are ZEDX, an expert AI interviewer. 
 You are conducting a professional mock interview.
+Interview Type: ${interviewType}. (Adjust your questioning style strictly to this type).
+${interviewType === "Project Deep Dive" ? "CRITICAL: Since this is a Project Deep Dive, ignore standard behavioral questions. Pick one specific project mentioned in the Resume Context and grill the candidate heavily on its technical decisions, architecture, and their specific role in it." : ""}
 Difficulty Level: ${difficulty}.
 Language: ${language}.
 Always reply ONLY with the spoken question text. Do not include markdown, thinking, or tips. Just the exact text you will speak.`;

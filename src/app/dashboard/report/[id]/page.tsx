@@ -36,7 +36,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
             try {
                 const data = await interviewService.getInterviewById(id);
                 setInterview(data);
-                
+
                 if (data.analysis?.scorecard) {
                     // Scorecard already exists!
                     setScorecard(data.analysis.scorecard as Scorecard);
@@ -52,7 +52,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
             }
         };
         fetchInterview();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     const generateScorecard = async (data: Interview) => {
@@ -96,25 +96,19 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    model: "llama-3.1-8b-instant",
+                    model: "openai/gpt-oss-120b", // Using a stronger model for analysis
                     systemPrompt: systemPrompt,
-                    messages: [{ role: "user", content: userPrompt }]
+                    messages: [{ role: "user", content: userPrompt }],
+                    response_format: { type: "json_object" }
                 })
             });
 
             if (!response.ok) throw new Error("Failed to generate scorecard");
 
             const resData = await response.json();
-            
-            // Clean up the JSON if the LLM added markdown backticks
-            let jsonString = resData.content.trim();
-            if (jsonString.startsWith("```json")) {
-                jsonString = jsonString.replace(/```json/g, "").replace(/```/g, "").trim();
-            } else if (jsonString.startsWith("```")) {
-                jsonString = jsonString.replace(/```/g, "").trim();
-            }
 
-            const parsedScorecard = JSON.parse(jsonString);
+            // With Structured Outputs (json_object), the response is guaranteed to be valid JSON
+            const parsedScorecard = JSON.parse(resData.content.trim());
 
             // Update the state
             setScorecard(parsedScorecard);
@@ -135,7 +129,7 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                 detailedFeedback: "The candidate demonstrated an excellent grasp of the core concepts and communicated their thoughts clearly. They effectively utilized the generated insights to provide benchmark-level answers. Overall, a highly successful session with very minor areas for deeper elaboration."
             };
             setScorecard(fallbackScorecard);
-            
+
             // Save fallback to DB
             const updatedAnalysis = { ...data.analysis, scorecard: fallbackScorecard };
             await interviewService.updateInterview(id, { analysis: updatedAnalysis }).catch(console.error);
@@ -220,7 +214,7 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 p-4 sm:p-8 pt-24 font-sans">
             <div className="max-w-6xl mx-auto space-y-8">
-                
+
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
@@ -242,23 +236,23 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                     <>
                         {/* Scores Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <CircularProgress 
-                                value={scorecard.overallScore} 
-                                label="Overall Score" 
+                            <CircularProgress
+                                value={scorecard.overallScore}
+                                label="Overall Score"
                                 icon={Target}
-                                colorClass="text-emerald-500" 
+                                colorClass="text-emerald-500"
                             />
-                            <CircularProgress 
-                                value={scorecard.technicalScore} 
-                                label="Technical Accuracy" 
+                            <CircularProgress
+                                value={scorecard.technicalScore}
+                                label="Technical Accuracy"
                                 icon={Brain}
-                                colorClass="text-blue-500" 
+                                colorClass="text-blue-500"
                             />
-                            <CircularProgress 
-                                value={scorecard.communicationScore} 
-                                label="Communication" 
+                            <CircularProgress
+                                value={scorecard.communicationScore}
+                                label="Communication"
                                 icon={MessageSquare}
-                                colorClass="text-purple-500" 
+                                colorClass="text-purple-500"
                             />
                         </div>
 

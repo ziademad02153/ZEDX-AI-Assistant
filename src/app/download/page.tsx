@@ -52,132 +52,127 @@ export default function DownloadPage() {
                             <Zap size={16} className="fill-current" />
                             <span>Pro Level Access</span>
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
-                            Unlock the Full Power of <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400">ZEDX Desktop</span>
+                        <h1 className="text-5xl md:text-7xl font-semibold mb-6 tracking-tight text-zinc-900 dark:text-white">
+                            Choose Your Path <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400 font-bold">To Mastery.</span>
                         </h1>
-                        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                            Don&apos;t rely on low-quality browser microphones. The desktop app utilizes <strong className="text-emerald-500">Internal Audio Routing</strong> securely, so you get flawless audio capture during practice instantly.
+                        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed font-medium">
+                            Whether you want a strict <strong className="text-emerald-500">testing environment</strong> or an <strong className="text-emerald-500">assisted training sandbox</strong>, we have the perfect tool for your level.
                         </p>
                     </div>
 
                     {/* Feature Grid */}
-                    <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20">
+                    <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20 items-stretch">
                         {/* Web Version Card */}
-                        <div className="p-8 rounded-3xl bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 opacity-70 hover:opacity-100 transition-all">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="p-3 rounded-xl bg-gray-200 dark:bg-zinc-800">
-                                    <GlobeIcon />
+                        <div className="p-8 rounded-[2.5rem] bg-zinc-50/80 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-white/5 backdrop-blur-xl transition-all duration-300 hover:bg-white dark:hover:bg-zinc-900 shadow-xl shadow-zinc-200/20 dark:shadow-none flex flex-col group relative">
+                            <div className="absolute top-0 right-0 bg-zinc-200/50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-[10px] uppercase tracking-wider font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-[2.5rem] shadow-sm">For Testing</div>
+                            
+                            <div className="flex items-center justify-between mb-8 mt-2">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-14 h-14 rounded-2xl bg-white dark:bg-black/50 shadow-sm border border-zinc-100 dark:border-white/5 flex items-center justify-center text-zinc-700 dark:text-zinc-300 group-hover:scale-110 transition-transform duration-300">
+                                        <GlobeIcon />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Web Simulator</h3>
+                                        <p className="text-sm font-semibold text-red-500/80 dark:text-red-400/80 mt-0.5">Rigorous Testing</p>
+                                    </div>
                                 </div>
-                                <h3 className="text-xl font-bold">Web Version</h3>
                             </div>
-                            <ul className="space-y-4 mb-8 text-gray-600 dark:text-gray-400">
-                                <li className="flex gap-3">
-                                    <Check className="text-green-500 shrink-0" />
-                                    <span>Works in any browser</span>
+                            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-8">
+                                Designed for advanced candidates. Experience a strict, realistic interview environment. No hints, no help—just you and the AI evaluating your every word.
+                            </p>
+                            <ul className="space-y-4 mb-10 text-sm font-medium text-zinc-700 dark:text-zinc-300 flex-grow">
+                                <li className="flex gap-3 items-center">
+                                    <Check className="text-emerald-500 shrink-0 w-5 h-5" />
+                                    <span>Autonomous Voice-to-Voice AI</span>
                                 </li>
-                                <li className="flex gap-3">
-                                    <Check className="text-green-500 shrink-0" />
-                                    <span>No installation needed</span>
+                                <li className="flex gap-3 items-center">
+                                    <Check className="text-emerald-500 shrink-0 w-5 h-5" />
+                                    <span>Instant Groq™ LPU Processing</span>
                                 </li>
-                                <li className="flex gap-3 opacity-50">
-                                    <Shield className="text-orange-400 shrink-0" />
-                                    <span><strong>Limitation:</strong> Restrained by Browser Sandboxing</span>
+                                <li className="flex gap-3 items-center">
+                                    <Check className="text-emerald-500 shrink-0 w-5 h-5" />
+                                    <span>Granular Post-Interview Scorecards</span>
                                 </li>
-                                <li className="flex gap-3 opacity-50">
-                                    <Monitor className="text-red-400 shrink-0" />
-                                    <span>Cannot route internal audio (Headphones)</span>
+                                <li className="flex gap-3 items-center opacity-60">
+                                    <Shield className="text-orange-500 shrink-0 w-5 h-5" />
+                                    <span>No real-time assistance or hints</span>
                                 </li>
                             </ul>
-                            <Link href="/dashboard" className="block">
-                                <Button variant="outline" className="w-full rounded-xl py-6">
-                                    Continue on Web
+                            <Link href="/dashboard" className="block mt-auto">
+                                <Button variant="outline" className="w-full rounded-2xl py-7 text-lg font-semibold border-zinc-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-900 dark:text-white transition-all shadow-sm">
+                                    Enter Testing Arena
                                 </Button>
                             </Link>
                         </div>
 
                         {/* Desktop App Card (Highlighed) */}
-                        <div className="p-8 rounded-3xl bg-white dark:bg-zinc-900 border-2 border-emerald-500 shadow-2xl shadow-emerald-500/10 relative overflow-hidden transform hover:-translate-y-1 transition-all">
-                            <div className="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-xl">RECOMMENDED</div>
-
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-500">
-                                    <MonitorIcon />
-                                </div>
-                                <div>
-                                    <h3 className="text-xl font-bold">Windows Desktop App</h3>
-                                    <p className="text-sm text-emerald-500 font-medium">For Professional Use</p>
+                        <div className="p-8 rounded-[2.5rem] bg-white/80 dark:bg-zinc-900/80 border border-emerald-500/30 backdrop-blur-xl shadow-2xl shadow-emerald-500/10 relative overflow-hidden transform transition-all duration-300 hover:scale-[1.02] flex flex-col group">
+                            <div className="absolute top-0 right-0 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[10px] uppercase tracking-wider font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-[2.5rem] shadow-md">RECOMMENDED</div>
+                            
+                            <div className="flex items-center justify-between mb-8 mt-2">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 shadow-inner border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform duration-300">
+                                        <MonitorIcon />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Desktop Sandbox</h3>
+                                        <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">Assisted Learning</p>
+                                    </div>
                                 </div>
                             </div>
-
-                            <ul className="space-y-4 mb-8">
-                                <li className="flex gap-3 items-start">
-                                    <div className="mt-1 bg-emerald-500/20 p-1 rounded-full">
-                                        <Check size={14} className="text-emerald-500" />
+                            
+                            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-8">
+                                Designed for skill improvement. The AI acts as your copilot, analyzing your screen and providing suggested answers in real-time to build your confidence.
+                            </p>
+                            
+                            <ul className="space-y-4 mb-10 text-sm font-medium text-zinc-700 dark:text-zinc-300 flex-grow">
+                                <li className="flex gap-3 items-center">
+                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
                                     </div>
-                                    <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Practice Interface:</strong> Runs seamlessly for realistic interview simulations.
-                                    </span>
+                                    <span><strong>Live AI Copilot:</strong> Get real-time answer suggestions</span>
                                 </li>
-                                <li className="flex gap-3 items-start">
-                                    <div className="mt-1 bg-emerald-500/20 p-1 rounded-full">
-                                        <Check size={14} className="text-emerald-500" />
+                                <li className="flex gap-3 items-center">
+                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
                                     </div>
-                                    <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Internal Audio Routing:</strong> Capture simulated interviewer audio flawlessly during practice sessions.
-                                    </span>
+                                    <span><strong>Screen Capture (OCR):</strong> AI analyzes shared code/screens</span>
                                 </li>
-                                <li className="flex gap-3 items-start">
-                                    <div className="mt-1 bg-emerald-500/20 p-1 rounded-full">
-                                        <Check size={14} className="text-emerald-500" />
+                                <li className="flex gap-3 items-center">
+                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
                                     </div>
-                                    <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Screen Capture (OCR):</strong> Analyze shared content during simulated technical interviews.
-                                    </span>
+                                    <span><strong>Internal Audio Routing:</strong> Flawless system audio capture</span>
                                 </li>
-                                <li className="flex gap-3 items-start">
-                                    <div className="mt-1 bg-emerald-500/20 p-1 rounded-full">
-                                        <Check size={14} className="text-emerald-500" />
+                                <li className="flex gap-3 items-center">
+                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
                                     </div>
-                                    <span className="text-gray-700 dark:text-gray-200 font-medium">
-                                        <strong>Manual AI Chat:</strong> Ask follow-up questions during your practice session without interrupting the flow.
-                                    </span>
-                                </li>
-                                <li className="flex gap-3 items-start">
-                                    <div className="mt-1 bg-emerald-500/20 p-1 rounded-full">
-                                        <Check size={14} className="text-emerald-500" />
-                                    </div>
-                                    <span className="text-gray-700 dark:text-gray-200 font-medium">Global Keyboard Shortcuts (Alt+Space)</span>
+                                    <span><strong>Manual Chat:</strong> Ask follow-up questions anytime</span>
                                 </li>
                             </ul>
 
-                            <div className="space-y-3">
+                            <div className="space-y-4 mt-auto">
                                 <Link
                                     href="https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.3/ZEDX.AI.Setup.1.1.3.exe"
                                     className="block"
                                 >
-                                    <Button className="w-full rounded-xl py-7 text-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/25 group relative overflow-hidden">
+                                    <Button className="w-full rounded-2xl py-7 text-lg bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/30 group relative overflow-hidden transition-all font-semibold">
                                         <span className="relative z-10 flex items-center justify-center gap-2">
-                                            <Download size={20} />
+                                            <Download size={20} strokeWidth={2.5} />
                                             Download for Windows
-                                            <span className="text-xs opacity-80 font-normal ml-1">(.exe)</span>
                                         </span>
-                                        {/* Shimmer Effect */}
                                         <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-0"></div>
                                     </Button>
                                 </Link>
-                                <p className="text-center text-xs text-gray-400">
-                                    v1.1.3 Stable • Windows 10/11 • 64-bit
-                                </p>
-                            </div>
-
-                            {/* Security Note for Unsigned App */}
-                            <div className="mt-8 p-4 rounded-xl bg-blue-500/5 border border-blue-500/10 flex gap-3 text-left animate-fade-in">
-                                <Info size={20} className="text-blue-500 shrink-0 mt-0.5" />
-                                <div className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-                                    <strong className="text-gray-900 dark:text-white block mb-1">Security Note:</strong>
-                                    Windows might show a &quot;Protected your PC&quot; warning because ZEDX AI is currently an independent developer app.
-                                    To install, simply click <strong>&quot;More info&quot;</strong> and then <strong>&quot;Run anyway&quot;</strong>.
+                                
+                                <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 flex gap-3 text-left animate-fade-in items-start">
+                                    <Info size={18} className="text-blue-500 shrink-0 mt-0.5" />
+                                    <div className="text-xs leading-relaxed text-zinc-500 dark:text-zinc-400 font-medium">
+                                        <strong className="text-zinc-800 dark:text-zinc-200 block mb-0.5">Security Note:</strong>
+                                        Click <strong>&quot;More info&quot;</strong> and <strong>&quot;Run anyway&quot;</strong> if Windows SmartScreen appears.
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -15,7 +15,7 @@ export async function GET() {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { model, messages, systemPrompt, prompt } = body;
+        const { model, messages, systemPrompt, prompt, response_format } = body;
 
         const isDev = process.env.NODE_ENV === 'development';
 
@@ -53,18 +53,24 @@ export async function POST(request: Request) {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 30000);
 
+                const requestBody: any = {
+                    model: targetModel,
+                    messages: finalMessages,
+                    max_tokens: 4096,
+                    temperature: 0.85
+                };
+                
+                if (response_format) {
+                    requestBody.response_format = response_format;
+                }
+
                 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${groqApiKey}`
                     },
-                    body: JSON.stringify({
-                        model: targetModel,
-                        messages: finalMessages,
-                        max_tokens: 4096,
-                        temperature: 0.85
-                    }),
+                    body: JSON.stringify(requestBody),
                     signal: controller.signal
                 });
 

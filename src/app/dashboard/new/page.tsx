@@ -294,10 +294,9 @@ export default function NewInterviewPage() {
                                     value={interviewType}
                                     onChange={(e) => setInterviewType(e.target.value)}
                                 >
-                                    <option>Technical</option>
-                                    <option>System Design</option>
-                                    <option>Behavioral</option>
-                                    <option>HR Screening</option>
+                                    <option value="Technical">Technical</option>
+                                    <option value="Behavioral">Behavioral</option>
+                                    <option value="Project Deep Dive">Project Deep Dive</option>
                                 </select>
                             </div>
                             <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">

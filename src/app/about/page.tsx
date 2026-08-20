@@ -5,12 +5,12 @@ import { Shield, Mic, Timer, MessageSquare, BarChart, Zap } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { AnimatedOrb } from "@/components/animated-orb";
-import { 
-    GoogleStyleMicIcon, 
-    PrivacyShieldIcon, 
-    PremiumContextAwareIcon, 
-    PremiumMultiLangIcon, 
-    PremiumInstantTransIcon, 
+import {
+    GoogleStyleMicIcon,
+    PrivacyShieldIcon,
+    PremiumContextAwareIcon,
+    PremiumMultiLangIcon,
+    PremiumInstantTransIcon,
     PremiumModelAgnosticIcon,
     PremiumGranularScorecardsIcon,
     PremiumSmartSilenceDetectionIcon,
@@ -52,7 +52,9 @@ export default function AboutPage() {
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 dark:from-emerald-400 dark:via-green-400 dark:to-teal-400">Interview Simulation</span>
                         </h1>
 
-                        ZEDX AI Simulator isn&apos;t just a transcription tool; it&apos;s your personal interview coach. Engineered for fresh graduates and job seekers to verify answers and master every mock interview.
+                        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                            ZEDX AI Simulator is your ultimate interview mastery platform. Choose the <strong>Web Simulator</strong> for rigorous, unassisted testing, or the <strong>Desktop Sandbox</strong> for real-time AI copilot assistance and training.
+                        </p>
                     </div>
                 </section>
 
@@ -130,9 +132,9 @@ export default function AboutPage() {
                                         <PremiumSmartSilenceDetectionIcon />
                                     </div>
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Smart Silence Detection</h3>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Dynamic Interview Modes</h3>
                                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                                    Speak naturally. The AI actively listens and waits for you to finish. If you pause for 3 seconds, it automatically assumes you've completed your answer and moves to the next question.
+                                    Choose from Technical, Behavioral, or Project Deep Dive modes. The AI dynamically adapts its questioning style to grill you on your specific CV projects or soft skills.
                                 </p>
                             </div>
 
@@ -144,7 +146,7 @@ export default function AboutPage() {
                                     </div>
                                     <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Multi-Lingual Voice (TTS)</h3>
                                     <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                                        Powered by ElevenLabs Multilingual V2, the robot speaks to you with human-like intonation in over 29 languages, adapting to the language you choose for your interview.
+                                        Powered by ElevenLabs Multilingual V2, the robot speaks to you with human-like intonation in over 30 global languages, adapting to the language you choose for your interview.
                                     </p>
                                 </div>
                             </div>
@@ -179,12 +181,12 @@ export default function AboutPage() {
 
                     <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6 relative z-10">
                         {[
-                            { icon: <GoogleStyleMicIcon />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures key interview questions instantly." },
+                            { icon: <GoogleStyleMicIcon />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures your spoken answers instantly and accurately." },
                             { icon: <PremiumContextAwareIcon />, title: "Context Aware", desc: "Analyzes your uploaded CV and job descriptions to tailor answers specifically to your profile." },
                             { icon: <PremiumMultiLangIcon />, title: "Multi-Language", desc: "Native support for English, Arabic, Spanish, and 30+ other global languages." },
                             { icon: <PremiumInstantTransIcon />, title: "Instant Transcription", desc: "Powered by Groq™ for ultra-fast speech-to-text conversion with 99% accuracy." },
                             { icon: <PrivacyShieldIcon />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers." },
-                            { icon: <PremiumModelAgnosticIcon />, title: "Ultra-Fast Intelligence", desc: "Powered by Groq's LPU inference, featuring Llama-3.3 70B for instantaneous conversational responses." }
+                            { icon: <PremiumModelAgnosticIcon />, title: "Ultra-Fast Intelligence", desc: "Powered by Groq's LPU inference, featuring GPT-OSS 120B & Qwen for instantaneous conversational responses." }
                         ].map((item, i) => (
                             <div key={i} className="group p-8 rounded-3xl bg-zinc-50/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-white/10 hover:border-emerald-500/30 dark:hover:border-emerald-500/30 hover:shadow-lg dark:hover:bg-zinc-900 transition-all duration-300 backdrop-blur-sm">
                                 <div className="mb-8 flex items-center justify-start relative">

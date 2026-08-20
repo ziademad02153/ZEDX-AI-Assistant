@@ -50,21 +50,26 @@ export function ModelChat({ modelId, modelName, modelLogo }: ModelChatProps) {
         setIsLoading(true);
 
         try {
-            // Simulate API latency for "realism" (since we don't have a dedicated test endpoint yet)
-            // In a real implementation, this would hit /api/chat-test or similar
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            const systemPrompt = "You are ZEDX, a helpful AI assistant. Answer the user briefly and naturally in the SAME language they speak to you.";
+            const res = await fetch("/api/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    model: modelId,
+                    systemPrompt,
+                    prompt: input
+                })
+            });
 
-            let responseContent = `I am running on **${modelName}**. I can help you practice for your interview!`;
-
-            if (input.toLowerCase().includes("job")) {
-                responseContent = "I can analyze job descriptions to find key requirements.";
-            } else if (input.toLowerCase().includes("code")) {
-                responseContent = "I can help you optimize your code and explain complex algorithms.";
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || "Failed to generate response");
             }
 
-            const aiMessage = { role: "assistant" as const, content: responseContent };
+            const data = await res.json();
+            const aiMessage = { role: "assistant" as const, content: data.content };
             setMessages(prev => [...prev, aiMessage]);
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             setMessages(prev => [...prev, { role: "assistant", content: "Sorry, I encountered a connection error. Please try again." }]);
         } finally {
