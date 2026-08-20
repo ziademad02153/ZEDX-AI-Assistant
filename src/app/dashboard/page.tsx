@@ -111,7 +111,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
+                <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-6 rounded-[2.5rem] shadow-xl shadow-zinc-200/20 dark:shadow-none border border-zinc-200/50 dark:border-white/10 transition-colors">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl">
                             <Clock size={20} className="sm:size-[24px]" />
@@ -123,7 +123,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
+                <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-6 rounded-[2.5rem] shadow-xl shadow-zinc-200/20 dark:shadow-none border border-zinc-200/50 dark:border-white/10 transition-colors">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="p-2 sm:p-3 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl">
                             <CheckCircle size={20} className="sm:size-[24px]" />
@@ -136,7 +136,7 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 sm:p-8 transition-colors flex-1 flex flex-col">
+            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] shadow-xl shadow-zinc-200/20 dark:shadow-none border border-zinc-200/50 dark:border-white/10 p-6 sm:p-10 transition-colors flex-1 flex flex-col mt-4">
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white">Recent History</h3>
                     {recentSessions.length > 0 && (

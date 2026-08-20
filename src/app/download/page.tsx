@@ -73,8 +73,8 @@ export default function DownloadPage() {
                                         <GlobeIcon />
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Web Simulator</h3>
-                                        <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5">Rigorous Evaluation</p>
+                                        <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">AI Interviewer Robot</h3>
+                                        <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5">Web Simulator</p>
                                     </div>
                                 </div>
                             </div>
@@ -127,8 +127,8 @@ export default function DownloadPage() {
                                         <MonitorIcon />
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Desktop Sandbox</h3>
-                                        <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">Assisted Learning</p>
+                                        <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">AI Interview Mentor</h3>
+                                        <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">Desktop Sandbox</p>
                                     </div>
                                 </div>
                             </div>

@@ -195,7 +195,7 @@ export default function InterviewHistoryPage() {
             {isLoading ? (
                 <div className="space-y-4">
                     {[1, 2, 3].map((i) => (
-                        <div key={i} className="p-4 bg-white dark:bg-zinc-800 rounded-xl border border-gray-100 dark:border-zinc-700">
+                        <div key={i} className="p-6 bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none">
                             <div className="flex justify-between items-start mb-4">
                                 <div className="space-y-2 w-full max-w-[200px]">
                                     <Skeleton className="h-5 w-3/4" />
@@ -214,7 +214,7 @@ export default function InterviewHistoryPage() {
                     ))}
                 </div>
             ) : interviews.length === 0 ? (
-                <div className="text-center py-16 bg-white dark:bg-zinc-900/50 border border-dashed border-gray-200 dark:border-zinc-800 rounded-3xl">
+                <div className="text-center py-16 bg-white/50 dark:bg-zinc-900/40 backdrop-blur-md border border-dashed border-zinc-300 dark:border-zinc-700 rounded-[2.5rem]">
                     <div className="w-20 h-20 bg-emerald-50 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mx-auto mb-6 relative">
                         <div className="absolute inset-0 bg-emerald-100 dark:bg-emerald-500/10 rounded-full animate-ping opacity-20"></div>
                         <FileText size={32} className="text-emerald-500 dark:text-emerald-400" />
@@ -244,8 +244,8 @@ export default function InterviewHistoryPage() {
                             <div
                                 key={interview.id}
                                 className={cn(
-                                    "p-4 rounded-xl border transition-all cursor-pointer",
-                                    "bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-700",
+                                    "p-6 rounded-[2.5rem] border transition-all cursor-pointer backdrop-blur-xl shadow-xl shadow-zinc-200/10 dark:shadow-none",
+                                    "bg-white/70 dark:bg-zinc-900/60 border-zinc-200/50 dark:border-white/10",
                                     expandedId === interview.id ? "shadow-lg ring-2 ring-green-500" : "hover:shadow-md"
                                 )}
                                 onClick={() => toggleExpand(interview.id)}

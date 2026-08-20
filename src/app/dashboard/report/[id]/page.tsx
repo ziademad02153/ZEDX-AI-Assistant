@@ -165,7 +165,7 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
     if (isGenerating && !scorecard) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-zinc-50 dark:bg-[#0a0a0a]">
-                <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-10 rounded-[2.5rem] shadow-2xl border border-zinc-200/50 dark:border-white/10 text-center max-w-md w-full relative overflow-hidden">
+                <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-10 rounded-[2.5rem] shadow-xl shadow-zinc-200/50 dark:shadow-none border border-zinc-200/50 dark:border-white/10 text-center max-w-md w-full relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-500 to-emerald-400 animate-gradient-x"></div>
                     <Brain className="w-16 h-16 mx-auto mb-6 text-emerald-500 animate-bounce" />
                     <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Analyzing Session...</h2>
@@ -179,9 +179,9 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
     }
 
     // Helper for circular progress
-    const CircularProgress = ({ value, label, icon: Icon, colorClass, gradientId, fromColor, toColor }: { value: number, label: string, icon: any, colorClass: string, gradientId: string, fromColor: string, toColor: string }) => (
-        <div className="flex flex-col items-center p-8 bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] shadow-xl shadow-zinc-200/20 dark:shadow-none border border-zinc-200/50 dark:border-white/10 relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
-            <div className={`absolute -top-10 -right-10 w-40 h-40 opacity-10 rounded-full blur-2xl bg-gradient-to-br ${fromColor} ${toColor}`}></div>
+    const CircularProgress = ({ value, label, icon: Icon, colorClass, gradientId, fromColor, toColor, fromClass, toClass }: { value: number, label: string, icon: any, colorClass: string, gradientId: string, fromColor: string, toColor: string, fromClass: string, toClass: string }) => (
+        <div className="flex flex-col items-center p-8 bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] shadow-xl shadow-zinc-200/50 dark:shadow-none border border-zinc-200/50 dark:border-white/10 relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
+            <div className={`absolute -top-10 -right-10 w-40 h-40 opacity-10 dark:opacity-20 rounded-full blur-2xl bg-gradient-to-br ${fromClass} ${toClass}`}></div>
             <div className="relative w-36 h-36 mb-6">
                 <svg className="w-full h-full transform -rotate-90 drop-shadow-xl" viewBox="0 0 36 36">
                     <defs>
@@ -251,8 +251,10 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                                 icon={Target}
                                 colorClass="text-emerald-500"
                                 gradientId="grad-overall"
-                                fromColor="#10b981" // emerald-500
-                                toColor="#14b8a6" // teal-500
+                                fromColor="#10b981"
+                                toColor="#14b8a6"
+                                fromClass="from-emerald-500"
+                                toClass="to-teal-500"
                             />
                             <CircularProgress
                                 value={scorecard.technicalScore}
@@ -260,8 +262,10 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                                 icon={Brain}
                                 colorClass="text-blue-500"
                                 gradientId="grad-tech"
-                                fromColor="#3b82f6" // blue-500
-                                toColor="#6366f1" // indigo-500
+                                fromColor="#3b82f6"
+                                toColor="#6366f1"
+                                fromClass="from-blue-500"
+                                toClass="to-indigo-500"
                             />
                             <CircularProgress
                                 value={scorecard.communicationScore}
@@ -269,15 +273,17 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                                 icon={MessageSquare}
                                 colorClass="text-purple-500"
                                 gradientId="grad-comm"
-                                fromColor="#a855f7" // purple-500
-                                toColor="#ec4899" // pink-500
+                                fromColor="#a855f7"
+                                toColor="#ec4899"
+                                fromClass="from-purple-500"
+                                toClass="to-pink-500"
                             />
                         </div>
 
                         {/* Analysis Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {/* Strengths */}
-                            <div className="bg-emerald-50/70 dark:bg-emerald-950/20 backdrop-blur-xl border border-emerald-200/50 dark:border-emerald-900/50 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-emerald-500/5 dark:shadow-none">
+                            <div className="bg-emerald-50/70 dark:bg-emerald-950/20 backdrop-blur-xl border border-emerald-200/50 dark:border-emerald-900/50 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-emerald-500/10 dark:shadow-none">
                                 <h3 className="text-xl font-bold text-emerald-800 dark:text-emerald-400 mb-6 flex items-center gap-3">
                                     <CheckCircle className="w-6 h-6" /> Key Strengths
                                 </h3>
@@ -292,7 +298,7 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                             </div>
 
                             {/* Improvements */}
-                            <div className="bg-amber-50/70 dark:bg-amber-950/20 backdrop-blur-xl border border-amber-200/50 dark:border-amber-900/50 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-amber-500/5 dark:shadow-none">
+                            <div className="bg-amber-50/70 dark:bg-amber-950/20 backdrop-blur-xl border border-amber-200/50 dark:border-amber-900/50 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-amber-500/10 dark:shadow-none">
                                 <h3 className="text-xl font-bold text-amber-800 dark:text-amber-400 mb-6 flex items-center gap-3">
                                     <AlertTriangle className="w-6 h-6" /> Areas for Improvement
                                 </h3>
@@ -308,7 +314,7 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                         </div>
 
                         {/* Detailed Feedback */}
-                        <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-zinc-200/20 dark:shadow-none">
+                        <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-zinc-200/50 dark:shadow-none">
                             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Detailed Assessment</h3>
                             <div className="prose prose-lg dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
                                 <ReactMarkdown>{scorecard.detailedFeedback}</ReactMarkdown>
@@ -318,7 +324,7 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                 )}
 
                 {/* Transcript Archive */}
-                <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-zinc-200/20 dark:shadow-none mt-8">
+                <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-zinc-200/50 dark:shadow-none mt-8">
                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Session Transcript Archive</h3>
                     <div className="bg-gray-100/50 dark:bg-black/40 rounded-3xl p-8 whitespace-pre-wrap font-mono text-sm text-gray-700 dark:text-gray-300 border border-gray-200/50 dark:border-white/5 max-h-96 overflow-y-auto leading-relaxed shadow-inner">
                         {interview.transcript || "No transcript recorded for this session."}

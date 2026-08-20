@@ -125,40 +125,55 @@ export default function AboutPage() {
                         </div>
 
                         <div className="grid md:grid-cols-3 gap-8">
-                            <div className="bg-white dark:bg-[#111] p-8 rounded-3xl border border-gray-100 dark:border-white/5 shadow-xl hover:border-emerald-500/30 transition-all duration-300 group">
+                            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-zinc-200/50 dark:border-white/10 shadow-[0_15px_50px_-15px_rgba(181,248,80,0.3)] dark:shadow-[0_15px_50px_-15px_rgba(181,248,80,0.15)] hover:-translate-y-1 transition-all duration-300 group">
+                                <div className="mb-6">
+                                    <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
+                                        DYNAMIC
+                                    </span>
+                                </div>
                                 <div className="mb-6 flex items-center justify-start relative">
-                                    <div className="absolute w-16 h-16 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
+                                    <div className="absolute w-16 h-16 bg-[#b5f850]/20 dark:bg-[#b5f850]/10 rounded-full blur-xl group-hover:bg-[#b5f850]/30 transition-all duration-500"></div>
                                     <div className="relative z-10">
                                         <PremiumSmartSilenceDetectionIcon />
                                     </div>
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Dynamic Interview Modes</h3>
+                                <h3 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-3">Dynamic Interview Modes</h3>
                                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                                     Choose from Technical, Behavioral, or Project Deep Dive modes. The AI dynamically adapts its questioning style to grill you on your specific CV projects or soft skills.
                                 </p>
                             </div>
 
-                            <div className="bg-white dark:bg-[#111] p-8 rounded-3xl border border-gray-100 dark:border-white/5 shadow-xl hover:border-emerald-500/30 transition-all duration-300 group relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition-colors"></div>
+                            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-zinc-200/50 dark:border-white/10 shadow-[0_15px_50px_-15px_rgba(56,189,248,0.3)] dark:shadow-[0_15px_50px_-15px_rgba(56,189,248,0.15)] hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 rounded-full blur-3xl group-hover:bg-sky-500/20 transition-colors"></div>
                                 <div className="relative z-10">
-                                    <div className="mb-6 group-hover:scale-110 transition-transform duration-500">
-                                        <AnimatedOrb className="w-20 h-20 -ml-2 drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]" />
+                                    <div className="mb-6">
+                                        <span className="inline-block px-4 py-1.5 rounded-full bg-sky-200 text-sky-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
+                                            VOICE TTS
+                                        </span>
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Multi-Lingual Voice (TTS)</h3>
+                                    <div className="mb-6 group-hover:scale-110 transition-transform duration-500">
+                                        <AnimatedOrb className="w-20 h-20 -ml-2 drop-shadow-[0_0_20px_rgba(56,189,248,0.4)]" />
+                                    </div>
+                                    <h3 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-3">Multi-Lingual Voice (TTS)</h3>
                                     <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                                         Powered by ElevenLabs Multilingual V2, the robot speaks to you with human-like intonation in over 30 global languages, adapting to the language you choose for your interview.
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="bg-white dark:bg-[#111] p-8 rounded-3xl border border-gray-100 dark:border-white/5 shadow-xl hover:border-emerald-500/30 transition-all duration-300 group">
+                            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-zinc-200/50 dark:border-white/10 shadow-[0_15px_50px_-15px_rgba(168,85,247,0.3)] dark:shadow-[0_15px_50px_-15px_rgba(168,85,247,0.15)] hover:-translate-y-1 transition-all duration-300 group">
+                                <div className="mb-6">
+                                    <span className="inline-block px-4 py-1.5 rounded-full bg-purple-200 text-purple-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
+                                        ANALYTICS
+                                    </span>
+                                </div>
                                 <div className="mb-6 flex items-center justify-start relative">
-                                    <div className="absolute w-16 h-16 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
+                                    <div className="absolute w-16 h-16 bg-purple-500/10 dark:bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition-all duration-500"></div>
                                     <div className="relative z-10">
                                         <PremiumGranularScorecardsIcon />
                                     </div>
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Granular Scorecards</h3>
+                                <h3 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-3">Granular Scorecards</h3>
                                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                                     At the end of the session, the AI evaluates your exact spoken transcript, scoring each answer out of 10 and providing you with an ideal benchmark response.
                                 </p>
@@ -181,21 +196,26 @@ export default function AboutPage() {
 
                     <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6 relative z-10">
                         {[
-                            { icon: <GoogleStyleMicIcon />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures your spoken answers instantly and accurately." },
-                            { icon: <PremiumContextAwareIcon />, title: "Context Aware", desc: "Analyzes your uploaded CV and job descriptions to tailor answers specifically to your profile." },
-                            { icon: <PremiumMultiLangIcon />, title: "Multi-Language", desc: "Native support for English, Arabic, Spanish, and 30+ other global languages." },
-                            { icon: <PremiumInstantTransIcon />, title: "Instant Transcription", desc: "Powered by Groq™ for ultra-fast speech-to-text conversion with 99% accuracy." },
-                            { icon: <PrivacyShieldIcon />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers." },
-                            { icon: <PremiumModelAgnosticIcon />, title: "Ultra-Fast Intelligence", desc: "Powered by Groq's LPU inference, featuring GPT-OSS 120B & Qwen for instantaneous conversational responses." }
+                            { icon: <GoogleStyleMicIcon />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures your spoken answers instantly and accurately.", badge: "AUDIO", badgeClass: "bg-blue-100 text-blue-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(59,130,246,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(59,130,246,0.15)]", glowColor: "bg-blue-500" },
+                            { icon: <PremiumContextAwareIcon />, title: "Context Aware", desc: "Analyzes your uploaded CV and job descriptions to tailor answers specifically to your profile.", badge: "INTELLIGENCE", badgeClass: "bg-indigo-100 text-indigo-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(99,102,241,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(99,102,241,0.15)]", glowColor: "bg-indigo-500" },
+                            { icon: <PremiumMultiLangIcon />, title: "Multi-Language", desc: "Native support for English, Arabic, Spanish, and 30+ other global languages.", badge: "GLOBAL", badgeClass: "bg-[#d9f99d] text-green-950", shadowClass: "shadow-[0_15px_40px_-15px_rgba(181,248,80,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(181,248,80,0.15)]", glowColor: "bg-[#b5f850]" },
+                            { icon: <PremiumInstantTransIcon />, title: "Instant Transcription", desc: "Powered by Groq™ for ultra-fast speech-to-text conversion with 99% accuracy.", badge: "SPEED", badgeClass: "bg-amber-100 text-amber-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(245,158,11,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(245,158,11,0.15)]", glowColor: "bg-amber-500" },
+                            { icon: <PrivacyShieldIcon />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers.", badge: "SECURITY", badgeClass: "bg-teal-100 text-teal-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(20,184,166,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(20,184,166,0.15)]", glowColor: "bg-teal-500" },
+                            { icon: <PremiumModelAgnosticIcon />, title: "Ultra-Fast Intelligence", desc: "Powered by Groq's LPU inference, featuring GPT-OSS 120B & Qwen for instantaneous conversational responses.", badge: "HARDWARE", badgeClass: "bg-rose-100 text-rose-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(244,63,94,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(244,63,94,0.15)]", glowColor: "bg-rose-500" }
                         ].map((item, i) => (
-                            <div key={i} className="group p-8 rounded-3xl bg-zinc-50/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-white/10 hover:border-emerald-500/30 dark:hover:border-emerald-500/30 hover:shadow-lg dark:hover:bg-zinc-900 transition-all duration-300 backdrop-blur-sm">
-                                <div className="mb-8 flex items-center justify-start relative">
-                                    <div className="absolute w-16 h-16 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
+                            <div key={i} className={`bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-zinc-200/50 dark:border-white/10 hover:-translate-y-1 transition-all duration-300 group ${item.shadowClass}`}>
+                                <div className="mb-6">
+                                    <span className={`inline-block px-4 py-1.5 rounded-full ${item.badgeClass} text-[10px] font-extrabold tracking-widest uppercase shadow-sm`}>
+                                        {item.badge}
+                                    </span>
+                                </div>
+                                <div className="mb-6 flex items-center justify-start relative">
+                                    <div className={`absolute w-16 h-16 ${item.glowColor}/10 dark:${item.glowColor}/10 rounded-full blur-xl group-hover:${item.glowColor}/20 transition-all duration-500`}></div>
                                     <div className="relative z-10">
                                         {item.icon}
                                     </div>
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{item.title}</h3>
+                                <h3 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-3">{item.title}</h3>
                                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{item.desc}</p>
                             </div>
                         ))}

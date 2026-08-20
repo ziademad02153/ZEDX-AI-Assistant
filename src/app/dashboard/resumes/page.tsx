@@ -137,7 +137,7 @@ export default function MyResumesPage() {
             )}
 
             {isAdding && (
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-700 space-y-4 animate-in fade-in slide-in-from-top-4">
+                <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-6 rounded-[2.5rem] shadow-xl shadow-zinc-200/20 dark:shadow-none border border-zinc-200/50 dark:border-white/10 space-y-4 animate-in fade-in slide-in-from-top-4">
                     <h3 className="font-semibold text-lg dark:text-white">Add New Resume</h3>
 
                     {/* File Upload Section */}
@@ -205,7 +205,7 @@ export default function MyResumesPage() {
                         <RefreshCw className="animate-spin text-gray-400" size={32} />
                     </div>
                 ) : resumes.length === 0 && !isAdding ? (
-                    <div className="col-span-2 text-center py-12 bg-gray-50 dark:bg-zinc-800 rounded-2xl border border-dashed border-gray-200 dark:border-zinc-600">
+                    <div className="col-span-2 text-center py-12 bg-white/50 dark:bg-zinc-900/40 backdrop-blur-md rounded-[2.5rem] border border-dashed border-zinc-300 dark:border-zinc-700">
                         <FileText className="mx-auto text-gray-300 mb-3" size={48} />
                         <h3 className="text-lg font-medium text-gray-900 dark:text-white">No resumes yet</h3>
                         <p className="text-gray-500 mb-4">Add your first resume to get started.</p>
@@ -213,7 +213,7 @@ export default function MyResumesPage() {
                     </div>
                 ) : (
                     resumes.map((resume) => (
-                        <div key={resume.id} className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-700 hover:shadow-md transition-shadow group relative">
+                        <div key={resume.id} className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-6 rounded-[2.5rem] shadow-xl shadow-zinc-200/20 dark:shadow-none border border-zinc-200/50 dark:border-white/10 hover:-translate-y-1 transition-all duration-300 group relative">
                             <div className="flex justify-between items-start mb-4">
                                 <div className="flex items-center gap-3">
                                     <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">

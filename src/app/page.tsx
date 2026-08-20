@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { Check, Globe, Sparkles, ChevronDown } from "lucide-react";
+import { Check, Globe, Sparkles, ChevronDown, ArrowRight } from "lucide-react";
 import { PlatformSection } from "@/components/platform-section";
 
 export default function Home() {
@@ -21,13 +21,7 @@ export default function Home() {
         {/* Hero Section */}
         <section className="py-12 md:py-20 text-center container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
-            <div className="mb-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-zinc-800 border border-green-100 dark:border-green-800 shadow-sm text-green-700 dark:text-green-400 font-semibold text-sm animate-fade-in-up">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              ZEDX AI Simulator: Real-Time Interview Simulation
-            </div>
+
 
             <h1 className="text-[2.25rem] xs:text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-bold tracking-tight text-gray-900 dark:text-white mb-6 md:mb-8 leading-[1.15] md:leading-[1.1] max-w-[90rem] mx-auto px-4">
               Master Your Next Interview <br className="xs:hidden" />
@@ -43,8 +37,8 @@ export default function Home() {
 
             <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4">
               <Link href="/dashboard" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto text-base md:text-lg px-8 py-4 md:px-10 md:py-6 rounded-full bg-gray-900 hover:bg-gray-800 text-white shadow-xl shadow-gray-900/20 transition-all hover:scale-105">
-                  Get Started for Free
+                <Button className="w-full sm:w-auto text-base md:text-lg px-8 py-4 md:px-10 md:py-7 rounded-full bg-[#065f46] hover:bg-[#047857] text-white shadow-xl shadow-emerald-900/20 transition-all hover:scale-105 group font-semibold border-none">
+                  Try for free <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </div>
@@ -195,12 +189,12 @@ export default function Home() {
 
               {/* Feature 1: Context Upload */}
               <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
-                <div className="mb-4">
-                  <span className="inline-block px-4 py-1.5 rounded-full bg-green-100 text-green-800 text-xs font-bold tracking-wider uppercase">
+                <div className="mb-6">
+                  <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
                     Context
                   </span>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">Upload Context Documents</h3>
+                <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-8">Upload Context Documents</h3>
 
                 {/* Visual: Context File */}
                 <div className="flex-grow flex items-center justify-center mb-8">
@@ -228,12 +222,12 @@ export default function Home() {
 
               {/* Feature 2: Real-Time Accessibility */}
               <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
-                <div className="mb-4">
-                  <span className="inline-block px-4 py-1.5 rounded-full bg-teal-100 text-teal-800 text-xs font-bold tracking-wider uppercase">
+                <div className="mb-6">
+                  <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
                     Instant Verification
                   </span>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">Instant Feedback</h3>
+                <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-8">Instant Feedback</h3>
 
                 {/* Visual: Chat Bubble */}
                 <div className="flex-grow flex items-center justify-center mb-8 w-full">
@@ -253,13 +247,13 @@ export default function Home() {
               </div>
 
               {/* Feature 3: Multilingual */}
-              <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
-                <div className="mb-4">
-                  <span className="inline-block px-4 py-1.5 rounded-full bg-[#84cc16] text-black text-xs font-bold tracking-wider uppercase">
+              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
+                <div className="mb-6">
+                  <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
                     Multilingual
                   </span>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">29 Languages</h3>
+                <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-8">29 Languages</h3>
 
                 {/* Visual: Language Globe */}
                 <div className="flex-grow flex items-center justify-center mb-8 relative">
@@ -327,13 +321,13 @@ export default function Home() {
               </div>
 
               {/* Feature 4: AI Analysis */}
-              <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
-                <div className="mb-4">
-                  <span className="inline-block px-4 py-1.5 rounded-full bg-[#84cc16] dark:bg-green-700 text-black dark:text-white text-xs font-bold tracking-wider uppercase">
+              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
+                <div className="mb-6">
+                  <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
                     Analysis
                   </span>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-8">Performance Analysis</h3>
+                <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-8">Performance Analysis</h3>
 
                 {/* Visual: Summary Card Mockup */}
                 <div className="flex-grow flex items-center justify-center mb-8">
