@@ -206,22 +206,22 @@ The JSON must be an array of objects, where each object has:
     const overallTier = getPerformanceTier(averageScore);
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white p-6 sm:p-12 relative">
+        <div className="min-h-screen bg-zinc-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white p-6 sm:p-12 relative print:bg-white print:text-black">
             {/* Background Accents */}
-            <div className="fixed top-0 left-0 w-full h-[500px] bg-gradient-to-b from-emerald-900/20 to-transparent pointer-events-none"></div>
+            <div className="fixed top-0 left-0 w-full h-[500px] bg-gradient-to-b from-emerald-900/10 dark:from-emerald-900/20 to-transparent pointer-events-none print:hidden"></div>
 
             <div className="max-w-5xl mx-auto relative z-10">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-12">
+                <div className="flex items-center justify-between mb-12 print:mb-6">
                     <div className="flex items-center gap-4">
-                        <Link href="/dashboard">
-                            <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
+                        <Link href="/dashboard" className="print:hidden">
+                            <Button variant="ghost" size="icon" className="rounded-full hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                                 <ArrowLeft className="w-6 h-6" />
                             </Button>
                         </Link>
                         <div>
-                            <h1 className="text-3xl font-light tracking-tight text-white">Interview <span className="font-bold">Scorecard</span></h1>
-                            <p className="text-sm text-emerald-500/80 uppercase tracking-widest mt-1 font-medium">ZEDX AI Assessment</p>
+                            <h1 className="text-3xl font-light tracking-tight text-gray-900 dark:text-white print:text-black">Interview <span className="font-bold">Scorecard</span></h1>
+                            <p className="text-sm text-emerald-600 dark:text-emerald-500/80 uppercase tracking-widest mt-1 font-medium">ZEDX AI Assessment</p>
                         </div>
                     </div>
                 </div>
@@ -230,12 +230,12 @@ The JSON must be an array of objects, where each object has:
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-black/40 backdrop-blur-2xl rounded-3xl p-8 sm:p-12 mb-12 shadow-2xl border border-white/10 flex flex-col sm:flex-row items-center gap-12"
+                    className="bg-white/80 dark:bg-black/40 backdrop-blur-2xl rounded-3xl p-8 sm:p-12 mb-12 shadow-xl dark:shadow-2xl border border-zinc-200 dark:border-white/10 flex flex-col sm:flex-row items-center gap-12 print:border-gray-300 print:shadow-none print:bg-white"
                 >
                     <div className="relative w-40 h-40 flex items-center justify-center shrink-0">
-                        <svg className="w-full h-full transform -rotate-90 drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]" viewBox="0 0 36 36">
+                        <svg className="w-full h-full transform -rotate-90 drop-shadow-md dark:drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]" viewBox="0 0 36 36">
                             <path
-                                className="text-white/5"
+                                className="text-gray-200 dark:text-white/5"
                                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                                 fill="none"
                                 stroke="currentColor"
@@ -254,15 +254,15 @@ The JSON must be an array of objects, where each object has:
                             />
                         </svg>
                         <div className="absolute flex flex-col items-center">
-                            <span className="text-5xl font-light text-white">{averageScore}<span className="text-2xl text-gray-500">/10</span></span>
+                            <span className="text-5xl font-light text-gray-900 dark:text-white print:text-black">{averageScore}<span className="text-2xl text-gray-400 dark:text-gray-500">/10</span></span>
                         </div>
                     </div>
                     <div className="flex-1 text-center sm:text-left">
-                        <div className={cn("inline-flex items-center px-4 py-1.5 rounded-full border bg-black/50 text-sm tracking-widest uppercase font-bold mb-4", overallTier.border, overallTier.color)}>
+                        <div className={cn("inline-flex items-center px-4 py-1.5 rounded-full border bg-gray-50 dark:bg-black/50 text-sm tracking-widest uppercase font-bold mb-4 print:bg-white", overallTier.border, overallTier.color)}>
                             {overallTier.label} Performance
                         </div>
-                        <p className="text-gray-400 text-lg leading-relaxed max-w-2xl font-light">
-                            You completed <strong className="text-white font-medium">{report.length}</strong> questions. Your technical articulation and response structures have been mapped against ideal industry benchmarks. Review the detailed breakdown below to optimize your delivery.
+                        <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed max-w-2xl font-light print:text-gray-800">
+                            You completed <strong className="text-gray-900 dark:text-white print:text-black font-medium">{report.length}</strong> questions. Your technical articulation and response structures have been mapped against ideal industry benchmarks. Review the detailed breakdown below to optimize your delivery.
                         </p>
                     </div>
                 </motion.div>
@@ -277,29 +277,29 @@ The JSON must be an array of objects, where each object has:
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 + (index * 0.1) }}
                                 key={index} 
-                                className="bg-black/20 backdrop-blur-xl rounded-3xl p-6 sm:p-10 border border-white/5 hover:border-white/10 transition-colors group"
+                                className="bg-white dark:bg-black/20 backdrop-blur-xl rounded-3xl p-6 sm:p-10 border border-zinc-200 dark:border-white/5 hover:border-zinc-300 dark:hover:border-white/10 transition-colors group print:border-gray-300 print:shadow-none print:break-inside-avoid"
                             >
                                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8">
                                     <div className="flex-1">
                                         <div className="flex items-center gap-3 mb-3">
-                                            <span className="text-xs font-bold text-gray-500 tracking-widest uppercase bg-white/5 px-3 py-1 rounded-full">
+                                            <span className="text-xs font-bold text-gray-500 tracking-widest uppercase bg-gray-100 dark:bg-white/5 px-3 py-1 rounded-full print:bg-gray-100">
                                                 Question {index + 1}
                                             </span>
-                                            <span className={cn("text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full border bg-black/40", tier.border, tier.color)}>
+                                            <span className={cn("text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full border bg-white dark:bg-black/40 print:bg-white", tier.border, tier.color)}>
                                                 Score: {item.score}/10
                                             </span>
                                         </div>
-                                        <h3 className="text-xl sm:text-2xl font-medium text-white leading-snug">{item.question}</h3>
+                                        <h3 className="text-xl sm:text-2xl font-medium text-gray-900 dark:text-white print:text-black leading-snug">{item.question}</h3>
                                     </div>
                                 </div>
 
-                                <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 mb-8 relative overflow-hidden group-hover:bg-white/[0.04] transition-colors">
-                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gray-600"></div>
+                                <div className="bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded-2xl p-6 mb-8 relative overflow-hidden group-hover:bg-gray-100 dark:group-hover:bg-white/[0.04] transition-colors print:bg-gray-50 print:border-gray-200">
+                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gray-400 dark:bg-gray-600"></div>
                                     <span className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2">
                                         <Mic className="w-3 h-3" /> Transcript
                                     </span>
-                                    <p className="text-gray-300 font-light text-lg leading-relaxed">
-                                        {item.answer ? `"${item.answer}"` : <span className="italic text-gray-600">(No audio captured)</span>}
+                                    <p className="text-gray-700 dark:text-gray-300 font-light text-lg leading-relaxed print:text-gray-800">
+                                        {item.answer ? `"${item.answer}"` : <span className="italic text-gray-400 dark:text-gray-600">(No audio captured)</span>}
                                     </p>
                                 </div>
 
@@ -311,16 +311,16 @@ The JSON must be an array of objects, where each object has:
                                             </div>
                                             <span className="text-sm font-bold tracking-widest uppercase">ZEDX Analysis</span>
                                         </div>
-                                        <p className="text-gray-400 text-base leading-relaxed font-light">{item.feedback}</p>
+                                        <p className="text-gray-600 dark:text-gray-400 print:text-gray-800 text-base leading-relaxed font-light">{item.feedback}</p>
                                     </div>
                                     <div>
-                                        <div className="flex items-center gap-3 mb-4 text-blue-400">
-                                            <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                                        <div className="flex items-center gap-3 mb-4 text-blue-500 dark:text-blue-400">
+                                            <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center border border-blue-200 dark:border-blue-500/20">
                                                 <Award className="w-4 h-4" />
                                             </div>
                                             <span className="text-sm font-bold tracking-widest uppercase">Ideal Benchmark</span>
                                         </div>
-                                        <p className="text-gray-400 text-base leading-relaxed font-light">{item.ideal_answer}</p>
+                                        <p className="text-gray-600 dark:text-gray-400 print:text-gray-800 text-base leading-relaxed font-light">{item.ideal_answer}</p>
                                     </div>
                                 </div>
                             </motion.div>
@@ -328,9 +328,12 @@ The JSON must be an array of objects, where each object has:
                     })}
                 </div>
                 
-                <div className="mt-16 mb-20 flex justify-center">
+                <div className="mt-16 mb-20 flex flex-col sm:flex-row justify-center items-center gap-4 print:hidden">
+                    <Button onClick={() => window.print()} className="h-16 px-10 text-lg font-medium tracking-wide rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700 shadow-[0_0_30px_rgba(16,185,129,0.2)] hover:shadow-[0_0_40px_rgba(16,185,129,0.4)] transition-all">
+                        استخراج المقابلة في ملف PDF منظم
+                    </Button>
                     <Link href="/dashboard">
-                        <Button className="h-16 px-10 text-lg font-medium tracking-wide rounded-2xl bg-white text-black hover:bg-gray-200 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all">
+                        <Button className="h-16 px-10 text-lg font-medium tracking-wide rounded-2xl bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 shadow-xl transition-all">
                             Finish & Return to Dashboard <ChevronRight className="ml-2 w-5 h-5" />
                         </Button>
                     </Link>

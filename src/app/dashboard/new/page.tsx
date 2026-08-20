@@ -349,6 +349,10 @@ export default function NewInterviewPage() {
                                     <option value="10">10 Questions</option>
                                     <option value="15">15 Questions</option>
                                     <option value="20">20 Questions</option>
+                                    <option value="25">25 Questions</option>
+                                    <option value="30">30 Questions</option>
+                                    <option value="35">35 Questions</option>
+                                    <option value="40">40 Questions</option>
                                 </select>
                             </div>
                         </motion.div>
