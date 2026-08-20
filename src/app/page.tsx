@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { Check, Globe, Sparkles, ChevronDown, ArrowRight, Star } from "lucide-react";
+import { Check, Globe, Sparkles, ChevronDown, ArrowRight, Star, Code } from "lucide-react";
 import { PlatformSection } from "@/components/platform-section";
 
 export default function Home() {
@@ -52,9 +52,10 @@ export default function Home() {
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-400"></div>
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-400"></div>
                   </div>
-                  <div className="mx-auto bg-[#d9f99d] dark:bg-emerald-900/30 border border-[#b5f850] dark:border-emerald-800 px-4 py-1.5 rounded-full text-[10px] md:text-xs text-green-950 dark:text-emerald-100 font-extrabold tracking-widest uppercase flex items-center gap-2 md:gap-2.5 shadow-sm">
-                    <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
-                    Real-Time Interview Simulation
+                  <div className="absolute left-0 right-0 flex justify-center pointer-events-none">
+                    <span className="text-xs md:text-sm font-semibold text-gray-500 dark:text-gray-400">
+                      Real-Time Interview Simulation
+                    </span>
                   </div>
                 </div>
                 <div className="p-4 md:p-10 bg-white dark:bg-zinc-900 min-h-[320px] md:min-h-[350px] flex flex-col items-center justify-center relative overflow-hidden">
@@ -63,31 +64,33 @@ export default function Home() {
 
                   {/* Floating Chat Bubbles */}
                   <div className="relative z-10 w-full max-w-4xl space-y-6 md:space-y-10">
-                    <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up">
-                      <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tr-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
-                        &quot;I noticed the PostgreSQL join logic was causing a 4-second delay, so I added a composite index...&quot;
+                    {/* Chat Bubble 1 (AI Question) */}
+                    <div className="flex gap-3 md:gap-7 items-start justify-start animate-fade-in-up">
+                      <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-black flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
+                        <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
-                      <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
-                        <Image src="/IIcon1.jpg" alt="User" width={52} height={52} className="object-cover w-full h-full" />
+                      <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                        &quot;Can you explain how you optimized the database query performance in your previous e-commerce project?&quot;
                       </div>
                     </div>
 
-                    <div className="flex gap-3 md:gap-7 items-start animate-fade-in-up" style={{ animationDelay: '1s' }}>
-                      <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
-                        <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
-                      </div>
-                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tl-none p-4 md:p-8 text-[0.85rem] md:text-[1.1rem] text-gray-800 dark:text-gray-100 shadow-xl max-w-[88%] md:max-w-[85%] relative border-l-4 border-l-green-500">
-                        <div className="absolute -top-2.5 -right-2.5 md:-top-5 md:-right-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
-                          <Sparkles className="w-4 h-4 md:w-6 md:h-6 text-green-500 fill-green-500" />
+                    {/* Chat Bubble 2 (User Answer) */}
+                    <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
+                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 text-[0.85rem] md:text-[1.1rem] text-gray-800 dark:text-gray-100 shadow-xl max-w-[88%] md:max-w-[85%] relative border-r-4 border-r-green-500 text-left">
+                        <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
+                          <Code className="w-4 h-4 md:w-6 md:h-6 text-green-500" />
                         </div>
-                        <div className="mb-2.5 md:mb-4">
-                          <span className="inline-block px-3 py-1 bg-[#d9f99d] dark:bg-emerald-900/50 rounded-full text-[10px] md:text-xs font-extrabold text-green-950 dark:text-emerald-100 uppercase tracking-widest shadow-sm">
-                            Instant Feedback
+                        <div className="mb-1 md:mb-2 text-left">
+                          <span className="text-[10px] md:text-xs font-bold text-emerald-700/80 dark:text-emerald-400/80 uppercase tracking-wider">
+                            Candidate Response
                           </span>
                         </div>
                         <p className="leading-relaxed">
-                          Great technical explanation! However, to make this answer stronger, mention the exact percentage of time saved (e.g., decreased execution time by 85%).
+                          &quot;I noticed the PostgreSQL join logic was causing a 4-second delay, so I added a composite index on the frequently queried columns, which decreased execution time by 85%.&quot;
                         </p>
+                      </div>
+                      <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
+                        <Image src="/IIcon1.jpg" alt="User" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
                     </div>
                   </div>
@@ -101,9 +104,12 @@ export default function Home() {
 
           <div className="mt-16 md:mt-24 relative w-full max-w-[900px] mx-auto perspective-1000 px-4">
             <div className="text-center mb-10 md:mb-16">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] dark:bg-emerald-900/30 text-green-950 dark:text-emerald-100 text-[10px] md:text-xs font-extrabold tracking-widest uppercase mb-4 shadow-sm">
-                Advanced Coding
-              </span>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700/50 mb-4 md:mb-6 shadow-sm">
+                <Code className="w-3.5 h-3.5 text-emerald-500" />
+                <span className="text-[10px] md:text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                  Advanced Coding
+                </span>
+              </div>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-6">
                 Technical <span className="text-gradient-fusion">Precision.</span>
               </h2>
@@ -116,10 +122,11 @@ export default function Home() {
                   <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-400"></div>
                   <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-400"></div>
                 </div>
-                <div className="mx-auto bg-[#d9f99d] dark:bg-emerald-900/30 border border-[#b5f850] dark:border-emerald-800 px-4 py-1.5 rounded-full text-[10px] md:text-xs text-green-950 dark:text-emerald-100 font-extrabold tracking-widest uppercase flex items-center gap-2 md:gap-2.5 shadow-sm">
-                  <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
-                  Mock Interview - Architecture Review
-                </div>
+                  <div className="absolute left-0 right-0 flex justify-center pointer-events-none">
+                    <span className="text-xs md:text-sm font-semibold text-gray-500 dark:text-gray-400">
+                      Architecture Review
+                    </span>
+                  </div>
               </div>
               <div className="p-4 md:p-10 bg-white dark:bg-zinc-900 min-h-[320px] md:min-h-[350px] flex flex-col items-center justify-center relative overflow-hidden">
                 {/* Background Grid */}
@@ -127,26 +134,25 @@ export default function Home() {
 
                 {/* Floating Chat Bubbles */}
                 <div className="relative z-10 w-full max-w-4xl space-y-6 md:space-y-10">
-                  <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up">
-                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tr-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
-                      &quot;I would use a combination of useState and useEffect to store the old prop when the component re-renders...&quot;
-                    </div>
-                    <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
-                      <Image src="/IIcon1.jpg" alt="User" width={52} height={52} className="object-cover w-full h-full" />
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3 md:gap-7 items-start animate-fade-in-up" style={{ animationDelay: '1s' }}>
+                  {/* Chat Bubble 1 (AI Question) */}
+                  <div className="flex gap-3 md:gap-7 items-start justify-start animate-fade-in-up">
                     <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
                       <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tl-none p-4 md:p-8 shadow-xl max-w-[88%] md:max-w-[85%] relative border-l-4 border-l-green-500">
-                      <div className="absolute -top-2.5 -right-2.5 md:-top-5 md:-right-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
-                        <Sparkles className="w-4 h-4 md:w-6 md:h-6 text-green-500 fill-green-500" />
+                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                      &quot;Your next task is to implement a custom React hook that stores the previous value of a prop without causing an extra render. How would you approach this?&quot;
+                    </div>
+                  </div>
+
+                  {/* Chat Bubble 2 (User Code) */}
+                  <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 shadow-xl max-w-[88%] md:max-w-[85%] relative border-r-4 border-r-green-500">
+                      <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
+                        <Code className="w-4 h-4 md:w-6 md:h-6 text-green-500" />
                       </div>
-                      <div className="mb-2.5 md:mb-4">
-                        <span className="inline-block px-3 py-1 bg-[#d9f99d] dark:bg-emerald-900/50 rounded-full text-[10px] md:text-xs font-extrabold text-green-950 dark:text-emerald-100 uppercase tracking-widest shadow-sm">
-                          Mock Reviewer
+                      <div className="mb-2 md:mb-3 text-left">
+                        <span className="text-[10px] md:text-xs font-bold text-emerald-700/80 dark:text-emerald-400/80 uppercase tracking-wider">
+                          Live Coding
                         </span>
                       </div>
                       <div className="bg-white/50 dark:bg-black/30 rounded-xl p-3 md:p-5 mb-3 md:mb-4 font-mono text-[10px] md:text-sm leading-relaxed overflow-x-auto border border-black/5 dark:border-white/10 shadow-inner">
@@ -160,9 +166,9 @@ export default function Home() {
                           {"};"}
                         </pre>
                       </div>
-                      <p className="leading-relaxed text-[0.85rem] md:text-[1rem] text-gray-700 dark:text-gray-200">
-                        Using <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useState</code> here will cause an extra render! The correct approach is to utilize <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useRef</code> to persist the value.
-                      </p>
+                    </div>
+                    <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
+                      <Image src="/IIcon1.jpg" alt="User" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
                   </div>
                 </div>
