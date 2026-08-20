@@ -52,17 +52,17 @@ export default function DownloadPage() {
 
                         <h1 className="text-5xl md:text-7xl font-semibold mb-6 tracking-tight text-zinc-900 dark:text-white">
                             Choose Your Path <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400 font-bold">To Mastery.</span>
+                            <span className="text-gradient-fusion font-bold">To Mastery.</span>
                         </h1>
                         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed font-medium">
-                            Whether you want a strict <strong className="text-emerald-500">testing environment</strong> or an <strong className="text-emerald-500">assisted training sandbox</strong>, we have the perfect tool for your level.
+                            Whether you want a strict <strong className="text-gradient-fusion">testing environment</strong> or an <strong className="text-gradient-fusion">assisted training sandbox</strong>, we have the perfect tool for your level.
                         </p>
                     </div>
 
                     {/* Feature Grid */}
                     <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20 items-stretch">
                         {/* Web Version Card */}
-                        <div className="p-8 rounded-[2.5rem] border border-sky-200/50 dark:border-sky-500/20 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-indigo-500/10 flex flex-col group relative overflow-hidden bg-[#e0f2fe] dark:bg-sky-950/40">
+                        <div className="p-8 rounded-[2.5rem] border border-sky-200/50 dark:border-sky-500/20 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-indigo-500/10 flex flex-col group relative overflow-hidden bg-white/80 dark:bg-sky-950/40">
                             {/* Animated Sand Gradient */}
                             <style>
                                 {`
@@ -77,7 +77,8 @@ export default function DownloadPage() {
                                 }
                                 `}
                             </style>
-                            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/40 via-emerald-400/20 to-blue-500/40 dark:from-indigo-500/40 dark:via-emerald-400/20 dark:to-blue-500/40 opacity-100 dark:opacity-80 blur-3xl z-0 sand-wave-gradient pointer-events-none"></div>
+                            <div className="absolute inset-0 z-0 mix-blend-overlay opacity-30 dark:opacity-10 pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/50 via-emerald-400/30 to-blue-500/50 dark:from-indigo-500/40 dark:via-emerald-400/20 dark:to-blue-500/40 opacity-100 dark:opacity-80 blur-3xl z-0 sand-wave-gradient pointer-events-none"></div>
                             
                             <div className="flex items-center justify-between mb-8 mt-2 relative z-10">
                                 <div className="flex items-center gap-4">
@@ -112,8 +113,8 @@ export default function DownloadPage() {
                                 </li>
                             </ul>
                             <Link href="/dashboard" className="block mt-auto relative z-10">
-                                <Button className="w-full rounded-2xl py-7 text-xl bg-transparent hover:bg-indigo-500/10 transition-all font-extrabold shadow-sm hover:shadow-indigo-500/20">
-                                    <span className="relative z-10 flex items-center justify-center gap-2 text-indigo-600 dark:text-indigo-400 drop-shadow-[0_2px_4px_rgba(79,70,229,0.5)]">
+                                <Button variant="ghost" className="w-full rounded-2xl py-7 text-xl hover:bg-indigo-500/10 transition-all font-extrabold border-0 shadow-none">
+                                    <span className="relative z-10 flex items-center justify-center gap-2 text-indigo-600 dark:text-indigo-400">
                                         Launch Web Simulator
                                     </span>
                                 </Button>
@@ -165,8 +166,8 @@ export default function DownloadPage() {
                                     href="https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.3/ZEDX.AI.Setup.1.1.3.exe"
                                     className="block"
                                 >
-                                    <Button className="w-full rounded-2xl py-7 text-xl bg-transparent hover:bg-emerald-500/10 transition-all font-extrabold shadow-sm hover:shadow-emerald-500/20">
-                                        <span className="relative z-10 flex items-center justify-center gap-2 text-emerald-600 dark:text-emerald-400 drop-shadow-[0_2px_4px_rgba(16,185,129,0.5)]">
+                                    <Button variant="ghost" className="w-full rounded-2xl py-7 text-xl hover:bg-emerald-500/10 transition-all font-extrabold border-0 shadow-none">
+                                        <span className="relative z-10 flex items-center justify-center gap-2 text-emerald-600 dark:text-emerald-400">
                                             <Download size={22} strokeWidth={2.5} />
                                             Download for Windows
                                         </span>
