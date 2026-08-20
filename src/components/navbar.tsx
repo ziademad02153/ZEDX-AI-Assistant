@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -13,6 +14,16 @@ export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const router = useRouter();
+
+    const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        e.preventDefault();
+        setIsSheetOpen(false);
+        // Wait for sheet close animation before navigating
+        setTimeout(() => {
+            router.push(href);
+        }, 350);
+    };
 
     useEffect(() => {
         // Check if running in Electron desktop mode
@@ -81,23 +92,23 @@ export function Navbar() {
                                     </SheetTitle>
                                 </div>
                                 <div className="flex flex-col flex-1 gap-2 p-4 overflow-y-auto justify-between">
-                                    <div className="flex flex-col gap-1.5">
-                                        <Link href="/dashboard" onClick={() => setIsSheetOpen(false)}>
+                                    <div className="flex flex-col gap-1.5 animate-in slide-in-from-right-8 fade-in duration-500 ease-out">
+                                        <Link href="/dashboard" onClick={(e) => handleNavigation(e, '/dashboard')}>
                                             <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 Dashboard
                                             </Button>
                                         </Link>
-                                        <Link href="/dashboard/new" onClick={() => setIsSheetOpen(false)}>
+                                        <Link href="/dashboard/new" onClick={(e) => handleNavigation(e, '/dashboard/new')}>
                                             <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 New Simulation
                                             </Button>
                                         </Link>
-                                        <Link href="/dashboard/resumes" onClick={() => setIsSheetOpen(false)}>
+                                        <Link href="/dashboard/resumes" onClick={(e) => handleNavigation(e, '/dashboard/resumes')}>
                                             <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 My Context Files
                                             </Button>
                                         </Link>
-                                        <Link href="/dashboard/history" onClick={() => setIsSheetOpen(false)}>
+                                        <Link href="/dashboard/history" onClick={(e) => handleNavigation(e, '/dashboard/history')}>
                                             <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 Training History
                                             </Button>
@@ -105,17 +116,17 @@ export function Navbar() {
 
                                         <div className="h-px bg-gray-100 dark:bg-gray-800 my-4 mx-2" />
 
-                                        <Link href="/#features" onClick={() => setIsSheetOpen(false)}>
+                                        <Link href="/#features" onClick={(e) => handleNavigation(e, '/#features')}>
                                             <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 How it Works
                                             </Button>
                                         </Link>
-                                        <Link href="/download" onClick={() => setIsSheetOpen(false)}>
+                                        <Link href="/download" onClick={(e) => handleNavigation(e, '/download')}>
                                             <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 Desktop App
                                             </Button>
                                         </Link>
-                                        <Link href="/about" onClick={() => setIsSheetOpen(false)}>
+                                        <Link href="/about" onClick={(e) => handleNavigation(e, '/about')}>
                                             <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
                                                 About ZEDX AI Simulator
                                             </Button>

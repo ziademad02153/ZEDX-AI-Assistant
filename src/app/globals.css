@@ -163,7 +163,7 @@ body {
 
 /* Gradient Text */
 .text-gradient-fusion {
-  background: linear-gradient(135deg, #16a34a 0%, #0d9488 100%);
+  background: linear-gradient(to right, #1fa34c, #bef264);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

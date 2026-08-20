@@ -67,18 +67,17 @@ export default function DownloadPage() {
                             <style>
                                 {`
                                 @keyframes sandWave {
-                                    0% { background-position: 0% 50%; }
-                                    50% { background-position: 100% 50%; }
-                                    100% { background-position: 0% 50%; }
+                                    0% { transform: scale(1.4) translate(0%, 0%) rotate(0deg); }
+                                    33% { transform: scale(1.4) translate(-2%, 2%) rotate(1deg); }
+                                    66% { transform: scale(1.4) translate(2%, -1%) rotate(-1deg); }
+                                    100% { transform: scale(1.4) translate(0%, 0%) rotate(0deg); }
                                 }
                                 .sand-wave-gradient {
-                                    animation: sandWave 8s ease-in-out infinite;
-                                    background-size: 200% 200%;
+                                    animation: sandWave 10s ease-in-out infinite;
                                 }
                                 `}
                             </style>
-                            <div className="absolute inset-0 opacity-[0.08] dark:opacity-[0.1] mix-blend-overlay pointer-events-none z-0" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
-                            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/30 via-emerald-400/20 to-blue-500/30 dark:from-indigo-500/40 dark:via-emerald-400/20 dark:to-blue-500/40 opacity-90 blur-2xl z-0 mix-blend-color-burn dark:mix-blend-color-dodge sand-wave-gradient"></div>
+                            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/40 via-emerald-400/20 to-blue-500/40 dark:from-indigo-500/40 dark:via-emerald-400/20 dark:to-blue-500/40 opacity-100 dark:opacity-80 blur-3xl z-0 sand-wave-gradient pointer-events-none"></div>
                             
                             <div className="flex items-center justify-between mb-8 mt-2 relative z-10">
                                 <div className="flex items-center gap-4">
