@@ -280,10 +280,19 @@ export default function Home() {
                       />
                     </div>
 
-                    {/* Floating Flags (represented as dots/badges) */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-6 h-4 bg-gray-100 rounded shadow-sm"></div>
-                    <div className="absolute bottom-4 right-4 w-6 h-4 bg-gray-100 rounded shadow-sm"></div>
-                    <div className="absolute top-1/3 left-2 w-6 h-4 bg-gray-100 rounded shadow-sm"></div>
+                    {/* Floating Flags */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
+                      <Image src="/ARABIC.png" alt="Arabic" fill className="object-cover" />
+                    </div>
+                    <div className="absolute bottom-4 right-4 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
+                      <Image src="/SPAIN LANG.png" alt="Spanish" fill className="object-cover" />
+                    </div>
+                    <div className="absolute top-1/3 left-2 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
+                      <Image src="/ENG.png" alt="English" fill className="object-cover" />
+                    </div>
+                    <div className="absolute top-[20%] right-2 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
+                      <Image src="/France lang.png" alt="French" fill className="object-cover" />
+                    </div>
                   </div>
                 </div>
 
