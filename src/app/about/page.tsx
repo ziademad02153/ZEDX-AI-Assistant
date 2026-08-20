@@ -132,7 +132,7 @@ export default function AboutPage() {
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Smart Silence Detection</h3>
                                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                                    Speak naturally. The AI actively listens and waits for you to finish. If you pause for 5 seconds, it automatically assumes you've completed your answer and moves to the next question.
+                                    Speak naturally. The AI actively listens and waits for you to finish. If you pause for 3 seconds, it automatically assumes you've completed your answer and moves to the next question.
                                 </p>
                             </div>
 
@@ -184,7 +184,7 @@ export default function AboutPage() {
                             { icon: <PremiumMultiLangIcon />, title: "Multi-Language", desc: "Native support for English, Arabic, Spanish, and 30+ other global languages." },
                             { icon: <PremiumInstantTransIcon />, title: "Instant Transcription", desc: "Powered by Groq™ for ultra-fast speech-to-text conversion with 99% accuracy." },
                             { icon: <PrivacyShieldIcon />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers." },
-                            { icon: <PremiumModelAgnosticIcon />, title: "Model Agnostic", desc: "Switch between Llama 3, GPT-4, and Qwen models on the fly for best results." }
+                            { icon: <PremiumModelAgnosticIcon />, title: "Ultra-Fast Intelligence", desc: "Powered by Groq's LPU inference, featuring Llama-3.3 70B for instantaneous conversational responses." }
                         ].map((item, i) => (
                             <div key={i} className="group p-8 rounded-3xl bg-zinc-50/50 dark:bg-zinc-900/50 border border-zinc-200/50 dark:border-white/10 hover:border-emerald-500/30 dark:hover:border-emerald-500/30 hover:shadow-lg dark:hover:bg-zinc-900 transition-all duration-300 backdrop-blur-sm">
                                 <div className="mb-8 flex items-center justify-start relative">
