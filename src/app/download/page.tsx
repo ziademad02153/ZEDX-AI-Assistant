@@ -178,10 +178,7 @@ export default function DownloadPage() {
                                 </Link>
                             </div>
                         </div>
-                            </div>
-                        </div>
                     </div>
-
                     {/* Mac Coming Soon */}
                     <div className="max-w-md mx-auto text-center p-6 rounded-2xl bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
                         <div className="flex items-center justify-center gap-3 mb-2 opacity-50">
