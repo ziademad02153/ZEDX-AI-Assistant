@@ -280,21 +280,43 @@ export default function Home() {
                       />
                     </div>
 
-                    {/* Floating Flags */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
-                      <Image src="/ARABIC.png" alt="Arabic" fill className="object-cover" />
+                    {/* Floating Flags - Orbiting like planets */}
+                    
+                    {/* Outer Orbit */}
+                    <div className="absolute inset-0 z-20 pointer-events-none" style={{ animation: 'spin 20s linear infinite' }}>
+                      <div className="absolute top-0 left-1/2 -ml-[14px] -mt-[10px] pointer-events-auto" style={{ animation: 'spin 20s linear infinite reverse' }}>
+                        <div className="relative w-7 h-5 rounded overflow-hidden shadow-md hover:scale-125 transition-transform cursor-pointer">
+                          <Image src="/ARABIC.png" alt="Arabic" fill className="object-cover" />
+                        </div>
+                      </div>
+                      <div className="absolute bottom-0 left-1/2 -ml-[14px] -mb-[10px] pointer-events-auto" style={{ animation: 'spin 20s linear infinite reverse' }}>
+                        <div className="relative w-7 h-5 rounded overflow-hidden shadow-md hover:scale-125 transition-transform cursor-pointer">
+                          <Image src="/SPAIN%20LANG.png" alt="Spanish" fill className="object-cover" />
+                        </div>
+                      </div>
                     </div>
-                    <div className="absolute bottom-4 right-4 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
-                      <Image src="/SPAIN%20LANG.png" alt="Spanish" fill className="object-cover" />
+
+                    {/* Middle Orbit */}
+                    <div className="absolute inset-4 z-20 pointer-events-none" style={{ animation: 'spin 15s linear infinite reverse' }}>
+                      <div className="absolute top-1/2 left-0 -mt-[10px] -ml-[14px] pointer-events-auto" style={{ animation: 'spin 15s linear infinite' }}>
+                        <div className="relative w-7 h-5 rounded overflow-hidden shadow-md hover:scale-125 transition-transform cursor-pointer">
+                          <Image src="/ENG.png" alt="English" fill className="object-cover" />
+                        </div>
+                      </div>
+                      <div className="absolute top-1/2 right-0 -mt-[10px] -mr-[14px] pointer-events-auto" style={{ animation: 'spin 15s linear infinite' }}>
+                        <div className="relative w-7 h-5 rounded overflow-hidden shadow-md hover:scale-125 transition-transform cursor-pointer">
+                          <Image src="/France%20lang.png" alt="French" fill className="object-cover" />
+                        </div>
+                      </div>
                     </div>
-                    <div className="absolute top-1/3 left-2 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
-                      <Image src="/ENG.png" alt="English" fill className="object-cover" />
-                    </div>
-                    <div className="absolute top-[20%] right-2 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
-                      <Image src="/France%20lang.png" alt="French" fill className="object-cover" />
-                    </div>
-                    <div className="absolute bottom-4 left-4 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
-                      <Image src="/german.png" alt="German" fill className="object-cover" />
+
+                    {/* Inner Orbit */}
+                    <div className="absolute inset-8 z-20 pointer-events-none" style={{ animation: 'spin 12s linear infinite' }}>
+                      <div className="absolute top-0 left-1/2 -ml-[14px] -mt-[10px] pointer-events-auto" style={{ animation: 'spin 12s linear infinite reverse' }}>
+                        <div className="relative w-7 h-5 rounded overflow-hidden shadow-md hover:scale-125 transition-transform cursor-pointer">
+                          <Image src="/german.png" alt="German" fill className="object-cover" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
