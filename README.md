@@ -63,21 +63,21 @@ The core architecture employs a bifurcated processing model to ensure minimal re
 
 ```mermaid
 graph TD
-    subgraph "Cloud Layer (Next.js Edge & Supabase)"
-        AUTH[Opaque Auth Gateway] --> DB[(Protected Storage with RLS)]
-        API[Edge API Serverless Routes] --> CONTEXT_SERVER[Context Aggregation Node]
+    subgraph CloudLayer ["Cloud Layer (Next.js Edge & Supabase)"]
+        AUTH["Opaque Auth Gateway"] --> DB[("Protected Storage with RLS")]
+        API["Edge API Serverless Routes"] --> CONTEXT_SERVER["Context Aggregation Node"]
         CONTEXT_SERVER --> DB
     end
 
-    subgraph "Local Execution Layer (Electron OS Engine)"
-        SYS[Local Microphone Audio Capture] --> VAD[Voice Activity Detection Layer]
-        MIC[Hardware Microphone Allocation] --> VAD
-        IPC[IPC Secure Bridge] --> API
+    subgraph LocalExecutionLayer ["Local Execution Layer (Electron OS Engine)"]
+        SYS["Local Microphone Audio Capture"] --> VAD["Voice Activity Detection Layer"]
+        MIC["Hardware Microphone Allocation"] --> VAD
+        IPC["IPC Secure Bridge"] --> API
     end
 
-    subgraph "Neural Inference Layer (Groq & LLaMA 3)"
-        VAD -- "WebM Chunk Streaming" --> WHISPER[Whisper V3 Engine]
-        WHISPER -- "Raw Parsed Transcripts" --> LLM[Llama 3.1 70B Instruct]
+    subgraph NeuralInferenceLayer ["Neural Inference Layer (Groq & LLaMA 3)"]
+        VAD -- "WebM Chunk Streaming" --> WHISPER["Whisper V3 Engine"]
+        WHISPER -- "Raw Parsed Transcripts" --> LLM["Llama 3.1 70B Instruct"]
         CONTEXT_SERVER -- "Agenda/Document Meta" --> LLM
         LLM -- "Actionable SSE Stream" --> IPC
     end
@@ -127,24 +127,24 @@ ZEDX AI Simulator dynamically replicates strict Dynamic Context Injection paradi
 
 ```mermaid
 graph LR
-    subgraph "Context Assembly Line"
-        HISTORY[Interview History & Memory]
-        JD[Job Description Meta]
-        RESUME[User Reference File / Data]
-        ANGLE[Randomized Interview Angle]
+    subgraph ContextAssemblyLine ["Context Assembly Line"]
+        HISTORY["Interview History & Memory"]
+        JD["Job Description Meta"]
+        RESUME["User Reference File / Data"]
+        ANGLE["Randomized Interview Angle"]
     end
 
-    subgraph "Prompt Synthesis Engine"
-        COMPILER[Dynamic System Prompt Compiler]
+    subgraph PromptSynthesisEngine ["Prompt Synthesis Engine"]
+        COMPILER["Dynamic System Prompt Compiler"]
         HISTORY --> COMPILER
         JD --> COMPILER
         RESUME --> COMPILER
         ANGLE --> COMPILER
     end
 
-    subgraph "Execution & Resolution"
-        LLAMA[Llama 3.1 / Qwen Engine]
-        UI[Secure React Practice Interface]
+    subgraph ExecutionResolution ["Execution & Resolution"]
+        LLAMA["Llama 3.1 / Qwen Engine"]
+        UI["Secure React Practice Interface"]
         COMPILER -- "Conversational Semantic Prompt" --> LLAMA
         LLAMA -- "Server-Sent Events (SSE)" --> UI
     end
@@ -169,14 +169,14 @@ Privacy-focused interview simulation requires secure handling of user CVs and tr
 
 ```mermaid
 flowchart TD
-    US[User Boot Sequence] -->|Opaque Publishable Key| NEXT[Next.js Hydration Context]
-    NEXT -->|JWT Verification Cycle| SUPA[Supabase Engine]
-    SUPA --> RLS{Row-Level Security Evaluator}
+    US["User Boot Sequence"] -->|Opaque Publishable Key| NEXT["Next.js Hydration Context"]
+    NEXT -->|JWT Verification Cycle| SUPA["Supabase Engine"]
+    SUPA --> RLS{"Row-Level Security Evaluator"}
     
-    RLS -- Valid UUID ownership bounds --> ALLOW(Permit Access to User-Owned Records)
-    RLS -- Cryptographic Identity Mismatch --> DENY(Reject Unauthorized Access)
+    RLS -- Valid UUID ownership bounds --> ALLOW("Permit Access to User-Owned Records")
+    RLS -- Cryptographic Identity Mismatch --> DENY("Reject Unauthorized Access")
 
-    ALLOW --> DB[(Secure Transaction Logs & Transcripts)]
+    ALLOW --> DB[("Secure Transaction Logs & Transcripts")]
 ```
 
 ### Engineering Highlights:
@@ -190,25 +190,25 @@ The new post-interview analysis system replaces standard static feedback with a 
 
 ```mermaid
 graph TD
-    subgraph "Post-Interview Aggregation"
-        STATE[Zustand Session State] -->|Extract| TRANSCRIPT[Complete Spoken Transcript]
-        STATE -->|Extract| METADATA[JD, Resume, Duration]
-        TRANSCRIPT --> PAYLOAD[JSON Context Payload]
+    subgraph PostInterviewAggregation ["Post-Interview Aggregation"]
+        STATE["Zustand Session State"] -->|Extract| TRANSCRIPT["Complete Spoken Transcript"]
+        STATE -->|Extract| METADATA["JD, Resume, Duration"]
+        TRANSCRIPT --> PAYLOAD["JSON Context Payload"]
         METADATA --> PAYLOAD
     end
 
-    subgraph "Evaluation Engine (Groq LPU)"
-        PAYLOAD -->|Next.js API Edge Route| GROQ[Groq 70B Evaluator]
-        GROQ -->|Strict JSON Schema| ANALYSIS{JSON Evaluator}
-        ANALYSIS -- "Technical Score (0-10)" --> METRICS
+    subgraph EvaluationEngine ["Evaluation Engine (Groq LPU)"]
+        PAYLOAD -->|Next.js API Edge Route| GROQ["Groq 70B Evaluator"]
+        GROQ -->|Strict JSON Schema| ANALYSIS{"JSON Evaluator"}
+        ANALYSIS -- "Technical Score (0-10)" --> METRICS["Output State"]
         ANALYSIS -- "Communication Score" --> METRICS
         ANALYSIS -- "Ideal Benchmarks" --> METRICS
     end
 
-    subgraph "Client Rendering & Export"
-        METRICS -->|Hydrate| SCORECARD[React Scorecard UI]
-        SCORECARD -->|Apply @media print styles| PRINT[Browser Print Spooler]
-        PRINT -->|Strip UI Elements & Backgrounds| PDF[Organized PDF Report]
+    subgraph ClientRenderingExport ["Client Rendering & Export"]
+        METRICS -->|Hydrate| SCORECARD["React Scorecard UI"]
+        SCORECARD -->|Apply @media print styles| PRINT["Browser Print Spooler"]
+        PRINT -->|Strip UI Elements & Backgrounds| PDF["Organized PDF Report"]
     end
 
     classDef state fill:#451a03,stroke:#b45309,stroke-width:2px,color:#fff;
@@ -231,19 +231,19 @@ ZEDX heavily invests in a premium, fluid aesthetic utilizing modern GPU-accelera
 
 ```mermaid
 flowchart LR
-    subgraph "Theme Provider (next-themes)"
-        SYSTEM[System Preference] --> THEME(Active Theme Context)
-        USER[User Override] --> THEME
+    subgraph ThemeProvider ["Theme Provider (next-themes)"]
+        SYSTEM["System Preference"] --> THEME("Active Theme Context")
+        USER["User Override"] --> THEME
     end
 
-    subgraph "Hardware Accelerated Compositing"
-        THEME -->|Injects class='dark'| TAILWIND[Tailwind CSS Engine]
-        TAILWIND -->|Light Mode| LIGHT[zinc-50 / gray-900]
-        TAILWIND -->|Dark Mode| DARK[bg-black / text-white]
+    subgraph HardwareAcceleratedCompositing ["Hardware Accelerated Compositing"]
+        THEME -->|Injects class='dark'| TAILWIND["Tailwind CSS Engine"]
+        TAILWIND -->|Light Mode| LIGHT["zinc-50 / gray-900"]
+        TAILWIND -->|Dark Mode| DARK["bg-black / text-white"]
         
-        THEME -->|Conditional Rendering| R3F[React Three Fiber]
-        R3F -->|WebGL Context| ANIMATIONS[3D Orbs & Sand Particles]
-        ANIMATIONS -->|CSS Transform & opacity| COMPOSITOR[GPU Compositor]
+        THEME -->|Conditional Rendering| R3F["React Three Fiber"]
+        R3F -->|WebGL Context| ANIMATIONS["3D Orbs & Sand Particles"]
+        ANIMATIONS -->|CSS Transform & opacity| COMPOSITOR["GPU Compositor"]
     end
 
     classDef theme fill:#334155,stroke:#94a3b8,stroke-width:2px,color:#fff;
