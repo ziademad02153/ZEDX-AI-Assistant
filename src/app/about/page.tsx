@@ -127,7 +127,7 @@ export default function AboutPage() {
                         <div className="grid md:grid-cols-3 gap-8">
                             <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-zinc-200/50 dark:border-white/10 shadow-[0_15px_50px_-15px_rgba(181,248,80,0.3)] dark:shadow-[0_15px_50px_-15px_rgba(181,248,80,0.15)] hover:-translate-y-1 transition-all duration-300 group">
                                 <div className="mb-6">
-                                    <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
+                                    <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-semibold tracking-wider uppercase shadow-sm">
                                         DYNAMIC
                                     </span>
                                 </div>
@@ -147,7 +147,7 @@ export default function AboutPage() {
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 rounded-full blur-3xl group-hover:bg-sky-500/20 transition-colors"></div>
                                 <div className="relative z-10">
                                     <div className="mb-6">
-                                        <span className="inline-block px-4 py-1.5 rounded-full bg-sky-200 text-sky-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
+                                        <span className="inline-block px-4 py-1.5 rounded-full bg-sky-200 text-sky-950 text-[10px] font-semibold tracking-wider uppercase shadow-sm">
                                             VOICE TTS
                                         </span>
                                     </div>
@@ -161,14 +161,14 @@ export default function AboutPage() {
                                 </div>
                             </div>
 
-                            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-zinc-200/50 dark:border-white/10 shadow-[0_15px_50px_-15px_rgba(168,85,247,0.3)] dark:shadow-[0_15px_50px_-15px_rgba(168,85,247,0.15)] hover:-translate-y-1 transition-all duration-300 group">
+                            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-zinc-200/50 dark:border-white/10 shadow-[0_15px_50px_-15px_rgba(0,223,181,0.3)] dark:shadow-[0_15px_50px_-15px_rgba(0,223,181,0.15)] hover:-translate-y-1 transition-all duration-300 group">
                                 <div className="mb-6">
-                                    <span className="inline-block px-4 py-1.5 rounded-full bg-purple-200 text-purple-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
+                                    <span className="inline-block px-4 py-1.5 rounded-full bg-[#00dfb5] text-teal-950 text-xs font-semibold tracking-wider uppercase shadow-sm">
                                         ANALYTICS
                                     </span>
                                 </div>
                                 <div className="mb-6 flex items-center justify-start relative">
-                                    <div className="absolute w-16 h-16 bg-purple-500/10 dark:bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition-all duration-500"></div>
+                                    <div className="absolute w-16 h-16 bg-[#00dfb5]/10 dark:bg-[#00dfb5]/10 rounded-full blur-xl group-hover:bg-[#00dfb5]/20 transition-all duration-500"></div>
                                     <div className="relative z-10">
                                         <PremiumGranularScorecardsIcon />
                                     </div>
@@ -196,16 +196,16 @@ export default function AboutPage() {
 
                     <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6 relative z-10">
                         {[
-                            { icon: <GoogleStyleMicIcon />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures your spoken answers instantly and accurately.", badge: "AUDIO", badgeClass: "bg-blue-100 text-blue-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(59,130,246,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(59,130,246,0.15)]", glowColor: "bg-blue-500" },
-                            { icon: <PremiumContextAwareIcon />, title: "Context Aware", desc: "Analyzes your uploaded CV and job descriptions to tailor answers specifically to your profile.", badge: "INTELLIGENCE", badgeClass: "bg-indigo-100 text-indigo-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(99,102,241,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(99,102,241,0.15)]", glowColor: "bg-indigo-500" },
+                            { icon: <GoogleStyleMicIcon />, title: "Voice Capture", desc: "Advanced VAD (Voice Activity Detection) filters noise and captures your spoken answers instantly and accurately.", badge: "AUDIO", badgeClass: "bg-emerald-100 text-emerald-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(16,185,129,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(16,185,129,0.15)]", glowColor: "bg-emerald-500" },
+                            { icon: <PremiumContextAwareIcon />, title: "Context Aware", desc: "Analyzes your uploaded CV and job descriptions to tailor answers specifically to your profile.", badge: "INTELLIGENCE", badgeClass: "bg-green-100 text-green-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(34,197,94,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(34,197,94,0.15)]", glowColor: "bg-green-500" },
                             { icon: <PremiumMultiLangIcon />, title: "Multi-Language", desc: "Native support for English, Arabic, Spanish, and 30+ other global languages.", badge: "GLOBAL", badgeClass: "bg-[#d9f99d] text-green-950", shadowClass: "shadow-[0_15px_40px_-15px_rgba(181,248,80,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(181,248,80,0.15)]", glowColor: "bg-[#b5f850]" },
-                            { icon: <PremiumInstantTransIcon />, title: "Instant Transcription", desc: "Powered by Groq™ for ultra-fast speech-to-text conversion with 99% accuracy.", badge: "SPEED", badgeClass: "bg-amber-100 text-amber-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(245,158,11,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(245,158,11,0.15)]", glowColor: "bg-amber-500" },
-                            { icon: <PrivacyShieldIcon />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers.", badge: "SECURITY", badgeClass: "bg-teal-100 text-teal-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(20,184,166,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(20,184,166,0.15)]", glowColor: "bg-teal-500" },
-                            { icon: <PremiumModelAgnosticIcon />, title: "Ultra-Fast Intelligence", desc: "Powered by Groq's LPU inference, featuring GPT-OSS 120B & Qwen for instantaneous conversational responses.", badge: "HARDWARE", badgeClass: "bg-rose-100 text-rose-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(244,63,94,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(244,63,94,0.15)]", glowColor: "bg-rose-500" }
+                            { icon: <PremiumInstantTransIcon />, title: "Instant Transcription", desc: "Powered by Groq™ for ultra-fast speech-to-text conversion with 99% accuracy.", badge: "SPEED", badgeClass: "bg-yellow-100 text-yellow-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(234,179,8,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(234,179,8,0.15)]", glowColor: "bg-yellow-500" },
+                            { icon: <PrivacyShieldIcon />, title: "Privacy First", desc: "Your audio data is processed ephemerally and never stored on our servers.", badge: "SECURITY", badgeClass: "bg-amber-100 text-amber-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(245,158,11,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(245,158,11,0.15)]", glowColor: "bg-amber-500" },
+                            { icon: <PremiumModelAgnosticIcon />, title: "Ultra-Fast Intelligence", desc: "Powered by Groq's LPU inference, featuring GPT-OSS 120B & Qwen for instantaneous conversational responses.", badge: "AI ENGINE", badgeClass: "bg-orange-100 text-orange-900", shadowClass: "shadow-[0_15px_40px_-15px_rgba(249,115,22,0.3)] dark:shadow-[0_15px_40px_-15px_rgba(249,115,22,0.15)]", glowColor: "bg-orange-500" }
                         ].map((item, i) => (
                             <div key={i} className={`bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-zinc-200/50 dark:border-white/10 hover:-translate-y-1 transition-all duration-300 group ${item.shadowClass}`}>
                                 <div className="mb-6">
-                                    <span className={`inline-block px-4 py-1.5 rounded-full ${item.badgeClass} text-[10px] font-extrabold tracking-widest uppercase shadow-sm`}>
+                                    <span className={`inline-block px-4 py-1.5 rounded-full ${item.badgeClass} text-[10px] font-semibold tracking-wider uppercase shadow-sm`}>
                                         {item.badge}
                                     </span>
                                 </div>

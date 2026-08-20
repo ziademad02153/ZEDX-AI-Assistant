@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { Check, Globe, Sparkles, ChevronDown, ArrowRight } from "lucide-react";
+import { Check, Globe, Sparkles, ChevronDown, ArrowRight, Star } from "lucide-react";
 import { PlatformSection } from "@/components/platform-section";
 
 export default function Home() {
@@ -52,8 +52,8 @@ export default function Home() {
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-400"></div>
                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-400"></div>
                   </div>
-                  <div className="mx-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 px-3 py-1 md:px-4 md:py-1 rounded-full text-[10px] md:text-[12px] text-gray-500 font-bold flex items-center gap-2 md:gap-2.5">
-                    <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <div className="mx-auto bg-[#d9f99d] dark:bg-emerald-900/30 border border-[#b5f850] dark:border-emerald-800 px-4 py-1.5 rounded-full text-[10px] md:text-xs text-green-950 dark:text-emerald-100 font-extrabold tracking-widest uppercase flex items-center gap-2 md:gap-2.5 shadow-sm">
+                    <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
                     Real-Time Interview Simulation
                   </div>
                 </div>
@@ -63,27 +63,31 @@ export default function Home() {
 
                   {/* Floating Chat Bubbles */}
                   <div className="relative z-10 w-full max-w-4xl space-y-6 md:space-y-10">
-                    <div className="flex gap-3 md:gap-7 items-start animate-fade-in-up">
-                      <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
-                        <Image src="/IIcon1.jpg" alt="Manager" width={52} height={52} className="object-cover w-full h-full" />
-                      </div>
-                      <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                    <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up">
+                      <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tr-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
                         &quot;I noticed the PostgreSQL join logic was causing a 4-second delay, so I added a composite index...&quot;
+                      </div>
+                      <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
+                        <Image src="/IIcon1.jpg" alt="User" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
                     </div>
 
-                    <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
-                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 text-[0.85rem] md:text-[1.1rem] text-gray-800 dark:text-gray-100 shadow-xl max-w-[88%] md:max-w-[85%] relative border-l-4 border-l-green-500">
-                        <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
+                    <div className="flex gap-3 md:gap-7 items-start animate-fade-in-up" style={{ animationDelay: '1s' }}>
+                      <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
+                        <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
+                      </div>
+                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tl-none p-4 md:p-8 text-[0.85rem] md:text-[1.1rem] text-gray-800 dark:text-gray-100 shadow-xl max-w-[88%] md:max-w-[85%] relative border-l-4 border-l-green-500">
+                        <div className="absolute -top-2.5 -right-2.5 md:-top-5 md:-right-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
                           <Sparkles className="w-4 h-4 md:w-6 md:h-6 text-green-500 fill-green-500" />
                         </div>
-                        <p className="font-extrabold text-green-600 mb-1.5 md:mb-2.5 text-[9px] md:text-sm uppercase tracking-widest">Instant Feedback</p>
+                        <div className="mb-2.5 md:mb-4">
+                          <span className="inline-block px-3 py-1 bg-[#d9f99d] dark:bg-emerald-900/50 rounded-full text-[10px] md:text-xs font-extrabold text-green-950 dark:text-emerald-100 uppercase tracking-widest shadow-sm">
+                            Instant Feedback
+                          </span>
+                        </div>
                         <p className="leading-relaxed">
                           Great technical explanation! However, to make this answer stronger, mention the exact percentage of time saved (e.g., decreased execution time by 85%).
                         </p>
-                      </div>
-                      <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
-                        <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
                     </div>
                   </div>
@@ -97,10 +101,10 @@ export default function Home() {
 
           <div className="mt-16 md:mt-24 relative w-full max-w-[900px] mx-auto perspective-1000 px-4">
             <div className="text-center mb-10 md:mb-16">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] md:text-xs font-extrabold tracking-widest uppercase mb-4">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] dark:bg-emerald-900/30 text-green-950 dark:text-emerald-100 text-[10px] md:text-xs font-extrabold tracking-widest uppercase mb-4 shadow-sm">
                 Advanced Coding
               </span>
-              <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-6">
                 Technical <span className="text-gradient-fusion">Precision.</span>
               </h2>
             </div>
@@ -112,8 +116,8 @@ export default function Home() {
                   <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-400"></div>
                   <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-400"></div>
                 </div>
-                <div className="mx-auto bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 px-3 py-1 md:px-4 md:py-1 rounded-full text-[10px] md:text-[12px] text-gray-500 font-bold flex items-center gap-2 md:gap-2.5">
-                  <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <div className="mx-auto bg-[#d9f99d] dark:bg-emerald-900/30 border border-[#b5f850] dark:border-emerald-800 px-4 py-1.5 rounded-full text-[10px] md:text-xs text-green-950 dark:text-emerald-100 font-extrabold tracking-widest uppercase flex items-center gap-2 md:gap-2.5 shadow-sm">
+                  <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
                   Mock Interview - Architecture Review
                 </div>
               </div>
@@ -123,38 +127,42 @@ export default function Home() {
 
                 {/* Floating Chat Bubbles */}
                 <div className="relative z-10 w-full max-w-4xl space-y-6 md:space-y-10">
-                  <div className="flex gap-3 md:gap-7 items-start animate-fade-in-up">
-                    <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
-                      <Image src="/IIcon1.jpg" alt="CTO" width={52} height={52} className="object-cover w-full h-full" />
-                    </div>
-                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                  <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up">
+                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tr-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
                       &quot;I would use a combination of useState and useEffect to store the old prop when the component re-renders...&quot;
+                    </div>
+                    <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
+                      <Image src="/IIcon1.jpg" alt="User" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
                   </div>
 
-                  <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 shadow-xl max-w-[88%] md:max-w-[85%] relative border-l-4 border-l-green-500">
-                      <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
+                  <div className="flex gap-3 md:gap-7 items-start animate-fade-in-up" style={{ animationDelay: '1s' }}>
+                    <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
+                      <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
+                    </div>
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tl-none p-4 md:p-8 shadow-xl max-w-[88%] md:max-w-[85%] relative border-l-4 border-l-green-500">
+                      <div className="absolute -top-2.5 -right-2.5 md:-top-5 md:-right-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
                         <Sparkles className="w-4 h-4 md:w-6 md:h-6 text-green-500 fill-green-500" />
                       </div>
-                      <p className="font-extrabold text-green-600 mb-1.5 md:mb-2.5 text-[9px] md:text-sm uppercase tracking-widest">Mock Reviewer</p>
-                      <div className="bg-gray-900/5 dark:bg-white/5 rounded-xl p-2.5 md:p-4 mb-3 md:mb-4 font-mono text-[9px] md:text-sm leading-relaxed overflow-x-auto border border-black/5 dark:border-white/5">
-                        <pre className="text-emerald-900 dark:text-emerald-200">
-                          {`const usePrevious = (value) => {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-  return ref.current;
-};`}
+                      <div className="mb-2.5 md:mb-4">
+                        <span className="inline-block px-3 py-1 bg-[#d9f99d] dark:bg-emerald-900/50 rounded-full text-[10px] md:text-xs font-extrabold text-green-950 dark:text-emerald-100 uppercase tracking-widest shadow-sm">
+                          Mock Reviewer
+                        </span>
+                      </div>
+                      <div className="bg-white/50 dark:bg-black/30 rounded-xl p-3 md:p-5 mb-3 md:mb-4 font-mono text-[10px] md:text-sm leading-relaxed overflow-x-auto border border-black/5 dark:border-white/10 shadow-inner">
+                        <pre className="text-gray-800 dark:text-gray-200">
+                          <span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> <span className="text-blue-600 dark:text-blue-400">usePrevious</span> = (<span className="text-orange-600 dark:text-orange-300">value</span>) <span className="text-pink-600 dark:text-pink-400 font-semibold">=&gt;</span> {"{\n"}
+                          {"  "}<span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> <span className="text-sky-600 dark:text-sky-300">ref</span> = <span className="text-yellow-600 dark:text-yellow-200">useRef</span>();{"\n"}
+                          {"  "}<span className="text-yellow-600 dark:text-yellow-200">useEffect</span>(() <span className="text-pink-600 dark:text-pink-400 font-semibold">=&gt;</span> {"{\n"}
+                          {"    "}<span className="text-sky-600 dark:text-sky-300">ref</span>.current = <span className="text-orange-600 dark:text-orange-300">value</span>;{"\n"}
+                          {"  "}, [<span className="text-orange-600 dark:text-orange-300">value</span>]);{"\n"}
+                          {"  "}<span className="text-purple-600 dark:text-purple-400 font-semibold">return</span> <span className="text-sky-600 dark:text-sky-300">ref</span>.current;{"\n"}
+                          {"};"}
                         </pre>
                       </div>
                       <p className="leading-relaxed text-[0.85rem] md:text-[1rem] text-gray-700 dark:text-gray-200">
                         Using <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useState</code> here will cause an extra render! The correct approach is to utilize <code className="bg-green-100 dark:bg-green-900/50 px-1 rounded text-xs">useRef</code> to persist the value.
                       </p>
-                    </div>
-                    <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
-                      <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
                   </div>
                 </div>
@@ -162,11 +170,6 @@ export default function Home() {
             </div>
             {/* Massive Atmosphere Glow */}
             <div className="absolute -inset-16 bg-gradient-to-r from-emerald-400/10 to-green-400/10 blur-[130px] -z-10 rounded-full"></div>
-          </div>
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce hidden md:flex flex-col items-center gap-2 opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
-            <span className="text-[10px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-semibold">Scroll</span>
-            <ChevronDown className="text-gray-400 dark:text-gray-500 w-5 h-5" />
           </div>
         </section>
 
@@ -188,7 +191,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
 
               {/* Feature 1: Context Upload */}
-              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
+              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] hover:-translate-y-2 transition-all duration-300 flex flex-col h-full group">
                 <div className="mb-6">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
                     Context
@@ -200,14 +203,12 @@ export default function Home() {
                 <div className="flex-grow flex items-center justify-center mb-8">
                   <div className="bg-gray-50 dark:bg-zinc-800 rounded-xl border border-gray-100 dark:border-zinc-700 p-6 shadow-sm relative overflow-hidden w-full max-w-[280px]">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-16 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-600 rounded-lg flex flex-col items-center justify-center gap-1 shadow-sm">
-                        <div className="w-8 h-1 bg-gray-200 rounded-full"></div>
-                        <div className="w-6 h-1 bg-gray-200 rounded-full"></div>
-                        <div className="w-8 h-1 bg-gray-200 rounded-full"></div>
+                      <div className="w-12 h-16 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Image src="/cv.png" alt="CV" width={48} height={64} className="object-contain drop-shadow-md" />
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-gray-900 dark:text-white">Q3_Agenda.pdf</div>
-                        <div className="text-xs text-green-600 flex items-center gap-1 font-medium">
+                        <div className="text-sm font-bold text-gray-900 dark:text-white truncate max-w-[150px]">Software_Engineer_Resume.pdf</div>
+                        <div className="text-xs text-green-600 flex items-center gap-1 font-medium mt-0.5">
                           <Check size={12} /> Analyzed & Ready
                         </div>
                       </div>
@@ -221,7 +222,7 @@ export default function Home() {
               </div>
 
               {/* Feature 2: Real-Time Accessibility */}
-              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
+              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] hover:-translate-y-2 transition-all duration-300 flex flex-col h-full group">
                 <div className="mb-6">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
                     Instant Verification
@@ -231,12 +232,24 @@ export default function Home() {
 
                 {/* Visual: Chat Bubble */}
                 <div className="flex-grow flex items-center justify-center mb-8 w-full">
-                  <div className="space-y-3 w-full max-w-[280px]">
-                    <div className="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 p-3 rounded-2xl rounded-tl-none shadow-sm text-sm text-gray-600 dark:text-gray-300 w-3/4">
-                      Can you explain your experience with React?
+                  <div className="space-y-4 w-full max-w-[280px]">
+                    {/* ZEDX AI Interviewer Asking */}
+                    <div className="flex items-end gap-2">
+                      <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-200 dark:border-zinc-700">
+                        <Image src="/AI.jpg" alt="ZEDX AI" width={32} height={32} className="object-cover w-full h-full" />
+                      </div>
+                      <div className="bg-white dark:bg-zinc-800 border border-gray-100 dark:border-zinc-700 p-3.5 rounded-[1.5rem] rounded-bl-sm shadow-[0_10px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_10px_20px_rgba(0,0,0,0.2)] text-[13px] text-gray-700 dark:text-gray-200 w-[85%] font-medium">
+                        Can you explain your experience with React?
+                      </div>
                     </div>
-                    <div className="bg-teal-50 dark:bg-teal-900/30 border border-teal-100 dark:border-teal-800 p-3 rounded-2xl rounded-tr-none shadow-sm text-sm text-gray-800 dark:text-gray-200 w-3/4 ml-auto">
-                      I used React to build scalable web applications...
+                    {/* User Answering */}
+                    <div className="flex items-end gap-2 justify-end">
+                      <div className="bg-gradient-to-br from-[#f4fce3] to-[#d9f99d] dark:from-[#b5f850]/20 dark:to-[#b5f850]/10 border border-[#b5f850]/50 dark:border-[#b5f850]/30 p-3.5 rounded-[1.5rem] rounded-br-sm shadow-[0_10px_25px_rgba(181,248,80,0.3)] dark:shadow-[0_10px_25px_rgba(181,248,80,0.1)] text-[13px] text-green-950 dark:text-emerald-100 w-[85%] font-medium">
+                        I used React to build scalable web applications...
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 shadow-md border border-gray-200 dark:border-zinc-700 overflow-hidden">
+                        <Image src="/IIcon1.jpg" alt="User" width={32} height={32} className="object-cover w-full h-full" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -247,7 +260,7 @@ export default function Home() {
               </div>
 
               {/* Feature 3: Multilingual */}
-              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
+              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] hover:-translate-y-2 transition-all duration-300 flex flex-col h-full group">
                 <div className="mb-6">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
                     Multilingual
@@ -321,7 +334,7 @@ export default function Home() {
               </div>
 
               {/* Feature 4: AI Analysis */}
-              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
+              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] hover:-translate-y-2 transition-all duration-300 flex flex-col h-full group">
                 <div className="mb-6">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-[#d9f99d] text-green-950 text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
                     Analysis
@@ -334,14 +347,16 @@ export default function Home() {
                   <div className="w-full max-w-[280px] bg-white dark:bg-zinc-800 border border-gray-100 dark:border-zinc-700 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-5 relative overflow-hidden">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center text-white font-bold text-xs">P</div>
+                        <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-200 dark:border-zinc-700">
+                          <Image src="/AI.jpg" alt="ZEDX AI" width={32} height={32} className="object-cover w-full h-full" />
+                        </div>
                         <div>
                           <div className="text-xs font-bold text-gray-900 dark:text-white">Training</div>
                           <div className="text-[10px] text-gray-400">Interview Analysis</div>
                         </div>
                       </div>
                       <div className="flex gap-0.5">
-                        {[1, 2, 3, 4, 5].map(i => <div key={i} className="w-2 h-2 rounded-full bg-yellow-400"></div>)}
+                        {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400 drop-shadow-sm" />)}
                       </div>
                     </div>
 
