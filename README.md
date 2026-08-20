@@ -257,6 +257,38 @@ flowchart LR
 - **Zero-Layout-Thrashing Animations:** Complex visual elements like the "Sand Wave" orbs are explicitly bound to CSS `transform` and `opacity` properties, isolating them to the GPU compositor thread to prevent main-thread blocking during expensive LLM streaming.
 - **Mix-Blend-Mode Compositing:** Dynamic lighting effects and gradients utilize CSS `mix-blend-overlay` and localized opacity tweaks to maintain perfect contrast ratios across both light and dark modes without requiring duplicate DOM elements.
 
+---
+
+## 7. Autonomous Voice-to-Voice Pipeline (The Core Loop)
+The crown jewel of ZEDX AI Simulator is the near-instantaneous Voice-to-Voice loop. This pipeline links three distinct neural networks (STT, LLM, TTS) into a single, seamless conversational duplex.
+
+```mermaid
+sequenceDiagram
+    participant USER as User (Microphone)
+    participant STT as Groq Whisper V3
+    participant LLM as Groq Llama 3.1 70B
+    participant TTS as ElevenLabs TTS
+    participant UI as Browser Audio Context
+    
+    USER->>STT: Speaks (VAD Filtered Audio Chunks)
+    Note over STT: Sub-second Transcription (ISO-639-1)
+    STT-->>LLM: Forward Transcribed Text
+    
+    Note over LLM: Inject System Prompt & Resume Context
+    LLM-->>TTS: Stream TTFT (Time-To-First-Token) 
+    
+    Note over TTS: Multilingual V2 (Human-like Intonation)
+    TTS-->>UI: Stream Raw Audio Buffers (ArrayBuffer)
+    
+    UI->>USER: Real-time Audio Playback
+```
+
+### Engineering Highlights:
+- **Streaming Pipeline (No Polling):** The architecture leverages HTTP Streams from the LLM directly into the TTS engine chunk-by-chunk. We do not wait for the LLM to finish thinking before we start generating audio.
+- **Multi-Model Orchestration:** We combine **Groq's LPU** (Language Processing Units) for instantaneous STT (Whisper) and LLM inference (Llama/Qwen) with **ElevenLabs'** state-of-the-art neural speech synthesis, achieving latency metrics that mimic natural human conversational gaps.
+
+---
+
 ## Codebase Directory Architecture (Separation of Concerns)
 
 ZEDX AI Simulator enforces a modular, highly uncoupled Directory structure for enterprise scaling:
@@ -276,18 +308,7 @@ ZEDX-AI-Simulator/
 
 ---
 
-## Environment Strategy & Pipeline Requirements
 
-To operate ZEDX AI Simulator securely within a local developer environment, the following configuration parameters must be mounted in `.env.local`:
-
-| Variable Key | System Purpose | Validation Constraint |
-| :--- | :--- | :--- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Distributed Database Locator | Strict HTTPS requirement |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public access mapping token | Opaque Publishable Key (RLS bound) |
-| `GROQ_API_KEY` | Neural Inference Layer Access | Active Groq account |
-| `GROQ_STT_KEY_[1-5]` | High-Availability Load Balancing Arrays | Mutually exclusive STT tokens |
-
----
 
 ## Future Blueprint (Technical Scalability)
 - **Offline Transduction Models (WASM):** Shifting dependencies from cloud-reliant AI endpoints to natively hosted ONNX (WebAssembly) tensor flows to execute fully offline, zero-trust architectures.
