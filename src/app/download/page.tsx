@@ -62,10 +62,23 @@ export default function DownloadPage() {
                     {/* Feature Grid */}
                     <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20 items-stretch">
                         {/* Web Version Card */}
-                        <div className="p-8 rounded-[2.5rem] border border-indigo-200/50 dark:border-indigo-500/20 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-indigo-500/10 flex flex-col group relative overflow-hidden bg-white/40 dark:bg-zinc-900/40">
+                        <div className="p-8 rounded-[2.5rem] border border-sky-200/50 dark:border-sky-500/20 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-indigo-500/10 flex flex-col group relative overflow-hidden bg-[#e0f2fe] dark:bg-sky-950/40">
                             {/* Animated Sand Gradient */}
-                            <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06] mix-blend-overlay pointer-events-none z-0" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
-                            <div className="absolute inset-0 bg-gradient-to-t from-indigo-500/20 via-purple-500/10 to-blue-500/20 dark:from-indigo-500/30 dark:via-purple-500/15 dark:to-blue-500/30 animate-pulse opacity-80 blur-3xl z-0"></div>
+                            <style>
+                                {`
+                                @keyframes sandWave {
+                                    0% { background-position: 0% 50%; }
+                                    50% { background-position: 100% 50%; }
+                                    100% { background-position: 0% 50%; }
+                                }
+                                .sand-wave-gradient {
+                                    animation: sandWave 8s ease-in-out infinite;
+                                    background-size: 200% 200%;
+                                }
+                                `}
+                            </style>
+                            <div className="absolute inset-0 opacity-[0.08] dark:opacity-[0.1] mix-blend-overlay pointer-events-none z-0" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/30 via-emerald-400/20 to-blue-500/30 dark:from-indigo-500/40 dark:via-emerald-400/20 dark:to-blue-500/40 opacity-90 blur-2xl z-0 mix-blend-color-burn dark:mix-blend-color-dodge sand-wave-gradient"></div>
                             
                             <div className="flex items-center justify-between mb-8 mt-2 relative z-10">
                                 <div className="flex items-center gap-4">
@@ -81,34 +94,26 @@ export default function DownloadPage() {
                             <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-8">
                                 Designed for advanced candidates. Experience a strict, hyper-realistic interview environment powered by our most advanced autonomous models.
                             </p>
-                            <ul className="space-y-4 mb-10 text-sm font-medium text-zinc-700 dark:text-zinc-300 flex-grow">
+                            <ul className="space-y-4 mb-10 text-sm font-medium text-zinc-700 dark:text-zinc-300 flex-grow relative z-10">
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-indigo-500/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-indigo-600 dark:text-indigo-400 w-3 h-3" strokeWidth={3} />
-                                    </div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)] shrink-0"></div>
                                     <span><strong>Voice-to-Voice AI:</strong> True conversational partner</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-indigo-500/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-indigo-600 dark:text-indigo-400 w-3 h-3" strokeWidth={3} />
-                                    </div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)] shrink-0"></div>
                                     <span><strong>Groq™ LPU:</strong> Instant, zero-latency processing</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-indigo-500/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-indigo-600 dark:text-indigo-400 w-3 h-3" strokeWidth={3} />
-                                    </div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)] shrink-0"></div>
                                     <span><strong>Deep Analytics:</strong> Granular post-interview scorecard</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-indigo-500/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-indigo-600 dark:text-indigo-400 w-3 h-3" strokeWidth={3} />
-                                    </div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)] shrink-0"></div>
                                     <span><strong>Unfiltered:</strong> No hints, simulating real pressure</span>
                                 </li>
                             </ul>
                             <Link href="/dashboard" className="block mt-auto relative z-10">
-                                <Button className="w-full rounded-2xl py-7 text-xl bg-transparent border-2 border-indigo-500/40 hover:bg-indigo-500/10 transition-all font-extrabold shadow-sm hover:shadow-indigo-500/20">
+                                <Button className="w-full rounded-2xl py-7 text-xl bg-transparent hover:bg-indigo-500/10 transition-all font-extrabold shadow-sm hover:shadow-indigo-500/20">
                                     <span className="relative z-10 flex items-center justify-center gap-2 text-indigo-600 dark:text-indigo-400 drop-shadow-[0_2px_4px_rgba(79,70,229,0.5)]">
                                         Launch Web Simulator
                                     </span>
@@ -117,9 +122,9 @@ export default function DownloadPage() {
                         </div>
 
                         {/* Desktop App Card */}
-                        <div className="p-8 rounded-[2.5rem] border border-emerald-200/50 dark:border-emerald-500/20 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-emerald-500/10 flex flex-col group relative overflow-hidden bg-white/40 dark:bg-zinc-900/40">
+                        <div className="p-8 rounded-[2.5rem] border border-emerald-200/50 dark:border-emerald-500/20 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-emerald-500/10 flex flex-col group relative overflow-hidden bg-[#eefadc] dark:bg-[#1a2f1c]">
                             {/* Animated Emerald Glow */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 via-teal-500/5 to-emerald-500/10 dark:from-emerald-500/20 dark:via-teal-500/10 dark:to-emerald-500/20 animate-pulse opacity-70 blur-3xl z-0"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/20 via-teal-500/10 to-emerald-500/20 dark:from-emerald-500/20 dark:via-teal-500/10 dark:to-emerald-500/20 animate-pulse opacity-80 blur-3xl z-0"></div>
                             
                             <div className="flex items-center justify-between mb-8 mt-2 relative z-10">
                                 <div className="flex items-center gap-4">
@@ -139,27 +144,19 @@ export default function DownloadPage() {
                             
                             <ul className="space-y-4 mb-10 text-sm font-medium text-zinc-700 dark:text-zinc-300 flex-grow relative z-10">
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
-                                    </div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] shrink-0"></div>
                                     <span><strong>Live AI Copilot:</strong> Get real-time answer suggestions</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
-                                    </div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] shrink-0"></div>
                                     <span><strong>Screen Capture (OCR):</strong> AI analyzes shared code/screens</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
-                                    </div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] shrink-0"></div>
                                     <span><strong>Internal Audio Routing:</strong> Flawless system audio capture</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
-                                    </div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] shrink-0"></div>
                                     <span><strong>Manual Chat:</strong> Ask follow-up questions anytime</span>
                                 </li>
                             </ul>
@@ -169,7 +166,7 @@ export default function DownloadPage() {
                                     href="https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.3/ZEDX.AI.Setup.1.1.3.exe"
                                     className="block"
                                 >
-                                    <Button className="w-full rounded-2xl py-7 text-xl bg-transparent border-2 border-emerald-500/40 hover:bg-emerald-500/10 transition-all font-extrabold shadow-sm hover:shadow-emerald-500/20">
+                                    <Button className="w-full rounded-2xl py-7 text-xl bg-transparent hover:bg-emerald-500/10 transition-all font-extrabold shadow-sm hover:shadow-emerald-500/20">
                                         <span className="relative z-10 flex items-center justify-center gap-2 text-emerald-600 dark:text-emerald-400 drop-shadow-[0_2px_4px_rgba(16,185,129,0.5)]">
                                             <Download size={22} strokeWidth={2.5} />
                                             Download for Windows

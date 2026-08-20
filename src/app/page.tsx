@@ -97,19 +97,13 @@ export default function Home() {
                 </div>
               </div>
               {/* Massive Atmosphere Glow */}
-              <div className="absolute -inset-16 bg-gradient-to-r from-green-400/20 to-teal-400/20 blur-[130px] -z-10 rounded-full"></div>
+              <div className="absolute -inset-32 bg-gradient-to-r from-green-600/40 via-[#1fa34c]/40 to-emerald-600/40 blur-[160px] -z-10 rounded-[4rem] opacity-90 animate-pulse"></div>
             </div>
 
           </div>
 
           <div className="mt-16 md:mt-24 relative w-full max-w-[900px] mx-auto perspective-1000 px-4">
             <div className="text-center mb-10 md:mb-16">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700/50 mb-4 md:mb-6 shadow-sm">
-                <Code className="w-3.5 h-3.5 text-emerald-500" />
-                <span className="text-[10px] md:text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                  Advanced Coding
-                </span>
-              </div>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-6">
                 Technical <span className="text-gradient-fusion">Precision.</span>
               </h2>
@@ -133,40 +127,38 @@ export default function Home() {
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:3rem_3rem] md:bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
 
                 {/* Floating Chat Bubbles */}
-                <div className="relative z-10 w-full max-w-4xl space-y-6 md:space-y-10">
+                <div className="relative z-10 w-full max-w-5xl space-y-6 md:space-y-10">
                   {/* Chat Bubble 1 (AI Question) */}
                   <div className="flex gap-3 md:gap-7 items-start justify-start animate-fade-in-up">
                     <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
                       <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
-                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
-                      &quot;Your next task is to implement a custom React hook that stores the previous value of a prop without causing an extra render. How would you approach this?&quot;
+                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm w-[90%] md:w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                      &quot;Can you implement a robust custom React hook for fetching data that includes an abort controller for cleanup, as well as comprehensive loading and error state management?&quot;
                     </div>
                   </div>
 
                   {/* Chat Bubble 2 (User Code) */}
                   <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 shadow-xl max-w-[88%] md:max-w-[85%] relative border-r-4 border-r-green-500">
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 shadow-xl w-[95%] md:w-[92%] relative border-r-4 border-r-green-500">
                       <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
                         <Code className="w-4 h-4 md:w-6 md:h-6 text-green-500" />
                       </div>
-                      <div className="mb-2 md:mb-3 text-left">
-                        <span className="text-[10px] md:text-xs font-bold text-emerald-700/80 dark:text-emerald-400/80 uppercase tracking-wider">
-                          Live Coding
-                        </span>
-                      </div>
-                      <div className="bg-white/50 dark:bg-black/30 rounded-xl p-3 md:p-5 mb-3 md:mb-4 font-mono text-[10px] md:text-sm leading-relaxed overflow-x-auto border border-black/5 dark:border-white/10 shadow-inner">
+                      
+                      <div className="bg-white/50 dark:bg-black/30 rounded-xl p-4 md:p-6 mb-3 md:mb-4 font-mono text-[10px] md:text-[13px] leading-relaxed overflow-x-auto border border-black/5 dark:border-white/10 shadow-inner">
                         <pre className="text-gray-800 dark:text-gray-200">
-                          <span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> <span className="text-blue-600 dark:text-blue-400">usePrevious</span> = (<span className="text-orange-600 dark:text-orange-300">value</span>) <span className="text-pink-600 dark:text-pink-400 font-semibold">=&gt;</span> {"{\n"}
-                          {"  "}<span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> <span className="text-sky-600 dark:text-sky-300">ref</span> = <span className="text-yellow-600 dark:text-yellow-200">useRef</span>();{"\n"}
+                          <span className="text-pink-600 dark:text-pink-400 font-semibold">export function</span> <span className="text-blue-600 dark:text-blue-400">useFetch</span>&lt;<span className="text-teal-600 dark:text-teal-400">T</span>&gt;(<span className="text-orange-600 dark:text-orange-300">url</span>: <span className="text-teal-600 dark:text-teal-400">string</span>) {"{\n"}
+                          {"  "}<span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> [<span className="text-sky-600 dark:text-sky-300">data</span>, <span className="text-blue-600 dark:text-blue-400">setData</span>] = <span className="text-yellow-600 dark:text-yellow-200">useState</span>&lt;<span className="text-teal-600 dark:text-teal-400">T | null</span>&gt;(<span className="text-purple-600 dark:text-purple-400">null</span>);{"\n"}
+                          {"  "}<span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> [<span className="text-sky-600 dark:text-sky-300">error</span>, <span className="text-blue-600 dark:text-blue-400">setError</span>] = <span className="text-yellow-600 dark:text-yellow-200">useState</span>&lt;<span className="text-teal-600 dark:text-teal-400">Error | null</span>&gt;(<span className="text-purple-600 dark:text-purple-400">null</span>);{"\n"}
+                          {"  "}<span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> [<span className="text-sky-600 dark:text-sky-300">loading</span>, <span className="text-blue-600 dark:text-blue-400">setLoading</span>] = <span className="text-yellow-600 dark:text-yellow-200">useState</span>(<span className="text-purple-600 dark:text-purple-400">true</span>);{"\n\n"}
                           {"  "}<span className="text-yellow-600 dark:text-yellow-200">useEffect</span>(() <span className="text-pink-600 dark:text-pink-400 font-semibold">=&gt;</span> {"{\n"}
-                          {"    "}<span className="text-sky-600 dark:text-sky-300">ref</span>.current = <span className="text-orange-600 dark:text-orange-300">value</span>;{"\n"}
-                          {"  "}, [<span className="text-orange-600 dark:text-orange-300">value</span>]);{"\n"}
-                          {"  "}<span className="text-purple-600 dark:text-purple-400 font-semibold">return</span> <span className="text-sky-600 dark:text-sky-300">ref</span>.current;{"\n"}
-                          {"};"}
-                          {"\n"}
-                          <span className="text-gray-400 dark:text-gray-500 italic">// This hook allows you to store the previous state</span>{"\n"}
-                          <span className="text-gray-400 dark:text-gray-500 italic">// without causing an additional re-render loop.</span>
+                          {"    "}<span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> <span className="text-sky-600 dark:text-sky-300">abortController</span> = <span className="text-pink-600 dark:text-pink-400 font-semibold">new</span> <span className="text-teal-600 dark:text-teal-400">AbortController</span>();{"\n"}
+                          {"    "}<span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> <span className="text-blue-600 dark:text-blue-400">fetchData</span> = <span className="text-pink-600 dark:text-pink-400 font-semibold">async</span> () <span className="text-pink-600 dark:text-pink-400 font-semibold">=&gt;</span> {"{\n"}
+                          {"      "}<span className="text-purple-600 dark:text-purple-400 font-semibold">try</span> {"{\n"}
+                          {"        "}<span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> <span className="text-sky-600 dark:text-sky-300">res</span> = <span className="text-purple-600 dark:text-purple-400 font-semibold">await</span> <span className="text-yellow-600 dark:text-yellow-200">fetch</span>(<span className="text-orange-600 dark:text-orange-300">url</span>, {"{ "}signal: <span className="text-sky-600 dark:text-sky-300">abortController</span>.signal{" }"});{"\n"}
+                          {"        "}<span className="text-purple-600 dark:text-purple-400 font-semibold">if</span> (!<span className="text-sky-600 dark:text-sky-300">res</span>.ok) <span className="text-purple-600 dark:text-purple-400 font-semibold">throw new</span> <span className="text-teal-600 dark:text-teal-400">Error</span>(<span className="text-green-600 dark:text-green-400">'Failed to fetch data'</span>);{"\n"}
+                          {"        "}<span className="text-blue-600 dark:text-blue-400">setData</span>(<span className="text-purple-600 dark:text-purple-400 font-semibold">await</span> <span className="text-sky-600 dark:text-sky-300">res</span>.<span className="text-yellow-600 dark:text-yellow-200">json</span>());{"\n"}
+                          {"      "}...
                         </pre>
                       </div>
                     </div>
@@ -178,7 +170,7 @@ export default function Home() {
               </div>
             </div>
             {/* Massive Atmosphere Glow */}
-            <div className="absolute -inset-x-32 top-1/4 bottom-0 bg-gradient-to-br from-[#d9f99d]/60 via-emerald-400/40 to-[#b5f850]/50 dark:from-[#b5f850]/20 dark:via-emerald-500/20 dark:to-green-500/10 blur-[160px] -z-10 rounded-full opacity-80 animate-pulse"></div>
+            <div className="absolute -inset-x-48 top-0 bottom-0 bg-gradient-to-br from-green-600/40 via-[#1fa34c]/30 to-emerald-600/40 dark:from-green-600/30 dark:via-[#1fa34c]/20 dark:to-emerald-600/30 blur-[180px] -z-10 rounded-[5rem] opacity-90 animate-pulse"></div>
           </div>
         </section>
 
