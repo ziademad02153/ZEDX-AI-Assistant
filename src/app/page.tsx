@@ -164,6 +164,9 @@ export default function Home() {
                           {"  "}, [<span className="text-orange-600 dark:text-orange-300">value</span>]);{"\n"}
                           {"  "}<span className="text-purple-600 dark:text-purple-400 font-semibold">return</span> <span className="text-sky-600 dark:text-sky-300">ref</span>.current;{"\n"}
                           {"};"}
+                          {"\n"}
+                          <span className="text-gray-400 dark:text-gray-500 italic">// This hook allows you to store the previous state</span>{"\n"}
+                          <span className="text-gray-400 dark:text-gray-500 italic">// without causing an additional re-render loop.</span>
                         </pre>
                       </div>
                     </div>
@@ -175,7 +178,7 @@ export default function Home() {
               </div>
             </div>
             {/* Massive Atmosphere Glow */}
-            <div className="absolute -inset-16 bg-gradient-to-r from-emerald-400/10 to-green-400/10 blur-[130px] -z-10 rounded-full"></div>
+            <div className="absolute -inset-x-32 top-1/4 bottom-0 bg-gradient-to-br from-[#d9f99d]/60 via-emerald-400/40 to-[#b5f850]/50 dark:from-[#b5f850]/20 dark:via-emerald-500/20 dark:to-green-500/10 blur-[160px] -z-10 rounded-full opacity-80 animate-pulse"></div>
           </div>
         </section>
 

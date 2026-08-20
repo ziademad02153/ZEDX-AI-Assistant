@@ -64,14 +64,13 @@ export default function DownloadPage() {
                         {/* Web Version Card */}
                         <div className="p-8 rounded-[2.5rem] border border-indigo-200/50 dark:border-indigo-500/20 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-indigo-500/10 flex flex-col group relative overflow-hidden bg-white/40 dark:bg-zinc-900/40">
                             {/* Animated Sand Gradient */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-indigo-500/10 via-purple-500/5 to-blue-500/10 dark:from-indigo-500/20 dark:via-purple-500/10 dark:to-blue-500/20 animate-pulse opacity-70 blur-2xl z-0"></div>
-                            
-                            <div className="absolute top-0 right-0 bg-gradient-to-r from-indigo-500 to-blue-500 text-white text-[10px] uppercase tracking-wider font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-[2.5rem] shadow-md z-10">WEB SIMULATOR</div>
+                            <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06] mix-blend-overlay pointer-events-none z-0" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-indigo-500/20 via-purple-500/10 to-blue-500/20 dark:from-indigo-500/30 dark:via-purple-500/15 dark:to-blue-500/30 animate-pulse opacity-80 blur-3xl z-0"></div>
                             
                             <div className="flex items-center justify-between mb-8 mt-2 relative z-10">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 shadow-inner border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform duration-300 overflow-hidden">
-                                        <AnimatedOrb className="w-20 h-20" />
+                                    <div className="flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform duration-300">
+                                        <AnimatedOrb className="w-16 h-16" />
                                     </div>
                                     <div>
                                         <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">AI Interviewer Robot</h3>
@@ -109,83 +108,76 @@ export default function DownloadPage() {
                                 </li>
                             </ul>
                             <Link href="/dashboard" className="block mt-auto relative z-10">
-                                <Button className="w-full rounded-2xl py-7 text-lg bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 group relative overflow-hidden transition-all font-semibold border-none">
-                                    <span className="relative z-10 flex items-center justify-center gap-2">
+                                <Button className="w-full rounded-2xl py-7 text-xl bg-transparent border-2 border-indigo-500/40 hover:bg-indigo-500/10 transition-all font-extrabold shadow-sm hover:shadow-indigo-500/20">
+                                    <span className="relative z-10 flex items-center justify-center gap-2 text-indigo-600 dark:text-indigo-400 drop-shadow-[0_2px_4px_rgba(79,70,229,0.5)]">
                                         Launch Web Simulator
                                     </span>
-                                    <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-0"></div>
                                 </Button>
                             </Link>
                         </div>
 
                         {/* Desktop App Card */}
-                        <div className="p-8 rounded-[2.5rem] bg-gradient-to-b from-[#2ecc71] to-[#27ae60] dark:from-[#2ecc71] dark:to-[#1e8449] border-t border-white/20 shadow-[0_8px_30px_rgba(46,204,113,0.3)] relative overflow-hidden transform transition-all duration-300 hover:scale-[1.02] flex flex-col group">
-                            <div className="absolute top-0 right-0 bg-white/20 backdrop-blur-md text-white text-[10px] uppercase tracking-wider font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-[2.5rem] shadow-sm">DESKTOP APP</div>
+                        <div className="p-8 rounded-[2.5rem] border border-emerald-200/50 dark:border-emerald-500/20 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-emerald-500/10 flex flex-col group relative overflow-hidden bg-white/40 dark:bg-zinc-900/40">
+                            {/* Animated Emerald Glow */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 via-teal-500/5 to-emerald-500/10 dark:from-emerald-500/20 dark:via-teal-500/10 dark:to-emerald-500/20 animate-pulse opacity-70 blur-3xl z-0"></div>
                             
-                            <div className="flex items-center justify-between mb-8 mt-2">
+                            <div className="flex items-center justify-between mb-8 mt-2 relative z-10">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-14 h-14 rounded-2xl bg-white/10 shadow-inner border border-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
+                                    <div className="flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform duration-300">
                                         <CommandIcon />
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-bold text-white">AI Interview Mentor</h3>
-                                        <p className="text-sm font-semibold text-emerald-100 mt-0.5">Desktop Sandbox</p>
+                                        <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">AI Interview Mentor</h3>
+                                        <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">Desktop Sandbox</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <p className="text-emerald-50 leading-relaxed mb-8">
+                            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-8 relative z-10">
                                 Designed for skill improvement. The AI acts as your copilot, analyzing your screen and providing suggested answers in real-time to build your confidence.
                             </p>
                             
-                            <ul className="space-y-4 mb-10 text-sm font-medium text-white flex-grow">
+                            <ul className="space-y-4 mb-10 text-sm font-medium text-zinc-700 dark:text-zinc-300 flex-grow relative z-10">
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-white/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-white w-3 h-3" strokeWidth={3} />
+                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
                                     </div>
                                     <span><strong>Live AI Copilot:</strong> Get real-time answer suggestions</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-white/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-white w-3 h-3" strokeWidth={3} />
+                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
                                     </div>
                                     <span><strong>Screen Capture (OCR):</strong> AI analyzes shared code/screens</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-white/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-white w-3 h-3" strokeWidth={3} />
+                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
                                     </div>
                                     <span><strong>Internal Audio Routing:</strong> Flawless system audio capture</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <div className="bg-white/20 p-1 rounded-full shrink-0">
-                                        <Check className="text-white w-3 h-3" strokeWidth={3} />
+                                    <div className="bg-emerald-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-emerald-600 dark:text-emerald-400 w-3 h-3" strokeWidth={3} />
                                     </div>
                                     <span><strong>Manual Chat:</strong> Ask follow-up questions anytime</span>
                                 </li>
                             </ul>
 
-                            <div className="space-y-4 mt-auto">
+                            <div className="space-y-4 mt-auto relative z-10">
                                 <Link
                                     href="https://github.com/ziademad02153/zedx-ai-dist/releases/download/v1.1.3/ZEDX.AI.Setup.1.1.3.exe"
                                     className="block"
                                 >
-                                    <Button className="w-full rounded-2xl py-7 text-lg bg-white hover:bg-gray-50 text-emerald-700 shadow-lg group relative overflow-hidden transition-all font-bold border-none">
-                                        <span className="relative z-10 flex items-center justify-center gap-2">
-                                            <Download size={20} strokeWidth={2.5} />
+                                    <Button className="w-full rounded-2xl py-7 text-xl bg-transparent border-2 border-emerald-500/40 hover:bg-emerald-500/10 transition-all font-extrabold shadow-sm hover:shadow-emerald-500/20">
+                                        <span className="relative z-10 flex items-center justify-center gap-2 text-emerald-600 dark:text-emerald-400 drop-shadow-[0_2px_4px_rgba(16,185,129,0.5)]">
+                                            <Download size={22} strokeWidth={2.5} />
                                             Download for Windows
                                         </span>
-                                        <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-emerald-100/30 to-transparent z-0"></div>
                                     </Button>
                                 </Link>
-                                
-                                <div className="p-4 rounded-2xl bg-black/10 border border-black/5 flex gap-3 text-left animate-fade-in items-start backdrop-blur-sm">
-                                    <Info size={18} className="text-white shrink-0 mt-0.5" />
-                                    <div className="text-xs leading-relaxed text-emerald-50 font-medium">
-                                        <strong className="text-white block mb-0.5">Security Note:</strong>
-                                        Click <strong>&quot;More info&quot;</strong> and <strong>&quot;Run anyway&quot;</strong> if Windows SmartScreen appears.
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
                             </div>
                         </div>
                     </div>
