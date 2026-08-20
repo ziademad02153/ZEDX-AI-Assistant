@@ -23,7 +23,7 @@ ZEDX bridges the gap between preparation and execution by offering two distinct 
 
 ---
 
-## 🔥 Key Platform Updates & Features
+## Key Platform Updates & Features
 
 - **Advanced Performance Scorecard**: A comprehensive post-interview AI analysis evaluating Technical Accuracy, Communication Skills, and Overall Performance, providing actionable insights based on ideal industry benchmarks.
 - **Organized PDF Export**: Ability to instantly export the interview scorecard into a clean, geometric, and printable PDF document.
@@ -184,6 +184,78 @@ flowchart TD
 - **Row-Level Security (RLS) Vaulting:** Users cannot directly access other users' rows; all transactions bind mathematically to verified user sessions to prohibit lateral account escalation.
 
 ---
+
+## 5. Advanced Performance Scorecard & PDF Generation Pipeline
+The new post-interview analysis system replaces standard static feedback with a multi-dimensional JSON-structured AI evaluation, ending with a hardware-accelerated PDF export.
+
+```mermaid
+graph TD
+    subgraph "Post-Interview Aggregation"
+        STATE[Zustand Session State] -->|Extract| TRANSCRIPT[Complete Spoken Transcript]
+        STATE -->|Extract| METADATA[JD, Resume, Duration]
+        TRANSCRIPT --> PAYLOAD[JSON Context Payload]
+        METADATA --> PAYLOAD
+    end
+
+    subgraph "Evaluation Engine (Groq LPU)"
+        PAYLOAD -->|Next.js API Edge Route| GROQ[Groq 70B Evaluator]
+        GROQ -->|Strict JSON Schema| ANALYSIS{JSON Evaluator}
+        ANALYSIS -- "Technical Score (0-10)" --> METRICS
+        ANALYSIS -- "Communication Score" --> METRICS
+        ANALYSIS -- "Ideal Benchmarks" --> METRICS
+    end
+
+    subgraph "Client Rendering & Export"
+        METRICS -->|Hydrate| SCORECARD[React Scorecard UI]
+        SCORECARD -->|Apply @media print styles| PRINT[Browser Print Spooler]
+        PRINT -->|Strip UI Elements & Backgrounds| PDF[Organized PDF Report]
+    end
+
+    classDef state fill:#451a03,stroke:#b45309,stroke-width:2px,color:#fff;
+    classDef ai fill:#312e81,stroke:#6366f1,stroke-width:2px,color:#fff;
+    classDef render fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff;
+
+    class STATE,TRANSCRIPT,METADATA,PAYLOAD state;
+    class GROQ,ANALYSIS,METRICS ai;
+    class SCORECARD,PRINT,PDF render;
+```
+
+### Engineering Highlights:
+- **Deterministic JSON Enforcement:** Prompt structures strictly force the LLM to output valid JSON, which is instantly parsed and mapped to TypeScript interfaces to render individual feedback cards.
+- **CSS Print Media Optimization:** Utilizes Tailwind's `print:` modifiers to dynamically strip heavy UI components, shadows, and dark-mode backgrounds, guaranteeing a pristine, geometric PDF output directly from the browser without requiring a heavy backend PDF generator (e.g., Puppeteer).
+
+---
+
+## 6. Hardware-Accelerated UI & Dual-Theme Rendering
+ZEDX heavily invests in a premium, fluid aesthetic utilizing modern GPU-accelerated rendering techniques and intelligent dark/light mode context switching.
+
+```mermaid
+flowchart LR
+    subgraph "Theme Provider (next-themes)"
+        SYSTEM[System Preference] --> THEME(Active Theme Context)
+        USER[User Override] --> THEME
+    end
+
+    subgraph "Hardware Accelerated Compositing"
+        THEME -->|Injects class='dark'| TAILWIND[Tailwind CSS Engine]
+        TAILWIND -->|Light Mode| LIGHT[zinc-50 / gray-900]
+        TAILWIND -->|Dark Mode| DARK[bg-black / text-white]
+        
+        THEME -->|Conditional Rendering| R3F[React Three Fiber]
+        R3F -->|WebGL Context| ANIMATIONS[3D Orbs & Sand Particles]
+        ANIMATIONS -->|CSS Transform & opacity| COMPOSITOR[GPU Compositor]
+    end
+
+    classDef theme fill:#334155,stroke:#94a3b8,stroke-width:2px,color:#fff;
+    classDef gpu fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#fff;
+
+    class SYSTEM,USER,THEME theme;
+    class TAILWIND,LIGHT,DARK,R3F,ANIMATIONS,COMPOSITOR gpu;
+```
+
+### Engineering Highlights:
+- **Zero-Layout-Thrashing Animations:** Complex visual elements like the "Sand Wave" orbs are explicitly bound to CSS `transform` and `opacity` properties, isolating them to the GPU compositor thread to prevent main-thread blocking during expensive LLM streaming.
+- **Mix-Blend-Mode Compositing:** Dynamic lighting effects and gradients utilize CSS `mix-blend-overlay` and localized opacity tweaks to maintain perfect contrast ratios across both light and dark modes without requiring duplicate DOM elements.
 
 ## Codebase Directory Architecture (Separation of Concerns)
 
