@@ -194,7 +194,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
 
               {/* Feature 1: Context Upload */}
-              <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
+              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
                 <div className="mb-4">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-green-100 text-green-800 text-xs font-bold tracking-wider uppercase">
                     Context
@@ -227,7 +227,7 @@ export default function Home() {
               </div>
 
               {/* Feature 2: Real-Time Accessibility */}
-              <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full">
+              <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 border border-zinc-200/50 dark:border-white/10 shadow-xl shadow-zinc-200/20 dark:shadow-none hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group">
                 <div className="mb-4">
                   <span className="inline-block px-4 py-1.5 rounded-full bg-teal-100 text-teal-800 text-xs font-bold tracking-wider uppercase">
                     Instant Verification

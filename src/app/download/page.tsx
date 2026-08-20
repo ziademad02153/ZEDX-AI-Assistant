@@ -64,51 +64,62 @@ export default function DownloadPage() {
                     {/* Feature Grid */}
                     <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20 items-stretch">
                         {/* Web Version Card */}
-                        <div className="p-8 rounded-[2.5rem] bg-zinc-50/80 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-white/5 backdrop-blur-xl transition-all duration-300 hover:bg-white dark:hover:bg-zinc-900 shadow-xl shadow-zinc-200/20 dark:shadow-none flex flex-col group relative">
-                            <div className="absolute top-0 right-0 bg-zinc-200/50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-[10px] uppercase tracking-wider font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-[2.5rem] shadow-sm">For Testing</div>
+                        <div className="p-8 rounded-[2.5rem] bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-200/50 dark:border-indigo-500/20 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-indigo-500/10 flex flex-col group relative overflow-hidden">
+                            <div className="absolute top-0 right-0 bg-gradient-to-r from-indigo-500 to-blue-500 text-white text-[10px] uppercase tracking-wider font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-[2.5rem] shadow-md">FOR TESTING</div>
                             
                             <div className="flex items-center justify-between mb-8 mt-2">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-14 h-14 rounded-2xl bg-white dark:bg-black/50 shadow-sm border border-zinc-100 dark:border-white/5 flex items-center justify-center text-zinc-700 dark:text-zinc-300 group-hover:scale-110 transition-transform duration-300">
+                                    <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 shadow-inner border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform duration-300">
                                         <GlobeIcon />
                                     </div>
                                     <div>
                                         <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Web Simulator</h3>
-                                        <p className="text-sm font-semibold text-red-500/80 dark:text-red-400/80 mt-0.5">Rigorous Testing</p>
+                                        <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5">Rigorous Evaluation</p>
                                     </div>
                                 </div>
                             </div>
                             <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-8">
-                                Designed for advanced candidates. Experience a strict, realistic interview environment. No hints, no help—just you and the AI evaluating your every word.
+                                Designed for advanced candidates. Experience a strict, hyper-realistic interview environment powered by our most advanced autonomous models.
                             </p>
                             <ul className="space-y-4 mb-10 text-sm font-medium text-zinc-700 dark:text-zinc-300 flex-grow">
                                 <li className="flex gap-3 items-center">
-                                    <Check className="text-emerald-500 shrink-0 w-5 h-5" />
-                                    <span>Autonomous Voice-to-Voice AI</span>
+                                    <div className="bg-indigo-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-indigo-600 dark:text-indigo-400 w-3 h-3" strokeWidth={3} />
+                                    </div>
+                                    <span><strong>Voice-to-Voice AI:</strong> True conversational partner</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <Check className="text-emerald-500 shrink-0 w-5 h-5" />
-                                    <span>Instant Groq™ LPU Processing</span>
+                                    <div className="bg-indigo-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-indigo-600 dark:text-indigo-400 w-3 h-3" strokeWidth={3} />
+                                    </div>
+                                    <span><strong>Groq™ LPU:</strong> Instant, zero-latency processing</span>
                                 </li>
                                 <li className="flex gap-3 items-center">
-                                    <Check className="text-emerald-500 shrink-0 w-5 h-5" />
-                                    <span>Granular Post-Interview Scorecards</span>
+                                    <div className="bg-indigo-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-indigo-600 dark:text-indigo-400 w-3 h-3" strokeWidth={3} />
+                                    </div>
+                                    <span><strong>Deep Analytics:</strong> Granular post-interview scorecard</span>
                                 </li>
-                                <li className="flex gap-3 items-center opacity-60">
-                                    <Shield className="text-orange-500 shrink-0 w-5 h-5" />
-                                    <span>No real-time assistance or hints</span>
+                                <li className="flex gap-3 items-center">
+                                    <div className="bg-indigo-500/20 p-1 rounded-full shrink-0">
+                                        <Check className="text-indigo-600 dark:text-indigo-400 w-3 h-3" strokeWidth={3} />
+                                    </div>
+                                    <span><strong>Unfiltered:</strong> No hints, simulating real pressure</span>
                                 </li>
                             </ul>
                             <Link href="/dashboard" className="block mt-auto">
-                                <Button variant="outline" className="w-full rounded-2xl py-7 text-lg font-semibold border-zinc-200 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-900 dark:text-white transition-all shadow-sm">
-                                    Enter Testing Arena
+                                <Button className="w-full rounded-2xl py-7 text-lg bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 group relative overflow-hidden transition-all font-semibold border-none">
+                                    <span className="relative z-10 flex items-center justify-center gap-2">
+                                        Enter Testing Arena
+                                    </span>
+                                    <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-0"></div>
                                 </Button>
                             </Link>
                         </div>
 
-                        {/* Desktop App Card (Highlighed) */}
+                        {/* Desktop App Card */}
                         <div className="p-8 rounded-[2.5rem] bg-white/80 dark:bg-zinc-900/80 border border-emerald-500/30 backdrop-blur-xl shadow-2xl shadow-emerald-500/10 relative overflow-hidden transform transition-all duration-300 hover:scale-[1.02] flex flex-col group">
-                            <div className="absolute top-0 right-0 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[10px] uppercase tracking-wider font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-[2.5rem] shadow-md">RECOMMENDED</div>
+                            <div className="absolute top-0 right-0 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[10px] uppercase tracking-wider font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-[2.5rem] shadow-md">FOR PRACTICE</div>
                             
                             <div className="flex items-center justify-between mb-8 mt-2">
                                 <div className="flex items-center gap-4">

@@ -77,9 +77,9 @@ export default function AboutPage() {
                         </div>
                         <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-green-500/10 dark:from-emerald-500/20 dark:to-green-500/20 blur-3xl rounded-full"></div>
-                            <div className="relative bg-white/70 dark:bg-zinc-900/80 border border-white/40 dark:border-white/10 rounded-3xl p-8 shadow-xl dark:shadow-2xl backdrop-blur-xl">
+                            <div className="relative bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-8 shadow-xl shadow-zinc-200/20 dark:shadow-none">
                                 <div className="space-y-4">
-                                    <div className="flex items-center gap-4 p-4 bg-zinc-50/80 dark:bg-black/40 rounded-xl border border-zinc-100 dark:border-white/5">
+                                    <div className="flex items-center gap-4 p-4 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-md rounded-2xl border border-zinc-200/50 dark:border-white/5 shadow-sm">
                                         <div className="flex items-center justify-center p-2">
                                             <AnimatedOrb className="w-16 h-16 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
                                         </div>
@@ -88,7 +88,7 @@ export default function AboutPage() {
                                             <p className="text-sm text-gray-500 dark:text-gray-400">Instant coaching and explanations during simulation.</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-4 p-4 bg-zinc-50/80 dark:bg-zinc-950/40 rounded-xl border border-zinc-100 dark:border-white/5">
+                                    <div className="flex items-center gap-4 p-4 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-md rounded-2xl border border-zinc-200/50 dark:border-white/5 shadow-sm">
                                         <div className="flex items-center justify-center p-2 w-20 h-20 -ml-2 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                                             <PremiumFocusedPracticeWorkspaceIcon />
                                         </div>
@@ -97,7 +97,7 @@ export default function AboutPage() {
                                             <p className="text-sm text-gray-500 dark:text-gray-400">Minimal UI for focused practice sessions.</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-4 p-4 bg-zinc-50/80 dark:bg-zinc-950/40 rounded-xl border border-zinc-100 dark:border-white/5">
+                                    <div className="flex items-center gap-4 p-4 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-md rounded-2xl border border-zinc-200/50 dark:border-white/5 shadow-sm">
                                         <div className="flex items-center justify-center p-2 group-hover:scale-105 transition-transform">
                                             <PremiumVoiceToVoiceSimulationIcon />
                                         </div>

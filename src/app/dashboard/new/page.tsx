@@ -200,10 +200,10 @@ export default function NewInterviewPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4 }}
-                            className="group relative bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-1 shadow-xl dark:shadow-2xl overflow-hidden flex-1 flex flex-col"
+                            className="group relative bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-1.5 shadow-xl shadow-zinc-200/20 dark:shadow-none overflow-hidden flex-1 flex flex-col"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none"></div>
-                            <div className="relative bg-white dark:bg-[#151515] rounded-[22px] p-6 sm:p-10 flex-1 flex flex-col">
+                            <div className="relative bg-white/50 dark:bg-zinc-800/50 backdrop-blur-md rounded-[2.2rem] p-6 sm:p-10 flex-1 flex flex-col">
                                 <div className="flex items-center justify-between mb-6 sm:mb-8">
                                     <div className="flex items-center gap-4 sm:gap-5">
                                         <div className="flex items-center justify-center shrink-0">
@@ -230,7 +230,7 @@ export default function NewInterviewPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: 0.1 }}
-                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-lg dark:shadow-none flex-1 flex flex-col"
+                            className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 sm:p-10 relative overflow-hidden shadow-xl shadow-zinc-200/20 dark:shadow-none flex-1 flex flex-col"
                         >
                             <div className="flex flex-col gap-6 mb-8">
                                 <div className="flex items-center gap-4 sm:gap-5">
@@ -282,7 +282,7 @@ export default function NewInterviewPage() {
                             transition={{ duration: 0.4, delay: 0.2 }}
                             className="grid grid-cols-1 sm:grid-cols-2 gap-6"
                         >
-                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
+                            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
                                 <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
                                     <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                                         <Image src="/Interview-Logo.png" alt="Interview Type" width={28} height={28} className="object-contain dark:invert transition-all" />
@@ -299,7 +299,7 @@ export default function NewInterviewPage() {
                                     <option value="Project Deep Dive">Project Deep Dive</option>
                                 </select>
                             </div>
-                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
+                            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
                                 <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
                                     <div className="text-emerald-600 dark:text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                                         <Image src="/Multi-Language.png" alt="Language Globe" width={28} height={28} className="object-contain" />
@@ -316,7 +316,7 @@ export default function NewInterviewPage() {
                                     ))}
                                 </select>
                             </div>
-                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
+                            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
                                 <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
                                     <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                                         <Image src="/Granular Scorecards.png" alt="Difficulty Scorecard" width={28} height={28} className="object-contain" />
@@ -333,7 +333,7 @@ export default function NewInterviewPage() {
                                     <option value="Expert">Expert</option>
                                 </select>
                             </div>
-                            <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 shadow-sm">
+                            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
                                 <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
                                     <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                                         <Image src="/question.png" alt="Questions" width={36} height={36} className="object-contain scale-110" />
@@ -364,7 +364,7 @@ export default function NewInterviewPage() {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/5 rounded-3xl p-6 sm:p-10 shadow-lg dark:shadow-none flex-grow flex flex-col h-full"
+                            className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 sm:p-10 shadow-xl shadow-zinc-200/20 dark:shadow-none flex-grow flex flex-col h-full"
                         >
                             {/* AI Model Header with AI.jpg */}
                             <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">

@@ -164,8 +164,8 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
 
     if (isGenerating && !scorecard) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-gray-50 dark:bg-zinc-950">
-                <div className="bg-white dark:bg-gray-900 p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 text-center max-w-md w-full relative overflow-hidden">
+            <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-zinc-50 dark:bg-[#0a0a0a]">
+                <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-10 rounded-[2.5rem] shadow-2xl border border-zinc-200/50 dark:border-white/10 text-center max-w-md w-full relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-500 to-emerald-400 animate-gradient-x"></div>
                     <Brain className="w-16 h-16 mx-auto mb-6 text-emerald-500 animate-bounce" />
                     <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Analyzing Session...</h2>
@@ -179,41 +179,50 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
     }
 
     // Helper for circular progress
-    const CircularProgress = ({ value, label, icon: Icon, colorClass }: { value: number, label: string, icon: any, colorClass: string }) => (
-        <div className="flex flex-col items-center p-6 bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-gray-100 dark:border-zinc-800 relative overflow-hidden group hover:shadow-lg transition-all">
-            <div className={`absolute top-0 right-0 w-32 h-32 opacity-5 rounded-bl-full ${colorClass}`}></div>
-            <div className="relative w-28 h-28 mb-4">
-                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+    const CircularProgress = ({ value, label, icon: Icon, colorClass, gradientId, fromColor, toColor }: { value: number, label: string, icon: any, colorClass: string, gradientId: string, fromColor: string, toColor: string }) => (
+        <div className="flex flex-col items-center p-8 bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl rounded-[2.5rem] shadow-xl shadow-zinc-200/20 dark:shadow-none border border-zinc-200/50 dark:border-white/10 relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
+            <div className={`absolute -top-10 -right-10 w-40 h-40 opacity-10 rounded-full blur-2xl bg-gradient-to-br ${fromColor} ${toColor}`}></div>
+            <div className="relative w-36 h-36 mb-6">
+                <svg className="w-full h-full transform -rotate-90 drop-shadow-xl" viewBox="0 0 36 36">
+                    <defs>
+                        <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor={fromColor} />
+                            <stop offset="100%" stopColor={toColor} />
+                        </linearGradient>
+                    </defs>
                     <path
-                        className="text-gray-100 dark:text-zinc-800"
-                        strokeWidth="3"
+                        className="text-zinc-100 dark:text-white/5"
+                        strokeWidth="3.5"
                         stroke="currentColor"
                         fill="none"
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
                     <path
-                        className={`${colorClass} transition-all duration-1000 ease-out`}
-                        strokeWidth="3"
+                        className="transition-all duration-1000 ease-out drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]"
+                        strokeWidth="3.5"
                         strokeDasharray={`${value}, 100`}
                         strokeLinecap="round"
-                        stroke="currentColor"
+                        stroke={`url(#${gradientId})`}
                         fill="none"
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center flex-col">
-                    <span className="text-2xl font-bold text-gray-900 dark:text-white">{value}%</span>
+                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tighter">{value}<span className="text-xl text-gray-400">%</span></span>
                 </div>
             </div>
-            <h3 className="text-gray-600 dark:text-gray-300 font-medium flex items-center gap-2">
-                <Icon className="w-4 h-4" /> {label}
+            <h3 className="text-gray-600 dark:text-gray-300 font-semibold tracking-wide flex items-center gap-2">
+                <Icon className={`w-5 h-5 ${colorClass}`} /> {label}
             </h3>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 p-4 sm:p-8 pt-24 font-sans">
-            <div className="max-w-6xl mx-auto space-y-8">
+        <div className="min-h-screen bg-zinc-50 dark:bg-[#0a0a0a] p-4 sm:p-8 pt-24 font-sans relative overflow-hidden">
+            {/* Ambient Background Glow */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+            
+            <div className="max-w-6xl mx-auto space-y-8 relative z-10">
 
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -235,38 +244,47 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                 {scorecard && (
                     <>
                         {/* Scores Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <CircularProgress
                                 value={scorecard.overallScore}
                                 label="Overall Score"
                                 icon={Target}
                                 colorClass="text-emerald-500"
+                                gradientId="grad-overall"
+                                fromColor="#10b981" // emerald-500
+                                toColor="#14b8a6" // teal-500
                             />
                             <CircularProgress
                                 value={scorecard.technicalScore}
                                 label="Technical Accuracy"
                                 icon={Brain}
                                 colorClass="text-blue-500"
+                                gradientId="grad-tech"
+                                fromColor="#3b82f6" // blue-500
+                                toColor="#6366f1" // indigo-500
                             />
                             <CircularProgress
                                 value={scorecard.communicationScore}
                                 label="Communication"
                                 icon={MessageSquare}
                                 colorClass="text-purple-500"
+                                gradientId="grad-comm"
+                                fromColor="#a855f7" // purple-500
+                                toColor="#ec4899" // pink-500
                             />
                         </div>
 
                         {/* Analysis Cards */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {/* Strengths */}
-                            <div className="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/50 rounded-3xl p-6 sm:p-8">
-                                <h3 className="text-xl font-bold text-emerald-800 dark:text-emerald-400 mb-6 flex items-center gap-2">
+                            <div className="bg-emerald-50/70 dark:bg-emerald-950/20 backdrop-blur-xl border border-emerald-200/50 dark:border-emerald-900/50 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-emerald-500/5 dark:shadow-none">
+                                <h3 className="text-xl font-bold text-emerald-800 dark:text-emerald-400 mb-6 flex items-center gap-3">
                                     <CheckCircle className="w-6 h-6" /> Key Strengths
                                 </h3>
                                 <ul className="space-y-4">
                                     {scorecard.strengths.map((s, i) => (
-                                        <li key={i} className="flex items-start gap-3 text-emerald-900 dark:text-emerald-100">
-                                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+                                        <li key={i} className="flex items-start gap-3 text-emerald-900 dark:text-emerald-100 font-medium">
+                                            <span className="mt-1.5 w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                                             <span className="leading-relaxed">{s}</span>
                                         </li>
                                     ))}
@@ -274,14 +292,14 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                             </div>
 
                             {/* Improvements */}
-                            <div className="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/50 rounded-3xl p-6 sm:p-8">
-                                <h3 className="text-xl font-bold text-amber-800 dark:text-amber-400 mb-6 flex items-center gap-2">
+                            <div className="bg-amber-50/70 dark:bg-amber-950/20 backdrop-blur-xl border border-amber-200/50 dark:border-amber-900/50 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-amber-500/5 dark:shadow-none">
+                                <h3 className="text-xl font-bold text-amber-800 dark:text-amber-400 mb-6 flex items-center gap-3">
                                     <AlertTriangle className="w-6 h-6" /> Areas for Improvement
                                 </h3>
                                 <ul className="space-y-4">
                                     {scorecard.improvements.map((s, i) => (
-                                        <li key={i} className="flex items-start gap-3 text-amber-900 dark:text-amber-100">
-                                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
+                                        <li key={i} className="flex items-start gap-3 text-amber-900 dark:text-amber-100 font-medium">
+                                            <span className="mt-1.5 w-2 h-2 rounded-full bg-amber-500 flex-shrink-0 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
                                             <span className="leading-relaxed">{s}</span>
                                         </li>
                                     ))}
@@ -290,8 +308,8 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                         </div>
 
                         {/* Detailed Feedback */}
-                        <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-sm">
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Detailed Assessment</h3>
+                        <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-zinc-200/20 dark:shadow-none">
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Detailed Assessment</h3>
                             <div className="prose prose-lg dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
                                 <ReactMarkdown>{scorecard.detailedFeedback}</ReactMarkdown>
                             </div>
@@ -300,9 +318,9 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                 )}
 
                 {/* Transcript Archive */}
-                <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-sm mt-8">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Session Transcript Archive</h3>
-                    <div className="bg-gray-50 dark:bg-zinc-950 rounded-2xl p-6 whitespace-pre-wrap font-mono text-sm text-gray-600 dark:text-gray-400 border border-gray-100 dark:border-zinc-800 max-h-96 overflow-y-auto leading-relaxed">
+                <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-8 sm:p-10 shadow-xl shadow-zinc-200/20 dark:shadow-none mt-8">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Session Transcript Archive</h3>
+                    <div className="bg-gray-100/50 dark:bg-black/40 rounded-3xl p-8 whitespace-pre-wrap font-mono text-sm text-gray-700 dark:text-gray-300 border border-gray-200/50 dark:border-white/5 max-h-96 overflow-y-auto leading-relaxed shadow-inner">
                         {interview.transcript || "No transcript recorded for this session."}
                     </div>
                 </div>
