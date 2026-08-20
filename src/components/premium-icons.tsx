@@ -46,13 +46,30 @@ export const PremiumContextAwareIcon = () => (
 
 // 3. Multi-Language (Globe)
 export const PremiumMultiLangIcon = () => (
-  <Image
-    src="/Multi-Language.png"
-    alt="Multi-Language"
-    width={48}
-    height={48}
-    className={iconClasses + " object-contain"}
-  />
+  <div className={`relative w-12 h-12 ${iconClasses}`}>
+    <Image
+      src="/Multi-Language.png"
+      alt="Multi-Language"
+      fill
+      className="object-contain"
+    />
+    {/* Top Box */}
+    <div className="absolute top-[7%] left-[41.5%] w-[17%] h-[11%] rounded-[1.5px] overflow-hidden z-10 opacity-90 hover:opacity-100 transition-opacity">
+      <Image src="/ARABIC.png" alt="Arabic" fill className="object-cover" />
+    </div>
+    {/* Left Box */}
+    <div className="absolute top-[37%] left-[5%] w-[17%] h-[11%] rounded-[1.5px] overflow-hidden z-10 opacity-90 hover:opacity-100 transition-opacity">
+      <Image src="/ENG.png" alt="English" fill className="object-cover" />
+    </div>
+    {/* Bottom Right Box */}
+    <div className="absolute top-[76%] left-[72.5%] w-[17%] h-[11%] rounded-[1.5px] overflow-hidden z-10 opacity-90 hover:opacity-100 transition-opacity">
+      <Image src="/SPAIN LANG.png" alt="Spanish" fill className="object-cover" />
+    </div>
+    {/* Top Right Box (France) */}
+    <div className="absolute top-[22%] left-[80%] w-[17%] h-[11%] rounded-[1.5px] overflow-hidden z-10 opacity-90 hover:opacity-100 transition-opacity">
+      <Image src="/France lang.png" alt="French" fill className="object-cover" />
+    </div>
+  </div>
 );
 
 // 4. Instant Transcription (Zap)
