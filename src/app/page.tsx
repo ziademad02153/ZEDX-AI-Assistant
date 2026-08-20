@@ -285,13 +285,16 @@ export default function Home() {
                       <Image src="/ARABIC.png" alt="Arabic" fill className="object-cover" />
                     </div>
                     <div className="absolute bottom-4 right-4 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
-                      <Image src="/SPAIN LANG.png" alt="Spanish" fill className="object-cover" />
+                      <Image src="/SPAIN%20LANG.png" alt="Spanish" fill className="object-cover" />
                     </div>
                     <div className="absolute top-1/3 left-2 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
                       <Image src="/ENG.png" alt="English" fill className="object-cover" />
                     </div>
                     <div className="absolute top-[20%] right-2 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
-                      <Image src="/France lang.png" alt="French" fill className="object-cover" />
+                      <Image src="/France%20lang.png" alt="French" fill className="object-cover" />
+                    </div>
+                    <div className="absolute bottom-4 left-4 w-7 h-5 rounded overflow-hidden shadow-md z-20 hover:scale-110 transition-transform">
+                      <Image src="/german.png" alt="German" fill className="object-cover" />
                     </div>
                   </div>
                 </div>

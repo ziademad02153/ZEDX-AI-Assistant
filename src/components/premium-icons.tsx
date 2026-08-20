@@ -63,11 +63,15 @@ export const PremiumMultiLangIcon = () => (
     </div>
     {/* Bottom Right Box */}
     <div className="absolute top-[76%] left-[72.5%] w-[17%] h-[11%] rounded-[1.5px] overflow-hidden z-10 opacity-90 hover:opacity-100 transition-opacity">
-      <Image src="/SPAIN LANG.png" alt="Spanish" fill className="object-cover" />
+      <Image src="/SPAIN%20LANG.png" alt="Spanish" fill className="object-cover" />
     </div>
     {/* Top Right Box (France) */}
     <div className="absolute top-[22%] left-[80%] w-[17%] h-[11%] rounded-[1.5px] overflow-hidden z-10 opacity-90 hover:opacity-100 transition-opacity">
-      <Image src="/France lang.png" alt="French" fill className="object-cover" />
+      <Image src="/France%20lang.png" alt="French" fill className="object-cover" />
+    </div>
+    {/* Bottom Left Box (German) */}
+    <div className="absolute top-[75%] left-[10%] w-[17%] h-[11%] rounded-[1.5px] overflow-hidden z-10 opacity-90 hover:opacity-100 transition-opacity">
+      <Image src="/german.png" alt="German" fill className="object-cover" />
     </div>
   </div>
 );
