@@ -23,6 +23,15 @@ ZEDX bridges the gap between preparation and execution by offering two distinct 
 
 ---
 
+## 🔥 Key Platform Updates & Features
+
+- **Advanced Performance Scorecard**: A comprehensive post-interview AI analysis evaluating Technical Accuracy, Communication Skills, and Overall Performance, providing actionable insights based on ideal industry benchmarks.
+- **Organized PDF Export**: Ability to instantly export the interview scorecard into a clean, geometric, and printable PDF document.
+- **Custom Interview Limits**: Configurable mock interviews allowing between 5 to 40 questions per session to accommodate various testing endurances.
+- **Dynamic Light & Dark Modes**: Fully optimized, premium aesthetic spanning both light and dark themes with hardware-accelerated fluid animations.
+
+---
+
 ## Why ZEDX?
 
 | Traditional Interview Prep | ZEDX AI Simulator |

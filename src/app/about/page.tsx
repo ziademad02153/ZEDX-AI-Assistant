@@ -173,9 +173,9 @@ export default function AboutPage() {
                                         <PremiumGranularScorecardsIcon />
                                     </div>
                                 </div>
-                                <h3 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-3">Granular Scorecards</h3>
+                                <h3 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-3">Granular Scorecards & PDF Export</h3>
                                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                                    At the end of the session, the AI evaluates your exact spoken transcript, scoring each answer out of 10 and providing you with an ideal benchmark response.
+                                    At the end of the session, the AI evaluates your exact spoken transcript, scoring each answer out of 10 and providing you with an ideal benchmark response. Export your results to a pristine, organized PDF report to track your improvement.
                                 </p>
                             </div>
                         </div>
