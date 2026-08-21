@@ -213,12 +213,10 @@ export default function InterviewPage() {
         2. **CONTEXT AWARENESS**: 
            - Use the provided context (Resume/JD) for personal questions.
            - For technical or general questions, provide industry-leading, expert-level insights.
-        3. **CONCISE & SPOKEN FORMAT (CRITICAL)**:
-           - **NEVER USE MARKDOWN TABLES.** They are impossible to read quickly during practice.
-           - Keep your answer extremely concise, focused, and conversational (max 3-4 short bullet points or a short paragraph).
-           - This is a real-time practice session, so your answer must be easy to read at a glance.
-           - **CODING EXCEPTION:** If the question is a programming/coding problem (e.g., LeetCode, algorithms), you MUST provide the FULL code solution in a code block, but keep the explanation before/after the code extremely brief.
-           - Do not write long essays or exhaustive comparisons. Provide just enough depth to prove expertise without being overwhelming.
+        3. **DYNAMIC FORMATTING (CRITICAL)**:
+           - Adapt your answer length to the question. If a question needs a one-line answer, give exactly one line. If it requires a deep explanation, explain thoroughly. Do not artificially inflate or deflate answers.
+           - **RICH MARKDOWN**: Structure your answers beautifully like ChatGPT. Use bullet points, bold text for emphasis, line breaks, and clear paragraphs to make it extremely easy to read.
+           - **CODING**: If the question is a programming/coding problem, you MUST provide the FULL code solution inside properly formatted markdown code blocks, accompanied by a clean, structured explanation.
         4. **INTERVIEW STRATEGY**: Provide the "Benchmark Answer". Focus on what makes a candidate stand out: problem-solving, impact, and clarity.
         5. **LANGUAGE**: Strictly use ${interviewContext.lang}.
            - If 'ar-EG', use professional Egyptian Arabic (Ammiya) but keep technical terms in English where appropriate. Avoid overly formal Fusha.
@@ -380,6 +378,31 @@ export default function InterviewPage() {
 
     // Detect if running in Electron (Desktop App)
     const isElectron = hasMounted && typeof window !== 'undefined' && (window as unknown as { electronAPI?: { isElectron: boolean } }).electronAPI?.isElectron;
+
+    // --- APPLY TRANSPARENT BODY IN DESKTOP MODE ---
+    useEffect(() => {
+        if (isElectron) {
+            document.body.style.background = 'transparent';
+            document.documentElement.style.background = 'transparent';
+            
+            // Hide scrollbars globally in electron
+            const style = document.createElement('style');
+            style.id = 'electron-scrollbar-hide';
+            style.innerHTML = '::-webkit-scrollbar { display: none !important; } * { -ms-overflow-style: none !important; scrollbar-width: none !important; }';
+            document.head.appendChild(style);
+        } else {
+            document.body.style.background = '';
+            document.documentElement.style.background = '';
+            
+            const style = document.getElementById('electron-scrollbar-hide');
+            if (style) style.remove();
+        }
+        
+        return () => {
+            const style = document.getElementById('electron-scrollbar-hide');
+            if (style) style.remove();
+        };
+    }, [isElectron]);
 
     // --- SCREEN AUDIO CAPTURE (ELECTRON ONLY) ---
     const stopScreenAudio = useCallback(() => {
@@ -1106,7 +1129,7 @@ export default function InterviewPage() {
 
                     if (text) {
                         console.log("[Scanner] Extracted text:", text);
-                        setManualQuestion(text);
+                        setManualQuestion(prev => prev ? prev + '\n\n' + text : text);
                         showToast("Text captured from screen!", "success");
                     } else {
                         showToast("No text detected in the area.", "info");
@@ -1167,7 +1190,18 @@ export default function InterviewPage() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col lg:flex-row gap-4 p-2 sm:p-4 pt-20 transition-colors duration-300 bg-gray-50 dark:bg-zinc-950 overflow-auto">
+        <div className={cn("min-h-screen flex flex-col lg:flex-row gap-4 p-2 sm:p-4 pt-20 transition-colors duration-300 overflow-auto", !isElectron && "bg-gray-50 dark:bg-zinc-950")}>
+            
+            {/* Drag Handle for Electron */}
+            {isElectron && (
+                <div 
+                    style={{ WebkitAppRegion: "drag" } as React.CSSProperties} 
+                    className="fixed top-0 left-0 right-0 h-6 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-md border-b border-white/10 text-[10px] uppercase font-mono tracking-widest text-emerald-400 cursor-move"
+                >
+                    ZEDX AI - Drag to Move
+                </div>
+            )}
+
             {/* Error Banner */}
             {error && (
                 <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded z-50 flex items-center gap-2 shadow-lg">
@@ -1329,9 +1363,9 @@ export default function InterviewPage() {
                 )}
 
                 {/* Transcript Area */}
-                <div className="h-1/3 p-4 rounded-2xl shadow-sm border flex flex-col bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 transition-colors">
+                <div className={cn("h-1/3 p-4 rounded-2xl shadow-sm border flex flex-col transition-colors", isElectron ? "bg-black/60 backdrop-blur-md border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]" : "bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800")}>
                     <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-bold flex items-center gap-2 text-gray-900 dark:text-white">
+                        <h3 className={cn("font-bold flex items-center gap-2", isElectron ? "text-emerald-400" : "text-gray-900 dark:text-white")}>
                             <span className={cn("w-2 h-2 rounded-full", isRecording ? "bg-red-500 animate-pulse" : "bg-gray-300")}></span>
                             Live Transcript
                         </h3>
@@ -1339,7 +1373,7 @@ export default function InterviewPage() {
                             <Trash2 size={16} />
                         </Button>
                     </div>
-                    <div className="flex-1 rounded-xl p-4 overflow-y-auto text-base font-sans leading-loose bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 transition-colors">
+                    <div className={cn("flex-1 rounded-xl p-4 overflow-y-auto text-base font-sans leading-loose transition-colors", isElectron ? "bg-black/40 text-gray-200" : "bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200")}>
                         {transcript}
                         {interimTranscript && (
                             <span className="text-gray-500 dark:text-gray-400 italic">
@@ -1354,9 +1388,9 @@ export default function InterviewPage() {
 
             {/* Right Panel: AI Response */}
             <div className="w-full lg:w-1/2 flex flex-col gap-4">
-                <div className="p-6 rounded-2xl shadow-sm border flex-1 flex flex-col bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 transition-colors">
+                <div className={cn("p-6 rounded-2xl shadow-sm border flex-1 flex flex-col transition-colors", isElectron ? "bg-black/60 backdrop-blur-md border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]" : "bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800")}>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-                        <h3 className="font-bold flex items-center gap-2 text-lg text-gray-900 dark:text-white">
+                        <h3 className={cn("font-bold flex items-center gap-2 text-lg", isElectron ? "text-emerald-400" : "text-gray-900 dark:text-white")}>
                             <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
                             Example of a Strong Answer
                         </h3>
@@ -1403,7 +1437,7 @@ export default function InterviewPage() {
                     {/* Manual Input for Coding Questions */}
                     <div className="mb-4">
                         <div className="flex items-center justify-between mb-2">
-                            <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            <label className={cn("text-xs font-bold uppercase tracking-wider", isElectron ? "text-emerald-400" : "text-gray-500 dark:text-gray-400")}>
                                 Manual Question / Code
                             </label>
                             {manualQuestion && (
@@ -1422,7 +1456,7 @@ export default function InterviewPage() {
                                 value={manualQuestion}
                                 onChange={(e) => setManualQuestion(e.target.value)}
                                 placeholder="Paste coding question or type here... (Press Enter to ask)"
-                                className="w-full p-4 pr-12 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50 resize-y min-h-[120px] text-gray-800 dark:text-gray-200 shadow-sm"
+                                className={cn("w-full p-4 pr-12 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50 resize-y min-h-[120px] shadow-sm", isElectron ? "bg-black/40 border border-white/10 text-gray-200" : "border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200")}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' && !e.shiftKey) {
                                         e.preventDefault();
@@ -1442,7 +1476,7 @@ export default function InterviewPage() {
                         </div>
                     </div>
 
-                    <div className="flex-1 rounded-xl p-6 overflow-y-auto prose prose-lg max-w-none bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors relative">
+                    <div className={cn("flex-1 rounded-xl p-6 overflow-y-auto prose prose-lg max-w-none transition-colors relative", isElectron ? "bg-black/40 text-gray-200 prose-invert" : "bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100")}>
                         <div className="absolute top-2 right-2 flex gap-1">
                             {/* Retry Button - always shows when lastTranscript exists */}
                             {lastTranscript && (

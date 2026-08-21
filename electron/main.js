@@ -4,6 +4,9 @@ const path = require('path');
 
 const ICON_PATH = path.join(__dirname, '..', 'public', 'favicon.ico');
 
+// Bypass Google OAuth "This browser or app may not be secure" error
+app.userAgentFallback = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
 function initOverlaySystem() {
     if (process.platform === 'win32') {
         app.setAppUserModelId('System.Helper');
@@ -138,16 +141,16 @@ function createMainAppWindow() {
         x: Math.floor(width / 2) - 250,
         y: 120,
         frame: false,
-        transparent: false,
+        transparent: true,
         icon: ICON_PATH,
         alwaysOnTop: true,
         skipTaskbar: true, // HUD BACKGROUND MODE
         resizable: true,
         movable: true,
         hasShadow: true,
-        focusable: false, // GHOST MODE: Prevent focus stealing
+        focusable: true, // TEMPORARY: Enable focus so user can login
         show: true,
-        backgroundColor: '#18181b',
+        backgroundColor: '#00000000',
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -179,6 +182,22 @@ function createMainAppWindow() {
         console.error(`[App] Load fail: ${errorDescription} (${errorCode})`);
         mainAppWindow.webContents.send('load-error', errorDescription);
     });
+
+    // Auto-toggle Ghost Mode based on URL
+    const toggleGhostMode = (url) => {
+        if (!mainAppWindow) return;
+        // If on interview pages, enable Ghost Mode (prevent focus stealing)
+        const isInterviewSession = url.includes('/interview') || url.includes('/how-to-use') || url.includes('/scanner-frame') || url.includes('/session');
+        if (isInterviewSession) {
+            mainAppWindow.setFocusable(false);
+        } else {
+            // Enable focus for login / OAuth pages
+            mainAppWindow.setFocusable(true);
+        }
+    };
+
+    mainAppWindow.webContents.on('did-navigate', (event, url) => toggleGhostMode(url));
+    mainAppWindow.webContents.on('did-navigate-in-page', (event, url) => toggleGhostMode(url));
 
     loadAppContent();
 }

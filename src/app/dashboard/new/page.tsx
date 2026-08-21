@@ -83,9 +83,11 @@ export default function NewInterviewPage() {
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [savedResumes, setSavedResumes] = useState<Resume[]>([]);
+    const [isDesktop, setIsDesktop] = useState(false);
 
     // Load saved resumes
     useEffect(() => {
+        setIsDesktop(typeof window !== 'undefined' && !!(window as any).electronAPI);
         const loadResumes = async () => {
             try {
                 const data = await resumeService.getUserResumes();
@@ -316,11 +318,13 @@ export default function NewInterviewPage() {
                                     ))}
                                 </select>
                             </div>
-                            <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
-                                <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
-                                    <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
-                                        <Image src="/Granular Scorecards.png" alt="Difficulty Scorecard" width={28} height={28} className="object-contain" />
-                                    </div> 
+                            {!isDesktop && (
+                                <>
+                                <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
+                                    <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
+                                        <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+                                            <Image src="/Granular Scorecards.png" alt="Difficulty Scorecard" width={28} height={28} className="object-contain" />
+                                        </div> 
                                     Difficulty
                                 </label>
                                 <select
@@ -355,6 +359,8 @@ export default function NewInterviewPage() {
                                     <option value="40">40 Questions</option>
                                 </select>
                             </div>
+                                </>
+                            )}
                         </motion.div>
 
                     </div>
