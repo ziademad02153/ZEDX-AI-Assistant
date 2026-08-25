@@ -303,16 +303,16 @@ function AuthButtons({ onSheetClose }: { onSheetClose?: () => void }) {
 
     return (
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-            <Link href="/login" onClick={onSheetClose}>
-                <Button variant="ghost" className="w-full sm:w-auto text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">
+            <Button asChild variant="ghost" className="w-full sm:w-auto text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">
+                <Link href="/login" onClick={onSheetClose} className="w-full h-full flex items-center justify-center cursor-pointer">
                     Sign in
-                </Button>
-            </Link>
-            <Link href="/login" onClick={onSheetClose}>
-                <Button variant="gradient" className="w-full sm:w-auto shadow-lg shadow-green-900/20">
+                </Link>
+            </Button>
+            <Button asChild variant="gradient" className="w-full sm:w-auto shadow-lg shadow-green-900/20">
+                <Link href="/login" onClick={onSheetClose} className="w-full h-full flex items-center justify-center cursor-pointer">
                     Try For Free
-                </Button>
-            </Link>
+                </Link>
+            </Button>
         </div>
     );
 }

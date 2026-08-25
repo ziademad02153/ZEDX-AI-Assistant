@@ -36,11 +36,11 @@ export default function Home() {
             </p>
 
             <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4">
-              <Link href="/dashboard" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto text-base md:text-lg px-8 py-4 md:px-10 md:py-7 rounded-full bg-[#065f46] hover:bg-[#047857] text-white shadow-xl shadow-emerald-900/20 transition-all hover:scale-105 group font-semibold border-none">
+              <Button asChild className="w-full sm:w-auto text-base md:text-lg px-8 py-4 md:px-10 md:py-7 rounded-full bg-[#065f46] hover:bg-[#047857] text-white shadow-xl shadow-emerald-900/20 transition-all hover:scale-105 group font-semibold border-none">
+                <Link href="/dashboard" className="w-full sm:w-auto flex items-center justify-center cursor-pointer">
                   Try for free <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
 
             {/* Hero Visual: Realistic UI Mockup (Reverted) */}
