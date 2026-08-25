@@ -57,7 +57,7 @@ export async function POST(request: Request) {
                     model: targetModel,
                     messages: finalMessages,
                     max_tokens: 4096,
-                    temperature: 0.85
+                    temperature: 0.1
                 };
                 
                 if (response_format) {

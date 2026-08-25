@@ -34,8 +34,8 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify({
                 model: model || "llama-3.1-8b-instant",
                 messages: finalMessages,
-                max_tokens: 1024,
-                temperature: 0.7,
+                max_tokens: 4096,
+                temperature: 0.1,
                 stream: true // Enable streaming
             })
         });

@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Menu, LayoutDashboard, PlayCircle, FolderOpen, History, HelpCircle, MonitorSmartphone, Info } from "lucide-react";
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -22,7 +23,7 @@ export function Navbar() {
         // Wait for sheet close animation before navigating
         setTimeout(() => {
             router.push(href);
-        }, 350);
+        }, 500);
     };
 
     useEffect(() => {
@@ -79,7 +80,7 @@ export function Navbar() {
                 <div className="flex items-center gap-4">
                     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                         <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full active:scale-90 transition-all">
+                            <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all duration-500 ease-out active:scale-90">
                                 <Menu size={24} />
                             </Button>
                         </SheetTrigger>
@@ -92,50 +93,64 @@ export function Navbar() {
                                     </SheetTitle>
                                 </div>
                                 <div className="flex flex-col flex-1 gap-2 p-4 overflow-y-auto justify-between">
-                                    <div className="flex flex-col gap-1.5 animate-in slide-in-from-right-8 fade-in duration-500 ease-out">
-                                        <Link href="/dashboard" onClick={(e) => handleNavigation(e, '/dashboard')}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
-                                                Dashboard
-                                            </Button>
-                                        </Link>
-                                        <Link href="/dashboard/new" onClick={(e) => handleNavigation(e, '/dashboard/new')}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
-                                                New Simulation
-                                            </Button>
-                                        </Link>
-                                        <Link href="/dashboard/resumes" onClick={(e) => handleNavigation(e, '/dashboard/resumes')}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
-                                                My Context Files
-                                            </Button>
-                                        </Link>
-                                        <Link href="/dashboard/history" onClick={(e) => handleNavigation(e, '/dashboard/history')}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
-                                                Training History
-                                            </Button>
-                                        </Link>
+                                    <motion.div 
+                                        className="flex flex-col gap-2"
+                                        initial="hidden"
+                                        animate="visible"
+                                        variants={{
+                                            hidden: { opacity: 0 },
+                                            visible: {
+                                                opacity: 1,
+                                                transition: { staggerChildren: 0.08 }
+                                            }
+                                        }}
+                                    >
+                                        {[
+                                            { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+                                            { href: '/dashboard/new', label: 'New Simulation', icon: PlayCircle },
+                                            { href: '/dashboard/resumes', label: 'My Context Files', icon: FolderOpen },
+                                            { href: '/dashboard/history', label: 'Training History', icon: History },
+                                            { type: 'divider' },
+                                            { href: '/#features', label: 'How it Works', icon: HelpCircle },
+                                            { href: '/download', label: 'Desktop App', icon: MonitorSmartphone },
+                                            { href: '/about', label: 'About ZEDX AI Simulator', icon: Info },
+                                        ].map((item, idx) => (
+                                            item.type === 'divider' ? (
+                                                <motion.div 
+                                                    key={`div-${idx}`}
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    className="h-px bg-gray-200/50 dark:bg-gray-800/50 my-2 mx-4 rounded-full" 
+                                                />
+                                            ) : (
+                                                <motion.div
+                                                    key={item.href}
+                                                    variants={{
+                                                        hidden: { opacity: 0, x: 20 },
+                                                        visible: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+                                                    }}
+                                                    whileHover={{ scale: 1.02 }}
+                                                    whileTap={{ scale: 0.96, transition: { type: "spring", stiffness: 150, damping: 15 } }}
+                                                >
+                                                    <Link href={item.href!} onClick={(e) => handleNavigation(e, item.href!)}>
+                                                        <Button variant="ghost" className="w-full justify-start text-base font-medium h-14 px-4 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl transition-all duration-500 ease-out group flex items-center gap-3">
+                                                            {item.icon && <item.icon size={20} className="text-gray-400 group-hover:text-blue-500 transition-colors duration-500" />}
+                                                            {item.label}
+                                                        </Button>
+                                                    </Link>
+                                                </motion.div>
+                                            )
+                                        ))}
+                                    </motion.div>
 
-                                        <div className="h-px bg-gray-100 dark:bg-gray-800 my-4 mx-2" />
-
-                                        <Link href="/#features" onClick={(e) => handleNavigation(e, '/#features')}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
-                                                How it Works
-                                            </Button>
-                                        </Link>
-                                        <Link href="/download" onClick={(e) => handleNavigation(e, '/download')}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
-                                                Desktop App
-                                            </Button>
-                                        </Link>
-                                        <Link href="/about" onClick={(e) => handleNavigation(e, '/about')}>
-                                            <Button variant="ghost" className="w-full justify-start text-base font-medium h-12 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl active:scale-[0.98] transition-all">
-                                                About ZEDX AI Simulator
-                                            </Button>
-                                        </Link>
-                                    </div>
-
-                                    <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                                    <motion.div 
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.3, type: "spring" }}
+                                        className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800"
+                                    >
                                         <AuthButtons onSheetClose={() => setIsSheetOpen(false)} />
-                                    </div>
+                                    </motion.div>
                                 </div>
                             </div>
                         </SheetContent>

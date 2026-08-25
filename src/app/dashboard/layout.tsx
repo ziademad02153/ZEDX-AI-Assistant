@@ -75,7 +75,7 @@ export default function DashboardLayout({
         const checkAuth = async () => {
             const { data } = await supabase.auth.getSession();
             if (!data.session) {
-                router.push("/login");
+                router.push("/login?reason=expired");
                 return;
             }
             setIsAuthChecking(false);

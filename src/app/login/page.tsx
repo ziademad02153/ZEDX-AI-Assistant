@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth";
 import { generateStrongPassword } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export default function LoginPage() {
     // const router = useRouter();
@@ -76,6 +77,24 @@ export default function LoginPage() {
             }
         };
         checkAuth();
+    }, []);
+
+    // Check for session expiration
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const searchParams = new URLSearchParams(window.location.search);
+            if (searchParams.get("reason") === "expired") {
+                // Clear it from the URL so it doesn't trigger again on refresh
+                window.history.replaceState({}, document.title, window.location.pathname);
+                // Show premium toast
+                toast.error("انتهت الجلسة لأسباب أمنية. يرجى تسجيل الدخول مرة أخرى.", {
+                    description: "Security Protocol: Session Expired",
+                    duration: 5000,
+                    className: "border border-red-500/20 bg-black/90 text-white shadow-[0_0_20px_rgba(220,38,38,0.3)] backdrop-blur-md",
+                    position: "top-center"
+                });
+            }
+        }
     }, []);
 
 

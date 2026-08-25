@@ -81,6 +81,7 @@ export default function InterviewPage() {
     const screenSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
     const [isScannerActive, setIsScannerActive] = useState(false);
     const [hasMounted, setHasMounted] = useState(false);
+    const tesseractWorkerRef = useRef<any>(null);
 
     // Independent Mode State
     const [isIndependentModeActive, setIsIndependentModeActive] = useState(false);
@@ -103,6 +104,32 @@ export default function InterviewPage() {
         return () => {
             window.removeEventListener("settingsChanged", handleSettingsChange);
             window.removeEventListener("themeChanged", handleSettingsChange);
+        };
+    }, []);
+
+    // Pre-load Tesseract when scanner is activated and cleanup on unmount
+    useEffect(() => {
+        if (isScannerActive && !tesseractWorkerRef.current) {
+            console.log("[Scanner] Pre-loading Tesseract worker...");
+            createWorker('eng', 1, {
+                logger: m => console.log("[Scanner] Init Progress:", m.status, Math.round(m.progress * 100) + "%"),
+            }).then(async worker => {
+                await worker.setParameters({
+                    tessedit_pageseg_mode: '3',
+                    preserve_interword_spaces: '1',
+                } as unknown as Record<string, string>);
+                tesseractWorkerRef.current = worker;
+                console.log("[Scanner] Tesseract worker pre-loaded and ready!");
+            }).catch(err => console.error("[Scanner] Pre-load failed:", err));
+        }
+    }, [isScannerActive]);
+
+    useEffect(() => {
+        return () => {
+            if (tesseractWorkerRef.current) {
+                tesseractWorkerRef.current.terminate();
+                tesseractWorkerRef.current = null;
+            }
         };
     }, []);
 
@@ -216,7 +243,9 @@ export default function InterviewPage() {
         3. **DYNAMIC FORMATTING (CRITICAL)**:
            - Adapt your answer length to the question. If a question needs a one-line answer, give exactly one line. If it requires a deep explanation, explain thoroughly. Do not artificially inflate or deflate answers.
            - **RICH MARKDOWN**: Structure your answers beautifully like ChatGPT. Use bullet points, bold text for emphasis, line breaks, and clear paragraphs to make it extremely easy to read.
-           - **CODING**: If the question is a programming/coding problem, you MUST provide the FULL code solution inside properly formatted markdown code blocks, accompanied by a clean, structured explanation.
+           - **INTENT CLASSIFICATION (THEORY vs CODING)**: 
+             * Read the question carefully. Is the interviewer asking "What is...", "How does...", "Why do we use...", or asking to compare concepts? If YES, this is a **THEORETICAL** question. You MUST explain the concept deeply, professionally, and theoretically. Discuss the "under the hood" mechanisms. DO NOT output a large code block as your main answer. Small 1-3 line code snippets are allowed ONLY to illustrate the theory.
+             * Is the interviewer asking to "Write a function", "Implement X", "Solve this problem", or explicitly pasting code to fix? If YES, this is a **PRACTICAL CODING** problem. You MUST provide the FULL code solution inside properly formatted markdown code blocks, followed by a clean, structured explanation of the logic and time/space complexity.
         4. **INTERVIEW STRATEGY**: Provide the "Benchmark Answer". Focus on what makes a candidate stand out: problem-solving, impact, and clarity.
         5. **LANGUAGE**: Strictly use ${interviewContext.lang}.
            - If 'ar-EG', use professional Egyptian Arabic (Ammiya) but keep technical terms in English where appropriate. Avoid overly formal Fusha.
@@ -446,6 +475,9 @@ export default function InterviewPage() {
                 }
                 const stream = await navigator.mediaDevices.getUserMedia({
                     audio: {
+                        echoCancellation: false,
+                        noiseSuppression: false,
+                        autoGainControl: false,
                         // @ts-expect-error: mandatory is non-standard but required for Electron desktop capture
                         mandatory: {
                             chromeMediaSource: 'desktop',
@@ -456,7 +488,10 @@ export default function InterviewPage() {
                         // @ts-expect-error: mandatory is non-standard but required for Electron desktop capture
                         mandatory: {
                             chromeMediaSource: 'desktop',
-                            chromeMediaSourceId: sourceId
+                            chromeMediaSourceId: sourceId,
+                            maxWidth: 1,
+                            maxHeight: 1,
+                            maxFrameRate: 1
                         }
                     }
                 });
@@ -1112,24 +1147,31 @@ export default function InterviewPage() {
                     stream.getTracks().forEach(track => track.stop());
                     video.srcObject = null;
 
-                    // Process with Tesseract optimized for tech/code
-                    const worker = await createWorker('eng', 1, {
-                        logger: m => console.log("[Scanner] Progress:", m.status, Math.round(m.progress * 100) + "%"),
-                    });
-
-                    // Fine-tune parameters for technical/code text extraction
-                    await worker.setParameters({
-                        tessedit_pageseg_mode: '3', // PSM_AUTO
-                        preserve_interword_spaces: '1',
-                    } as unknown as Record<string, string>);
+                    // Reuse pre-loaded Tesseract worker for zero-lag OCR
+                    let worker = tesseractWorkerRef.current;
+                    if (!worker) {
+                        console.log("[Scanner] Worker not ready, initializing now...");
+                        showToast("Initializing AI Scanner...", "info");
+                        worker = await createWorker('eng', 1, {
+                            logger: m => console.log("[Scanner] Progress:", m.status, Math.round(m.progress * 100) + "%"),
+                        });
+                        await worker.setParameters({
+                            tessedit_pageseg_mode: '3',
+                            preserve_interword_spaces: '1',
+                        } as unknown as Record<string, string>);
+                        tesseractWorkerRef.current = worker;
+                    }
 
                     const ret = await worker.recognize(imageData);
                     const text = ret.data.text.trim();
-                    await worker.terminate();
+                    // DO NOT terminate worker to reuse it for next scans
 
                     if (text) {
                         console.log("[Scanner] Extracted text:", text);
-                        setManualQuestion(prev => prev ? prev + '\n\n' + text : text);
+                        setManualQuestion(prev => {
+                            const combined = prev ? prev + '\n\n' + text : text;
+                            return combined.length > 3000 ? "... " + combined.slice(-3000) : combined;
+                        });
                         showToast("Text captured from screen!", "success");
                     } else {
                         showToast("No text detected in the area.", "info");
