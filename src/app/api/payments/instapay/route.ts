@@ -53,6 +53,45 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Failed to submit request" }, { status: 500 });
         }
 
+        // Send email notification to Admin
+        try {
+            const nodemailer = require("nodemailer");
+            const transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS,
+                },
+            });
+
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: "ziademadbts@gmail.com",
+                subject: "🚨 New Instapay Payment Request - ZEDX",
+                html: `
+                    <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                        <h2 style="color: #10b981;">New Instapay Payment Request!</h2>
+                        <p>A user has just submitted a new payment request for <strong>ZEDX Pro</strong>.</p>
+                        <hr style="border: 1px solid #eee; margin: 15px 0;" />
+                        <p><strong>User Email:</strong> ${user.email || 'N/A'}</p>
+                        <p><strong>Transaction ID/Username:</strong> ${transactionId}</p>
+                        <p><strong>Amount:</strong> 300 EGP</p>
+                        <hr style="border: 1px solid #eee; margin: 15px 0;" />
+                        <p>Please review and approve/reject this request from the Admin Dashboard:</p>
+                        <a href="https://zedx-ai-simulator.vercel.app/admin/payments" 
+                           style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 10px;">
+                           Open Admin Dashboard
+                        </a>
+                    </div>
+                `,
+            };
+
+            await transporter.sendMail(mailOptions);
+        } catch (mailError) {
+            console.error("Failed to send email notification:", mailError);
+            // Don't fail the API request if just the email fails
+        }
+
         return NextResponse.json({ success: true });
 
     } catch (error) {
