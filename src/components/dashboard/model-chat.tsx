@@ -18,12 +18,19 @@ interface ModelChatProps {
     modelLogo: string;
 }
 
+import { supabase } from "@/lib/supabase";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Lock } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 export function ModelChat({ modelId, modelName, modelLogo }: ModelChatProps) {
+    const router = useRouter();
     const [messages, setMessages] = useState<Message[]>([
         { role: "assistant", content: `Hello! I'm ${modelName}. Ask me anything to test my capabilities before your interview.` }
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [showPaywall, setShowPaywall] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -34,7 +41,6 @@ export function ModelChat({ modelId, modelName, modelLogo }: ModelChatProps) {
         scrollToBottom();
     }, [messages]);
 
-    // Reset chat when model changes
     useEffect(() => {
         setMessages([
             { role: "assistant", content: `Hello! I'm ${modelName}. Ask me anything to test my capabilities before your interview.` }
@@ -50,10 +56,16 @@ export function ModelChat({ modelId, modelName, modelLogo }: ModelChatProps) {
         setIsLoading(true);
 
         try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = session?.access_token;
+
             const systemPrompt = "You are ZEDX, a helpful AI assistant. Answer the user briefly and naturally in the SAME language they speak to you.";
             const res = await fetch("/api/generate", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    ...(token ? { "Authorization": `Bearer ${token}` } : {})
+                },
                 body: JSON.stringify({
                     model: modelId,
                     systemPrompt,
@@ -61,12 +73,16 @@ export function ModelChat({ modelId, modelName, modelLogo }: ModelChatProps) {
                 })
             });
 
+            const data = await res.json();
+
             if (!res.ok) {
-                const errorData = await res.json().catch(() => ({}));
-                throw new Error(errorData.error?.message || "Failed to generate response");
+                if (data.error?.code === "PAYWALL_LIMIT_REACHED" || data.error?.message === "PAYWALL_LIMIT_REACHED") {
+                    setShowPaywall(true);
+                    return;
+                }
+                throw new Error(data.error?.message || "Failed to generate response");
             }
 
-            const data = await res.json();
             const aiMessage = { role: "assistant" as const, content: data.content };
             setMessages(prev => [...prev, aiMessage]);
         } catch (error: any) {
@@ -77,8 +93,47 @@ export function ModelChat({ modelId, modelName, modelLogo }: ModelChatProps) {
         }
     };
 
+    // Include the Paywall Dialog at the bottom of the component
+    const paywallDialog = (
+        <Dialog open={showPaywall} onOpenChange={setShowPaywall}>
+            <DialogContent className="sm:max-w-md bg-white/95 dark:bg-black/95 backdrop-blur-xl border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl">
+                <DialogHeader className="text-center sm:text-center space-y-4 pt-4">
+                    <div className="mx-auto w-12 h-12 bg-amber-100 dark:bg-amber-500/20 rounded-full flex items-center justify-center mb-2">
+                        <Lock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+                        Free Limit Reached
+                    </DialogTitle>
+                    <DialogDescription className="text-gray-600 dark:text-gray-300 text-base">
+                        You've reached your free 3-question limit. To continue testing AI models and ace your interviews, upgrade to ZEDX Pro.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="flex flex-col gap-3 py-6">
+                    <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                        <Sparkles className="w-4 h-4 text-emerald-500" /> Unlimited AI model testing
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                        <Sparkles className="w-4 h-4 text-emerald-500" /> Advanced technical deep-dives
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                        <Sparkles className="w-4 h-4 text-emerald-500" /> Full interview analytics & PDFs
+                    </div>
+                </div>
+                <DialogFooter className="sm:justify-center">
+                    <Button 
+                        onClick={() => router.push('/pricing')}
+                        className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-xl px-8 py-6 h-auto shadow-lg shadow-emerald-500/20 transition-all hover:scale-105"
+                    >
+                        Upgrade to Pro
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+
     return (
         <div className="flex flex-col h-[400px] border border-gray-200 dark:border-white/10 rounded-2xl bg-white dark:bg-black/40 backdrop-blur-xl overflow-hidden shadow-xl dark:shadow-2xl">
+            {paywallDialog}
             {/* Header */}
             <div className="p-4 border-b border-gray-200 dark:border-white/10 bg-gray-50/50 dark:bg-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-3">

@@ -39,13 +39,7 @@ export default function AboutPage() {
                 {/* Hero Section */}
                 <section className="pb-24 text-center container mx-auto px-4">
                     <div className="max-w-4xl mx-auto flex flex-col items-center">
-                        <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100/30 dark:bg-emerald-500/10 border border-emerald-200/50 dark:border-emerald-500/20 backdrop-blur-md text-emerald-700 dark:text-emerald-400 font-bold text-sm animate-fade-in-up">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                            </span>
-                            Revolutionizing Interview Training
-                        </div>
+
 
                         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
                             The Future of <br className="hidden sm:block" />
@@ -230,20 +224,20 @@ export default function AboutPage() {
 
                             <div className="relative z-10">
                                 <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
-                                    Ready to empower your workflow?
+                                    Ready to master your next interview?
                                 </h2>
                                 <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-xl mx-auto">
                                     Join thousands of job seekers and fresh graduates using ZEDX AI Simulator to elevate their interview skills.
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                    <Link href="/download">
-                                        <Button className="h-14 px-8 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-lg shadow-lg shadow-emerald-500/30 dark:shadow-emerald-900/20 transition-all hover:-translate-y-1">
-                                            Download for Windows
+                                    <Link href="/pricing">
+                                        <Button className="h-14 px-8 rounded-[14px] bg-gradient-to-r from-[#22c55e] to-[#a3e635] text-black hover:opacity-90 font-bold text-lg shadow-[0_2px_12px_rgba(34,197,94,0.25)] transition-all hover:-translate-y-1">
+                                            Upgrade to ZEDX Pro
                                         </Button>
                                     </Link>
                                     <Link href="/dashboard">
-                                        <Button variant="outline" className="h-14 px-8 rounded-full border-zinc-200 dark:border-white/20 bg-transparent hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-700 dark:text-white font-semibold text-lg backdrop-blur-sm transition-all hover:-translate-y-1">
-                                            Try Web Version
+                                        <Button variant="outline" className="h-14 px-8 rounded-[14px] border-zinc-200 dark:border-white/20 bg-transparent hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-700 dark:text-white font-semibold text-lg backdrop-blur-sm transition-all hover:-translate-y-1">
+                                            Try Free Version
                                         </Button>
                                     </Link>
                                 </div>

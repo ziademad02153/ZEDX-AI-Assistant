@@ -9,6 +9,8 @@ interface AuthState {
   signInWithGoogle: () => Promise<void>;
   signUp: (email: string, password?: string, fullName?: string) => Promise<unknown>;
   verifyOtp: (email: string, token: string, type?: 'signup' | 'recovery' | 'magiclink') => Promise<unknown>;
+  signInWithMagicLink: (email: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
   checkSession: () => Promise<void>;
 }
@@ -55,11 +57,17 @@ export const useAuth = create<AuthState>((set) => ({
     return data;
   },
 
+  signInWithMagicLink: async (email) => {
+    const { error } = await supabase.auth.signInWithOtp({ email });
+    if (error) throw error;
+  },
+
   signInWithGoogle: async () => {
-    // Use the Site URL from Supabase config, don't override with redirectTo
+    const redirectTo = typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
+        redirectTo,
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
@@ -86,14 +94,18 @@ export const useAuth = create<AuthState>((set) => ({
     return data;
   },
 
-  verifyOtp: async (email, token, type = 'signup') => {
-    const { data, error } = await supabase.auth.verifyOtp({
-      email,
-      token,
-      type,
-    });
+  verifyOtp: async (email, otp, type) => {
+    const { data, error } = await supabase.auth.verifyOtp({ email, token: otp, type: (type as any) || 'signup' });
     if (error) throw error;
     return data;
+  },
+
+  resetPassword: async (email) => {
+    const redirectTo = typeof window !== 'undefined' ? `${window.location.origin}/auth/update-password` : undefined;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo,
+    });
+    if (error) throw error;
   },
 
   signOut: async () => {

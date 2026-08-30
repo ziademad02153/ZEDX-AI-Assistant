@@ -12,12 +12,12 @@ import { toast } from "sonner";
 
 export default function LoginPage() {
     // const router = useRouter();
-    const { signIn, signUp, verifyOtp, signInWithGoogle } = useAuth();
+    const { signIn, signUp, verifyOtp, signInWithGoogle, resetPassword, signInWithMagicLink } = useAuth();
 
     // UI State
     const [isLoading, setIsLoading] = useState(false);
     const [isCheckingSession, setIsCheckingSession] = useState(true);
-    const [mode, setMode] = useState<"signin" | "signup" | "verify">("signin");
+    const [mode, setMode] = useState<"signin" | "signup" | "verify" | "forgot" | "magiclink">("signin");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
@@ -128,6 +128,12 @@ export default function LoginPage() {
                 }
             } else if (mode === "verify") {
                 // Should not reach here typically due to separate handler
+            } else if (mode === "forgot") {
+                await resetPassword(formData.email);
+                setSuccess("Password reset link sent! Check your email.");
+            } else if (mode === "magiclink") {
+                await signInWithMagicLink(formData.email);
+                setSuccess("Sign-in link sent! Check your email.");
             } else {
                 try {
                     const result = await signIn(formData.email, formData.password) as { session?: { access_token: string } };
@@ -295,14 +301,18 @@ export default function LoginPage() {
 
                     <div className="text-center">
                         <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            {mode === "signin" ? "Welcome back" : mode === "signup" ? "Get started free" : "Check your email"}
+                            {mode === "signin" ? "Welcome back" : mode === "signup" ? "Get started free" : mode === "forgot" ? "Reset Password" : mode === "magiclink" ? "Sign in with Code" : "Check your email"}
                         </h1>
                         <p className="text-sm text-gray-500 mt-3">
                             {mode === "signin"
                                 ? "Enter your email to sign in to your accounts"
                                 : mode === "signup"
                                     ? "Create your account in seconds. No credit card required."
-                                    : `We've sent a verification code to ${formData.email}`}
+                                    : mode === "forgot"
+                                        ? "Enter your email to receive a password reset link."
+                                        : mode === "magiclink"
+                                            ? "Enter your email to receive a sign-in link."
+                                            : `We've sent a verification code to ${formData.email}`}
                         </p>
                     </div>
 
@@ -363,7 +373,7 @@ export default function LoginPage() {
                             </div>
                         )}
 
-                        {mode !== 'verify' && (
+                        {mode !== 'verify' && mode !== 'forgot' && mode !== 'magiclink' && (
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
                                     <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
@@ -458,7 +468,7 @@ export default function LoginPage() {
                             {isLoading ? (
                                 <RefreshCw className="animate-spin mr-2 h-4 w-4" />
                             ) : (
-                                mode === 'signin' ? "Sign In" : mode === 'signup' ? "Create Account" : "Verify Email"
+                                mode === 'signin' ? "Sign In" : mode === 'signup' ? "Create Account" : mode === 'forgot' ? "Send Reset Link" : mode === 'magiclink' ? "Send Sign-in Link" : "Verify Email"
                             )}
                         </Button>
 
@@ -503,20 +513,24 @@ export default function LoginPage() {
                         {mode === 'signin' ? (
                             <>
                                 Don&apos;t have an account?{" "}
-                                <button onClick={() => setMode('signup')} className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-all">
+                                <button onClick={() => setMode('signup')} type="button" className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-all">
                                     Sign up
                                 </button>
+                                <div className="mt-3 space-x-4">
+                                    <button type="button" onClick={() => setMode('forgot')} className="text-xs text-gray-500 hover:text-gray-900 underline transition-all">Forgot password?</button>
+                                    <button type="button" onClick={() => setMode('magiclink')} className="text-xs text-gray-500 hover:text-gray-900 underline transition-all">Sign in with Code</button>
+                                </div>
                             </>
                         ) : mode === 'signup' ? (
                             <>
                                 Already have an account?{" "}
-                                <button onClick={() => setMode('signin')} className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-all">
+                                <button onClick={() => setMode('signin')} type="button" className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-all">
                                     Sign in
                                 </button>
                             </>
                         ) : (
-                            <button onClick={() => setMode('signup')} className="text-gray-500 hover:text-gray-900 underline transition-all">
-                                Change email address
+                            <button onClick={() => setMode('signin')} type="button" className="text-gray-500 hover:text-gray-900 underline transition-all">
+                                Back to sign in
                             </button>
                         )}
                     </div>

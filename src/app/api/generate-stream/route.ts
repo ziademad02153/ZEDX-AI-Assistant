@@ -5,8 +5,43 @@ import { NextRequest } from "next/server";
 
 export const runtime = "edge"; // Use Edge Runtime for faster streaming
 
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
 export async function POST(request: NextRequest) {
     try {
+        // 1. Authenticate Request
+        const authHeader = request.headers.get('Authorization');
+        const token = authHeader?.split(' ')[1];
+        
+        if (!token) {
+            return new Response(JSON.stringify({ error: "Unauthorized. Please sign in." }), { status: 401 });
+        }
+
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+        if (authError || !user) {
+            return new Response(JSON.stringify({ error: "Invalid authentication token." }), { status: 401 });
+        }
+
+        // 2. Check Usage Limits (Teaser Mode)
+        const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('tier, questions_asked')
+            .eq('id', user.id)
+            .single();
+
+        if (profileError || !profile) {
+            return new Response(JSON.stringify({ error: "User profile not found. Please re-login." }), { status: 404 });
+        }
+
+        if (profile.tier === 'free' && profile.questions_asked >= 4) {
+            return new Response(JSON.stringify({ error: "PAYWALL_LIMIT_REACHED", code: "PAYWALL_LIMIT_REACHED" }), { status: 403 });
+        }
+
         const body = await request.json();
         const { model, messages, systemPrompt } = body;
 
@@ -19,12 +54,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Build messages array with system prompt
-        const finalMessages = systemPrompt
-            ? [{ role: "system", content: systemPrompt }, ...messages]
-            : messages;
+        const finalMessages = systemPrompt ? [{ role: "system", content: systemPrompt }, ...messages] : messages;
 
-        // Request streaming response from Groq
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
             headers: {
@@ -36,9 +67,17 @@ export async function POST(request: NextRequest) {
                 messages: finalMessages,
                 max_tokens: 4096,
                 temperature: 0.1,
-                stream: true // Enable streaming
+                stream: true
             })
         });
+
+        // 3. Increment Questions Count for Free Users
+        if (response.ok && profile.tier === 'free') {
+            await supabase
+                .from('profiles')
+                .update({ questions_asked: profile.questions_asked + 1 })
+                .eq('id', user.id);
+        }
 
         if (!response.ok) {
             const errorData = await response.text();

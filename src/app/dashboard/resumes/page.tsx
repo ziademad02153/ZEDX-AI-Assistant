@@ -216,7 +216,7 @@ export default function MyResumesPage() {
                         <div key={resume.id} className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl p-6 rounded-[2.5rem] shadow-xl shadow-zinc-200/20 dark:shadow-none border border-zinc-200/50 dark:border-white/10 hover:-translate-y-1 transition-all duration-300 group relative">
                             <div className="flex justify-between items-start mb-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                    <div className="p-2 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg">
                                         <FileText size={24} />
                                     </div>
                                     <div>
@@ -236,12 +236,12 @@ export default function MyResumesPage() {
                                     <Trash2 size={18} />
                                 </Button>
                             </div>
-                            <p className="text-sm text-gray-500 line-clamp-3 mb-4 font-mono bg-gray-50 p-2 rounded-lg">
+                            <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-3 mb-4 font-mono bg-gray-50 dark:bg-zinc-800/50 p-2 rounded-lg">
                                 {resume.content}
                             </p>
                             <Button
-                                className="w-full gap-2 group-hover:bg-green-600 group-hover:text-white transition-colors"
-                                variant="outline"
+                                className="w-full gap-2 border border-zinc-200 dark:border-zinc-700 bg-transparent dark:bg-transparent text-zinc-700 dark:text-zinc-300 group-hover:bg-green-600 group-hover:text-white group-hover:border-green-600 transition-colors shadow-sm dark:shadow-none"
+                                variant="ghost"
                                 onClick={() => handleUseResume(resume)}
                             >
                                 Use for Interview <ArrowRight size={16} />

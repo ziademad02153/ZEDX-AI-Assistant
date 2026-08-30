@@ -12,6 +12,7 @@ import { resumeService, Resume } from "@/lib/resume-service";
 import { ModelChat } from "@/components/dashboard/model-chat";
 import { motion } from "framer-motion";
 import { AnimatedOrb } from "@/components/animated-orb";
+import { supabase } from "@/lib/supabase";
 
 // Custom SVG Icons
 const BriefcaseIcon = () => (
@@ -39,7 +40,6 @@ const GlobeIcon = () => (
     </svg>
 );
 
-// Available AI Models with brand logo images
 const AI_MODELS = [
     {
         id: "openai/gpt-oss-20b",
@@ -47,7 +47,8 @@ const AI_MODELS = [
         description: "Fast, efficient",
         logo: "/openai-logo.png",
         gradient: "from-blue-500/20 to-cyan-500/20",
-        border: "group-hover:border-blue-500/50"
+        border: "group-hover:border-blue-500/50",
+        isProOnly: true
     },
     {
         id: "openai/gpt-oss-120b",
@@ -55,7 +56,8 @@ const AI_MODELS = [
         description: "Max power reasoning",
         logo: "/openai-logo.png",
         gradient: "from-emerald-500/20 to-green-500/20",
-        border: "group-hover:border-emerald-500/50"
+        border: "group-hover:border-emerald-500/50",
+        isProOnly: true
     },
     {
         id: "qwen/qwen3.6-27b",
@@ -63,7 +65,8 @@ const AI_MODELS = [
         description: "Multilingual pro",
         logo: "/qwen.png",
         gradient: "from-indigo-500/20 to-violet-500/20",
-        border: "group-hover:border-indigo-500/50"
+        border: "group-hover:border-indigo-500/50",
+        isProOnly: false
     }
 ];
 
@@ -77,13 +80,14 @@ export default function NewInterviewPage() {
     const [interviewType, setInterviewType] = useState("Technical");
     const [language, setLanguage] = useState("en-US");
     const [difficulty, setDifficulty] = useState("Intermediate");
-    const [questionCount, setQuestionCount] = useState("10");
-    const [selectedModel, setSelectedModel] = useState("openai/gpt-oss-20b");
+    const [questionCount, setQuestionCount] = useState("4");
+    const [selectedModel, setSelectedModel] = useState("qwen/qwen3.6-27b");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [savedResumes, setSavedResumes] = useState<Resume[]>([]);
     const [isDesktop, setIsDesktop] = useState(false);
+    const [isPro, setIsPro] = useState(false);
 
     // Load saved resumes
     useEffect(() => {
@@ -97,6 +101,23 @@ export default function NewInterviewPage() {
             }
         };
         loadResumes();
+
+        const checkProStatus = async () => {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('tier')
+                        .eq('id', session.user.id)
+                        .single();
+                    if (profile?.tier === 'pro') setIsPro(true);
+                }
+            } catch (err) {
+                console.error("Failed to fetch profile status", err);
+            }
+        };
+        checkProStatus();
 
         try {
             const savedModel = localStorage.getItem("selected_ai_model");
@@ -347,16 +368,23 @@ export default function NewInterviewPage() {
                                 <select
                                     className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
                                     value={questionCount}
-                                    onChange={(e) => setQuestionCount(e.target.value)}
+                                    onChange={(e) => {
+                                        const val = parseInt(e.target.value);
+                                        if (val > 4 && !isPro && !isDesktop) {
+                                            router.push("/pricing");
+                                            return;
+                                        }
+                                        setQuestionCount(e.target.value);
+                                    }}
                                 >
-                                    <option value="5">5 Questions</option>
-                                    <option value="10">10 Questions</option>
-                                    <option value="15">15 Questions</option>
-                                    <option value="20">20 Questions</option>
-                                    <option value="25">25 Questions</option>
-                                    <option value="30">30 Questions</option>
-                                    <option value="35">35 Questions</option>
-                                    <option value="40">40 Questions</option>
+                                    <option value="4">4 Questions (Free Limit)</option>
+                                    <option value="10">10 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
+                                    <option value="15">15 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
+                                    <option value="20">20 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
+                                    <option value="25">25 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
+                                    <option value="30">30 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
+                                    <option value="35">35 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
+                                    <option value="40">40 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
                                 </select>
                             </div>
                                 </>
@@ -392,12 +420,19 @@ export default function NewInterviewPage() {
                                 {AI_MODELS.map((model) => (
                                     <div
                                         key={model.id}
-                                        onClick={() => setSelectedModel(model.id)}
+                                        onClick={() => {
+                                            if (model.isProOnly && !isPro && !isDesktop) {
+                                                router.push("/pricing");
+                                                return;
+                                            }
+                                            setSelectedModel(model.id);
+                                        }}
                                         className={cn(
                                             "relative p-3.5 sm:p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-4 sm:gap-5 group/item",
                                             selectedModel === model.id
                                                 ? "bg-white dark:bg-white/5 border-emerald-500 shadow-sm"
-                                                : "bg-gray-50 dark:bg-black/20 border-transparent hover:bg-gray-100 dark:hover:bg-white/5"
+                                                : "bg-gray-50 dark:bg-black/20 border-transparent hover:bg-gray-100 dark:hover:bg-white/5",
+                                            model.isProOnly && !isPro && !isDesktop ? "opacity-75" : ""
                                         )}
                                     >
                                         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white dark:bg-black p-1.5 sm:p-2 shadow-sm border border-gray-100 dark:border-white/10 flex items-center justify-center">
@@ -411,8 +446,8 @@ export default function NewInterviewPage() {
                                         </div>
                                         <div className="flex-1">
                                             <div className="flex items-center justify-between mb-0.5 sm:mb-1">
-                                                <h4 className={cn("font-bold text-sm sm:text-base", selectedModel === model.id ? "text-gray-900 dark:text-white" : "text-gray-600 dark:text-gray-400")}>
-                                                    {model.name}
+                                                <h4 className={cn("font-bold text-sm sm:text-base flex items-center gap-2", selectedModel === model.id ? "text-gray-900 dark:text-white" : "text-gray-600 dark:text-gray-400")}>
+                                                    {model.name} {model.isProOnly && !isPro && !isDesktop && <span className="text-xs font-normal text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md flex items-center gap-1">🔒 Pro</span>}
                                                 </h4>
                                                 {selectedModel === model.id && (
                                                     <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>

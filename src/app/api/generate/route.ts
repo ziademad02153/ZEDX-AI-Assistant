@@ -12,44 +12,62 @@ export async function GET() {
     return NextResponse.json({ status: "ok", message: "AI Generate endpoint is active" });
 }
 
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
 export async function POST(request: Request) {
     try {
+        // 1. Authenticate Request
+        const authHeader = request.headers.get('Authorization');
+        const token = authHeader?.split(' ')[1];
+        
+        if (!token) {
+            return NextResponse.json({ error: { message: "Unauthorized. Please sign in." } }, { status: 401 });
+        }
+
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+        if (authError || !user) {
+            return NextResponse.json({ error: { message: "Invalid authentication token." } }, { status: 401 });
+        }
+
+        // 2. Check Usage Limits (Teaser Mode)
+        const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('tier, questions_asked')
+            .eq('id', user.id)
+            .single();
+
+        if (profileError || !profile) {
+            return NextResponse.json({ error: { message: "User profile not found. Please re-login." } }, { status: 404 });
+        }
+
+        if (profile.tier === 'free' && profile.questions_asked >= 4) {
+            return NextResponse.json({ error: { message: "PAYWALL_LIMIT_REACHED", code: "PAYWALL_LIMIT_REACHED" } }, { status: 403 });
+        }
+
         const body = await request.json();
         const { model, messages, systemPrompt, prompt, response_format } = body;
 
         const isDev = process.env.NODE_ENV === 'development';
-
-        // Get Groq API Key from server environment
         const groqApiKey = process.env.GROQ_API_KEY;
 
         if (!groqApiKey) {
-            return NextResponse.json(
-                { error: { message: "Server AI configuration missing. Please contact support." } },
-                { status: 500 }
-            );
+            return NextResponse.json({ error: { message: "Server AI configuration missing." } }, { status: 500 });
         }
 
-        if (isDev) console.log(`[API Generate] Using Groq with model: ${model || 'auto'}`);
-
-        // Build model fallback chain - user's selection first, then fallbacks
         const modelsToTry = model ? [model, ...GROQ_MODELS.filter(m => m !== model)] : GROQ_MODELS;
         const uniqueModels = [...new Set(modelsToTry)];
-
         let lastError: Error | null = null;
 
         for (const targetModel of uniqueModels) {
             try {
-                if (isDev) console.log(`[API Generate] Trying Groq ${targetModel}...`);
-
-                // Build messages array
                 const groqMessages = messages || [{ role: "user", content: prompt }];
+                const finalMessages = systemPrompt ? [{ role: "system", content: systemPrompt }, ...groqMessages] : groqMessages;
 
-                // Add system prompt if provided
-                const finalMessages = systemPrompt
-                    ? [{ role: "system", content: systemPrompt }, ...groqMessages]
-                    : groqMessages;
-
-                // Add timeout of 30 seconds
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 30000);
 
@@ -60,9 +78,7 @@ export async function POST(request: Request) {
                     temperature: 0.1
                 };
                 
-                if (response_format) {
-                    requestBody.response_format = response_format;
-                }
+                if (response_format) requestBody.response_format = response_format;
 
                 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
@@ -75,42 +91,32 @@ export async function POST(request: Request) {
                 });
 
                 clearTimeout(timeoutId);
-
                 const data = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(data.error?.message || `HTTP ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(data.error?.message || `HTTP ${response.status}`);
+                
                 const content = data.choices?.[0]?.message?.content;
                 if (!content) throw new Error("Empty response from AI");
 
-                if (isDev) console.log(`[API Generate] Groq Success: ${targetModel}`);
-                return NextResponse.json({
-                    content,
-                    modelUsed: targetModel,
-                    provider: "groq"
-                });
+                // 3. Increment Questions Count for Free Users
+                if (profile.tier === 'free') {
+                    await supabase
+                        .from('profiles')
+                        .update({ questions_asked: profile.questions_asked + 1 })
+                        .eq('id', user.id);
+                }
+
+                return NextResponse.json({ content, modelUsed: targetModel, provider: "groq" });
 
             } catch (error: unknown) {
                 const err = error as Error;
-                console.warn(`[API Generate] Groq ${targetModel} failed:`, err.message);
                 lastError = err;
-
-                // If rate limited or quota exceeded, try next model
-                if (err.message.includes("429") || err.message.includes("quota")) {
-                    continue;
-                }
+                if (err.message.includes("429") || err.message.includes("quota")) continue;
             }
         }
 
-        // All models failed
         return NextResponse.json({
-            error: {
-                message: isDev
-                    ? `AI temporarily unavailable. ${lastError?.message || "Please try again."}`
-                    : "AI temporarily unavailable. Please try again later."
-            }
+            error: { message: "AI temporarily unavailable. Please try again later." }
         }, { status: 503 });
 
     } catch (error: unknown) {

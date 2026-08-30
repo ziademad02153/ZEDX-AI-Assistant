@@ -11,7 +11,9 @@ import { useRouter } from "next/navigation";
 import { SettingsDialog } from "@/components/settings-dialog";
 import { useConfirmDialog } from "@/components/confirm-dialog";
 import { interviewService } from "@/lib/interview-service";
-
+import { supabase } from "@/lib/supabase";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Lock } from "lucide-react";
 // --- Types for Web Speech API ---
 interface SpeechRecognitionEvent extends Event {
     results: SpeechRecognitionResultList;
@@ -58,6 +60,7 @@ export default function InterviewPage() {
     const [isRecording, setIsRecording] = useState(false);
     const [transcript, setTranscript] = useState("");
     const [interimTranscript, setInterimTranscript] = useState("");
+    const [showPaywall, setShowPaywall] = useState(false);
     const [aiResponse, setAiResponse] = useState("## Ready to Assist\n\nI am your Mock Assessor. I will listen to your session and provide real-time feedback.\n\n**Instructions:**\n1. Click the microphone to start listening.\n2. Speak your question or discussion point.\n3. When you need feedback, click **Get Feedback**.");
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -261,10 +264,16 @@ export default function InterviewPage() {
         - User Context File: ${interviewContext.resume || "Not provided"}
         `;
 
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = session?.access_token;
+
             // Call Server-Side API (Groq powered - no API key needed)
             const response = await fetch("/api/generate", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    ...(token ? { "Authorization": `Bearer ${token}` } : {})
+                },
                 body: JSON.stringify({
                     model: selectedModel,
                     systemPrompt: systemPrompt,
@@ -277,6 +286,13 @@ export default function InterviewPage() {
             const data = await response.json();
 
             if (!response.ok) {
+                if (data.error?.code === "PAYWALL_LIMIT_REACHED" || data.error?.message === "PAYWALL_LIMIT_REACHED") {
+                    setShowPaywall(true);
+                    setTranscript(currentTranscript);
+                    isAiSpeakingRef.current = false;
+                    setIsLoading(false);
+                    return;
+                }
                 throw new Error(data.error?.message || `API Error: ${response.status}`);
             }
 
@@ -363,9 +379,15 @@ export default function InterviewPage() {
         3. Do not add any conversational filler. Just the metrics.
         `;
 
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = session?.access_token;
+
             const response = await fetch("/api/generate", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    ...(token ? { "Authorization": `Bearer ${token}` } : {})
+                },
                 body: JSON.stringify({
                     model: selectedModel,
                     systemPrompt: systemPrompt,
@@ -374,7 +396,14 @@ export default function InterviewPage() {
             });
 
             const data = await response.json();
-            if (!response.ok) throw new Error(data.error?.message || "Failed to evaluate");
+            
+            if (!response.ok) {
+                if (data.error?.code === "PAYWALL_LIMIT_REACHED" || data.error?.message === "PAYWALL_LIMIT_REACHED") {
+                    setShowPaywall(true);
+                    return;
+                }
+                throw new Error(data.error?.message || "Failed to evaluate");
+            }
             
             setIndependentEvaluation(data.content);
             setTranscript("");
@@ -1230,10 +1259,47 @@ export default function InterviewPage() {
             setIsSaving(false);
         }
     };
+    // Include the Paywall Dialog
+    const paywallDialog = (
+        <Dialog open={showPaywall} onOpenChange={setShowPaywall}>
+            <DialogContent className="sm:max-w-md bg-white/95 dark:bg-black/95 backdrop-blur-xl border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl">
+                <DialogHeader className="text-center sm:text-center space-y-4 pt-4">
+                    <div className="mx-auto w-12 h-12 bg-amber-100 dark:bg-amber-500/20 rounded-full flex items-center justify-center mb-2">
+                        <Lock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+                        Free Limit Reached
+                    </DialogTitle>
+                    <DialogDescription className="text-gray-600 dark:text-gray-300 text-base">
+                        You've reached your free 3-question limit. To continue testing AI models and ace your interviews, upgrade to ZEDX Pro.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="flex flex-col gap-3 py-6">
+                    <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                        <Sparkles className="w-4 h-4 text-emerald-500" /> Unlimited AI model testing
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                        <Sparkles className="w-4 h-4 text-emerald-500" /> Advanced technical deep-dives
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                        <Sparkles className="w-4 h-4 text-emerald-500" /> Full interview analytics & PDFs
+                    </div>
+                </div>
+                <DialogFooter className="sm:justify-center">
+                    <Button 
+                        onClick={() => router.push('/pricing')}
+                        className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-xl px-8 py-6 h-auto shadow-lg shadow-emerald-500/20 transition-all hover:scale-105"
+                    >
+                        Upgrade to Pro
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
 
     return (
         <div className={cn("min-h-screen flex flex-col lg:flex-row gap-4 p-2 sm:p-4 pt-20 transition-colors duration-300 overflow-auto", !isElectron && "bg-gray-50 dark:bg-zinc-950")}>
-            
+            {paywallDialog}
             {/* Drag Handle for Electron */}
             {isElectron && (
                 <div 

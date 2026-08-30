@@ -29,18 +29,18 @@ export default function Home() {
             </h1>
 
             <p className="text-[0.95rem] md:text-xl text-gray-500 dark:text-gray-400 mb-4 max-w-4xl mx-auto leading-relaxed font-medium px-6 md:px-0">
-              The ultimate training platform featuring a <strong>Voice-to-Voice AI Recruiter</strong> for rigorous mock interviews, and an <strong>Advanced Desktop Sandbox</strong> for high-fidelity technical practice.
+              The ultimate training platform featuring a <strong>Voice-to-Voice AI Recruiter</strong> for rigorous mock interviews. Master your technical, behavioral, and system design interviews with high-fidelity simulations.
             </p>
             <p className="text-[0.85rem] md:text-lg text-emerald-600 dark:text-emerald-400 mb-8 md:mb-12 max-w-4xl mx-auto font-bold tracking-wide px-6 md:px-0">
-              Mock Interview Simulator (Web) • Advanced Practice Sandbox (Desktop)
+              AI Mock Interview Simulator • Real-time Feedback • Deep Performance Analytics
             </p>
 
-            <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4">
-              <Button asChild className="w-full sm:w-auto text-base md:text-lg px-8 py-4 md:px-10 md:py-7 rounded-full bg-[#065f46] hover:bg-[#047857] text-white shadow-xl shadow-emerald-900/20 transition-all hover:scale-105 group font-semibold border-none">
-                <Link href="/dashboard" className="w-full sm:w-auto flex items-center justify-center cursor-pointer">
-                  Try for free <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
+            <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4 relative z-50">
+              <Link href="/login" className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto text-base md:text-lg px-8 py-4 md:px-10 md:py-7 rounded-full bg-[#065f46] hover:bg-[#047857] text-white shadow-xl shadow-emerald-900/20 transition-all hover:scale-105 group font-semibold border-none flex items-center justify-center cursor-pointer">
+                  Start Practicing Now <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </div>
 
             {/* Hero Visual: Realistic UI Mockup (Reverted) */}
