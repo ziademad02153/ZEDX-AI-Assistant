@@ -179,9 +179,12 @@ function AuthButtons({ isMobile, scrolled, onSheetClose }: { isMobile?: boolean,
                                     </div>
                                 )}
                             </div>
-                            {userTier === 'pro' && (
-                                <div className="absolute -bottom-3.5 bg-gradient-to-r from-emerald-500 to-[#a3e635] text-black text-[9px] tracking-wider font-extrabold px-2 py-0.5 rounded-full border-[1.5px] border-white dark:border-zinc-800 shadow-md z-10 uppercase">
-                                    PRO
+                            {(userTier === 'pro' || userTier === 'ultra') && (
+                                <div className={cn(
+                                    "absolute -bottom-3.5 text-black text-[9px] tracking-wider font-extrabold px-2 py-0.5 rounded-full border-[1.5px] shadow-md z-10 uppercase",
+                                    userTier === 'ultra' ? "bg-gradient-to-r from-amber-500 to-yellow-300 border-white dark:border-zinc-800" : "bg-gradient-to-r from-emerald-500 to-[#a3e635] border-white dark:border-zinc-800"
+                                )}>
+                                    {userTier.toUpperCase()}
                                 </div>
                             )}
                         </div>
@@ -248,7 +251,8 @@ function DesktopUserDropdown({ userAvatar, userName, userEmail, userTier, handle
                     onClick={() => setIsOpen(!isOpen)}
                     className={cn(
                         "rounded-full overflow-hidden cursor-pointer transition-all duration-300 shadow-sm shrink-0",
-                        userTier === 'pro' ? "ring-2 ring-[#a3e635] ring-offset-2 ring-offset-white dark:ring-offset-[#0a0a0a]" : "border border-zinc-200 dark:border-zinc-700 hover:ring-2 hover:ring-emerald-500/50",
+                        userTier === 'pro' ? "ring-2 ring-[#a3e635] ring-offset-2 ring-offset-white dark:ring-offset-[#0a0a0a]" : 
+                        userTier === 'ultra' ? "ring-2 ring-amber-400 ring-offset-2 ring-offset-white dark:ring-offset-[#0a0a0a]" : "border border-zinc-200 dark:border-zinc-700 hover:ring-2 hover:ring-emerald-500/50",
                         scrolled ? "w-10 h-10" : "w-12 h-12"
                     )}
                 >
@@ -260,9 +264,12 @@ function DesktopUserDropdown({ userAvatar, userName, userEmail, userTier, handle
                         </div>
                     )}
                 </div>
-                {userTier === 'pro' && (
-                    <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-[#a3e635] text-black text-[9px] tracking-wider font-extrabold px-2 py-0.5 rounded-full border-[1.5px] border-white dark:border-[#0a0a0a] shadow-md z-10 uppercase whitespace-nowrap pointer-events-none">
-                        PRO
+                {(userTier === 'pro' || userTier === 'ultra') && (
+                    <div className={cn(
+                        "absolute -bottom-2.5 left-1/2 -translate-x-1/2 text-black text-[9px] tracking-wider font-extrabold px-2 py-0.5 rounded-full border-[1.5px] shadow-md z-10 uppercase whitespace-nowrap pointer-events-none",
+                        userTier === 'ultra' ? "bg-gradient-to-r from-amber-500 to-yellow-300 border-white dark:border-[#0a0a0a]" : "bg-gradient-to-r from-emerald-500 to-[#a3e635] border-white dark:border-[#0a0a0a]"
+                    )}>
+                        {userTier.toUpperCase()}
                     </div>
                 )}
             </div>
@@ -279,9 +286,12 @@ function DesktopUserDropdown({ userAvatar, userName, userEmail, userTier, handle
                         <div className="px-4 py-3 border-b border-zinc-100 dark:border-white/5 mb-1">
                             <div className="flex items-center gap-2 mb-1">
                                 <p className="font-semibold text-gray-900 dark:text-white truncate">{userName || 'User'}</p>
-                                {userTier === 'pro' && (
-                                    <span className="bg-emerald-500/10 text-emerald-500 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/20">
-                                        PRO
+                                {(userTier === 'pro' || userTier === 'ultra') && (
+                                    <span className={cn(
+                                        "text-[10px] font-bold px-2 py-0.5 rounded-full border",
+                                        userTier === 'ultra' ? "bg-amber-500/10 text-amber-500 border-amber-500/20" : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                                    )}>
+                                        {userTier.toUpperCase()}
                                     </span>
                                 )}
                             </div>

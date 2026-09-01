@@ -38,7 +38,7 @@ export async function POST(req: Request) {
             // 1. Get the user_id for this approval
             const { data: approval, error: fetchError } = await supabaseAdmin
                 .from("pending_approvals")
-                .select("user_id")
+                .select("user_id, amount")
                 .eq("id", id)
                 .single();
             
@@ -54,15 +54,16 @@ export async function POST(req: Request) {
             
             if (updateApprovalError) throw updateApprovalError;
 
-            // 3. Update the user's profile to PRO
+            // 3. Update the user's profile to PRO or ULTRA
+            const targetTier = (approval.amount && approval.amount >= 600) ? 'ultra' : 'pro';
             const { error: updateProfileError } = await supabaseAdmin
                 .from("profiles")
-                .update({ tier: 'pro' })
+                .update({ tier: targetTier })
                 .eq("id", approval.user_id);
             
             if (updateProfileError) throw updateProfileError;
 
-            return NextResponse.json({ success: true, message: "Approved and upgraded to Pro" });
+            return NextResponse.json({ success: true, message: `Approved and upgraded to ${targetTier}` });
         }
 
     } catch (error: any) {

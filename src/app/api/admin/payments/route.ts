@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+export const dynamic = 'force-dynamic';
 export async function GET(req: Request) {
     try {
         const adminKey = req.headers.get("x-admin-key");
@@ -28,7 +29,9 @@ export async function GET(req: Request) {
                 transaction_id,
                 payment_method,
                 status,
-                created_at
+                created_at,
+                amount,
+                currency
             `)
             .order("created_at", { ascending: false });
 

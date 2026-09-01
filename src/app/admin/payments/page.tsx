@@ -12,6 +12,8 @@ type PendingApproval = {
     payment_method: string;
     status: 'pending' | 'approved' | 'rejected';
     created_at: string;
+    amount?: number;
+    currency?: string;
     profiles?: { email?: string }; // if we join with profiles
 };
 
@@ -150,7 +152,7 @@ export default function AdminPaymentsPage() {
                                                     {app.transaction_id}
                                                 </div>
                                                 <div className="text-xs text-zinc-500 uppercase tracking-wider mt-1">
-                                                    {app.payment_method}
+                                                    {app.payment_method} - {app.amount ? `${app.amount} ${app.currency}` : '300 EGP'}
                                                 </div>
                                             </td>
                                             <td className="p-4">

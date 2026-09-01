@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Check, ArrowRight, ShieldCheck, Wallet, Globe, Copy, CheckCircle2 } from "lucide-react";
+import { Check, ArrowRight, ShieldCheck, Wallet, Globe, Copy, CheckCircle2, HelpCircle } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatedOrb } from "@/components/animated-orb";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -15,6 +16,7 @@ import { toast } from "sonner";
 export default function PricingPage() {
     const router = useRouter();
     const [isInstapayModalOpen, setIsInstapayModalOpen] = useState(false);
+    const [instapayTier, setInstapayTier] = useState<"pro" | "ultra">("pro");
     const [transactionId, setTransactionId] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -53,7 +55,7 @@ export default function PricingPage() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session.access_token}`
                 },
-                body: JSON.stringify({ transactionId }),
+                body: JSON.stringify({ transactionId, tier: instapayTier }),
             });
 
             if (!response.ok) {
@@ -79,7 +81,7 @@ export default function PricingPage() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-500/10 blur-[120px] rounded-full pointer-events-none" />
             
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 sm:pt-40 sm:pb-24 relative z-10 w-full">
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 sm:pt-40 sm:pb-24 relative z-10 w-full">
                 <div className="text-center max-w-3xl mx-auto mb-10 md:mb-12 relative z-10">
                     <h1 className="text-[36px] md:text-[44px] lg:text-[48px] font-bold mb-3 md:mb-4 tracking-tight leading-[1.15] bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-300">
                         Train Like It's the <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">Real Interview</span>
@@ -89,9 +91,9 @@ export default function PricingPage() {
                     </p>
                 </div>
 
-                <div className="flex flex-col md:flex-row justify-center gap-5 md:gap-6 max-w-[850px] mx-auto items-stretch relative z-10">
+                <div className="flex flex-col lg:flex-row flex-wrap justify-center gap-5 lg:gap-6 w-full mx-auto items-stretch relative z-10 px-2 lg:px-4">
                     {/* Free Plan */}
-                    <div className="w-full md:w-[380px] bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-3xl flex flex-col relative shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(0,0,0,0.4)]">
+                    <div className="w-full lg:w-[330px] shrink-0 bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-3xl flex flex-col relative shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(0,0,0,0.4)]">
                         <div className="mb-6">
                             <h3 className="text-[20px] md:text-[22px] font-semibold mb-1 text-white">Free</h3>
                             <p className="text-zinc-500 text-[12px] font-medium">Explore ZEDX.</p>
@@ -144,7 +146,7 @@ export default function PricingPage() {
                     </div>
 
                     {/* Pro Plan */}
-                    <div className="w-full md:w-[420px] bg-white/[0.04] border border-[#a3e635]/30 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-3xl flex flex-col relative shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_8px_40px_rgba(163,230,53,0.15)] transition-all duration-500 hover:bg-white/[0.07] hover:border-[#a3e635]/50 hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_12px_60px_rgba(163,230,53,0.25)] overflow-hidden">
+                    <div className="w-full lg:w-[400px] shrink-0 bg-white/[0.04] border border-[#a3e635]/30 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-3xl flex flex-col relative shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_8px_40px_rgba(163,230,53,0.15)] transition-all duration-500 hover:bg-white/[0.07] hover:border-[#a3e635]/50 hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_12px_60px_rgba(163,230,53,0.25)] overflow-hidden">
 
                         {/* Soft Top Glow inside card */}
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-32 bg-[#a3e635]/20 blur-[60px] pointer-events-none" />
@@ -160,11 +162,12 @@ export default function PricingPage() {
                                 <span className="text-[16px] text-zinc-500 font-medium line-through decoration-zinc-600">$20</span>
                                 <span className="text-[40px] font-bold text-white leading-none tracking-tight">$10</span>
                                 <span className="text-[13px] text-zinc-500 font-medium">/ month</span>
-                                <span className="ml-1 bg-[#a3e635]/10 text-[#a3e635] text-[11px] font-bold px-2 py-0.5 rounded-md">50% OFF</span>
+                                <span className="ml-1 bg-[#a3e635]/10 text-[#a3e635] text-[11px] font-bold px-2 py-0.5 rounded-md">SAVE 50%</span>
                             </div>
 
                             <div className="mt-2">
                                 <span className="text-[12px] text-zinc-400 font-medium"> Egypt: <strong className="text-[#a3e635] font-semibold">300 EGP</strong> / month</span>
+                                <span className="text-[11px] text-zinc-500 line-through ml-2">1000 EGP</span>
                             </div>
                         </div>
 
@@ -185,7 +188,7 @@ export default function PricingPage() {
                                     <Image src="/Multi-Language.png" alt="Languages" width={32} height={32} className="object-contain opacity-90" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">29+ Languages</div>
+                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">20 Languages</div>
                                     <div className="text-[13px] text-zinc-400 font-normal leading-snug">Multilingual voice interviews</div>
                                 </div>
                             </div>
@@ -262,7 +265,7 @@ export default function PricingPage() {
                                         <div className="w-[84px] h-7 mr-3 rounded-md overflow-hidden flex items-center justify-center shrink-0 shadow-sm border border-black/10">
                                             <Image src="/gumroad.webp" alt="Gumroad" width={84} height={28} className="w-full h-full object-cover object-center scale-110" />
                                         </div>
-                                        Start Practicing (USD)
+                                        Go Pro (USD)
                                     </Button>
 
                                     {/* Local Payment */}
@@ -274,13 +277,177 @@ export default function PricingPage() {
                                                 router.push("/login");
                                                 return;
                                             }
+                                            setInstapayTier("pro");
                                             setIsInstapayModalOpen(true);
                                         }}
                                     >
                                         <div className="w-8 h-8 mr-3 rounded-full overflow-hidden bg-white/10 flex items-center justify-center shrink-0">
                                             <Image src="/instapay.jpg" alt="Instapay" width={32} height={32} className="w-full h-full object-cover" />
                                         </div>
-                                        Start Practicing via Instapay (EGP)
+                                        Go Pro via Instapay (EGP)
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Ultra Plan */}
+                    <div className="w-full lg:w-[440px] shrink-0 bg-white/[0.04] border border-amber-500/40 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-3xl flex flex-col relative shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_8px_40px_rgba(245,158,11,0.15)] transition-all duration-500 hover:bg-white/[0.07] hover:border-amber-500/60 hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_12px_60px_rgba(245,158,11,0.25)] overflow-hidden">
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-32 bg-amber-500/20 blur-[60px] pointer-events-none" />
+
+                        <div className="mb-6 relative z-10">
+                            <div className="flex items-center justify-between mb-1">
+                                <h3 className="text-[20px] md:text-[22px] font-semibold text-white tracking-tight">ZEDX Ultra</h3>
+                                <span className="bg-amber-500/10 text-amber-400 text-[11px] font-medium px-2 py-0.5 rounded-full uppercase tracking-wide border border-amber-500/20">Best Value</span>
+                            </div>
+                            <p className="text-zinc-400 text-[12px] font-medium mb-5">3 Months of unlimited power.</p>
+
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-[16px] text-zinc-500 font-medium line-through decoration-zinc-600">$60</span>
+                                <span className="text-[40px] font-bold text-white leading-none tracking-tight">$25</span>
+                                <span className="text-[13px] text-zinc-500 font-medium">/ 3 months</span>
+                                <span className="ml-1 bg-amber-500/10 text-amber-400 text-[11px] font-bold px-2 py-0.5 rounded-md">SAVE 58%</span>
+                            </div>
+
+                            <div className="mt-2">
+                                <span className="text-[12px] text-zinc-400 font-medium"> Egypt: <strong className="text-amber-400 font-semibold">600 EGP</strong> / 3 months</span>
+                                <span className="text-[11px] text-zinc-500 line-through ml-2">3000 EGP</span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4 mb-8 flex-1 relative z-10 border-t border-white/5 pt-6">
+                            
+                            <div className="flex items-start gap-4">
+                                <div className="w-9 h-9 shrink-0 flex items-center justify-center mt-0.5">
+                                    <AnimatedOrb />
+                                </div>
+                                <div>
+                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Advanced Voice-to-Voice AI</div>
+                                    <div className="text-[13px] text-zinc-400 font-normal leading-snug">Zero latency, natural flowing conversations</div>
+                                </div>
+                            </div>
+                            
+                            <div className="flex items-start gap-4">
+                                <div className="w-9 h-9 shrink-0 flex items-center justify-center mt-0.5">
+                                    <Image src="/Multi-Language.png" alt="Languages" width={32} height={32} className="object-contain opacity-90 sepia-[.3] hue-rotate-[-30deg] saturate-[2]" />
+                                </div>
+                                <div>
+                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">All 29+ Languages Unlocked</div>
+                                    <div className="text-[13px] text-zinc-400 font-normal leading-snug">Full global language access without limits</div>
+                                </div>
+                            </div>
+                            
+                            <div className="flex items-start gap-4">
+                                <div className="w-9 h-9 shrink-0 flex items-center justify-center mt-0.5">
+                                    <Image src="/Interview-Logo.png" alt="Scenarios" width={26} height={26} className="object-contain invert opacity-80 sepia-[.3] hue-rotate-[-30deg]" />
+                                </div>
+                                <div>
+                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Technical & Behavioral</div>
+                                    <div className="text-[13px] text-zinc-400 font-normal leading-snug">Complete tailored interview scenarios</div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start gap-4">
+                                <div className="w-9 h-9 shrink-0 flex items-center justify-center mt-0.5">
+                                    <Image src="/Granular Scorecards.png" alt="Analytics" width={32} height={32} className="object-contain opacity-90 sepia-[.5] hue-rotate-[-20deg]" />
+                                </div>
+                                <div>
+                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Real-Time Evaluation</div>
+                                    <div className="text-[13px] text-zinc-400 font-normal leading-snug">Granular feedback & PDF reports</div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start gap-4">
+                                <div className="w-9 h-9 shrink-0 flex items-center justify-center mt-0.5">
+                                    <Image src="/expert.png" alt="Expert" width={32} height={32} className="object-contain opacity-90 invert sepia-[.3] hue-rotate-[-20deg]" />
+                                </div>
+                                <div>
+                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Expert Difficulty Level</div>
+                                    <div className="text-[13px] text-zinc-400 font-normal leading-snug">The ultimate FAANG-level challenge</div>
+                                </div>
+                            </div>
+                            
+                            <div className="flex items-start gap-4">
+                                <div className="w-9 h-9 shrink-0 flex items-center justify-center mt-0.5">
+                                    <Image src="/question.png" alt="Unlimited" width={26} height={26} className="object-contain opacity-80 sepia-[.3] hue-rotate-[-30deg]" />
+                                </div>
+                                <div>
+                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Truly Unlimited Sessions</div>
+                                    <div className="text-[13px] text-zinc-400 font-normal leading-snug">Practice without any caps or restrictions</div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start gap-4">
+                                <div className="w-9 h-9 shrink-0 flex items-center justify-center mt-0.5 rounded-[10px] bg-black border border-white/10 overflow-hidden">
+                                    <Image src="/AI.jpg" alt="Llama 70B" width={36} height={36} className="w-full h-full object-cover scale-110 opacity-90 sepia-[.2] hue-rotate-[20deg]" />
+                                </div>
+                                <div>
+                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">4 Premium Models</div>
+                                    <div className="text-[13px] text-zinc-400 font-normal leading-snug">Llama 70B, Qwen, GPT-OSS 120B, GPT-OSS 20B</div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start gap-4">
+                                <div className="w-9 h-9 shrink-0 flex items-center justify-center mt-0.5">
+                                    <Image src="/Priority VIP Support.png" alt="VIP Support" width={32} height={32} className="object-contain opacity-90" />
+                                </div>
+                                <div>
+                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Priority VIP Support</div>
+                                    <div className="text-[13px] text-zinc-400 font-normal leading-snug">Direct email assistance and feature requests</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3">
+                            {userTier === 'ultra' ? (
+                                <motion.div 
+                                    whileHover={{ scale: 1.01 }}
+                                    className="w-full relative overflow-hidden flex flex-col items-center justify-center gap-3 rounded-full py-5 bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
+                                >
+                                    <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
+                                    <div className="absolute top-0 right-1/4 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full"></div>
+                                    <div className="flex items-center gap-3 z-10">
+                                        <Image src="/zedx-logo.png" alt="ZEDX" width={28} height={28} className="object-contain" />
+                                        <span className="text-white font-semibold text-[17px] tracking-tight font-sans">Ultra Active</span>
+                                    </div>
+                                    <span className="text-[11px] text-zinc-400 font-medium z-10 tracking-[0.15em] uppercase">Ultimate access unlocked</span>
+                                </motion.div>
+                            ) : (
+                                <>
+                                    <Button
+                                        className="w-full rounded-full py-6 bg-gradient-to-r from-amber-400 to-amber-600 text-black hover:opacity-90 font-bold text-[15px] transition-all shadow-[0_2px_12px_rgba(245,158,11,0.25)] border-none flex items-center justify-center"
+                                        onClick={() => {
+                                            if (!isAuthenticated) {
+                                                toast.error("Please create an account first to upgrade.");
+                                                router.push("/login");
+                                                return;
+                                            }
+                                            // TODO: Update with real Ultra link
+                                            window.open('https://ziademad5.gumroad.com/l/ultra', '_blank');
+                                        }}
+                                    >
+                                        <div className="w-[84px] h-7 mr-3 rounded-md overflow-hidden flex items-center justify-center shrink-0 shadow-sm border border-black/10">
+                                            <Image src="/gumroad.webp" alt="Gumroad" width={84} height={28} className="w-full h-full object-cover object-center scale-110" />
+                                        </div>
+                                        Go Ultra (USD)
+                                    </Button>
+
+                                    <Button
+                                        className="w-full rounded-full py-6 bg-amber-500/5 border border-amber-500/30 text-amber-500 hover:bg-amber-500/15 font-semibold text-[15px] transition-all flex items-center justify-center shadow-none"
+                                        onClick={() => {
+                                            if (!isAuthenticated) {
+                                                toast.error("Please create an account first to upgrade.");
+                                                router.push("/login");
+                                                return;
+                                            }
+                                            setInstapayTier("ultra");
+                                            setIsInstapayModalOpen(true);
+                                        }}
+                                    >
+                                        <div className="w-8 h-8 mr-3 rounded-full overflow-hidden bg-white/10 flex items-center justify-center shrink-0">
+                                            <Image src="/instapay.jpg" alt="Instapay" width={32} height={32} className="w-full h-full object-cover" />
+                                        </div>
+                                        Go Ultra via Instapay (EGP)
                                     </Button>
                                 </>
                             )}
@@ -300,7 +467,7 @@ export default function PricingPage() {
                             Instapay Payment
                         </DialogTitle>
                         <DialogDescription className="text-zinc-400 text-[14px] leading-relaxed mt-3">
-                            To upgrade to <strong className="text-white font-medium">ZEDX Pro</strong>, please transfer exactly <strong className="text-emerald-400 font-semibold">300 EGP</strong> to the account below. Once transferred, provide your handle or transaction ID for verification.
+                            To upgrade to <strong className="text-white font-medium">{instapayTier === "ultra" ? "ZEDX Ultra" : "ZEDX Pro"}</strong>, please transfer exactly <strong className={instapayTier === "ultra" ? "text-amber-400 font-semibold" : "text-emerald-400 font-semibold"}>{instapayTier === "ultra" ? "600 EGP" : "300 EGP"}</strong> to the account below. Once transferred, provide your handle or transaction ID for verification.
                         </DialogDescription>
                     </DialogHeader>
 
@@ -351,7 +518,7 @@ export default function PricingPage() {
                             </div>
                             <h3 className="text-[22px] font-semibold text-white tracking-tight">Request Submitted!</h3>
                             <p className="text-zinc-400 text-[14px] max-w-[280px] mx-auto leading-relaxed">
-                                We are verifying your payment. Your account will be upgraded to Pro within 1-2 hours.
+                                We are verifying your payment. Your account will be upgraded to Pro within 1-2 minutes.
                             </p>
                         </div>
                     )}
@@ -383,6 +550,13 @@ export default function PricingPage() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+
+            <div className="mt-16 text-center pb-12">
+                <Link href="mailto:ziademadbts@gmail.com" className="inline-flex items-center gap-2 text-sm md:text-base text-zinc-400 hover:text-emerald-400 transition-colors bg-white/5 hover:bg-white/10 px-6 py-3 rounded-full border border-white/10 shadow-sm backdrop-blur-sm group">
+                    <HelpCircle className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
+                    Need help? Contact our Help Center
+                </Link>
+            </div>
         </div>
     );
 }

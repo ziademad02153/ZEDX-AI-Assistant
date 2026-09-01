@@ -42,13 +42,22 @@ const GlobeIcon = () => (
 
 const AI_MODELS = [
     {
+        id: "qwen/qwen3.6-27b",
+        name: "Qwen 3.6 27B",
+        description: "Multilingual pro",
+        logo: "/qwen.png",
+        gradient: "from-indigo-500/20 to-violet-500/20",
+        border: "group-hover:border-indigo-500/50",
+        tier: "free"
+    },
+    {
         id: "openai/gpt-oss-20b",
         name: "GPT-OSS 20B",
         description: "Fast, efficient",
         logo: "/openai-logo.png",
         gradient: "from-blue-500/20 to-cyan-500/20",
         border: "group-hover:border-blue-500/50",
-        isProOnly: true
+        tier: "free"
     },
     {
         id: "openai/gpt-oss-120b",
@@ -57,16 +66,16 @@ const AI_MODELS = [
         logo: "/openai-logo.png",
         gradient: "from-emerald-500/20 to-green-500/20",
         border: "group-hover:border-emerald-500/50",
-        isProOnly: true
+        tier: "pro"
     },
     {
-        id: "qwen/qwen3.6-27b",
-        name: "Qwen 3.6 27B",
-        description: "Multilingual pro",
-        logo: "/qwen.png",
-        gradient: "from-indigo-500/20 to-violet-500/20",
-        border: "group-hover:border-indigo-500/50",
-        isProOnly: false
+        id: "meta-llama/llama-3-70b-instruct",
+        name: "Llama 3 70B",
+        description: "Ultra intelligence",
+        logo: "/AI.jpg",
+        gradient: "from-amber-500/20 to-orange-500/20",
+        border: "group-hover:border-amber-500/50",
+        tier: "ultra"
     }
 ];
 
@@ -88,6 +97,7 @@ export default function NewInterviewPage() {
     const [savedResumes, setSavedResumes] = useState<Resume[]>([]);
     const [isDesktop, setIsDesktop] = useState(false);
     const [isPro, setIsPro] = useState(false);
+    const [userTier, setUserTier] = useState<"free" | "pro" | "ultra">("free");
 
     // Load saved resumes
     useEffect(() => {
@@ -111,7 +121,10 @@ export default function NewInterviewPage() {
                         .select('tier')
                         .eq('id', session.user.id)
                         .single();
-                    if (profile?.tier === 'pro') setIsPro(true);
+                    if (profile?.tier) {
+                        setUserTier(profile.tier as "free" | "pro" | "ultra");
+                        if (profile.tier === 'pro' || profile.tier === 'ultra') setIsPro(true);
+                    }
                 }
             } catch (err) {
                 console.error("Failed to fetch profile status", err);
@@ -336,11 +349,23 @@ export default function NewInterviewPage() {
                                 <select
                                     className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
                                     value={language}
-                                    onChange={(e) => setLanguage(e.target.value)}
+                                    onChange={(e) => {
+                                        const idx = SUPPORTED_LANGUAGES.findIndex(l => l.code === e.target.value);
+                                        if (idx >= 20 && userTier !== 'ultra' && !isDesktop) {
+                                            router.push("/pricing");
+                                            return;
+                                        }
+                                        setLanguage(e.target.value);
+                                    }}
                                 >
-                                    {SUPPORTED_LANGUAGES.map(lang => (
-                                        <option key={lang.code} value={lang.code}>{lang.native}</option>
-                                    ))}
+                                    {SUPPORTED_LANGUAGES.map((lang, idx) => {
+                                        const isUltraLanguage = idx >= 20;
+                                        return (
+                                            <option key={lang.code} value={lang.code}>
+                                                {lang.native} {isUltraLanguage && userTier !== 'ultra' && !isDesktop ? '(ULTRA)' : ''}
+                                            </option>
+                                        );
+                                    })}
                                 </select>
                             </div>
                             {!isDesktop && (
@@ -355,11 +380,17 @@ export default function NewInterviewPage() {
                                 <select
                                     className="w-full bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl p-3 sm:p-4 text-sm sm:text-base text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500/50"
                                     value={difficulty}
-                                    onChange={(e) => setDifficulty(e.target.value)}
+                                    onChange={(e) => {
+                                        if (e.target.value === "Expert" && userTier !== 'ultra' && !isDesktop) {
+                                            router.push("/pricing");
+                                            return;
+                                        }
+                                        setDifficulty(e.target.value);
+                                    }}
                                 >
                                     <option value="Beginner">Beginner</option>
                                     <option value="Intermediate">Intermediate</option>
-                                    <option value="Expert">Expert</option>
+                                    <option value="Expert">Expert {userTier !== 'ultra' && !isDesktop ? '(ULTRA)' : ''}</option>
                                 </select>
                             </div>
                             <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
@@ -382,13 +413,13 @@ export default function NewInterviewPage() {
                                     }}
                                 >
                                     <option value="4">4 Questions (Free Limit)</option>
-                                    <option value="10">10 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
-                                    <option value="15">15 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
-                                    <option value="20">20 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
-                                    <option value="25">25 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
-                                    <option value="30">30 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
-                                    <option value="35">35 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
-                                    <option value="40">40 Questions {!isPro && !isDesktop ? '🔒 (Pro)' : ''}</option>
+                                    <option value="10">10 Questions {!isPro && !isDesktop ? '(PRO)' : ''}</option>
+                                    <option value="15">15 Questions {!isPro && !isDesktop ? '(PRO)' : ''}</option>
+                                    <option value="20">20 Questions {!isPro && !isDesktop ? '(PRO)' : ''}</option>
+                                    <option value="25">25 Questions {!isPro && !isDesktop ? '(PRO)' : ''}</option>
+                                    <option value="30">30 Questions {!isPro && !isDesktop ? '(PRO)' : ''}</option>
+                                    <option value="35">35 Questions {!isPro && !isDesktop ? '(PRO)' : ''}</option>
+                                    <option value="40">40 Questions {!isPro && !isDesktop ? '(PRO)' : ''}</option>
                                 </select>
                             </div>
                                 </>
@@ -421,25 +452,40 @@ export default function NewInterviewPage() {
 
                             {/* Models List */}
                             <div className="space-y-3 sm:space-y-4 mb-8">
-                                {AI_MODELS.map((model) => (
+                                {AI_MODELS.map((model) => {
+                                    const isLocked = (model.tier === 'ultra' && userTier !== 'ultra' && !isDesktop) || 
+                                                     (model.tier === 'pro' && userTier === 'free' && !isDesktop);
+                                    
+                                    return (
                                     <div
                                         key={model.id}
                                         onClick={() => {
-                                            if (model.isProOnly && !isPro && !isDesktop) {
+                                            if (isLocked) {
                                                 router.push("/pricing");
                                                 return;
                                             }
                                             setSelectedModel(model.id);
                                         }}
                                         className={cn(
-                                            "relative p-3.5 sm:p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-4 sm:gap-5 group/item",
+                                            "relative p-3.5 sm:p-5 rounded-2xl border-2 transition-all flex items-center gap-4 sm:gap-5 group/item overflow-hidden",
                                             selectedModel === model.id
                                                 ? "bg-white dark:bg-white/5 border-emerald-500 shadow-sm"
                                                 : "bg-gray-50 dark:bg-black/20 border-transparent hover:bg-gray-100 dark:hover:bg-white/5",
-                                            model.isProOnly && !isPro && !isDesktop ? "opacity-75" : ""
+                                            isLocked ? "cursor-pointer" : "cursor-pointer"
                                         )}
                                     >
-                                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white dark:bg-black p-1.5 sm:p-2 shadow-sm border border-gray-100 dark:border-white/10 flex items-center justify-center">
+                                        {isLocked && (
+                                            <div className="absolute inset-0 z-10 flex items-center justify-end pr-5 backdrop-blur-[2.5px] bg-white/5 dark:bg-black/20">
+                                                <div className={cn(
+                                                    "px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-lg flex items-center gap-1.5",
+                                                    model.tier === 'ultra' ? "bg-amber-500/20 text-amber-500 border border-amber-500/30" : "bg-emerald-500/20 text-emerald-500 border border-emerald-500/30"
+                                                )}>
+                                                    {model.tier === 'ultra' ? 'ULTRA' : 'PRO'}
+                                                </div>
+                                            </div>
+                                        )}
+                                        
+                                        <div className={cn("w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white dark:bg-black p-1.5 sm:p-2 shadow-sm border border-gray-100 dark:border-white/10 flex items-center justify-center relative z-0", isLocked && "opacity-50 blur-[1px]")}>
                                             <Image
                                                 src={model.logo}
                                                 alt={model.name}
@@ -448,19 +494,19 @@ export default function NewInterviewPage() {
                                                 className={cn("w-full h-full object-contain", model.logo.includes('openai') && "dark:invert")}
                                             />
                                         </div>
-                                        <div className="flex-1">
+                                        <div className={cn("flex-1 relative z-0", isLocked && "opacity-60 blur-[1px]")}>
                                             <div className="flex items-center justify-between mb-0.5 sm:mb-1">
                                                 <h4 className={cn("font-bold text-sm sm:text-base flex items-center gap-2", selectedModel === model.id ? "text-gray-900 dark:text-white" : "text-gray-600 dark:text-gray-400")}>
-                                                    {model.name} {model.isProOnly && !isPro && !isDesktop && <span className="text-xs font-normal text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md flex items-center gap-1">🔒 Pro</span>}
+                                                    {model.name}
                                                 </h4>
-                                                {selectedModel === model.id && (
+                                                {selectedModel === model.id && !isLocked && (
                                                     <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>
                                                 )}
                                             </div>
                                             <p className="text-[10px] sm:text-sm text-gray-400 dark:text-gray-500">{model.description}</p>
                                         </div>
                                     </div>
-                                ))}
+                                )})}
                             </div>
 
                             {/* Chat Preview */}

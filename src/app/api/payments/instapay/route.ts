@@ -5,11 +5,13 @@ import { cookies } from "next/headers";
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { transactionId } = body;
+        const { transactionId, tier } = body;
 
         if (!transactionId) {
             return NextResponse.json({ error: "Transaction ID is required" }, { status: 400 });
         }
+
+        const amount = tier === "ultra" ? 600 : 300;
 
         const authHeader = req.headers.get('Authorization');
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -44,7 +46,7 @@ export async function POST(req: Request) {
                 transaction_id: transactionId,
                 payment_method: "instapay",
                 status: "pending",
-                amount: 300,
+                amount: amount,
                 currency: "EGP"
             });
 
@@ -71,11 +73,11 @@ export async function POST(req: Request) {
                 html: `
                     <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
                         <h2 style="color: #10b981;">New Instapay Payment Request!</h2>
-                        <p>A user has just submitted a new payment request for <strong>ZEDX Pro</strong>.</p>
+                        <p>A user has just submitted a new payment request for <strong>ZEDX ${tier === "ultra" ? "Ultra" : "Pro"}</strong>.</p>
                         <hr style="border: 1px solid #eee; margin: 15px 0;" />
                         <p><strong>User Email:</strong> ${user.email || 'N/A'}</p>
                         <p><strong>Transaction ID/Username:</strong> ${transactionId}</p>
-                        <p><strong>Amount:</strong> 300 EGP</p>
+                        <p><strong>Amount:</strong> ${amount} EGP</p>
                         <hr style="border: 1px solid #eee; margin: 15px 0;" />
                         <p>Please review and approve/reject this request from the Admin Dashboard:</p>
                         <a href="https://zedx-ai-simulator.vercel.app/admin/payments" 
