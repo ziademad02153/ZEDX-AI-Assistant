@@ -65,18 +65,18 @@ export default function Home() {
                   {/* Floating Chat Bubbles */}
                   <div className="relative z-10 w-full max-w-4xl space-y-6 md:space-y-10">
                     {/* Chat Bubble 1 (AI Question) */}
-                    <div className="flex gap-3 md:gap-7 items-start justify-start animate-fade-in-up">
+                    <div className="flex gap-3 md:gap-7 items-start justify-start animate-fade-in-up w-full">
                       <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-black flex items-center justify-center shadow-md flex-shrink-0 border border-gray-200">
                         <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
                       </div>
-                      <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[88%] md:max-w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                      <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm max-w-[calc(100%-3rem)] md:max-w-[85%] min-w-0 border border-gray-200/50 leading-relaxed font-medium">
                         &quot;Can you explain how you optimized the database query performance in your previous e-commerce project?&quot;
                       </div>
                     </div>
 
                     {/* Chat Bubble 2 (User Answer) */}
-                    <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
-                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 text-[0.85rem] md:text-[1.1rem] text-gray-800 dark:text-gray-100 shadow-xl max-w-[88%] md:max-w-[85%] relative border-r-4 border-r-green-500 text-left">
+                    <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up w-full" style={{ animationDelay: '1s' }}>
+                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 text-[0.85rem] md:text-[1.1rem] text-gray-800 dark:text-gray-100 shadow-xl max-w-[calc(100%-3rem)] md:max-w-[85%] min-w-0 relative border-r-4 border-r-green-500 text-left">
                         <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
                           <Code className="w-4 h-4 md:w-6 md:h-6 text-green-500" />
                         </div>
@@ -129,18 +129,18 @@ export default function Home() {
                 {/* Floating Chat Bubbles */}
                 <div className="relative z-10 w-full max-w-5xl space-y-6 md:space-y-10">
                   {/* Chat Bubble 1 (AI Question) */}
-                  <div className="flex gap-3 md:gap-7 items-start justify-start animate-fade-in-up">
+                  <div className="flex gap-3 md:gap-7 items-start justify-start animate-fade-in-up w-full">
                     <div className="w-8 h-8 md:w-13 md:h-13 rounded-full overflow-hidden bg-green-100 flex items-center justify-center shadow-xl border-2 border-green-500/20 flex-shrink-0">
                       <Image src="/AI.jpg" alt="ZEDX AI Simulator" width={52} height={52} className="object-cover w-full h-full" />
                     </div>
-                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm w-[90%] md:w-[85%] border border-gray-200/50 leading-relaxed font-medium">
+                    <div className="bg-gray-100 dark:bg-zinc-800 rounded-[1.1rem] md:rounded-[2rem] rounded-tl-none p-3.5 md:p-6 text-[0.85rem] md:text-[1.05rem] text-gray-700 dark:text-gray-200 shadow-sm w-full max-w-[calc(100%-3rem)] md:max-w-[85%] min-w-0 border border-gray-200/50 leading-relaxed font-medium">
                       &quot;Can you implement a robust custom React hook for fetching data that includes an abort controller for cleanup, as well as comprehensive loading and error state management?&quot;
                     </div>
                   </div>
 
                   {/* Chat Bubble 2 (User Code) */}
-                  <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up" style={{ animationDelay: '1s' }}>
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 shadow-xl w-[95%] md:w-[92%] relative border-r-4 border-r-green-500">
+                  <div className="flex gap-3 md:gap-7 items-start justify-end animate-fade-in-up w-full" style={{ animationDelay: '1s' }}>
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/40 dark:to-emerald-900/40 border border-green-200 dark:border-green-800 rounded-[1.1rem] md:rounded-[2.1rem] rounded-tr-none p-4 md:p-8 shadow-xl w-full max-w-[calc(100%-3rem)] md:max-w-[92%] min-w-0 relative border-r-4 border-r-green-500">
                       <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
                         <Code className="w-4 h-4 md:w-6 md:h-6 text-green-500" />
                       </div>

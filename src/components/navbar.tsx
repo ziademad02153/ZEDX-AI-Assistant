@@ -67,8 +67,8 @@ export function Navbar() {
             <div className={cn(
                 "flex items-center justify-between rounded-full border transition-all duration-500 ease-out",
                 scrolled
-                    ? "bg-white/90 dark:bg-[#0a0a0a]/85 backdrop-blur-3xl border-zinc-200/80 dark:border-white/15 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.8)] px-5 sm:px-6 h-16"
-                    : "bg-white/70 dark:bg-[#0a0a0a]/60 backdrop-blur-xl border-zinc-200/40 dark:border-white/10 shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-6 sm:px-8 h-[76px]"
+                    ? "bg-white/90 dark:bg-[#0a0a0a]/85 backdrop-blur-3xl border-zinc-200/80 dark:border-white/15 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.8)] px-3 sm:px-6 h-14 sm:h-16"
+                    : "bg-white/70 dark:bg-[#0a0a0a]/60 backdrop-blur-xl border-zinc-200/40 dark:border-white/10 shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-3 sm:px-8 h-16 sm:h-[76px]"
             )}>
                 
                 {/* Logo */}
@@ -80,14 +80,14 @@ export function Navbar() {
                         height={120}
                         className={cn(
                             "object-contain transition-all duration-500 group-hover:scale-105",
-                            scrolled ? "w-12 h-12 sm:w-14 sm:h-14" : "w-16 h-16 sm:w-[68px] sm:h-[68px]"
+                            scrolled ? "w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14" : "w-11 h-11 sm:w-14 sm:h-14 md:w-[68px] md:h-[68px]"
                         )}
                         priority
                     />
                 </Link>
 
                 {/* Desktop & Mobile Marquee Links */}
-                <div className="flex flex-1 overflow-hidden relative w-full max-w-[12.5rem] sm:max-w-[25rem] lg:max-w-[700px] mx-3 sm:mx-8 h-full items-center justify-center [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+                <div className="flex flex-1 overflow-hidden relative w-full min-w-[70px] max-w-[130px] xs:max-w-[180px] sm:max-w-[25rem] lg:max-w-[700px] mx-2 sm:mx-8 h-full items-center justify-center [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
                     <motion.div
                         className="flex w-max items-center cursor-pointer"
                         animate={{ x: ["0%", "-50%"] }}
@@ -102,7 +102,7 @@ export function Navbar() {
                 </div>
 
                 {/* Right Side (Auth) */}
-                <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+                <div className="flex items-center gap-1.5 sm:gap-4 shrink-0">
                     <div className="block">
                         <AuthButtons scrolled={scrolled} />
                     </div>
@@ -219,12 +219,12 @@ function AuthButtons({ isMobile, scrolled, onSheetClose }: { isMobile?: boolean,
     }
 
     return (
-        <div className={cn("flex gap-2", isMobile ? "flex-col" : "items-center")}>
-            <Button asChild variant="ghost" className="text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white px-4 rounded-full">
+        <div className={cn("flex gap-1.5 sm:gap-2", isMobile ? "flex-col" : "items-center")}>
+            <Button asChild variant="ghost" className="text-[12px] sm:text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white px-2 sm:px-4 rounded-full">
                 <Link href="/login" onClick={onSheetClose}>Sign in</Link>
             </Button>
-            <Button asChild className="text-[13px] font-semibold bg-gradient-to-r from-[#047857] to-[#bef264] text-white px-5 rounded-full transition-all hover:scale-105 border-none shadow-none">
-                <Link href="/login" onClick={onSheetClose}>Try for Free</Link>
+            <Button asChild className="text-[12px] sm:text-[13px] font-semibold bg-gradient-to-r from-[#047857] to-[#bef264] text-white px-3 sm:px-5 rounded-full transition-all hover:scale-105 border-none shadow-none">
+                <Link href="/login" onClick={onSheetClose}>Try Free</Link>
             </Button>
         </div>
     );
@@ -253,7 +253,7 @@ function DesktopUserDropdown({ userAvatar, userName, userEmail, userTier, handle
                         "rounded-full overflow-hidden cursor-pointer transition-all duration-300 shadow-sm shrink-0",
                         userTier === 'pro' ? "ring-2 ring-[#a3e635] ring-offset-2 ring-offset-white dark:ring-offset-[#0a0a0a]" : 
                         userTier === 'ultra' ? "ring-2 ring-amber-400 ring-offset-2 ring-offset-white dark:ring-offset-[#0a0a0a]" : "border border-zinc-200 dark:border-zinc-700 hover:ring-2 hover:ring-emerald-500/50",
-                        scrolled ? "w-10 h-10" : "w-12 h-12"
+                        scrolled ? "w-8 h-8 sm:w-10 sm:h-10" : "w-10 h-10 sm:w-12 sm:h-12"
                     )}
                 >
                     {userAvatar ? (
