@@ -145,7 +145,7 @@ export default function Home() {
                         <Code className="w-4 h-4 md:w-6 md:h-6 text-green-500" />
                       </div>
                       
-                      <div className="bg-white/50 dark:bg-black/30 rounded-xl p-4 md:p-6 mb-3 md:mb-4 font-mono text-[10px] md:text-[13px] leading-relaxed overflow-x-auto border border-black/5 dark:border-white/10 shadow-inner">
+                      <div className="bg-white/50 dark:bg-black/30 rounded-xl p-3 md:p-6 mb-3 md:mb-4 font-mono text-[0.65rem] md:text-[0.8rem] leading-relaxed overflow-x-auto border border-black/5 dark:border-white/10 shadow-inner w-full max-w-full">
                         <pre className="text-gray-800 dark:text-gray-200">
                           <span className="text-pink-600 dark:text-pink-400 font-semibold">export function</span> <span className="text-blue-600 dark:text-blue-400">useFetch</span>&lt;<span className="text-teal-600 dark:text-teal-400">T</span>&gt;(<span className="text-orange-600 dark:text-orange-300">url</span>: <span className="text-teal-600 dark:text-teal-400">string</span>) {"{\n"}
                           {"  "}<span className="text-pink-600 dark:text-pink-400 font-semibold">const</span> [<span className="text-sky-600 dark:text-sky-300">data</span>, <span className="text-blue-600 dark:text-blue-400">setData</span>] = <span className="text-yellow-600 dark:text-yellow-200">useState</span>&lt;<span className="text-teal-600 dark:text-teal-400">T | null</span>&gt;(<span className="text-purple-600 dark:text-purple-400">null</span>);{"\n"}

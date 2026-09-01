@@ -25,6 +25,16 @@
   }
 }
 
+/* 
+  Global Scale Down for Mobile screens
+  To make elements fit better (zoom out effect by ~25%)
+*/
+@media (max-width: 768px) {
+  html {
+    font-size: 12px; 
+  }
+}
+
 
 body {
   background: var(--background);

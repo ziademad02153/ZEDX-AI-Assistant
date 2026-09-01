@@ -35,15 +35,11 @@ const NavGroup = () => (
 export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
-    const [isSheetOpen, setIsSheetOpen] = useState(false);
     const router = useRouter();
 
     const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
         e.preventDefault();
-        setIsSheetOpen(false);
-        setTimeout(() => {
-            router.push(href);
-        }, 500);
+        router.push(href);
     };
 
     useEffect(() => {
@@ -90,12 +86,12 @@ export function Navbar() {
                     />
                 </Link>
 
-                {/* Desktop Marquee Links */}
-                <div className="hidden lg:flex flex-1 overflow-hidden relative max-w-[700px] mx-8 h-full items-center justify-center [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+                {/* Desktop & Mobile Marquee Links */}
+                <div className="flex flex-1 overflow-hidden relative w-full max-w-[200px] sm:max-w-[400px] lg:max-w-[700px] mx-3 sm:mx-8 h-full items-center justify-center [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
                     <motion.div
                         className="flex w-max items-center cursor-pointer"
                         animate={{ x: ["0%", "-50%"] }}
-                        transition={{ ease: "linear", duration: 50, repeat: Infinity }}
+                        transition={{ ease: "linear", duration: 35, repeat: Infinity }}
                         whileHover={{ animationPlayState: "paused" }}
                     >
                         <NavGroup />
@@ -105,45 +101,10 @@ export function Navbar() {
                     </motion.div>
                 </div>
 
-                {/* Right Side (Auth + Mobile Burger) */}
-                <div className="flex items-center gap-4 shrink-0">
-                    <div className="hidden sm:block">
+                {/* Right Side (Auth) */}
+                <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+                    <div className="block">
                         <AuthButtons scrolled={scrolled} />
-                    </div>
-
-                    {/* Mobile Burger Menu */}
-                    <div className="md:hidden">
-                        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                            <SheetTrigger asChild>
-                                <Button variant="ghost" size="icon" className="rounded-full h-12 w-12 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/10">
-                                    <Menu size={26} />
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent side="right" className="w-[85vw] sm:w-[350px] border-l border-zinc-200/50 dark:border-white/10 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-3xl p-0 rounded-l-[2.5rem] shadow-2xl">
-                                <div className="flex flex-col h-full">
-                                    <div className="p-8 border-b border-zinc-200/30 dark:border-white/5 flex items-center justify-between">
-                                        <SheetTitle className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                                            <Image src="/favicon.png" alt="Logo" width={28} height={28} />
-                                            Menu
-                                        </SheetTitle>
-                                    </div>
-                                    <div className="flex flex-col flex-1 gap-3 p-6 overflow-y-auto justify-between">
-                                        <div className="flex flex-col gap-2">
-                                            {NAV_LINKS.map((item, idx) => (
-                                                <Link key={idx} href={item.href} onClick={(e) => handleNavigation(e, item.href)}>
-                                                    <Button variant="ghost" className="w-full justify-start text-lg font-medium h-16 px-6 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10 rounded-2xl transition-all">
-                                                        {item.label}
-                                                    </Button>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                        <div className="mt-4 pt-6 border-t border-zinc-100 dark:border-white/5">
-                                            <AuthButtons isMobile onSheetClose={() => setIsSheetOpen(false)} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </SheetContent>
-                        </Sheet>
                     </div>
                 </div>
 
