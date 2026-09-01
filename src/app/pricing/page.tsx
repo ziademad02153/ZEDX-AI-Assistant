@@ -165,9 +165,10 @@ export default function PricingPage() {
                                 <span className="ml-1 bg-[#a3e635]/10 text-[#a3e635] text-[11px] font-bold px-2 py-0.5 rounded-md">SAVE 50%</span>
                             </div>
 
-                            <div className="mt-2">
+                            <div className="mt-2 flex items-center">
                                 <span className="text-[12px] text-zinc-400 font-medium"> Egypt: <strong className="text-[#a3e635] font-semibold">300 EGP</strong> / month</span>
                                 <span className="text-[11px] text-zinc-500 line-through ml-2">1000 EGP</span>
+                                <span className="ml-2 bg-[#a3e635]/10 text-[#a3e635] text-[10px] font-bold px-1.5 py-0.5 rounded-md">SAVE 70%</span>
                             </div>
                         </div>
 
@@ -309,9 +310,10 @@ export default function PricingPage() {
                                 <span className="ml-1 bg-amber-500/10 text-amber-400 text-[11px] font-bold px-2 py-0.5 rounded-md">SAVE 58%</span>
                             </div>
 
-                            <div className="mt-2">
+                            <div className="mt-2 flex items-center">
                                 <span className="text-[12px] text-zinc-400 font-medium"> Egypt: <strong className="text-amber-400 font-semibold">600 EGP</strong> / 3 months</span>
                                 <span className="text-[11px] text-zinc-500 line-through ml-2">3000 EGP</span>
+                                <span className="ml-2 bg-amber-500/10 text-amber-400 text-[10px] font-bold px-1.5 py-0.5 rounded-md">SAVE 80%</span>
                             </div>
                         </div>
 
