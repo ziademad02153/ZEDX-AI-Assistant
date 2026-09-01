@@ -423,7 +423,7 @@ export default function PricingPage() {
                                                 return;
                                             }
                                             // TODO: Update with real Ultra link
-                                            window.open('https://ziademad5.gumroad.com/l/ultra', '_blank');
+                                            window.open('https://ziademad5.gumroad.com/l/molojy', '_blank');
                                         }}
                                     >
                                         <div className="w-[84px] h-7 mr-3 rounded-md overflow-hidden flex items-center justify-center shrink-0 shadow-sm border border-black/10">
