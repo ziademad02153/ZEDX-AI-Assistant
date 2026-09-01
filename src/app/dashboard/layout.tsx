@@ -98,7 +98,7 @@ export default function DashboardLayout({
 
 
     return (
-        <div className="min-h-screen bg-gray-50/50 dark:bg-black flex flex-col transition-colors duration-300">
+        <div className="min-h-screen bg-gray-50/50 dark:bg-black flex flex-col transition-colors duration-300 overflow-x-hidden">
             <Navbar />
             <SettingsDialog open={showSettings} onOpenChange={setShowSettings} />
 

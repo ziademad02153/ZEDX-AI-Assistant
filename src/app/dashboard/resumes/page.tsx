@@ -6,6 +6,7 @@ import { Plus, Trash2, FileText, Calendar, ArrowRight, RefreshCw, AlertCircle } 
 import { resumeService, Resume } from "@/lib/resume-service";
 import { useRouter } from "next/navigation";
 import { useConfirmDialog } from "@/components/confirm-dialog";
+import { supabase } from "@/lib/supabase";
 
 export default function MyResumesPage() {
     const router = useRouter();
@@ -74,8 +75,12 @@ export default function MyResumesPage() {
         formData.append("file", file);
 
         try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = session?.access_token;
+
             const res = await fetch("/api/parse-resume", {
                 method: "POST",
+                headers: token ? { "Authorization": `Bearer ${token}` } : undefined,
                 body: formData,
             });
             const data = await res.json();

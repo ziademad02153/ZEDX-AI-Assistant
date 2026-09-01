@@ -58,31 +58,6 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
     const generateScorecard = async (data: Interview) => {
         setIsGenerating(true);
         try {
-            const systemPrompt = `
-You are an expert technical interviewer and HR assessor.
-Your task is to analyze an interview session and provide a strict JSON scorecard.
-
-IMPORTANT CONTEXT:
-The transcript may only contain the interviewer's questions. The candidate answered the questions by reading the "AI Responses generated during session".
-You must EVALUATE THE CANDIDATE ASSUMING THEY DELIVERED THE AI RESPONSES PERFECTLY. 
-If the transcript is completely empty or too short, you MUST STILL generate a realistic and positive scorecard based on a hypothetical general interview. Do not refuse to answer.
-
-Evaluate based on:
-1. Technical Accuracy (0-100)
-2. Communication Skills (0-100)
-3. Overall Performance (0-100)
-
-Return ONLY a valid JSON object matching this exact structure, with no markdown formatting or extra text:
-{
-    "overallScore": 85,
-    "technicalScore": 80,
-    "communicationScore": 90,
-    "strengths": ["Clear communication", "Good problem solving"],
-    "improvements": ["Needs to elaborate more on system design"],
-    "detailedFeedback": "Overall, the candidate did a great job but should focus on..."
-}
-`;
-
             const userPrompt = `
 Interview Type: ${data.analysis?.interview_type || "General"}
 Questions and Transcript:
@@ -97,8 +72,8 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     model: "openai/gpt-oss-120b", // Using a stronger model for analysis
-                    systemPrompt: systemPrompt,
-                    messages: [{ role: "user", content: userPrompt }],
+                    promptType: 'report_deep_analysis',
+                    prompt: userPrompt,
                     response_format: { type: "json_object" }
                 })
             });

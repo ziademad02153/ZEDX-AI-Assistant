@@ -238,14 +238,6 @@ export default function MockInterviewPage() {
         // Determine if this question should focus on JD or Resume (50/50)
         const focusArea = index % 2 === 0 ? "Job Description" : "Resume";
         
-        const systemPrompt = `You are ZEDX, an expert AI interviewer. 
-You are conducting a professional mock interview.
-Interview Type: ${interviewType}. (Adjust your questioning style strictly to this type).
-${interviewType === "Project Deep Dive" ? "CRITICAL: Since this is a Project Deep Dive, ignore standard behavioral questions. Pick one specific project mentioned in the Resume Context and grill the candidate heavily on its technical decisions, architecture, and their specific role in it." : ""}
-Difficulty Level: ${difficulty}.
-Language: ${language}.
-Always reply ONLY with the spoken question text. Do not include markdown, thinking, or tips. Just the exact text you will speak.`;
-
         const langObj = SUPPORTED_LANGUAGES.find(l => l.code === language) || SUPPORTED_LANGUAGES[0];
         let nextQuestionText = "";
 
@@ -276,7 +268,8 @@ Resume Context: ${resume.substring(0, 500)}...`;
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         model: model,
-                        systemPrompt,
+                        promptType: 'mock_interview',
+                        promptContext: { interviewType, difficulty, language },
                         prompt
                     })
                 });

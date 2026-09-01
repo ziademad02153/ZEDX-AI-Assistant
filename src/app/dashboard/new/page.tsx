@@ -135,8 +135,12 @@ export default function NewInterviewPage() {
         formData.append("file", file);
 
         try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = session?.access_token;
+            
             const res = await fetch("/api/parse-resume", {
                 method: "POST",
+                headers: token ? { "Authorization": `Bearer ${token}` } : undefined,
                 body: formData,
             });
             const data = await res.json();
@@ -188,7 +192,7 @@ export default function NewInterviewPage() {
 
 
     return (
-        <div className="min-h-screen bg-white dark:bg-black text-foreground selection:bg-emerald-500/30">
+        <div className="min-h-screen bg-white dark:bg-black text-foreground selection:bg-emerald-500/30 overflow-x-hidden">
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
                 <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>
                 <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[150px]"></div>

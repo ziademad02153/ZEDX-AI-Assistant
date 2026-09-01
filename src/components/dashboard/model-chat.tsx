@@ -59,7 +59,6 @@ export function ModelChat({ modelId, modelName, modelLogo }: ModelChatProps) {
             const { data: { session } } = await supabase.auth.getSession();
             const token = session?.access_token;
 
-            const systemPrompt = "You are ZEDX, a helpful AI assistant. Answer the user briefly and naturally in the SAME language they speak to you.";
             const res = await fetch("/api/generate", {
                 method: "POST",
                 headers: { 
@@ -68,7 +67,7 @@ export function ModelChat({ modelId, modelName, modelLogo }: ModelChatProps) {
                 },
                 body: JSON.stringify({
                     model: modelId,
-                    systemPrompt,
+                    promptType: 'chatbot',
                     prompt: input
                 })
             });

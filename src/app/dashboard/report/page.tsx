@@ -35,20 +35,6 @@ export default function ReportPage() {
                 const history = JSON.parse(historyRaw);
                 const model = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
 
-                const systemPrompt = `You are an expert technical recruiter and a highly critical AI evaluator.
-You will be given a transcript of an interview. Your job is to rigorously evaluate the candidate's answers.
-Be brutally honest, strict, and highly critical. Do NOT flatter the candidate. Score them strictly based on technical accuracy, depth, and relevance. A score above 8 should be extremely rare and only for flawless answers.
-If an answer is missing, very short, or irrelevant, give a score of 0 or a very low score.
-You MUST reply strictly in JSON format. Do NOT wrap it in markdown block quotes. Just raw JSON.
-The JSON must be an array of objects, where each object has:
-{
-    "question": "The question asked",
-    "answer": "The candidate's answer",
-    "score": <number from 0 to 10>,
-    "feedback": "1 sentence of strict critique on what they missed or did wrong, followed by what they did well (if anything).",
-    "ideal_answer": "A short example of a perfect answer"
-}`;
-
                 const prompt = `Here is the interview transcript: ${JSON.stringify(history)}`;
 
                 const res = await fetch("/api/generate", {
@@ -56,7 +42,7 @@ The JSON must be an array of objects, where each object has:
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         model: model,
-                        systemPrompt,
+                        promptType: 'report_evaluator',
                         prompt
                     })
                 });

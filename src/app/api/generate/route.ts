@@ -1,4 +1,10 @@
 import { NextResponse } from "next/server";
+import { getSystemPrompt, PromptType } from "@/lib/prompts";
+
+// Simple in-memory rate limiter (20 requests per minute per user)
+const rateLimitMap = new Map<string, { count: number, resetTime: number }>();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const MAX_REQUESTS = 20;
 
 // Fallback models in case the selected one fails
 const GROQ_MODELS = [
@@ -45,12 +51,30 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: { message: "User profile not found. Please re-login." } }, { status: 404 });
         }
 
+        // Rate Limiter Check (Applies to all users, even Pro)
+        const now = Date.now();
+        const userRateData = rateLimitMap.get(user.id);
+        if (userRateData) {
+            if (now > userRateData.resetTime) {
+                rateLimitMap.set(user.id, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+            } else if (userRateData.count >= MAX_REQUESTS) {
+                return NextResponse.json({ error: { message: "Rate limit exceeded. Please wait a minute." } }, { status: 429 });
+            } else {
+                userRateData.count += 1;
+            }
+        } else {
+            rateLimitMap.set(user.id, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+        }
+
         if (profile.tier === 'free' && profile.questions_asked >= 4) {
             return NextResponse.json({ error: { message: "PAYWALL_LIMIT_REACHED", code: "PAYWALL_LIMIT_REACHED" } }, { status: 403 });
         }
 
         const body = await request.json();
-        const { model, messages, systemPrompt, prompt, response_format } = body;
+        const { model, messages, promptType, promptContext, prompt, response_format } = body;
+        
+        // Generate secure system prompt on the server
+        const systemPrompt = getSystemPrompt(promptType as PromptType, promptContext);
 
         const isDev = process.env.NODE_ENV === 'development';
         const groqApiKey = process.env.GROQ_API_KEY;
@@ -98,12 +122,9 @@ export async function POST(request: Request) {
                 const content = data.choices?.[0]?.message?.content;
                 if (!content) throw new Error("Empty response from AI");
 
-                // 3. Increment Questions Count for Free Users
+                // 3. Increment Questions Count for Free Users (Fixes Race Condition via RPC)
                 if (profile.tier === 'free') {
-                    await supabase
-                        .from('profiles')
-                        .update({ questions_asked: profile.questions_asked + 1 })
-                        .eq('id', user.id);
+                    await supabase.rpc('increment_questions', { user_id: user.id });
                 }
 
                 return NextResponse.json({ content, modelUsed: targetModel, provider: "groq" });

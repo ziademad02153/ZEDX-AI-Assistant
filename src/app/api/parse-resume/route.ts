@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { extractText } from "unpdf";
+import { createClient } from "@supabase/supabase-js";
 
 // Force Node.js runtime
 export const runtime = "nodejs";
@@ -8,6 +9,23 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
     console.log("Resume Parse Request Received (unpdf)");
     try {
+        // 1. Authenticate Request to prevent DoS attacks
+        const authHeader = req.headers.get('Authorization');
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return NextResponse.json({ error: "Unauthorized - Please sign in first" }, { status: 401 });
+        }
+        
+        const token = authHeader.split(' ')[1];
+        const supabase = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        );
+        
+        const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+        if (authError || !user) {
+            return NextResponse.json({ error: "Unauthorized - Invalid token" }, { status: 401 });
+        }
+
         const formData = await req.formData();
         const file = formData.get("file") as File;
 

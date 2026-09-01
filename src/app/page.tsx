@@ -37,14 +37,14 @@ export default function Home() {
 
             <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4 relative z-50">
               <Link href="/login" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto text-base md:text-lg px-8 py-4 md:px-10 md:py-7 rounded-full bg-[#065f46] hover:bg-[#047857] text-white shadow-xl shadow-emerald-900/20 transition-all hover:scale-105 group font-semibold border-none flex items-center justify-center cursor-pointer">
+                <Button className="w-full sm:w-auto text-base md:text-lg px-8 py-4 md:px-10 md:py-7 rounded-full bg-gradient-to-r from-[#047857] to-[#bef264] text-white transition-all hover:scale-105 group font-bold flex items-center justify-center cursor-pointer border-none shadow-none">
                   Start Practicing Now <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </div>
 
             {/* Hero Visual: Realistic UI Mockup (Reverted) */}
-            <div className="relative w-full max-w-[900px] mx-auto perspective-1000 px-4">
+            <div className="relative w-full max-w-[56.25rem] lg:max-w-[900px] mx-auto perspective-1000 px-4">
               <div className="bg-white dark:bg-zinc-900 rounded-[1.5rem] md:rounded-[2rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] border border-gray-100 dark:border-zinc-700 overflow-hidden relative z-10 transition-transform duration-700 hover:rotate-x-1">
                 <div className="bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-700 p-3 md:p-4 flex items-center gap-2 md:gap-2.5">
                   <div className="flex gap-1.5 md:gap-2">
@@ -102,7 +102,7 @@ export default function Home() {
 
           </div>
 
-          <div className="mt-16 md:mt-24 relative w-full max-w-[900px] mx-auto perspective-1000 px-4">
+          <div className="mt-16 md:mt-24 relative w-full max-w-[56.25rem] lg:max-w-[900px] mx-auto perspective-1000 px-4">
             <div className="text-center mb-10 md:mb-16">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-6">
                 Technical <span className="text-gradient-fusion">Precision.</span>

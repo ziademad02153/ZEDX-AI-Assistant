@@ -129,6 +129,21 @@ export default function LoginPage() {
             } else if (mode === "verify") {
                 // Should not reach here typically due to separate handler
             } else if (mode === "forgot") {
+                // First check if the email exists
+                const checkRes = await fetch('/api/auth/check-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: formData.email })
+                });
+                const checkData = await checkRes.json();
+                
+                if (checkRes.ok && !checkData.exists) {
+                    setError("This account does not exist. Please sign up first.");
+                    setTimeout(() => setMode("signup"), 3000);
+                    setIsLoading(false);
+                    return;
+                }
+
                 await resetPassword(formData.email);
                 setSuccess("Password reset link sent! Check your email.");
             } else if (mode === "magiclink") {
@@ -431,7 +446,7 @@ export default function LoginPage() {
                         {mode === 'verify' && (
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                    <label className="text-sm font-medium text-gray-500 dark:text-zinc-400">
                                         Verification Code
                                     </label>
                                     <input
@@ -440,13 +455,13 @@ export default function LoginPage() {
                                         maxLength={8}
                                         inputMode="numeric"
                                         pattern="[0-9]{6,8}"
-                                        className="flex h-12 w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-4 py-3 text-sm text-gray-900 dark:text-white ring-offset-white dark:ring-offset-zinc-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-center tracking-[0.5em] font-mono text-xl transition-all"
+                                        className="flex h-12 w-full rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-black/50 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50 disabled:cursor-not-allowed disabled:opacity-50 text-center tracking-[0.5em] font-mono text-xl transition-all shadow-inner"
                                         value={formData.otp}
                                         onChange={(e) => setFormData({ ...formData, otp: e.target.value.replace(/\D/g, '').slice(0, 8) })}
                                         required
                                     />
                                 </div>
-                                <p className="text-xs text-center text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                <p className="text-xs text-center text-gray-500 dark:text-zinc-400 bg-gray-50 dark:bg-white/5 p-3 rounded-xl border border-gray-100 dark:border-white/5">
                                     We sent a code to <span className="font-medium text-gray-900 dark:text-white">{formData.email}</span>. <br />Check your spam folder if it doesn&apos;t appear.
                                 </p>
                                 <button
@@ -462,7 +477,7 @@ export default function LoginPage() {
                         )}
 
                         <Button
-                            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-11 font-semibold rounded-xl shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/30 transition-all text-base"
+                            className="w-full bg-emerald-600 hover:bg-emerald-500 text-white h-11 font-medium rounded-full shadow-lg shadow-emerald-900/20 hover:shadow-emerald-900/40 transition-all text-[15px]"
                             disabled={isLoading}
                         >
                             {isLoading ? (
@@ -486,7 +501,7 @@ export default function LoginPage() {
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    className="w-full h-11 rounded-xl border-gray-200 dark:border-zinc-600 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-800 dark:text-gray-100 font-medium flex items-center justify-center gap-3"
+                                    className="w-full h-11 rounded-full border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 text-gray-800 dark:text-gray-100 font-medium flex items-center justify-center gap-3 transition-colors shadow-sm"
                                     onClick={async () => {
                                         try {
                                             await signInWithGoogle();

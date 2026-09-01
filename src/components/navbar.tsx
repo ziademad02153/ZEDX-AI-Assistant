@@ -61,8 +61,8 @@ export function Navbar() {
         <nav className={cn(
             "fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-out",
             scrolled
-                ? "top-4 w-[90%] max-w-[900px]"
-                : "top-6 sm:top-8 w-[95%] max-w-[1050px]"
+                ? "top-4 w-[90%] max-w-[56.25rem] lg:max-w-[900px]"
+                : "top-6 sm:top-8 w-[95%] max-w-[65.625rem] lg:max-w-[1050px]"
         )}>
             <div className={cn(
                 "flex items-center justify-between rounded-full border transition-all duration-500 ease-out",
@@ -87,7 +87,7 @@ export function Navbar() {
                 </Link>
 
                 {/* Desktop & Mobile Marquee Links */}
-                <div className="flex flex-1 overflow-hidden relative w-full max-w-[200px] sm:max-w-[400px] lg:max-w-[700px] mx-3 sm:mx-8 h-full items-center justify-center [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+                <div className="flex flex-1 overflow-hidden relative w-full max-w-[12.5rem] sm:max-w-[25rem] lg:max-w-[700px] mx-3 sm:mx-8 h-full items-center justify-center [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
                     <motion.div
                         className="flex w-max items-center cursor-pointer"
                         animate={{ x: ["0%", "-50%"] }}
@@ -220,7 +220,7 @@ function AuthButtons({ isMobile, scrolled, onSheetClose }: { isMobile?: boolean,
             <Button asChild variant="ghost" className="text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white px-4 rounded-full">
                 <Link href="/login" onClick={onSheetClose}>Sign in</Link>
             </Button>
-            <Button asChild className="text-[13px] font-semibold bg-black dark:bg-white text-white dark:text-black hover:bg-zinc-800 dark:hover:bg-zinc-200 px-5 rounded-full shadow-md transition-all hover:scale-105 border border-transparent dark:border-white/10">
+            <Button asChild className="text-[13px] font-semibold bg-gradient-to-r from-[#047857] to-[#bef264] text-white px-5 rounded-full transition-all hover:scale-105 border-none shadow-none">
                 <Link href="/login" onClick={onSheetClose}>Try for Free</Link>
             </Button>
         </div>

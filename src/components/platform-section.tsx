@@ -35,7 +35,7 @@ interface PlatformIcon {
 // Reusable Marquee Row Component for perfect seamlessness
 function MarqueeRow({ icons, duration, reverse = false }: { icons: PlatformIcon[], duration: string, reverse?: boolean }) {
     return (
-        <div className="relative bg-white rounded-l-full rounded-r-none py-1.5 md:py-3 px-4 md:px-6 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-[calc(100%+100px)] md:w-[calc(100%+400px)]">
+        <div className="relative bg-white rounded-l-full rounded-r-none py-1.5 md:py-3 px-4 md:px-6 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)] w-[calc(100%+6.25rem)] md:w-[calc(100%+25rem)] lg:w-[calc(100%+400px)]">
             <div
                 className="flex w-max animate-marquee pause-on-hover will-change-transform"
                 style={{ animationDuration: duration, animationDirection: reverse ? 'reverse' : 'normal' }}

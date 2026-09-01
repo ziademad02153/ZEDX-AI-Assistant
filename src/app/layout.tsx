@@ -97,12 +97,6 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export const viewport = {
-  themeColor: "#16a34a",
-  width: "device-width",
-  initialScale: 1,
-};
-
 export default async function RootLayout({
   children,
 }: Readonly<{

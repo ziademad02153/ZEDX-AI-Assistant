@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Navbar } from "@/components/navbar";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 export default function PricingPage() {
     const router = useRouter();
@@ -19,11 +20,13 @@ export default function PricingPage() {
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [copied, setCopied] = useState(false);
     const [userTier, setUserTier] = useState<string>("free");
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         const fetchTier = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
+                setIsAuthenticated(true);
                 const { data: profile } = await supabase.from('profiles').select('tier').eq('id', session.user.id).single();
                 if (profile?.tier) setUserTier(profile.tier);
             }
@@ -247,7 +250,14 @@ export default function PricingPage() {
                                     {/* Global Payment */}
                                     <Button
                                         className="w-full rounded-full py-6 bg-gradient-to-r from-[#22c55e] to-[#a3e635] text-black hover:opacity-90 font-bold text-[15px] transition-all shadow-[0_2px_12px_rgba(34,197,94,0.25)] border-none flex items-center justify-center"
-                                        onClick={() => window.open('https://ziademad5.gumroad.com/l/hkfdfv', '_blank')}
+                                        onClick={() => {
+                                            if (!isAuthenticated) {
+                                                toast.error("Please create an account first to upgrade.");
+                                                router.push("/login");
+                                                return;
+                                            }
+                                            window.open('https://ziademad5.gumroad.com/l/hkfdfv', '_blank');
+                                        }}
                                     >
                                         <div className="w-[84px] h-7 mr-3 rounded-md overflow-hidden flex items-center justify-center shrink-0 shadow-sm border border-black/10">
                                             <Image src="/gumroad.webp" alt="Gumroad" width={84} height={28} className="w-full h-full object-cover object-center scale-110" />
@@ -258,7 +268,14 @@ export default function PricingPage() {
                                     {/* Local Payment */}
                                     <Button
                                         className="w-full rounded-full py-6 bg-[#22c55e]/5 border border-[#22c55e]/30 text-[#a3e635] hover:bg-[#22c55e]/15 font-semibold text-[15px] transition-all flex items-center justify-center shadow-none"
-                                        onClick={() => setIsInstapayModalOpen(true)}
+                                        onClick={() => {
+                                            if (!isAuthenticated) {
+                                                toast.error("Please create an account first to upgrade.");
+                                                router.push("/login");
+                                                return;
+                                            }
+                                            setIsInstapayModalOpen(true);
+                                        }}
                                     >
                                         <div className="w-8 h-8 mr-3 rounded-full overflow-hidden bg-white/10 flex items-center justify-center shrink-0">
                                             <Image src="/instapay.jpg" alt="Instapay" width={32} height={32} className="w-full h-full object-cover" />
@@ -272,77 +289,81 @@ export default function PricingPage() {
                 </div>
             </div>
 
-            {/* Instapay Modal */}
+            {/* Instapay Modal - Apple/MacBook Style */}
             <Dialog open={isInstapayModalOpen} onOpenChange={setIsInstapayModalOpen}>
-                <DialogContent className="sm:max-w-md bg-[#0a0a0a]/90 backdrop-blur-3xl border-white/10 text-white rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden">
-                    <DialogHeader className="px-2 pt-2">
-                        <DialogTitle className="text-2xl font-bold flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden bg-white/10">
+                <DialogContent className="sm:max-w-[420px] bg-zinc-950/70 backdrop-blur-3xl border border-white/10 text-white rounded-[2.5rem] shadow-[0_24px_80px_rgba(0,0,0,0.6)] overflow-hidden p-6 sm:p-8">
+                    <DialogHeader className="mb-4">
+                        <DialogTitle className="text-[22px] font-semibold flex items-center gap-3 tracking-tight">
+                            <div className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden bg-white/5 border border-white/10 shadow-sm">
                                 <Image src="/instapay.jpg" alt="Instapay" width={40} height={40} className="w-full h-full object-cover" />
                             </div>
                             Instapay Payment
                         </DialogTitle>
-                        <DialogDescription className="text-zinc-400 text-[15px] pt-2">
-                            Transfer exactly <strong className="text-white font-semibold">300 EGP</strong> to the Instapay address below, then enter your phone number or transaction ID for verification.
+                        <DialogDescription className="text-zinc-400 text-[14px] leading-relaxed mt-3">
+                            To upgrade to <strong className="text-white font-medium">ZEDX Pro</strong>, please transfer exactly <strong className="text-emerald-400 font-semibold">300 EGP</strong> to the account below. Once transferred, provide your handle or transaction ID for verification.
                         </DialogDescription>
                     </DialogHeader>
 
                     {!submitSuccess ? (
-                        <div className="space-y-5 py-4 px-2">
-                            <div className="bg-gradient-to-b from-white/5 to-transparent p-5 rounded-2xl border border-white/10 flex flex-col items-center justify-center relative overflow-hidden group">
-                                <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <p className="text-sm text-zinc-500 mb-2 font-medium">Send to Instapay Address:</p>
+                        <div className="space-y-6">
+                            <div className="bg-white/[0.03] p-5 rounded-[1.5rem] border border-white/[0.08] flex flex-col items-center justify-center relative group transition-all hover:bg-white/[0.05]">
+                                <p className="text-[12px] text-zinc-500 mb-2 font-medium tracking-wide uppercase">Send to Instapay Address</p>
                                 <div className="flex items-center gap-3">
-                                    <div className="text-xl sm:text-2xl font-mono font-bold text-emerald-400 tracking-wider">
+                                    <div className="text-[18px] sm:text-[20px] font-mono font-semibold text-white tracking-wide">
                                         zyad02153@instapay
                                     </div>
                                     <button 
-                                        onClick={() => {
-                                            navigator.clipboard.writeText("zyad02153@instapay");
-                                            setCopied(true);
-                                            setTimeout(() => setCopied(false), 2000);
+                                        onClick={async () => {
+                                            try {
+                                                await navigator.clipboard.writeText("zyad02153@instapay");
+                                                setCopied(true);
+                                                toast.success("Instapay address copied to clipboard!");
+                                                setTimeout(() => setCopied(false), 2000);
+                                            } catch (err) {
+                                                toast.error("Failed to copy. Please copy manually.");
+                                            }
                                         }}
-                                        className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors text-zinc-400 hover:text-white flex-shrink-0"
+                                        className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition-all text-zinc-300 hover:text-white flex-shrink-0 cursor-pointer border border-white/5 shadow-sm active:scale-95"
                                         title="Copy address"
                                     >
-                                        {copied ? <CheckCircle2 className="w-5 h-5 text-emerald-400" /> : <Copy className="w-5 h-5" />}
+                                        {copied ? <CheckCircle2 className="w-[18px] h-[18px] text-emerald-400" /> : <Copy className="w-[18px] h-[18px]" />}
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="space-y-2.5">
-                                <label className="text-[13px] font-semibold text-zinc-300 uppercase tracking-wide">
+                            <div className="space-y-3">
+                                <label className="text-[12px] font-medium text-zinc-400 tracking-wide uppercase pl-1">
                                     Your Handle or Phone Number
                                 </label>
                                 <input
                                     type="text"
                                     value={transactionId}
                                     onChange={(e) => setTransactionId(e.target.value)}
-                                    placeholder="e.g. 01012345678 or myname@instapay"
-                                    className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500/40 transition-all font-medium"
+                                    placeholder="e.g. 01012345678 or handle@instapay"
+                                    className="w-full bg-black/50 border border-white/10 rounded-full px-5 py-3.5 text-[15px] text-white placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all shadow-inner"
                                 />
                             </div>
                         </div>
                     ) : (
-                        <div className="py-10 px-2 text-center space-y-5">
-                            <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_40px_rgba(16,185,129,0.3)]">
-                                <ShieldCheck size={40} />
+                        <div className="py-8 text-center space-y-4">
+                            <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white rounded-full flex items-center justify-center mx-auto shadow-[0_0_40px_rgba(16,185,129,0.3)]">
+                                <ShieldCheck size={32} />
                             </div>
-                            <h3 className="text-2xl font-bold text-white tracking-tight">Request Submitted!</h3>
-                            <p className="text-zinc-400 text-[15px] max-w-[280px] mx-auto leading-relaxed">
+                            <h3 className="text-[22px] font-semibold text-white tracking-tight">Request Submitted!</h3>
+                            <p className="text-zinc-400 text-[14px] max-w-[280px] mx-auto leading-relaxed">
                                 We are verifying your payment. Your account will be upgraded to Pro within 1-2 hours.
                             </p>
                         </div>
                     )}
 
-                    <DialogFooter className="sm:justify-end gap-3 px-2 pb-2">
+                    <DialogFooter className="sm:justify-end gap-3 mt-8">
                         {!submitSuccess ? (
                             <>
-                                <Button variant="ghost" onClick={() => setIsInstapayModalOpen(false)} className="text-zinc-400 hover:text-white rounded-xl h-11 px-6 font-medium">Cancel</Button>
+                                <Button variant="ghost" onClick={() => setIsInstapayModalOpen(false)} className="text-zinc-400 hover:text-white hover:bg-white/10 rounded-full h-11 px-6 font-medium text-[15px] transition-colors">Cancel</Button>
                                 <Button
                                     onClick={handleInstapaySubmit}
                                     disabled={!transactionId.trim() || isSubmitting}
-                                    className="bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl h-11 px-6 font-semibold shadow-lg shadow-emerald-900/20"
+                                    className="bg-emerald-500 hover:bg-emerald-400 text-black rounded-full h-11 px-6 font-semibold shadow-[0_2px_10px_rgba(16,185,129,0.2)] text-[15px] transition-all"
                                 >
                                     {isSubmitting ? "Submitting..." : "I have transferred"}
                                 </Button>
@@ -354,9 +375,9 @@ export default function PricingPage() {
                                     setSubmitSuccess(false);
                                     setTransactionId("");
                                 }}
-                                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white"
+                                className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-full h-11 font-medium transition-colors"
                             >
-                                Got it
+                                Done
                             </Button>
                         )}
                     </DialogFooter>

@@ -1,4 +1,10 @@
 import { NextRequest } from "next/server";
+import { getSystemPrompt, PromptType } from "@/lib/prompts";
+
+// Simple in-memory rate limiter (20 requests per minute per user)
+const rateLimitMap = new Map<string, { count: number, resetTime: number }>();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const MAX_REQUESTS = 20;
 
 // Streaming AI Generation using Groq
 // This endpoint returns Server-Sent Events (SSE) for real-time word-by-word responses
@@ -38,12 +44,30 @@ export async function POST(request: NextRequest) {
             return new Response(JSON.stringify({ error: "User profile not found. Please re-login." }), { status: 404 });
         }
 
+        // Rate Limiter Check (Applies to all users, even Pro)
+        const now = Date.now();
+        const userRateData = rateLimitMap.get(user.id);
+        if (userRateData) {
+            if (now > userRateData.resetTime) {
+                rateLimitMap.set(user.id, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+            } else if (userRateData.count >= MAX_REQUESTS) {
+                return new Response(JSON.stringify({ error: "Rate limit exceeded. Please wait a minute." }), { status: 429 });
+            } else {
+                userRateData.count += 1;
+            }
+        } else {
+            rateLimitMap.set(user.id, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+        }
+
         if (profile.tier === 'free' && profile.questions_asked >= 4) {
             return new Response(JSON.stringify({ error: "PAYWALL_LIMIT_REACHED", code: "PAYWALL_LIMIT_REACHED" }), { status: 403 });
         }
 
         const body = await request.json();
-        const { model, messages, systemPrompt } = body;
+        const { model, messages, promptType, promptContext } = body;
+        
+        // Generate secure system prompt on the server
+        const systemPrompt = getSystemPrompt(promptType as PromptType, promptContext);
 
         const groqApiKey = process.env.GROQ_API_KEY;
 
@@ -71,12 +95,9 @@ export async function POST(request: NextRequest) {
             })
         });
 
-        // 3. Increment Questions Count for Free Users
+        // 3. Increment Questions Count for Free Users (Fixes Race Condition via RPC)
         if (response.ok && profile.tier === 'free') {
-            await supabase
-                .from('profiles')
-                .update({ questions_asked: profile.questions_asked + 1 })
-                .eq('id', user.id);
+            await supabase.rpc('increment_questions', { user_id: user.id });
         }
 
         if (!response.ok) {
