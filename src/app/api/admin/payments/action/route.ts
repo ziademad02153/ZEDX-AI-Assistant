@@ -46,15 +46,7 @@ export async function POST(req: Request) {
                 return NextResponse.json({ error: "Approval not found" }, { status: 404 });
             }
 
-            // 2. Update the approval status
-            const { error: updateApprovalError } = await supabaseAdmin
-                .from("pending_approvals")
-                .update({ status: 'approved' })
-                .eq("id", id);
-            
-            if (updateApprovalError) throw updateApprovalError;
-
-            // 3. Update the user's profile to PRO or ULTRA
+            // 2. Update the user's profile to PRO or ULTRA FIRST!
             const targetTier = (approval.amount && approval.amount >= 600) ? 'ultra' : 'pro';
             const { error: updateProfileError } = await supabaseAdmin
                 .from("profiles")
@@ -62,6 +54,14 @@ export async function POST(req: Request) {
                 .eq("id", approval.user_id);
             
             if (updateProfileError) throw updateProfileError;
+
+            // 3. ONLY if the profile update succeeds, mark the transaction as approved
+            const { error: updateApprovalError } = await supabaseAdmin
+                .from("pending_approvals")
+                .update({ status: 'approved' })
+                .eq("id", id);
+            
+            if (updateApprovalError) throw updateApprovalError;
 
             return NextResponse.json({ success: true, message: `Approved and upgraded to ${targetTier}` });
         }
