@@ -399,12 +399,7 @@ export default function Home() {
 
             </div>
 
-            <div className="mt-16 text-center">
-              <Link href="mailto:ziademadbts@gmail.com" className="inline-flex items-center gap-2 text-sm md:text-base text-gray-500 hover:text-emerald-500 transition-colors bg-white/50 dark:bg-zinc-900/50 px-6 py-3 rounded-full border border-gray-200 dark:border-zinc-800 shadow-sm backdrop-blur-sm group">
-                <HelpCircle className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
-                Need help? Contact our Help Center
-              </Link>
-            </div>
+
           </div>
         </section>
       </main>

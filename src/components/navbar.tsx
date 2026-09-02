@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu, LayoutDashboard, PlayCircle, FolderOpen, History, HelpCircle, MonitorSmartphone, Info, LogOut } from "lucide-react";
+import { Menu, LayoutDashboard, PlayCircle, FolderOpen, History, MonitorSmartphone, Info, LogOut } from "lucide-react";
 import { motion, AnimatePresence, useAnimationFrame, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -80,15 +80,12 @@ export function Navbar() {
                 </Link>
 
                 {/* Desktop & Mobile Marquee Links */}
-                <div className="flex flex-1 overflow-hidden relative w-full mx-2 sm:mx-8 h-full items-center justify-center [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+                <div className="flex flex-1 overflow-hidden relative w-full mx-2 sm:mx-8 h-full items-center justify-start [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
                     <DraggableMarquee />
                 </div>
 
-                {/* Right Side (Auth & Suggestion) */}
+                {/* Right Side (Auth) */}
                 <div className="flex items-center gap-1.5 sm:gap-4 shrink-0">
-                    <Link href="mailto:ziademadbts@gmail.com" title="Have a suggestion?" className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors shrink-0 group">
-                        <Image src="/suggestion logo.png" alt="Suggestion" width={22} height={22} className="dark:invert opacity-70 group-hover:opacity-100 transition-opacity object-contain" />
-                    </Link>
                     <div className="block">
                         <AuthButtons scrolled={scrolled} />
                     </div>
@@ -103,22 +100,33 @@ function DraggableMarquee() {
     const baseX = useMotionValue(0);
     const contentRef = useRef<HTMLDivElement>(null);
     const [isHovered, setIsHovered] = useState(false);
+    const initialized = useRef(false);
 
     useAnimationFrame((t, delta) => {
-        if (!isHovered && contentRef.current) {
-            // Speed of auto scroll: 40px per second to the left
-            const moveBy = -40 * (delta / 1000);
-            let newX = baseX.get() + moveBy;
+        if (contentRef.current) {
+            const singleGroupWidth = contentRef.current.scrollWidth / 16;
             
-            // We have 4 groups. Half the scrollWidth is exactly 2 groups.
-            // If we've scrolled past half, seamlessly jump back.
-            const halfWidth = contentRef.current.scrollWidth / 2;
-            if (newX <= -halfWidth) {
-                newX += halfWidth;
-            } else if (newX > 0) {
-                newX -= halfWidth;
+            // Initialize position in the exact middle to ensure content exists on both left and right
+            if (!initialized.current && singleGroupWidth > 0) {
+                baseX.set(-singleGroupWidth * 8);
+                initialized.current = true;
+                return;
             }
-            baseX.set(newX);
+
+            if (!isHovered) {
+                // Speed of auto scroll: 40px per second to the left
+                const moveBy = -40 * (delta / 1000);
+                let newX = baseX.get() + moveBy;
+                
+                // Keep the value perfectly bounded between group 7 and 9
+                // to guarantee endless scrolling on ultra-wide monitors
+                if (newX <= -singleGroupWidth * 9) {
+                    newX += singleGroupWidth;
+                } else if (newX > -singleGroupWidth * 7) {
+                    newX -= singleGroupWidth;
+                }
+                baseX.set(newX);
+            }
         }
     });
 
@@ -128,20 +136,19 @@ function DraggableMarquee() {
             className="flex w-max items-center cursor-grab active:cursor-grabbing"
             style={{ x: baseX }}
             drag="x"
-            dragConstraints={{ left: -10000, right: 10000 }} // virtually unbounded for infinite dragging
+            dragConstraints={{ left: -100000, right: 100000 }} // virtually unbounded for infinite dragging
             dragElastic={0} // no bouncing
             onDrag={(e, info) => {
-                // When dragging, we manually update the motion value
                 if (contentRef.current) {
-                    let newX = baseX.get() + info.delta.x;
-                    const halfWidth = contentRef.current.scrollWidth / 2;
-                    // Wrap immediately while dragging to create the infinite effect
-                    if (newX <= -halfWidth) {
-                        newX += halfWidth;
-                    } else if (newX > 0) {
-                        newX -= halfWidth;
+                    const singleGroupWidth = contentRef.current.scrollWidth / 16;
+                    let newX = baseX.get(); // drag="x" automatically updates baseX
+                    
+                    // Seamlessly wrap during manual drag
+                    if (newX <= -singleGroupWidth * 9) {
+                        baseX.set(newX + singleGroupWidth);
+                    } else if (newX > -singleGroupWidth * 7) {
+                        baseX.set(newX - singleGroupWidth);
                     }
-                    baseX.set(newX);
                 }
             }}
             onMouseEnter={() => setIsHovered(true)}
@@ -149,10 +156,9 @@ function DraggableMarquee() {
             onTouchStart={() => setIsHovered(true)}
             onTouchEnd={() => setIsHovered(false)}
         >
-            <NavGroup />
-            <NavGroup />
-            <NavGroup />
-            <NavGroup />
+            {Array.from({ length: 16 }).map((_, i) => (
+                <NavGroup key={i} />
+            ))}
         </motion.div>
     );
 }
