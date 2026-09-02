@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, AlertTriangle, Target, Award, ChevronRight, Mic } from "lucide-react";
+import { ArrowLeft, AlertTriangle, Target, Award, ChevronRight, Mic, BarChart } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -291,10 +291,8 @@ export default function ReportPage() {
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10">
                                     <div>
-                                        <div className="flex items-center gap-3 mb-4 text-emerald-400">
-                                            <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                                                <Target className="w-4 h-4" />
-                                            </div>
+                                        <div className="flex items-center gap-2.5 mb-4 text-emerald-400">
+                                            <BarChart className="w-5 h-5" />
                                             <span className="text-sm font-bold tracking-widest uppercase">ZEDX Analysis</span>
                                         </div>
                                         <p className="text-gray-600 dark:text-gray-400 print:text-gray-800 text-base leading-relaxed font-light">{item.feedback}</p>

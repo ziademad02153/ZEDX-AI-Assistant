@@ -166,26 +166,31 @@ export default function InterviewPage() {
     // Initialize Camera
     useEffect(() => {
         let currentStream: MediaStream | null = null;
+        let isCancelled = false; // Prevents race condition if unmounted during permission prompt
 
         const startCamera = async () => {
             try {
                 if (!navigator.mediaDevices?.getUserMedia) {
                     throw new Error("Camera API not supported in this browser.");
                 }
-                currentStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                
+                if (isCancelled) {
+                    // Stop tracks immediately if component unmounted while waiting for camera
+                    stream.getTracks().forEach(track => track.stop());
+                    return;
+                }
+
+                currentStream = stream;
                 if (videoRef.current) {
                     videoRef.current.srcObject = currentStream;
                 }
                 setSystemStatus(prev => ({ ...prev, camera: true }));
                 setError(null);
             } catch (err) {
+                if (isCancelled) return;
                 console.error("Error accessing camera:", err);
                 setSystemStatus(prev => ({ ...prev, camera: false }));
-                // Cleanup any partial stream on error
-                if (currentStream) {
-                    currentStream.getTracks().forEach(track => track.stop());
-                    currentStream = null;
-                }
             }
         };
 
@@ -197,10 +202,10 @@ export default function InterviewPage() {
 
         const videoElem = videoRef.current;
         return () => {
+            isCancelled = true;
             if (currentStream) {
                 currentStream.getTracks().forEach(track => track.stop());
             }
-            // Fix: Use local variable for cleanup to avoid ref mutation issues
             if (videoElem) {
                 videoElem.srcObject = null;
             }

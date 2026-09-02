@@ -475,28 +475,28 @@ export default function PricingPage() {
                         <p className="text-zinc-500 dark:text-zinc-400 text-[15px] md:text-[16px] font-medium mb-8 text-center" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
                             Secured & Supported Payments
                         </p>
-                        <div className="flex items-center justify-center gap-8">
+                        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 px-4 max-w-full">
                             
-                            <img src="/visa.png" className="h-16 w-auto object-contain" alt="Visa" />
+                            <img src="/visa.png" className="h-10 sm:h-16 w-auto object-contain shrink-0" alt="Visa" />
                             
-                            <div className="h-10 w-[1px] bg-zinc-600 shrink-0"></div>
+                            <div className="hidden sm:block h-10 w-[1px] bg-zinc-200 dark:bg-zinc-800 shrink-0"></div>
                             
-                            <img src="/master.png" className="h-20 w-auto object-contain" alt="Mastercard" />
+                            <img src="/master.png" className="h-12 sm:h-20 w-auto object-contain shrink-0" alt="Mastercard" />
                             
-                            <div className="h-10 w-[1px] bg-zinc-600 shrink-0"></div>
+                            <div className="hidden sm:block h-10 w-[1px] bg-zinc-200 dark:bg-zinc-800 shrink-0"></div>
                             
                             {/* Google Pay dynamic component to handle dark mode text color */}
-                            <div className="flex items-center gap-1.5 h-10">
-                                <FcGoogle className="w-10 h-10" />
-                                <span className="text-[26px] font-medium tracking-tight text-zinc-900 dark:text-white" style={{ fontFamily: 'sans-serif' }}>Pay</span>
+                            <div className="flex items-center gap-1.5 h-10 shrink-0">
+                                <FcGoogle className="w-8 h-8 sm:w-10 sm:h-10" />
+                                <span className="text-[20px] sm:text-[26px] font-medium tracking-tight text-zinc-900 dark:text-white" style={{ fontFamily: 'sans-serif' }}>Pay</span>
                             </div>
                             
-                            <div className="h-10 w-[1px] bg-zinc-600 shrink-0"></div>
+                            <div className="hidden sm:block h-10 w-[1px] bg-zinc-200 dark:bg-zinc-800 shrink-0"></div>
                             
                             {/* Instapay flex layout because instapay.jpg is just a square circle icon */}
-                            <div className="flex items-center gap-2 h-10">
-                                <img src="/instapay.jpg" className="h-10 w-10 object-contain rounded-full" alt="Instapay" />
-                                <span className="text-[22px] font-bold tracking-tight text-zinc-900 dark:text-white">Instapay</span>
+                            <div className="flex items-center gap-2 h-10 shrink-0">
+                                <img src="/instapay.jpg" className="h-8 w-8 sm:h-10 sm:w-10 object-contain rounded-full" alt="Instapay" />
+                                <span className="text-[18px] sm:text-[22px] font-bold tracking-tight text-zinc-900 dark:text-white">Instapay</span>
                             </div>
                             
                         </div>
