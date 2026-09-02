@@ -40,15 +40,31 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: { message: "Invalid authentication token." } }, { status: 401 });
         }
 
-        // 2. Check Usage Limits (Teaser Mode)
-        const { data: profile, error: profileError } = await supabase
+        // 2. Fetch User Profile
+        const supabaseAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+        const { data: profile, error: profileError } = await supabaseAdmin
             .from('profiles')
-            .select('tier, questions_asked')
+            .select('tier, questions_asked, subscription_expires_at')
             .eq('id', user.id)
             .single();
 
         if (profileError || !profile) {
             return NextResponse.json({ error: { message: "User profile not found. Please re-login." } }, { status: 404 });
+        }
+
+        let currentTier = profile.tier;
+
+        // 3. Subscription Expiration Logic (Auto-downgrade)
+        if (profile.subscription_expires_at) {
+            const expiryDate = new Date(profile.subscription_expires_at);
+            if (new Date() > expiryDate) {
+                // Subscription expired, auto-downgrade to free
+                currentTier = 'free';
+                await supabaseAdmin
+                    .from('profiles')
+                    .update({ tier: 'free', subscription_expires_at: null })
+                    .eq('id', user.id);
+            }
         }
 
         // Rate Limiter Check (Applies to all users, even Pro)
@@ -66,12 +82,21 @@ export async function POST(request: Request) {
             rateLimitMap.set(user.id, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
         }
 
-        if (profile.tier === 'free' && profile.questions_asked >= 4) {
+        // 4. Teaser Mode Limit Check
+        if (currentTier === 'free' && profile.questions_asked >= 4) {
             return NextResponse.json({ error: { message: "PAYWALL_LIMIT_REACHED", code: "PAYWALL_LIMIT_REACHED" } }, { status: 403 });
         }
 
         const body = await request.json();
         const { model, messages, promptType, promptContext, prompt, response_format } = body;
+
+        // 5. Backend Model Security (Prevent API hijacking)
+        if (model === "meta-llama/llama-3-70b-instruct" && currentTier !== 'ultra') {
+            return NextResponse.json({ error: { message: "Unauthorized model. Requires Ultra tier." } }, { status: 403 });
+        }
+        if (model === "openai/gpt-oss-120b" && currentTier === 'free') {
+            return NextResponse.json({ error: { message: "Unauthorized model. Requires Pro or Ultra tier." } }, { status: 403 });
+        }
         
         // Generate secure system prompt on the server
         const systemPrompt = getSystemPrompt(promptType as PromptType, promptContext);

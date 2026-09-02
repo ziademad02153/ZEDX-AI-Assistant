@@ -48,9 +48,21 @@ export async function POST(req: Request) {
 
             // 2. Update the user's profile to PRO or ULTRA FIRST!
             const targetTier = (approval.amount && approval.amount >= 600) ? 'ultra' : 'pro';
+            
+            // Calculate expiration date
+            const expirationDate = new Date();
+            if (targetTier === 'ultra') {
+                expirationDate.setMonth(expirationDate.getMonth() + 3);
+            } else {
+                expirationDate.setMonth(expirationDate.getMonth() + 1);
+            }
+
             const { error: updateProfileError } = await supabaseAdmin
                 .from("profiles")
-                .update({ tier: targetTier })
+                .update({ 
+                    tier: targetTier,
+                    subscription_expires_at: expirationDate.toISOString()
+                })
                 .eq("id", approval.user_id);
             
             if (updateProfileError) throw updateProfileError;
