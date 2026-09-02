@@ -124,6 +124,10 @@ export default function InterviewPage() {
                 tesseractWorkerRef.current = worker;
                 console.log("[Scanner] Tesseract worker pre-loaded and ready!");
             }).catch(err => console.error("[Scanner] Pre-load failed:", err));
+        } else if (!isScannerActive && tesseractWorkerRef.current) {
+            console.log("[Scanner] Terminating Tesseract worker to free memory...");
+            tesseractWorkerRef.current.terminate();
+            tesseractWorkerRef.current = null;
         }
     }, [isScannerActive]);
 
@@ -549,6 +553,10 @@ export default function InterviewPage() {
 
             console.log(`[Desktop STT] Sending audio with language: ${langCode}`);
 
+            // Get auth token
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = session?.access_token;
+
             let response;
             let retries = 2; // Try up to 2 extra times
             let delay = 1000;
@@ -556,6 +564,9 @@ export default function InterviewPage() {
             while (retries >= 0) {
                 response = await fetch('/api/transcribe', {
                     method: 'POST',
+                    headers: {
+                        ...(token ? { "Authorization": `Bearer ${token}` } : {})
+                    },
                     body: formData,
                 });
 
@@ -810,6 +821,18 @@ export default function InterviewPage() {
         activeStreamsRef.current = [];
         console.log("[Desktop STT] Stopped");
     }, []);
+
+    // --- GLOBAL CLEANUP ON UNMOUNT ---
+    useEffect(() => {
+        return () => {
+            console.log("[Interview] Unmounting, cleaning up resources...");
+            stopDesktopSTT();
+            stopScreenAudio();
+            if (recognitionRef.current) {
+                try { recognitionRef.current.abort(); } catch { }
+            }
+        };
+    }, [stopDesktopSTT, stopScreenAudio]);
 
     // --- TOGGLE RECORDING (UNIFIED) ---
     const toggleRecording = async () => {
@@ -1205,8 +1228,8 @@ export default function InterviewPage() {
             router.push(`/dashboard/report/${savedInterview.id}`);
         } catch (error) {
             console.error("Failed to save interview:", error);
-            // Still navigate even if save fails
-            router.push("/dashboard");
+            showToast("Failed to save meeting. Please check your connection and try again.", "error");
+            // Do NOT navigate away, let the user retry so data isn't lost!
         } finally {
             setIsSaving(false);
         }

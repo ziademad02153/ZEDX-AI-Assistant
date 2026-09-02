@@ -4,9 +4,9 @@ import { createClient } from "@supabase/supabase-js";
 export async function POST(req: Request) {
     try {
         const adminKey = req.headers.get("x-admin-key");
-        const EXPECTED_KEY = process.env.ADMIN_SECRET_KEY || "zedx-admin-2024";
+        const EXPECTED_KEY = process.env.ADMIN_SECRET_KEY;
         
-        if (!adminKey || adminKey !== EXPECTED_KEY) {
+        if (!EXPECTED_KEY || !adminKey || adminKey !== EXPECTED_KEY) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
@@ -18,8 +18,12 @@ export async function POST(req: Request) {
         }
 
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
         
+        if (!supabaseServiceKey) {
+            return NextResponse.json({ error: "Server Configuration Error" }, { status: 500 });
+        }
+
         const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
             auth: { autoRefreshToken: false, persistSession: false }
         });

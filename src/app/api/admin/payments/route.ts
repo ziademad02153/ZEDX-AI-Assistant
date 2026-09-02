@@ -6,17 +6,21 @@ export async function GET(req: Request) {
     try {
         const adminKey = req.headers.get("x-admin-key");
         
-        // Very basic hardcoded check for prototype, or from env
-        const EXPECTED_KEY = process.env.ADMIN_SECRET_KEY || "zedx-admin-2024";
+        // Require environment variable for security
+        const EXPECTED_KEY = process.env.ADMIN_SECRET_KEY;
         
-        if (!adminKey || adminKey !== EXPECTED_KEY) {
+        if (!EXPECTED_KEY || !adminKey || adminKey !== EXPECTED_KEY) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
         // We use the service_role key to bypass RLS and get ALL pending approvals
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
         
+        if (!supabaseServiceKey) {
+            return NextResponse.json({ error: "Server Configuration Error" }, { status: 500 });
+        }
+
         const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
             auth: { autoRefreshToken: false, persistSession: false }
         });

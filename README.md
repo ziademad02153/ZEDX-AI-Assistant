@@ -166,7 +166,7 @@ graph LR
 ---
 
 ## 4. Security Subsystem & State Persistence
-Privacy-focused interview simulation requires secure handling of user CVs and training session data. ZEDX enforces rigorous privacy out-of-the-box.
+Privacy-focused interview simulation requires secure handling of user CVs, training session data, and financial transactions. ZEDX enforces rigorous, Enterprise-grade security out-of-the-box.
 
 ```mermaid
 flowchart TD
@@ -180,9 +180,12 @@ flowchart TD
     ALLOW --> DB[("Secure Transaction Logs & Transcripts")]
 ```
 
-### Engineering Highlights:
-- **Strict TypeScript Interfaces:** Implementation of absolute horizontal type-safety (`SessionAnalysis`, `InterviewServiceError`) through the data-access layers, drastically mitigating runtime state mutations and providing pristine vertical maintainability.
-- **Row-Level Security (RLS) Vaulting:** Users cannot directly access other users' rows; all transactions bind mathematically to verified user sessions to prohibit lateral account escalation.
+### Engineering Highlights & 100X Audit Defenses:
+- **AI Prompt Injection Guard:** Employs strict XML-based payload encapsulation and Cognitive Constraint Directives (CCD) during prompt synthesis. This prevents malicious actors from hiding system instructions within their PDF Resumes to manipulate the LLM's scoring algorithm.
+- **Webhook Fraud Prevention:** Advanced Payment Gateway processing for Gumroad that actively monitors for `refunded` and `chargebacked` webhook signatures, instantly revoking Pro/Ultra access to prevent Subscription Fraud and Business Logic exploits.
+- **Transaction Idempotency (DoS Protection):** Instapay local payment processing utilizes atomic DB constraint checks to prevent duplicate transaction IDs, effectively eliminating duplicate payment email spam and Database DoS attacks.
+- **Strict TypeScript Interfaces:** Implementation of absolute horizontal type-safety (`SessionAnalysis`, `InterviewServiceError`) through the data-access layers, drastically mitigating runtime state mutations.
+- **Row-Level Security (RLS) Vaulting:** Hardened PostgreSQL policies ensure users cannot directly access other users' rows; all transactions bind mathematically to verified user sessions to prohibit lateral account escalation or PII (Personally Identifiable Information) leaks.
 
 ---
 

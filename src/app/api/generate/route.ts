@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSystemPrompt, PromptType } from "@/lib/prompts";
 
+export const runtime = 'edge';
+
 // Simple in-memory rate limiter (20 requests per minute per user)
 const rateLimitMap = new Map<string, { count: number, resetTime: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
@@ -8,9 +10,9 @@ const MAX_REQUESTS = 20;
 
 // Fallback models in case the selected one fails
 const GROQ_MODELS = [
-    "openai/gpt-oss-20b",
-    "openai/gpt-oss-120b",
-    "qwen/qwen3.6-27b"
+    "llama-3.1-8b-instant",
+    "llama3-8b-8192",
+    "mixtral-8x7b-32768"
 ];
 
 // Debug GET handler to verify endpoint reaches the server
@@ -68,6 +70,8 @@ export async function POST(request: Request) {
         }
 
         // Rate Limiter Check (Applies to all users, even Pro)
+        // Note: In Serverless (Vercel), memory Map is not shared across instances.
+        // For production, this should ideally use Redis or a Supabase 'rate_limits' table.
         const now = Date.now();
         const userRateData = rateLimitMap.get(user.id);
         if (userRateData) {
@@ -82,9 +86,15 @@ export async function POST(request: Request) {
             rateLimitMap.set(user.id, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
         }
 
-        // 4. Teaser Mode Limit Check
-        if (currentTier === 'free' && profile.questions_asked >= 4) {
-            return NextResponse.json({ error: { message: "PAYWALL_LIMIT_REACHED", code: "PAYWALL_LIMIT_REACHED" } }, { status: 403 });
+        // 4. Teaser Mode Limit Check & Early Lock (Fix TOCTOU Race Condition)
+        let isQuestionLocked = false;
+        if (currentTier === 'free') {
+            if (profile.questions_asked >= 4) {
+                return NextResponse.json({ error: { message: "PAYWALL_LIMIT_REACHED", code: "PAYWALL_LIMIT_REACHED" } }, { status: 403 });
+            }
+            // Lock the question slot BEFORE making the slow Groq API call
+            await supabase.rpc('increment_questions', { user_id: user.id });
+            isQuestionLocked = true;
         }
 
         const body = await request.json();
@@ -147,10 +157,8 @@ export async function POST(request: Request) {
                 const content = data.choices?.[0]?.message?.content;
                 if (!content) throw new Error("Empty response from AI");
 
-                // 3. Increment Questions Count for Free Users (Fixes Race Condition via RPC)
-                if (profile.tier === 'free') {
-                    await supabase.rpc('increment_questions', { user_id: user.id });
-                }
+                // Success! No need to refund the question.
+
 
                 return NextResponse.json({ content, modelUsed: targetModel, provider: "groq" });
 
@@ -159,6 +167,12 @@ export async function POST(request: Request) {
                 lastError = err;
                 if (err.message.includes("429") || err.message.includes("quota")) continue;
             }
+        }
+
+        // Refund the question if all models failed
+        if (isQuestionLocked) {
+            // Decrement by 1 since we failed to generate
+            await supabaseAdmin.from('profiles').update({ questions_asked: Math.max(0, profile.questions_asked) }).eq('id', user.id);
         }
 
         return NextResponse.json({

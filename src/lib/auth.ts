@@ -95,7 +95,7 @@ export const useAuth = create<AuthState>((set) => ({
   },
 
   verifyOtp: async (email, otp, type) => {
-    const { data, error } = await supabase.auth.verifyOtp({ email, token: otp, type: (type as any) || 'signup' });
+    const { data, error } = await supabase.auth.verifyOtp({ email, token: otp, type: type || 'signup' });
     if (error) throw error;
     return data;
   },

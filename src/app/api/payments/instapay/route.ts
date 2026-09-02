@@ -7,8 +7,12 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { transactionId, tier } = body;
 
-        if (!transactionId) {
+        if (!transactionId || typeof transactionId !== 'string') {
             return NextResponse.json({ error: "Transaction ID is required" }, { status: 400 });
+        }
+
+        if (transactionId.length > 50) {
+            return NextResponse.json({ error: "Transaction ID is too long" }, { status: 400 });
         }
 
         const amount = tier === "ultra" ? 600 : 300;
@@ -32,12 +36,28 @@ export async function POST(req: Request) {
         }
 
         // Insert into pending_approvals table using Admin client to bypass RLS
-        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        if (!supabaseServiceKey) {
+            console.error("Missing SUPABASE_SERVICE_ROLE_KEY");
+            return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        }
+
         const supabaseAdmin = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL!,
             supabaseServiceKey,
             { auth: { autoRefreshToken: false, persistSession: false } }
         );
+
+        // 40X SECURITY FIX: Prevent Duplicate Transaction IDs (Anti-Spam)
+        const { data: existingTx } = await supabaseAdmin
+            .from("pending_approvals")
+            .select("id")
+            .eq("transaction_id", transactionId)
+            .single();
+
+        if (existingTx) {
+            return NextResponse.json({ error: "This Transaction ID has already been submitted for review." }, { status: 409 });
+        }
 
         const { error: insertError } = await supabaseAdmin
             .from("pending_approvals")

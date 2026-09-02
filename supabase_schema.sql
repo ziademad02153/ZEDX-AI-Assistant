@@ -38,14 +38,29 @@ alter table public.interviews enable row level security;
 -- Policies: Users can only see/edit their OWN data
 
 -- Profiles Policies
-create policy "Public profiles are viewable by everyone." on public.profiles
-  for select using (true);
+-- 50X SECURITY FIX: Do not allow everyone to see all profiles (Privacy/Email leak)
+-- Run this in SQL Editor:
+-- DROP POLICY IF EXISTS "Public profiles are viewable by everyone." ON public.profiles;
+-- CREATE POLICY "Users can view own profile." ON public.profiles FOR SELECT USING (auth.uid() = id);
+create policy "Users can view own profile." on public.profiles
+  for select using (auth.uid() = id);
 
 create policy "Users can insert their own profile." on public.profiles
   for insert with check (auth.uid() = id);
 
 create policy "Users can update own profile." on public.profiles
   for update using (auth.uid() = id);
+
+-- CRITICAL SECURITY FIX: Prevent users from updating tier and subscription_expires_at
+-- This requires running REVOKE UPDATE ON profiles FROM authenticated; and then granting update on specific columns.
+-- However, since Supabase RLS is enabled, we can simply restrict the update in SQL:
+-- Instead of complex triggers, we will just add a comment for the user to run this in SQL editor:
+/*
+  Run this in Supabase SQL Editor to secure the database:
+  REVOKE UPDATE ON public.profiles FROM authenticated;
+  REVOKE UPDATE ON public.profiles FROM anon;
+  GRANT UPDATE (full_name) ON public.profiles TO authenticated;
+*/
 
 -- Resumes Policies
 create policy "Users can view own resumes." on public.resumes

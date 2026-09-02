@@ -3,27 +3,27 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, LayoutDashboard, PlayCircle, FolderOpen, History, HelpCircle, MonitorSmartphone, Info, LogOut } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimationFrame, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const NAV_LINKS = [
     { label: "Dashboard", href: "/dashboard" },
     { label: "New Simulation", href: "/dashboard/new" },
     { label: "My Context Files", href: "/dashboard/resumes" },
     { label: "Training History", href: "/dashboard/history" },
-    { label: "Pricing / Pro", href: "/pricing" },
+    { label: "Pricing", href: "/pricing" },
     { label: "How it Works", href: "/#features" },
     { label: "Desktop App", href: "/download" },
     { label: "About ZEDX", href: "/about" },
 ];
 
 const NavGroup = () => (
-    <div className="flex gap-16 items-center px-8 w-max shrink-0">
+    <div className="flex gap-8 md:gap-12 items-center pr-8 md:pr-12 w-max shrink-0">
         {NAV_LINKS.map((link, idx) => (
             <Link key={idx} href={link.href} className="whitespace-nowrap text-[15px] font-semibold tracking-wide text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors duration-300 shrink-0">
                 {link.label}
@@ -34,19 +34,12 @@ const NavGroup = () => (
 
 export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
-    const [isDesktop, setIsDesktop] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(
+        typeof window !== "undefined" ? !!(window as any).electronAPI?.isElectron : false
+    );
     const router = useRouter();
 
-    const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-        e.preventDefault();
-        router.push(href);
-    };
-
     useEffect(() => {
-        if (typeof window !== "undefined" && (window as unknown as { electronAPI?: { isElectron: boolean } }).electronAPI?.isElectron) {
-            setIsDesktop(true);
-        }
-
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
         };
@@ -87,22 +80,15 @@ export function Navbar() {
                 </Link>
 
                 {/* Desktop & Mobile Marquee Links */}
-                <div className="flex flex-1 overflow-hidden relative w-full min-w-[70px] max-w-[130px] xs:max-w-[180px] sm:max-w-[25rem] lg:max-w-[700px] mx-2 sm:mx-8 h-full items-center justify-center [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-                    <motion.div
-                        className="flex w-max items-center cursor-pointer"
-                        animate={{ x: ["0%", "-50%"] }}
-                        transition={{ ease: "linear", duration: 35, repeat: Infinity }}
-                        whileHover={{ animationPlayState: "paused" }}
-                    >
-                        <NavGroup />
-                        <NavGroup />
-                        <NavGroup />
-                        <NavGroup />
-                    </motion.div>
+                <div className="flex flex-1 overflow-hidden relative w-full mx-2 sm:mx-8 h-full items-center justify-center [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+                    <DraggableMarquee />
                 </div>
 
-                {/* Right Side (Auth) */}
+                {/* Right Side (Auth & Suggestion) */}
                 <div className="flex items-center gap-1.5 sm:gap-4 shrink-0">
+                    <Link href="mailto:ziademadbts@gmail.com" title="Have a suggestion?" className="hidden md:flex items-center justify-center w-10 h-10 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors shrink-0 group">
+                        <Image src="/suggestion logo.png" alt="Suggestion" width={22} height={22} className="dark:invert opacity-70 group-hover:opacity-100 transition-opacity object-contain" />
+                    </Link>
                     <div className="block">
                         <AuthButtons scrolled={scrolled} />
                     </div>
@@ -110,6 +96,64 @@ export function Navbar() {
 
             </div>
         </nav>
+    );
+}
+
+function DraggableMarquee() {
+    const baseX = useMotionValue(0);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [isHovered, setIsHovered] = useState(false);
+
+    useAnimationFrame((t, delta) => {
+        if (!isHovered && contentRef.current) {
+            // Speed of auto scroll: 40px per second to the left
+            const moveBy = -40 * (delta / 1000);
+            let newX = baseX.get() + moveBy;
+            
+            // We have 4 groups. Half the scrollWidth is exactly 2 groups.
+            // If we've scrolled past half, seamlessly jump back.
+            const halfWidth = contentRef.current.scrollWidth / 2;
+            if (newX <= -halfWidth) {
+                newX += halfWidth;
+            } else if (newX > 0) {
+                newX -= halfWidth;
+            }
+            baseX.set(newX);
+        }
+    });
+
+    return (
+        <motion.div
+            ref={contentRef}
+            className="flex w-max items-center cursor-grab active:cursor-grabbing"
+            style={{ x: baseX }}
+            drag="x"
+            dragConstraints={{ left: -10000, right: 10000 }} // virtually unbounded for infinite dragging
+            dragElastic={0} // no bouncing
+            onDrag={(e, info) => {
+                // When dragging, we manually update the motion value
+                if (contentRef.current) {
+                    let newX = baseX.get() + info.delta.x;
+                    const halfWidth = contentRef.current.scrollWidth / 2;
+                    // Wrap immediately while dragging to create the infinite effect
+                    if (newX <= -halfWidth) {
+                        newX += halfWidth;
+                    } else if (newX > 0) {
+                        newX -= halfWidth;
+                    }
+                    baseX.set(newX);
+                }
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onTouchStart={() => setIsHovered(true)}
+            onTouchEnd={() => setIsHovered(false)}
+        >
+            <NavGroup />
+            <NavGroup />
+            <NavGroup />
+            <NavGroup />
+        </motion.div>
     );
 }
 
@@ -212,7 +256,6 @@ function AuthButtons({ isMobile, scrolled, onSheetClose }: { isMobile?: boolean,
                     userTier={userTier}
                     handleLogout={handleLogout}
                     scrolled={scrolled}
-                    router={router}
                 />
             </div>
         );
@@ -230,7 +273,16 @@ function AuthButtons({ isMobile, scrolled, onSheetClose }: { isMobile?: boolean,
     );
 }
 
-function DesktopUserDropdown({ userAvatar, userName, userEmail, userTier, handleLogout, scrolled, router }: any) {
+interface DesktopUserDropdownProps {
+    userAvatar: string | null;
+    userName: string | null;
+    userEmail: string | null;
+    userTier: string;
+    handleLogout: () => void;
+    scrolled?: boolean;
+}
+
+function DesktopUserDropdown({ userAvatar, userName, userEmail, userTier, handleLogout, scrolled }: DesktopUserDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 

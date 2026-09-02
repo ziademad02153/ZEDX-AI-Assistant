@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Check, ArrowRight, ShieldCheck, Wallet, Globe, Copy, CheckCircle2, HelpCircle } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatedOrb } from "@/components/animated-orb";
@@ -84,7 +85,7 @@ export default function PricingPage() {
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 sm:pt-40 sm:pb-24 relative z-10 w-full">
                 <div className="text-center max-w-3xl mx-auto mb-10 md:mb-12 relative z-10">
                     <h1 className="text-[36px] md:text-[44px] lg:text-[48px] font-bold mb-3 md:mb-4 tracking-tight leading-[1.15] bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-300">
-                        Train Like It's the <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">Real Interview</span>
+                        Train Like It&apos;s the <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">Real Interview</span>
                     </h1>
                     <p className="text-[15px] md:text-[16px] text-zinc-400 font-normal tracking-normal max-w-2xl mx-auto leading-[1.6]">
                         Practice real interviews with an AI interviewer that listens, speaks, adapts, and evaluates your answers.
@@ -249,25 +250,36 @@ export default function PricingPage() {
                                     </div>
                                     <span className="text-[11px] text-zinc-400 font-medium z-10 tracking-[0.15em] uppercase">Enjoy unlimited access</span>
                                 </motion.div>
+                            ) : userTier === 'ultra' ? (
+                                <motion.div 
+                                    className="w-full relative overflow-hidden flex flex-col items-center justify-center gap-3 rounded-full py-5 bg-black/20 backdrop-blur-md border border-white/5 opacity-50 cursor-not-allowed"
+                                >
+                                    <div className="flex items-center gap-3 z-10">
+                                        <CheckCircle2 className="text-zinc-500 w-5 h-5" />
+                                        <span className="text-zinc-400 font-semibold text-[15px] tracking-tight font-sans">Included in Ultra</span>
+                                    </div>
+                                </motion.div>
                             ) : (
                                 <>
                                     {/* Global Payment */}
-                                    <Button
-                                        className="w-full rounded-full py-6 bg-gradient-to-r from-[#22c55e] to-[#a3e635] text-black hover:opacity-90 font-bold text-[15px] transition-all shadow-[0_2px_12px_rgba(34,197,94,0.25)] border-none flex items-center justify-center"
-                                        onClick={() => {
-                                            if (!isAuthenticated) {
-                                                toast.error("Please create an account first to upgrade.");
-                                                router.push("/login");
-                                                return;
-                                            }
-                                            window.open('https://ziademad5.gumroad.com/l/hkfdfv', '_blank');
-                                        }}
-                                    >
-                                        <div className="w-[84px] h-7 mr-3 rounded-md overflow-hidden flex items-center justify-center shrink-0 shadow-sm border border-black/10">
-                                            <Image src="/gumroad.webp" alt="Gumroad" width={84} height={28} className="w-full h-full object-cover object-center scale-110" />
-                                        </div>
-                                        Go Pro (USD)
-                                    </Button>
+                                    <div className="space-y-2">
+                                        <Button
+                                            className="w-full rounded-full py-6 bg-gradient-to-r from-[#22c55e] to-[#a3e635] text-black hover:opacity-90 font-bold text-[15px] transition-all shadow-[0_2px_12px_rgba(34,197,94,0.25)] border-none flex items-center justify-center"
+                                            onClick={() => {
+                                                if (!isAuthenticated) {
+                                                    toast.error("Please create an account first to upgrade.");
+                                                    router.push("/login");
+                                                    return;
+                                                }
+                                                window.open('https://ziademad5.gumroad.com/l/hkfdfv', '_blank');
+                                            }}
+                                        >
+                                            <div className="w-[84px] h-7 mr-3 rounded-md overflow-hidden flex items-center justify-center shrink-0 shadow-sm border border-black/10">
+                                                <Image src="/gumroad.webp" alt="Gumroad" width={84} height={28} className="w-full h-full object-cover object-center scale-110" />
+                                            </div>
+                                            Go Pro (USD)
+                                        </Button>
+                                    </div>
 
                                     {/* Local Payment */}
                                     <Button
@@ -416,23 +428,25 @@ export default function PricingPage() {
                                 </motion.div>
                             ) : (
                                 <>
-                                    <Button
-                                        className="w-full rounded-full py-6 bg-gradient-to-r from-amber-400 to-amber-600 text-black hover:opacity-90 font-bold text-[15px] transition-all shadow-[0_2px_12px_rgba(245,158,11,0.25)] border-none flex items-center justify-center"
-                                        onClick={() => {
-                                            if (!isAuthenticated) {
-                                                toast.error("Please create an account first to upgrade.");
-                                                router.push("/login");
-                                                return;
-                                            }
-                                            // TODO: Update with real Ultra link
-                                            window.open('https://ziademad5.gumroad.com/l/molojy', '_blank');
-                                        }}
-                                    >
-                                        <div className="w-[84px] h-7 mr-3 rounded-md overflow-hidden flex items-center justify-center shrink-0 shadow-sm border border-black/10">
-                                            <Image src="/gumroad.webp" alt="Gumroad" width={84} height={28} className="w-full h-full object-cover object-center scale-110" />
-                                        </div>
-                                        Go Ultra (USD)
-                                    </Button>
+                                    <div className="space-y-2">
+                                        <Button
+                                            className="w-full rounded-full py-6 bg-gradient-to-r from-amber-400 to-amber-600 text-black hover:opacity-90 font-bold text-[15px] transition-all shadow-[0_2px_12px_rgba(245,158,11,0.25)] border-none flex items-center justify-center"
+                                            onClick={() => {
+                                                if (!isAuthenticated) {
+                                                    toast.error("Please create an account first to upgrade.");
+                                                    router.push("/login");
+                                                    return;
+                                                }
+                                                // TODO: Update with real Ultra link
+                                                window.open('https://ziademad5.gumroad.com/l/molojy', '_blank');
+                                            }}
+                                        >
+                                            <div className="w-[84px] h-7 mr-3 rounded-md overflow-hidden flex items-center justify-center shrink-0 shadow-sm border border-black/10">
+                                                <Image src="/gumroad.webp" alt="Gumroad" width={84} height={28} className="w-full h-full object-cover object-center scale-110" />
+                                            </div>
+                                            Go Ultra (USD)
+                                        </Button>
+                                    </div>
 
                                     <Button
                                         className="w-full rounded-full py-6 bg-amber-500/5 border border-amber-500/30 text-amber-500 hover:bg-amber-500/15 font-semibold text-[15px] transition-all flex items-center justify-center shadow-none"
@@ -453,6 +467,38 @@ export default function PricingPage() {
                                     </Button>
                                 </>
                             )}
+                        </div>
+                    </div>
+                    
+                    {/* Global Payment Methods Banner */}
+                    <div className="mt-16 pt-8 flex flex-col items-center justify-center relative z-10 w-full mb-8">
+                        <p className="text-zinc-500 dark:text-zinc-400 text-[15px] md:text-[16px] font-medium mb-8 text-center" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
+                            Secured & Supported Payments
+                        </p>
+                        <div className="flex items-center justify-center gap-8">
+                            
+                            <img src="/visa.png" className="h-16 w-auto object-contain" alt="Visa" />
+                            
+                            <div className="h-10 w-[1px] bg-zinc-600 shrink-0"></div>
+                            
+                            <img src="/master.png" className="h-20 w-auto object-contain" alt="Mastercard" />
+                            
+                            <div className="h-10 w-[1px] bg-zinc-600 shrink-0"></div>
+                            
+                            {/* Google Pay dynamic component to handle dark mode text color */}
+                            <div className="flex items-center gap-1.5 h-10">
+                                <FcGoogle className="w-10 h-10" />
+                                <span className="text-[26px] font-medium tracking-tight text-zinc-900 dark:text-white" style={{ fontFamily: 'sans-serif' }}>Pay</span>
+                            </div>
+                            
+                            <div className="h-10 w-[1px] bg-zinc-600 shrink-0"></div>
+                            
+                            {/* Instapay flex layout because instapay.jpg is just a square circle icon */}
+                            <div className="flex items-center gap-2 h-10">
+                                <img src="/instapay.jpg" className="h-10 w-10 object-contain rounded-full" alt="Instapay" />
+                                <span className="text-[22px] font-bold tracking-tight text-zinc-900 dark:text-white">Instapay</span>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -553,12 +599,18 @@ export default function PricingPage() {
                 </DialogContent>
             </Dialog>
 
-            <div className="mt-16 text-center pb-12">
-                <Link href="mailto:ziademadbts@gmail.com" className="inline-flex items-center gap-2 text-sm md:text-base text-zinc-400 hover:text-emerald-400 transition-colors bg-white/5 hover:bg-white/10 px-6 py-3 rounded-full border border-white/10 shadow-sm backdrop-blur-sm group">
-                    <HelpCircle className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
-                    Need help? Contact our Help Center
-                </Link>
-            </div>
+            {/* Floating Help Center Button (Pro/Ultra Only) */}
+            {(userTier === 'pro' || userTier === 'ultra') && (
+                <div className="fixed bottom-6 left-6 z-50">
+                    <Link 
+                        href="mailto:ziademadbts@gmail.com" 
+                        className="flex items-center gap-3 bg-white dark:bg-[#111] border border-zinc-200 dark:border-white/10 px-5 py-3.5 rounded-full shadow-2xl hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgba(255,255,255,0.05)] hover:-translate-y-1 transition-all group backdrop-blur-md"
+                    >
+                        <Image src="/Priority VIP Support.png" alt="Help Center" width={26} height={26} className="object-contain group-hover:scale-110 transition-transform" />
+                        <span className="text-[14px] font-semibold text-zinc-700 dark:text-zinc-300">Help Center</span>
+                    </Link>
+                </div>
+            )}
         </div>
     );
 }

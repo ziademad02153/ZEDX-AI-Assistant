@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import { Mic } from 'lucide-react';
 
 // Common classes for all premium icons
 const iconClasses = "drop-shadow-lg group-hover:scale-110 transition-transform duration-300";

@@ -180,6 +180,26 @@ export default function Home() {
         {/* Features Section */}
         <section id="features" className="py-24 relative z-10">
           <div className="container mx-auto px-4">
+            
+            {/* Suggestion Button */}
+            <div className="flex justify-center md:justify-end w-full mb-4 max-w-6xl mx-auto">
+              <Link 
+                  href="mailto:ziademadbts@gmail.com" 
+                  className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white dark:bg-[#111] border border-gray-200 dark:border-white/10 rounded-full shadow-sm hover:shadow-md transition-all hover:scale-105 group"
+              >
+                  <Image 
+                      src="/suggestion logo.png" 
+                      alt="Suggestion" 
+                      width={22} 
+                      height={22} 
+                      className="dark:invert opacity-80 group-hover:opacity-100 transition-opacity object-contain" 
+                  />
+                  <span className="text-[14px] font-medium text-gray-700 dark:text-gray-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                      Have a suggestion?
+                  </span>
+              </Link>
+            </div>
+
             <div className="text-center mb-20">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
                 Everything you need to <span className="text-gradient-fusion">succeed</span>

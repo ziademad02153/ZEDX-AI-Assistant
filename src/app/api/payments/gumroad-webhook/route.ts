@@ -3,6 +3,15 @@ import { createClient } from "@supabase/supabase-js";
 
 export async function POST(request: Request) {
     try {
+        // 1. Security Check: Verify Webhook Secret
+        const url = new URL(request.url);
+        const secret = url.searchParams.get('secret');
+        const expectedSecret = process.env.GUMROAD_WEBHOOK_SECRET;
+
+        if (!expectedSecret || secret !== expectedSecret) {
+            return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+        }
+
         // Gumroad sends data as application/x-www-form-urlencoded
         const formData = await request.formData();
         
@@ -13,11 +22,20 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Missing email" }, { status: 400 });
         }
 
+        const refunded = formData.get('refunded');
+        const chargebacked = formData.get('chargebacked');
+        const isRefunded = refunded === 'true' || chargebacked === 'true';
+
         // Determine tier based on Gumroad product permalink
         let targetTier: 'free' | 'pro' | 'ultra' = 'free';
         let monthsToAdd = 0;
 
-        if (permalink === 'hkfdfv') {
+        if (isRefunded) {
+            // 70X SECURITY FIX: Refund Fraud Prevention
+            // If the user refunded or charged back, immediately revoke their access
+            targetTier = 'free';
+            monthsToAdd = -120; // Set expiration date to the past
+        } else if (permalink === 'hkfdfv') {
             targetTier = 'pro';
             monthsToAdd = 1;
         } else if (permalink === 'molojy') {

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import {
     Mic,
     Monitor,
@@ -115,6 +116,28 @@ export default function HowToUsePage() {
             </div>
 
             <div className="relative z-10 max-w-4xl w-full flex flex-col items-center">
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="w-full flex justify-center sm:justify-end px-4 mb-8"
+                >
+                    <Link 
+                        href="mailto:ziademadbts@gmail.com" 
+                        className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white dark:bg-[#111] border border-gray-200 dark:border-white/10 rounded-full shadow-sm hover:shadow-md transition-all hover:scale-105 group"
+                    >
+                        <Image 
+                            src="/suggestion logo.png" 
+                            alt="Suggestion" 
+                            width={22} 
+                            height={22} 
+                            className="dark:invert opacity-80 group-hover:opacity-100 transition-opacity object-contain" 
+                        />
+                        <span className="text-[14px] font-medium text-gray-700 dark:text-gray-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                            Have a suggestion?
+                        </span>
+                    </Link>
+                </motion.div>
+
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

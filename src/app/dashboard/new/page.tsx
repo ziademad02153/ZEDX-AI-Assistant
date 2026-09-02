@@ -72,7 +72,7 @@ const AI_MODELS = [
         id: "meta-llama/llama-3-70b-instruct",
         name: "Llama 3 70B",
         description: "Ultra intelligence",
-        logo: "/AI.jpg",
+        logo: "/Llama 3 70B.png",
         gradient: "from-amber-500/20 to-orange-500/20",
         border: "group-hover:border-amber-500/50",
         tier: "ultra"
