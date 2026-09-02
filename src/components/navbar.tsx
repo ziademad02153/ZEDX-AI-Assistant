@@ -25,7 +25,7 @@ const NAV_LINKS = [
 const NavGroup = () => (
     <div className="flex gap-8 md:gap-12 items-center pr-8 md:pr-12 w-max shrink-0">
         {NAV_LINKS.map((link, idx) => (
-            <Link key={idx} href={link.href} className="whitespace-nowrap text-[15px] font-semibold tracking-wide text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors duration-300 shrink-0">
+            <Link key={idx} href={link.href} className="whitespace-nowrap text-[14px] font-semibold tracking-wide text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors duration-300 shrink-0">
                 {link.label}
             </Link>
         ))}
@@ -59,9 +59,9 @@ export function Navbar() {
         )}>
             <div className={cn(
                 "flex items-center justify-between rounded-full border transition-all duration-500 ease-out",
-                scrolled
-                    ? "bg-white/90 dark:bg-[#0a0a0a]/85 backdrop-blur-3xl border-zinc-200/80 dark:border-white/15 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.8)] px-3 sm:px-6 h-14 sm:h-16"
-                    : "bg-white/70 dark:bg-[#0a0a0a]/60 backdrop-blur-xl border-zinc-200/40 dark:border-white/10 shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-3 sm:px-8 h-16 sm:h-[76px]"
+                    scrolled
+                        ? "bg-white/90 dark:bg-[#0a0a0a]/85 backdrop-blur-3xl border-zinc-200/80 dark:border-white/15 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.8)] px-3 sm:px-6 h-12 sm:h-14"
+                        : "bg-white/70 dark:bg-[#0a0a0a]/60 backdrop-blur-xl border-zinc-200/40 dark:border-white/10 shadow-[0_4px_20px_rgb(0,0,0,0.05)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-3 sm:px-8 h-14 sm:h-[68px]"
             )}>
                 
                 {/* Logo */}
@@ -73,7 +73,7 @@ export function Navbar() {
                         height={120}
                         className={cn(
                             "object-contain transition-all duration-500 group-hover:scale-105",
-                            scrolled ? "w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14" : "w-11 h-11 sm:w-14 sm:h-14 md:w-[68px] md:h-[68px]"
+                            scrolled ? "w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12" : "w-10 h-10 sm:w-12 sm:h-12 md:w-[60px] md:h-[60px]"
                         )}
                         priority
                     />
@@ -269,10 +269,10 @@ function AuthButtons({ isMobile, scrolled, onSheetClose }: { isMobile?: boolean,
 
     return (
         <div className={cn("flex gap-1.5 sm:gap-2", isMobile ? "flex-col" : "items-center")}>
-            <Button asChild variant="ghost" className="text-[12px] sm:text-[13px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white px-2 sm:px-4 rounded-full">
+            <Button asChild variant="ghost" className="text-[11px] sm:text-[12px] font-medium text-zinc-600 dark:text-zinc-300 hover:text-black dark:hover:text-white px-2 sm:px-4 rounded-full">
                 <Link href="/login" onClick={onSheetClose}>Sign in</Link>
             </Button>
-            <Button asChild className="text-[12px] sm:text-[13px] font-semibold bg-gradient-to-r from-[#047857] to-[#bef264] text-white px-3 sm:px-5 rounded-full transition-all hover:scale-105 border-none shadow-none">
+            <Button asChild className="text-[11px] sm:text-[12px] font-semibold bg-gradient-to-r from-[#047857] to-[#bef264] text-white px-3 sm:px-4 rounded-full transition-all hover:scale-105 border-none shadow-none">
                 <Link href="/login" onClick={onSheetClose}>Try Free</Link>
             </Button>
         </div>
@@ -311,7 +311,7 @@ function DesktopUserDropdown({ userAvatar, userName, userEmail, userTier, handle
                         "rounded-full overflow-hidden cursor-pointer transition-all duration-300 shadow-sm shrink-0",
                         userTier === 'pro' ? "ring-2 ring-[#a3e635] ring-offset-2 ring-offset-white dark:ring-offset-[#0a0a0a]" : 
                         userTier === 'ultra' ? "ring-2 ring-amber-400 ring-offset-2 ring-offset-white dark:ring-offset-[#0a0a0a]" : "border border-zinc-200 dark:border-zinc-700 hover:ring-2 hover:ring-emerald-500/50",
-                        scrolled ? "w-8 h-8 sm:w-10 sm:h-10" : "w-10 h-10 sm:w-12 sm:h-12"
+                        scrolled ? "w-7 h-7 sm:w-9 sm:h-9" : "w-9 h-9 sm:w-11 sm:h-11"
                     )}
                 >
                     {userAvatar ? (

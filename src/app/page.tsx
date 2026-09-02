@@ -116,11 +116,11 @@ export default function Home() {
                   <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-400"></div>
                   <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-400"></div>
                 </div>
-                  <div className="absolute left-0 right-0 flex justify-center pointer-events-none">
-                    <span className="text-xs md:text-sm font-semibold text-gray-500 dark:text-gray-400">
-                      Architecture Review
-                    </span>
-                  </div>
+                <div className="absolute left-0 right-0 flex justify-center pointer-events-none">
+                  <span className="text-xs md:text-sm font-semibold text-gray-500 dark:text-gray-400">
+                    Architecture Review
+                  </span>
+                </div>
               </div>
               <div className="p-4 md:p-10 bg-white dark:bg-zinc-900 min-h-[320px] md:min-h-[350px] flex flex-col items-center justify-center relative overflow-hidden">
                 {/* Background Grid */}
@@ -144,7 +144,7 @@ export default function Home() {
                       <div className="absolute -top-2.5 -left-2.5 md:-top-5 md:-left-5 bg-white dark:bg-zinc-800 border-2 border-green-500 dark:border-green-600 rounded-full p-1 md:p-2.5 shadow-xl">
                         <Code className="w-4 h-4 md:w-6 md:h-6 text-green-500" />
                       </div>
-                      
+
                       <div className="bg-white/50 dark:bg-black/30 rounded-xl p-3 md:p-6 mb-3 md:mb-4 font-mono text-[0.65rem] md:text-[0.8rem] leading-relaxed overflow-x-auto border border-black/5 dark:border-white/10 shadow-inner w-full max-w-full">
                         <pre className="text-gray-800 dark:text-gray-200">
                           <span className="text-pink-600 dark:text-pink-400 font-semibold">export function</span> <span className="text-blue-600 dark:text-blue-400">useFetch</span>&lt;<span className="text-teal-600 dark:text-teal-400">T</span>&gt;(<span className="text-orange-600 dark:text-orange-300">url</span>: <span className="text-teal-600 dark:text-teal-400">string</span>) {"{\n"}
@@ -180,23 +180,23 @@ export default function Home() {
         {/* Features Section */}
         <section id="features" className="py-24 relative z-10">
           <div className="container mx-auto px-4">
-            
+
             {/* Suggestion Button */}
             <div className="flex justify-center md:justify-end w-full mb-4 max-w-6xl mx-auto">
-              <Link 
-                  href="mailto:ziademadbts@gmail.com" 
-                  className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white dark:bg-[#111] border border-gray-200 dark:border-white/10 rounded-full shadow-sm hover:shadow-md transition-all hover:scale-105 group"
+              <Link
+                href="mailto:ziademadbts@gmail.com"
+                className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white dark:bg-[#111] border border-gray-200 dark:border-white/10 rounded-full shadow-sm hover:shadow-md transition-all hover:scale-105 group"
               >
-                  <Image 
-                      src="/suggestion logo.png" 
-                      alt="Suggestion" 
-                      width={22} 
-                      height={22} 
-                      className="dark:invert opacity-80 group-hover:opacity-100 transition-opacity object-contain" 
-                  />
-                  <span className="text-[14px] font-medium text-gray-700 dark:text-gray-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                      Have a suggestion?
-                  </span>
+                <Image
+                  src="/suggestion logo.png"
+                  alt="Suggestion"
+                  width={22}
+                  height={22}
+                  className="dark:invert opacity-80 group-hover:opacity-100 transition-opacity object-contain"
+                />
+                <span className="text-[14px] font-medium text-gray-700 dark:text-gray-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  Have a suggestion?
+                </span>
               </Link>
             </div>
 
@@ -299,17 +299,17 @@ export default function Home() {
 
                     {/* Center Icon */}
                     <div className="w-20 h-20 bg-transparent rounded-full flex items-center justify-center z-10 relative">
-                      <Image 
-                        src="/Multi-Language.png" 
-                        alt="Multi-Language Globe" 
-                        width={80} 
-                        height={80} 
-                        className="rounded-full object-contain drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse" 
+                      <Image
+                        src="/Multi-Language.png"
+                        alt="Multi-Language Globe"
+                        width={80}
+                        height={80}
+                        className="rounded-full object-contain drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse"
                       />
                     </div>
 
                     {/* Floating Flags - Orbiting like planets */}
-                    
+
                     {/* Outer Orbit */}
                     <div className="absolute inset-0 z-20 pointer-events-none" style={{ animation: 'spin 20s linear infinite' }}>
                       <div className="absolute top-0 left-1/2 -ml-[14px] -mt-[10px] pointer-events-auto" style={{ animation: 'spin 20s linear infinite reverse' }}>
@@ -404,6 +404,7 @@ export default function Home() {
         </section>
       </main>
 
+      {/* Flat transition into footer */}
       <Footer />
     </div >
   );
