@@ -188,6 +188,10 @@ graph LR
     class COMPILER,LLM,UI engine;
 ```
 
+### Architectural Value:
+- **Zero Truncation Policy:** The LLM operates on the complete, untruncated candidate data (CV + JD) to ensure maximum personalization.
+- **Pronunciation Normalization:** System prompts dynamically adjust for Arabic vs Latin scripts to prevent TTS mispronunciations.
+
 ---
 
 ## 6. Security Subsystem & State Persistence
@@ -244,6 +248,10 @@ graph TD
     class GROQ,ANALYSIS,METRICS ai;
     class SCORECARD,PRINT,PDF render;
 ```
+
+### Architectural Value:
+- **Strict JSON Enforcement:** Forces the evaluation LLM to output predictable schema-validated JSON, preventing parsing crashes in the UI.
+- **Client-Side Hydration & Export:** Heavy lifting (rendering and PDF compilation) is offloaded entirely to the client's browser, saving server-side compute.
 
 ---
 

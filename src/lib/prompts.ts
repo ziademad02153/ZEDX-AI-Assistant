@@ -127,7 +127,7 @@ The JSON must be an array of objects, where each object has:
     "feedback": "1 sentence of strict critique on what they missed or did wrong, followed by what they did well (if anything).",
     "ideal_answer": "A short example of a perfect answer"
 }
-CRITICAL REQUIREMENT: You MUST write the "feedback" and "ideal_answer" STRICTLY in the following language code: ${context?.language || 'en-US'}. If the code is 'en-US', write entirely in English. If 'ar-EG' or 'ar-SA', write entirely in Arabic. DO NOT use any other language for the feedback and ideal_answer fields!`;
+CRITICAL REQUIREMENT: You MUST write the "feedback" and "ideal_answer" STRICTLY in the language corresponding to this language code: ${context?.language || 'en-US'}. For example, if it's 'fr-FR', write entirely in French. If 'ar-EG', write entirely in Arabic.`;
 
         case 'report_deep_analysis':
             return `
@@ -144,7 +144,7 @@ Evaluate based on:
 2. Communication Skills (0-100)
 3. Overall Performance (0-100)
 
-CRITICAL REQUIREMENT: You MUST write the "strengths", "improvements", and "detailedFeedback" STRICTLY in the following language code: ${context?.language || 'en-US'}. If the code is 'en-US', write entirely in English. If 'ar-EG' or 'ar-SA', write entirely in Arabic. DO NOT use any other language!
+CRITICAL REQUIREMENT: You MUST write the "strengths", "improvements", and "detailedFeedback" STRICTLY in the language corresponding to this language code: ${context?.language || 'en-US'}. For example, if it's 'fr-FR', write entirely in French. If 'ar-EG', write entirely in Arabic.
 
 Return ONLY a valid JSON object matching this exact structure, with no markdown formatting or extra text:
 {
