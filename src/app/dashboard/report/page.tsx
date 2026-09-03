@@ -84,10 +84,11 @@ export default function ReportPage() {
                 const prompt = `Here is the interview transcript: ${JSON.stringify(history)}`;
                 const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
                 const { data: { session } } = await supabase.auth.getSession();
+                const lang = localStorage.getItem("interview_context_lang") || "en-US";
                 const res = await fetch("/api/generate", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "Authorization": `Bearer ${session?.access_token}` },
-                    body: JSON.stringify({ model, promptType: "report_evaluator", prompt })
+                    body: JSON.stringify({ model, promptType: "report_evaluator", promptContext: { language: lang }, prompt })
                 });
                 if (!res.ok) {
                     const errorText = await res.text();

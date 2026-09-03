@@ -16,10 +16,18 @@ export async function POST(req: Request) {
 
         // 1. Arabic -> ElevenLabs (Premium Natural Voice)
         if (language.startsWith('ar')) {
-            const elevenLabsKeys = Object.keys(process.env)
-                .filter(key => key.startsWith('ELEVENLABS_API_KEY'))
-                .map(key => process.env[key])
-                .filter(Boolean) as string[];
+            const elevenLabsKeys = [
+                process.env.ELEVENLABS_API_KEY,
+                process.env.ELEVENLABS_API_KEY_1,
+                process.env.ELEVENLABS_API_KEY_2,
+                process.env.ELEVENLABS_API_KEY_3,
+                process.env.ELEVENLABS_API_KEY_4,
+                process.env.ELEVENLABS_API_KEY_5,
+                process.env.ELEVENLABS_API_KEY_6,
+                process.env.ELEVENLABS_API_KEY_7,
+                process.env.ELEVENLABS_API_KEY_8,
+                process.env.ELEVENLABS_API_KEY_9
+            ].filter(Boolean) as string[];
 
             if (elevenLabsKeys.length === 0) {
                 return NextResponse.json({ error: 'ELEVENLABS_API_KEY is missing' }, { status: 500 });

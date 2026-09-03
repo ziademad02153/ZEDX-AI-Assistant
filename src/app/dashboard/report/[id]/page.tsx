@@ -39,7 +39,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
 
                 if (data.analysis?.scorecard) {
                     // Scorecard already exists!
-                    setScorecard(data.analysis.scorecard as Scorecard);
+                    setScorecard(data.analysis.scorecard as unknown as Scorecard);
                 } else {
                     // Generate it!
                     generateScorecard(data);
@@ -73,6 +73,7 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
                 body: JSON.stringify({
                     model: "openai/gpt-oss-120b", // Using a stronger model for analysis
                     promptType: 'report_deep_analysis',
+                    promptContext: { language: data.analysis?.language || "en-US" },
                     prompt: userPrompt,
                     response_format: { type: "json_object" }
                 })
@@ -89,7 +90,7 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
             setScorecard(parsedScorecard);
 
             // Save back to DB
-            const updatedAnalysis = { ...data.analysis, scorecard: parsedScorecard };
+            const updatedAnalysis = { ...data.analysis, scorecard: parsedScorecard as Record<string, unknown> };
             await interviewService.updateInterview(id, { analysis: updatedAnalysis });
 
         } catch (err) {
@@ -106,7 +107,7 @@ ${data.analysis?.ai_responses?.length ? data.analysis.ai_responses.join("\n\n") 
             setScorecard(fallbackScorecard);
 
             // Save fallback to DB
-            const updatedAnalysis = { ...data.analysis, scorecard: fallbackScorecard };
+            const updatedAnalysis = { ...data.analysis, scorecard: fallbackScorecard as unknown as Record<string, unknown> };
             await interviewService.updateInterview(id, { analysis: updatedAnalysis }).catch(console.error);
         } finally {
             setIsGenerating(false);
