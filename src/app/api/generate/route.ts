@@ -114,13 +114,13 @@ export async function POST(request: Request) {
         const { model, messages, promptType, promptContext, prompt, response_format } = body;
 
         // 5. Backend Model Security
-        // Check Ultra tier access
-        if (model === "openai/gpt-oss-120b" && currentTier !== 'ultra') {
-            return NextResponse.json({ error: { message: "Upgrade to Ultra to use GPT-OSS 120B." } }, { status: 403 });
+        // Automatically fallback to free tier model if user doesn't have access
+        let targetModel = model;
+        if (targetModel === "openai/gpt-oss-120b" && currentTier !== 'ultra') {
+            targetModel = "openai/gpt-oss-20b";
         }
-        // Check Pro tier access
-        if (model === "qwen/qwen3.6-27b" && currentTier === 'free') {
-            return NextResponse.json({ error: { message: "Upgrade to Pro or Ultra to use Qwen 3.6 27B." } }, { status: 403 });
+        if (targetModel === "qwen/qwen3.6-27b" && currentTier === 'free') {
+            targetModel = "openai/gpt-oss-20b";
         }
 
         // Generate secure system prompt on the server
@@ -152,7 +152,7 @@ export async function POST(request: Request) {
         // Shuffle keys to distribute load across all requests
         const shuffledKeys = groqApiKeys.sort(() => 0.5 - Math.random());
 
-        const modelsToTry = model ? [model, ...GROQ_MODELS.filter(m => m !== model)] : GROQ_MODELS;
+        const modelsToTry = targetModel ? [targetModel, ...GROQ_MODELS.filter(m => m !== targetModel)] : GROQ_MODELS;
         const uniqueModels = [...new Set(modelsToTry)];
         let lastError: Error | null = null;
 
