@@ -164,7 +164,8 @@ export async function POST(request: Request) {
                     const finalMessages = systemPrompt ? [{ role: "system", content: systemPrompt }, ...groqMessages] : groqMessages;
 
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 30000);
+                    // Increased timeout to 60 seconds to allow heavy reasoning models to finish
+                    const timeoutId = setTimeout(() => controller.abort(), 60000);
 
                     const requestBody: any = {
                         model: targetModel,
