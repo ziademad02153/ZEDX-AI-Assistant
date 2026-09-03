@@ -55,14 +55,12 @@ function ScoreMiniRing({ score }: { score: number }) {
     const circumference = 2 * Math.PI * 18;
     const progress = (score / 10) * circumference;
     return (
-        <div className="relative w-12 h-12 shrink-0">
+        <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
             <svg width="48" height="48" className="absolute inset-0 -rotate-90">
                 <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="2.5" />
                 <motion.circle cx="24" cy="24" r="18" fill="none" stroke={c.stroke} strokeWidth="2.5" strokeLinecap="round" strokeDasharray={circumference} initial={{ strokeDashoffset: circumference }} whileInView={{ strokeDashoffset: circumference - progress }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }} style={{ filter: `drop-shadow(0 0 6px ${c.glow})` }} />
             </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-                <span className={cn("text-[13px] font-bold z-10", c.text)}>{score}</span>
-            </div>
+            <span className={cn("text-[13px] font-bold z-10", c.text)}>{score}</span>
         </div>
     );
 }
@@ -126,18 +124,33 @@ export default function ReportPage() {
                 console.warn("REPORT GENERATION ERROR:", err?.message || err);
                 
                 const historyRaw = localStorage.getItem("interview_results");
+                const lang = localStorage.getItem("interview_context_lang") || "en-US";
+                const isEn = lang.startsWith('en');
                 if (historyRaw) {
                     const history = JSON.parse(historyRaw);
                     const fallback = history.map((item: any, i: number) => {
                         const ans = (item.a || "").trim();
                         const wc = ans.split(/\s+/).filter((w: string) => w.length > 0).length;
-                        let score = 0; let feedback = "لم يتم تقديم إجابة واضحة.";
-                        let ideal = "الإجابة النموذجية يجب أن تكون مفصلة، وتغطي كل جوانب السؤال مع ذكر أمثلة عملية.";
-                        if (wc === 0) { score = 0; feedback = "لم نتمكن من التقاط أي إجابة صوتية."; }
-                        else if (wc > 0 && wc < 10) { score = 3; feedback = "الإجابة قصيرة جداً، يرجى التوضيح بأمثلة أكثر."; ideal = "يفضل استخدام أسلوب STAR لتوضيح الموقف، المهمة، الإجراء، والنتيجة."; }
-                        else if (wc >= 10 && wc < 30) { score = 5; feedback = "إجابة أساسية، ولكن تحتاج إلى تفاصيل وعمق تقني أكبر."; }
-                        else if (wc >= 30) { score = 8; feedback = "إجابة جيدة ومفصلة. حاول ربط النقاط بمتطلبات الوظيفة بشكل مباشر أكثر."; }
-                        return { question: item.q || "—", answer: ans || "لا يوجد إجابة", score, feedback, ideal_answer: ideal };
+                        let score = 0; 
+                        let feedback = isEn ? "No clear answer provided." : "لم يتم تقديم إجابة واضحة.";
+                        let ideal = isEn ? "An ideal answer should be detailed, covering all aspects of the question with practical examples." : "الإجابة النموذجية يجب أن تكون مفصلة، وتغطي كل جوانب السؤال مع ذكر أمثلة عملية.";
+                        
+                        if (wc === 0) { 
+                            score = 0; 
+                            feedback = isEn ? "We couldn't capture any audio response." : "لم نتمكن من التقاط أي إجابة صوتية."; 
+                        } else if (wc > 0 && wc < 10) { 
+                            score = 3; 
+                            feedback = isEn ? "Answer is too short. Please elaborate with more examples." : "الإجابة قصيرة جداً، يرجى التوضيح بأمثلة أكثر."; 
+                            ideal = isEn ? "It's highly recommended to use the STAR method to structure your situation, task, action, and result." : "يفضل استخدام أسلوب STAR لتوضيح الموقف، المهمة، الإجراء، والنتيجة."; 
+                        } else if (wc >= 10 && wc < 30) { 
+                            score = 5; 
+                            feedback = isEn ? "Basic answer, but requires more technical depth and detail." : "إجابة أساسية، ولكن تحتاج إلى تفاصيل وعمق تقني أكبر."; 
+                        } else if (wc >= 30) { 
+                            score = 8; 
+                            feedback = isEn ? "Good and detailed answer. Try to tie your points more directly to the job requirements." : "إجابة جيدة ومفصلة. حاول ربط النقاط بمتطلبات الوظيفة بشكل مباشر أكثر."; 
+                        }
+                        
+                        return { question: item.q || "—", answer: ans || (isEn ? "No answer" : "لا يوجد إجابة"), score, feedback, ideal_answer: ideal };
                     });
                     setReport(fallback);
                 } else {
