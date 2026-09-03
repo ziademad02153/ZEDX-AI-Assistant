@@ -9,13 +9,13 @@ export async function POST(request: Request) {
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return NextResponse.json({ error: "Unauthorized - Please sign in" }, { status: 401 });
         }
-        
+
         const token = authHeader.split(' ')[1];
         const supabase = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL!,
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         );
-        
+
         const { data: { user }, error: authError } = await supabase.auth.getUser(token);
         if (authError || !user) {
             return NextResponse.json({ error: "Unauthorized - Invalid token" }, { status: 401 });

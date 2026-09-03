@@ -73,7 +73,7 @@ export async function POST(req: Request) {
         // We must generate a unique file path to prevent concurrent request clashes
         const tempFilePath = path.join(os.tmpdir(), `tts-${crypto.randomUUID()}.mp3`);
         const scriptPath = path.join(os.tmpdir(), `tts-script-${crypto.randomUUID()}.js`);
-        
+
         // WORKAROUND: node-edge-tts hangs inside Next.js API routes due to stream/ws handling.
         // We spawn a separate Node process to handle the generation safely.
         const base64Text = Buffer.from(text).toString('base64');
@@ -85,15 +85,15 @@ tts.ttsPromise(Buffer.from('${base64Text}', 'base64').toString('utf-8'), '${temp
     .then(() => process.exit(0))
     .catch(e => { console.error(e); process.exit(1); });
 `;
-        
+
         let audioBuffer: Buffer | null = null;
         try {
             fs.writeFileSync(scriptPath, script);
-            
+
             const { exec } = require('child_process');
             const util = require('util');
             const execAsync = util.promisify(exec);
-            
+
             // Added timeout to prevent hanging forever
             await execAsync(`node "${scriptPath}"`, { cwd: process.cwd(), timeout: 15000 });
             audioBuffer = fs.readFileSync(tempFilePath);

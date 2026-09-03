@@ -27,48 +27,17 @@ ZEDX operates across two distinct functional modes:
 
 ---
 
-## Platform Architecture Updates (Latest Release)
-
-### TTS Hybrid Routing Engine
-
-The Text-to-Speech subsystem has been re-engineered from a single-provider model into a **dual-engine hybrid router** with dynamic language detection:
-
-- **Arabic Language Path** (`ar-*`): Routed to **ElevenLabs Multilingual V2** for hyper-realistic Arabic intonation and dialect support. Arabic requires neural TTS synthesis unavailable in standard edge-based engines.
-- **All Other Languages Path**: Routed to **Microsoft Edge TTS** via a spawned child process. Edge TTS delivers native-quality voice synthesis at zero per-character cost for all 30+ non-Arabic supported languages.
-
-This hybrid model reduces ElevenLabs character consumption to Arabic-only sessions, effectively extending API quota by a factor proportional to the ratio of Arabic to non-Arabic usage.
-
-### Distributed API Key Load Balancer
-
-Both the Groq inference layer and the ElevenLabs TTS layer now employ a **shuffled round-robin key rotation system** across multi-account key pools:
-
-- **Groq (LLM + STT):** Pool of 14 independent API keys across separate accounts. Keys are shuffled per request. On rate-limit or quota exhaustion, the system automatically retries the next available key transparently — zero downtime to the user.
-- **ElevenLabs (Arabic TTS):** Pool of 10 independent API keys across separate accounts. Same shuffle-and-retry architecture. A failed key (4xx status) triggers immediate fallback to the next key in the pool without surfacing an error to the interview session.
-
-This architecture eliminates single-key quota exhaustion as a failure mode entirely.
-
-### Interview Flow Consolidation
-
-The candidate onboarding sequence has been consolidated from a two-step greeting exchange into a **single merged AI-generated introduction**. The AI autonomously extracts the candidate's name from the uploaded CV and delivers a contextual, language-appropriate greeting. This reduces unnecessary round-trips at session start and maintains immersion.
-
-### Full-Context Document Injection
-
-Prior implementations truncated Job Description and Resume payloads to fixed character limits before injection into the system prompt. This introduced silent context loss on dense technical CVs.
-
-The current implementation passes **the complete, untruncated content** of both documents directly to the LLM system prompt. This ensures the AI evaluator operates on the full candidate profile without degradation.
-
-### Audio Concurrency Control
-
-A persistent defect caused audio segments to overlap (echo) when the AI's TTS output triggered a new STT cycle before the prior audio playback completed. This was resolved by:
-
-- **Global Audio Mute Gate:** Any new `speakText` invocation immediately halts and garbage-collects all in-flight `HTMLAudioElement` instances before initiating a new audio stream.
-- **`hasStartedRef` Race Guard:** A boolean ref prevents duplicate interview initialization when React's Strict Mode double-invokes `useEffect` hooks in development.
-
-### Pronunciation Normalization
-
-TTS engines exhibiting character-by-character spelling behavior for uppercase acronyms (e.g., "Z-E-D-X" instead of "Zedex") are now addressed at the prompt level. The system instructs the LLM to always render the brand name as `Zedex` (Latin scripts) or `زيدكس` (Arabic script), ensuring consistent phonetic output across all TTS providers.
-
 ---
+
+## Latest Release Highlights
+
+- **Hybrid TTS Engine:** Dynamic language-aware routing to the optimal speech synthesis provider per request, with automatic fallback handling and sub-millisecond routing decisions.
+- **Fault-Tolerant Inference Pipeline:** Distributed, shuffle-based key rotation across the LLM and TTS layers. Any quota or rate-limit event triggers a seamless, transparent failover to the next available endpoint — zero user-facing downtime.
+- **Unified Onboarding Flow:** Session initialization condensed into a single AI-generated, context-aware greeting derived directly from the candidate's CV — eliminating cold-start latency.
+- **Full-Document Context Injection:** Untruncated CV and Job Description content is passed to the LLM in its entirety, ensuring no silent context loss on dense technical profiles.
+- **Audio Concurrency Control:** Resolved race conditions causing audio overlap by implementing a global audio registry with an explicit mute gate and an initialization guard ref.
+
+
 
 ## Why ZEDX?
 

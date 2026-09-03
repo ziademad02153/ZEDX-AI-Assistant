@@ -31,10 +31,10 @@ export async function POST(request: Request) {
         const authHeader = request.headers.get('Authorization');
         const token = authHeader?.split(' ')[1];
         const isDev = process.env.NODE_ENV === 'development';
-        
+
         let user: any = null;
         let profile: any = null;
-        
+
         if (!token && !isDev) {
             return NextResponse.json({ error: { message: "Unauthorized. Please sign in." } }, { status: 401 });
         }
@@ -122,7 +122,7 @@ export async function POST(request: Request) {
         if (model === "qwen/qwen3.6-27b" && currentTier === 'free') {
             return NextResponse.json({ error: { message: "Upgrade to Pro or Ultra to use Qwen 3.6 27B." } }, { status: 403 });
         }
-        
+
         // Generate secure system prompt on the server
         const systemPrompt = getSystemPrompt(promptType as PromptType, promptContext);
 
@@ -159,7 +159,7 @@ export async function POST(request: Request) {
                         max_tokens: 4096,
                         temperature: 0.1
                     };
-                    
+
                     if (response_format) requestBody.response_format = response_format;
 
                     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -176,7 +176,7 @@ export async function POST(request: Request) {
                     const data = await response.json();
 
                     if (!response.ok) throw new Error(data.error?.message || `HTTP ${response.status}`);
-                    
+
                     let content = data.choices?.[0]?.message?.content;
                     if (!content) throw new Error("Empty response from AI");
 

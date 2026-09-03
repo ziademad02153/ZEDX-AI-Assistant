@@ -125,7 +125,7 @@ export default function PricingPage() {
                                 </div>
                                 <div className="flex items-start gap-3 text-gray-400 dark:text-zinc-600 min-h-[36px] items-center">
                                     <div className="w-[18px] h-[18px] shrink-0 flex items-center justify-center font-bold text-lg">×</div>
-                                    <span className="text-[14px] font-medium">29+ Languages</span>
+                                    <span className="text-[14px] font-medium">30+ Languages</span>
                                 </div>
                                 <div className="flex items-start gap-3 text-gray-400 dark:text-zinc-600 min-h-[36px] items-center">
                                     <div className="w-[18px] h-[18px] shrink-0 flex items-center justify-center font-bold text-lg">×</div>
@@ -346,7 +346,7 @@ export default function PricingPage() {
                                     <Image src="/Multi-Language.png" alt="Languages" width={32} height={32} className="object-contain opacity-90 sepia-[.3] hue-rotate-[-30deg] saturate-[2]" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">All 29+ Languages Unlocked</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">All 30+ Languages Unlocked</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Full global language access without limits</div>
                                 </div>
                             </div>

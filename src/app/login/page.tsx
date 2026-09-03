@@ -297,74 +297,78 @@ export default function LoginPage() {
                 </div>
             </div>
 
-            {/* Right Side - Clean Login Form (Light Theme) */}
-            <div className="flex items-center justify-center p-8 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white">
-                <div className="w-full max-w-sm space-y-8">
+            {/* Right Side — Apple-style Auth Panel */}
+            <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#111111] px-6">
+                <div className="w-full max-w-[360px]">
 
-                    {/* Header Mobile Brand (visible only on small) */}
-                    <div className="md:hidden text-center mb-6">
-                        <div className="relative w-14 h-14 mx-auto mb-3 overflow-hidden rounded-lg">
-                            <Image
-                                src="/zedx-logo.png"
-                                alt="ZEDX-AI Logo"
-                                fill
-                                className="object-cover"
-                            />
+                    {/* Mobile Brand */}
+                    <div className="md:hidden text-center mb-8">
+                        <div className="relative w-12 h-12 mx-auto mb-3 overflow-hidden rounded-2xl shadow-sm">
+                            <Image src="/zedx-logo.png" alt="ZEDX-AI Logo" fill className="object-cover" />
                         </div>
-                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">ZEDX-AI</h2>
+                        <h2 className="text-[15px] font-semibold text-gray-900 dark:text-white tracking-tight">ZEDX AI</h2>
                     </div>
 
-                    <div className="text-center">
-                        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            {mode === "signin" ? "Welcome back" : mode === "signup" ? "Get started free" : mode === "forgot" ? "Reset Password" : mode === "magiclink" ? "Sign in with Code" : "Check your email"}
+                    {/* Header */}
+                    <div className="mb-8">
+                        <h1
+                            className="text-[28px] font-semibold tracking-[-0.5px] text-gray-900 dark:text-white"
+                            style={{ fontFamily: "-apple-system, 'SF Pro Display', BlinkMacSystemFont, 'Inter', sans-serif" }}
+                        >
+                            {mode === "signin" ? "Welcome back" : mode === "signup" ? "Create account" : mode === "forgot" ? "Reset password" : mode === "magiclink" ? "Sign in with code" : "Check your email"}
                         </h1>
-                        <p className="text-sm text-gray-500 mt-3">
-                            {mode === "signin"
-                                ? "Enter your email to sign in to your accounts"
-                                : mode === "signup"
-                                    ? "Create your account in seconds. No credit card required."
-                                    : mode === "forgot"
-                                        ? "Enter your email to receive a password reset link."
-                                        : mode === "magiclink"
-                                            ? "Enter your email to receive a sign-in link."
-                                            : `We've sent a verification code to ${formData.email}`}
+                        <p
+                            className="mt-1.5 text-[14px] text-gray-500 dark:text-[#888]"
+                            style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
+                        >
+                            {mode === "signin" ? "Enter your email to sign in to your account"
+                                : mode === "signup" ? "Create your account in seconds. No credit card required."
+                                : mode === "forgot" ? "Enter your email to receive a reset link."
+                                : mode === "magiclink" ? "Enter your email to receive a sign-in link."
+                                : `We sent a code to ${formData.email}`}
                         </p>
                     </div>
 
                     <AnimatePresence mode="wait">
                         {error && (
                             <motion.div
-                                initial={{ opacity: 0, y: -10 }}
+                                initial={{ opacity: 0, y: -6 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="p-4 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl flex items-center gap-3"
+                                exit={{ opacity: 0 }}
+                                className="mb-4 px-4 py-3 text-[13px] text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 rounded-xl"
+                                style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
                             >
-                                <div className="w-1 h-1 rounded-full bg-red-600" />
                                 {error}
                             </motion.div>
                         )}
                         {success && (
                             <motion.div
-                                initial={{ opacity: 0, y: -10 }}
+                                initial={{ opacity: 0, y: -6 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="p-4 text-sm text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-3"
+                                exit={{ opacity: 0 }}
+                                className="mb-4 px-4 py-3 text-[13px] text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40 rounded-xl"
+                                style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
                             >
-                                <div className="w-1 h-1 rounded-full bg-emerald-600" />
                                 {success}
                             </motion.div>
                         )}
                     </AnimatePresence>
 
-                    <form onSubmit={mode === 'verify' ? handleVerifySubmit : handleAuth} className="space-y-5">
+                    <form onSubmit={mode === 'verify' ? handleVerifySubmit : handleAuth} className="space-y-4">
 
                         {mode === 'signup' && (
-                            <div className="space-y-2">
-                                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                            <div className="space-y-1.5">
+                                <label
+                                    className="block text-[13px] font-medium text-gray-700 dark:text-[#ccc]"
+                                    style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
+                                >
                                     Full Name
                                 </label>
                                 <input
                                     type="text"
                                     placeholder="Mohamed Salah"
-                                    className="flex h-11 w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-4 py-3 text-sm text-gray-900 dark:text-white ring-offset-white dark:ring-offset-zinc-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                                    className="w-full h-[44px] px-3.5 text-[15px] rounded-xl border border-[#d1d1d6] dark:border-[#3a3a3c] bg-white dark:bg-[#1c1c1e] text-gray-900 dark:text-white placeholder:text-[#aeaeb2] dark:placeholder:text-[#636366] outline-none focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                    style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     required
@@ -373,14 +377,18 @@ export default function LoginPage() {
                         )}
 
                         {mode !== 'verify' && (
-                            <div className="space-y-2">
-                                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                            <div className="space-y-1.5">
+                                <label
+                                    className="block text-[13px] font-medium text-gray-700 dark:text-[#ccc]"
+                                    style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
+                                >
                                     Email
                                 </label>
                                 <input
                                     type="email"
-                                    placeholder="mohamed@example.com"
-                                    className="flex h-11 w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-4 py-3 text-sm text-gray-900 dark:text-white ring-offset-white dark:ring-offset-zinc-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                                    placeholder="name@example.com"
+                                    className="w-full h-[44px] px-3.5 text-[15px] rounded-xl border border-[#d1d1d6] dark:border-[#3a3a3c] bg-white dark:bg-[#1c1c1e] text-gray-900 dark:text-white placeholder:text-[#aeaeb2] dark:placeholder:text-[#636366] outline-none focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                    style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     required
@@ -389,18 +397,22 @@ export default function LoginPage() {
                         )}
 
                         {mode !== 'verify' && mode !== 'forgot' && mode !== 'magiclink' && (
-                            <div className="space-y-2">
+                            <div className="space-y-1.5">
                                 <div className="flex items-center justify-between">
-                                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                    <label
+                                        className="block text-[13px] font-medium text-gray-700 dark:text-[#ccc]"
+                                        style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
+                                    >
                                         Password
                                     </label>
                                     {mode === 'signup' && (
                                         <button
                                             type="button"
                                             onClick={generatePassword}
-                                            className="text-xs text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1.5 transition-colors"
+                                            className="text-[12px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1 hover:opacity-70 transition-opacity"
+                                            style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
                                         >
-                                            <Sparkles size={14} /> Generate Strong
+                                            <Sparkles size={11} /> Generate
                                         </button>
                                     )}
                                 </div>
@@ -408,7 +420,7 @@ export default function LoginPage() {
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         placeholder="••••••••"
-                                        className="flex h-11 w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-4 py-3 text-sm text-gray-900 dark:text-white ring-offset-white dark:ring-offset-zinc-900 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10 font-mono transition-all"
+                                        className="w-full h-[44px] px-3.5 pr-10 text-[15px] rounded-xl border border-[#d1d1d6] dark:border-[#3a3a3c] bg-white dark:bg-[#1c1c1e] text-gray-900 dark:text-white placeholder:text-[#aeaeb2] dark:placeholder:text-[#636366] outline-none focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all font-mono"
                                         value={formData.password}
                                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                         required
@@ -417,25 +429,25 @@ export default function LoginPage() {
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 transition-colors"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aeaeb2] hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                                     >
-                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                                     </button>
                                 </div>
 
-                                {/* Password Strength Indicator - only show on signup */}
                                 {mode === 'signup' && formData.password && (
-                                    <div className="space-y-1 mt-2">
+                                    <div className="space-y-1 pt-1">
                                         <div className="flex gap-1">
                                             {[1, 2, 3, 4, 5].map((i) => (
                                                 <div
                                                     key={i}
-                                                    className={`h-1 flex-1 rounded-full transition-all ${i <= passwordStrength.level ? passwordStrength.color : 'bg-gray-200'
-                                                        }`}
+                                                    className={`h-[3px] flex-1 rounded-full transition-all ${i <= passwordStrength.level ? passwordStrength.color : 'bg-[#e5e5ea] dark:bg-[#3a3a3c]'}`}
                                                 />
                                             ))}
                                         </div>
-                                        <p className={`text-xs ${passwordStrength.color.replace('bg-', 'text-')}`}>
+                                        <p className={`text-[11px] ${passwordStrength.color.replace('bg-', 'text-')}`}
+                                            style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
+                                        >
                                             {passwordStrength.text}
                                         </p>
                                     </div>
@@ -444,113 +456,134 @@ export default function LoginPage() {
                         )}
 
                         {mode === 'verify' && (
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-500 dark:text-zinc-400">
+                            <div className="space-y-3">
+                                <div className="space-y-1.5">
+                                    <label
+                                        className="block text-[13px] font-medium text-gray-700 dark:text-[#ccc]"
+                                        style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
+                                    >
                                         Verification Code
                                     </label>
                                     <input
                                         type="text"
-                                        placeholder="12345678"
+                                        placeholder="123456"
                                         maxLength={8}
                                         inputMode="numeric"
                                         pattern="[0-9]{6,8}"
-                                        className="flex h-12 w-full rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-black/50 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500/50 disabled:cursor-not-allowed disabled:opacity-50 text-center tracking-[0.5em] font-mono text-xl transition-all shadow-inner"
+                                        className="w-full h-[52px] px-3.5 text-[22px] rounded-xl border border-[#d1d1d6] dark:border-[#3a3a3c] bg-white dark:bg-[#1c1c1e] text-gray-900 dark:text-white placeholder:text-[#aeaeb2] dark:placeholder:text-[#636366] outline-none focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all text-center tracking-[0.4em] font-mono"
                                         value={formData.otp}
                                         onChange={(e) => setFormData({ ...formData, otp: e.target.value.replace(/\D/g, '').slice(0, 8) })}
                                         required
                                     />
                                 </div>
-                                <p className="text-xs text-center text-gray-500 dark:text-zinc-400 bg-gray-50 dark:bg-white/5 p-3 rounded-xl border border-gray-100 dark:border-white/5">
-                                    We sent a code to <span className="font-medium text-gray-900 dark:text-white">{formData.email}</span>. <br />Check your spam folder if it doesn&apos;t appear.
+                                <p
+                                    className="text-[12px] text-center text-[#8e8e93] dark:text-[#636366] px-2"
+                                    style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
+                                >
+                                    Sent to <span className="font-medium text-gray-900 dark:text-white">{formData.email}</span>. Check your spam folder if needed.
                                 </p>
                                 <button
                                     type="button"
                                     onClick={handleResendCode}
                                     disabled={isLoading}
-                                    className="w-full text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center justify-center gap-2 py-2 hover:bg-emerald-50 rounded-lg transition-colors disabled:opacity-50"
+                                    className="w-full text-[13px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center justify-center gap-1.5 py-2 hover:opacity-70 transition-opacity disabled:opacity-40"
+                                    style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
                                 >
-                                    <RefreshCw size={14} className={isLoading ? "animate-spin" : ""} />
-                                    Resend Verification Code
+                                    <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
+                                    Resend code
                                 </button>
                             </div>
                         )}
 
-                        <Button
-                            className="w-full bg-emerald-600 hover:bg-emerald-500 text-white h-11 font-medium rounded-full shadow-lg shadow-emerald-900/20 hover:shadow-emerald-900/40 transition-all text-[15px]"
+                        {/* Primary CTA */}
+                        <button
+                            type="submit"
                             disabled={isLoading}
+                            className="w-full h-[44px] mt-1 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-[15px] font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 shadow-sm"
+                            style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
                         >
                             {isLoading ? (
-                                <RefreshCw className="animate-spin mr-2 h-4 w-4" />
+                                <RefreshCw className="animate-spin h-4 w-4" />
                             ) : (
                                 mode === 'signin' ? "Sign In" : mode === 'signup' ? "Create Account" : mode === 'forgot' ? "Send Reset Link" : mode === 'magiclink' ? "Send Sign-in Link" : "Verify Email"
                             )}
-                        </Button>
+                        </button>
 
+                        {/* Divider & Google */}
                         {mode !== 'verify' && (
                             <>
-                                <div className="relative my-4">
+                                <div className="relative my-5">
                                     <div className="absolute inset-0 flex items-center">
-                                        <span className="w-full border-t border-gray-200" />
+                                        <span className="w-full border-t border-[#e5e5ea] dark:border-[#3a3a3c]" />
                                     </div>
-                                    <div className="relative flex justify-center text-xs uppercase">
-                                        <span className="bg-white dark:bg-zinc-900 px-2 text-gray-400">Or continue with</span>
+                                    <div className="relative flex justify-center">
+                                        <span
+                                            className="bg-white dark:bg-[#111111] px-3 text-[12px] text-[#8e8e93] dark:text-[#636366] uppercase tracking-wider font-medium"
+                                            style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
+                                        >
+                                            or
+                                        </span>
                                     </div>
                                 </div>
 
-                                <Button
+                                <button
                                     type="button"
-                                    variant="outline"
-                                    className="w-full h-11 rounded-full border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 text-gray-800 dark:text-gray-100 font-medium flex items-center justify-center gap-3 transition-colors shadow-sm"
                                     onClick={async () => {
-                                        try {
-                                            await signInWithGoogle();
-                                        } catch (err: unknown) {
-                                            const error = err as Error;
-                                            setError(error.message || "Google sign-in failed");
-                                        }
+                                        try { await signInWithGoogle(); }
+                                        catch (err: unknown) { setError((err as Error).message || "Google sign-in failed"); }
                                     }}
                                     disabled={isLoading}
+                                    className="w-full h-[44px] rounded-xl border border-[#d1d1d6] dark:border-[#3a3a3c] bg-white dark:bg-[#1c1c1e] hover:bg-[#f5f5f7] dark:hover:bg-[#2c2c2e] text-gray-800 dark:text-white text-[15px] font-medium flex items-center justify-center gap-2.5 transition-all duration-150 disabled:opacity-50 shadow-sm"
+                                    style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
                                 >
-                                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                                    <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24">
                                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                                         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                                         <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                                         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                                     </svg>
                                     Continue with Google
-                                </Button>
+                                </button>
                             </>
                         )}
                     </form>
 
-                    <div className="text-center text-sm text-gray-500">
+                    {/* Footer links */}
+                    <div
+                        className="mt-7 text-center text-[13px] text-[#8e8e93] dark:text-[#636366]"
+                        style={{ fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', sans-serif" }}
+                    >
                         {mode === 'signin' ? (
-                            <>
-                                Don&apos;t have an account?{" "}
-                                <button onClick={() => setMode('signup')} type="button" className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-all">
-                                    Sign up
-                                </button>
-                                <div className="mt-3 space-x-4">
-                                    <button type="button" onClick={() => setMode('forgot')} className="text-xs text-gray-500 hover:text-gray-900 underline transition-all">Forgot password?</button>
-                                    <button type="button" onClick={() => setMode('magiclink')} className="text-xs text-gray-500 hover:text-gray-900 underline transition-all">Sign in with Code</button>
+                            <div className="space-y-2.5">
+                                <div>
+                                    Don&apos;t have an account?{" "}
+                                    <button onClick={() => setMode('signup')} type="button" className="text-emerald-600 dark:text-emerald-400 font-medium hover:opacity-70 transition-opacity">
+                                        Sign up
+                                    </button>
                                 </div>
-                            </>
+                                <div className="flex items-center justify-center gap-4">
+                                    <button type="button" onClick={() => setMode('forgot')} className="hover:text-gray-900 dark:hover:text-white transition-colors">
+                                        Forgot password?
+                                    </button>
+                                    <span className="w-1 h-1 rounded-full bg-[#d1d1d6] dark:bg-[#3a3a3c]" />
+                                    <button type="button" onClick={() => setMode('magiclink')} className="hover:text-gray-900 dark:hover:text-white transition-colors">
+                                        Sign in with Code
+                                    </button>
+                                </div>
+                            </div>
                         ) : mode === 'signup' ? (
-                            <>
+                            <div>
                                 Already have an account?{" "}
-                                <button onClick={() => setMode('signin')} type="button" className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-all">
+                                <button onClick={() => setMode('signin')} type="button" className="text-emerald-600 dark:text-emerald-400 font-medium hover:opacity-70 transition-opacity">
                                     Sign in
                                 </button>
-                            </>
+                            </div>
                         ) : (
-                            <button onClick={() => setMode('signin')} type="button" className="text-gray-500 hover:text-gray-900 underline transition-all">
+                            <button onClick={() => setMode('signin')} type="button" className="hover:text-gray-900 dark:hover:text-white transition-colors">
                                 Back to sign in
                             </button>
                         )}
                     </div>
-
-
 
                 </div>
             </div>
