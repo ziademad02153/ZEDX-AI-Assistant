@@ -10,9 +10,9 @@ const MAX_REQUESTS = 20;
 
 // Fallback models in case the selected one fails
 const GROQ_MODELS = [
-    "llama-3.1-8b-instant",
-    "llama3-8b-8192",
-    "mixtral-8x7b-32768"
+    "openai/gpt-oss-20b",
+    "openai/gpt-oss-120b",
+    "qwen/qwen3.6-27b"
 ];
 
 // Debug GET handler to verify endpoint reaches the server
@@ -30,28 +30,41 @@ export async function POST(request: Request) {
         // 1. Authenticate Request
         const authHeader = request.headers.get('Authorization');
         const token = authHeader?.split(' ')[1];
+        const isDev = process.env.NODE_ENV === 'development';
         
-        if (!token) {
+        let user: any = null;
+        let profile: any = null;
+        
+        if (!token && !isDev) {
             return NextResponse.json({ error: { message: "Unauthorized. Please sign in." } }, { status: 401 });
         }
 
         const supabase = createClient(supabaseUrl, supabaseAnonKey);
-        const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+        const { data: authData, error: authError } = token ? await supabase.auth.getUser(token) : { data: { user: null }, error: new Error("No token") };
 
-        if (authError || !user) {
-            return NextResponse.json({ error: { message: "Invalid authentication token." } }, { status: 401 });
-        }
-
-        // 2. Fetch User Profile
         const supabaseAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
-        const { data: profile, error: profileError } = await supabaseAdmin
-            .from('profiles')
-            .select('tier, questions_asked, subscription_expires_at')
-            .eq('id', user.id)
-            .single();
 
-        if (profileError || !profile) {
-            return NextResponse.json({ error: { message: "User profile not found. Please re-login." } }, { status: 404 });
+        if (authError || !authData.user) {
+            if (isDev) {
+                // Mock user for local development to bypass session expiration
+                user = { id: "dev-mock-user-id" };
+                profile = { tier: "pro", questions_asked: 0, subscription_expires_at: null };
+            } else {
+                return NextResponse.json({ error: { message: "Invalid authentication token." } }, { status: 401 });
+            }
+        } else {
+            user = authData.user;
+            // 2. Fetch User Profile
+            const { data: dbProfile, error: profileError } = await supabaseAdmin
+                .from('profiles')
+                .select('tier, questions_asked, subscription_expires_at')
+                .eq('id', user.id)
+                .single();
+
+            if (profileError || !dbProfile) {
+                return NextResponse.json({ error: { message: "User profile not found. Please re-login." } }, { status: 404 });
+            }
+            profile = dbProfile;
         }
 
         let currentTier = profile.tier;
@@ -100,73 +113,86 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { model, messages, promptType, promptContext, prompt, response_format } = body;
 
-        // 5. Backend Model Security (Prevent API hijacking)
-        if (model === "meta-llama/llama-3-70b-instruct" && currentTier !== 'ultra') {
-            return NextResponse.json({ error: { message: "Unauthorized model. Requires Ultra tier." } }, { status: 403 });
+        // 5. Backend Model Security
+        // Check Ultra tier access
+        if (model === "openai/gpt-oss-120b" && currentTier !== 'ultra') {
+            return NextResponse.json({ error: { message: "Upgrade to Ultra to use GPT-OSS 120B." } }, { status: 403 });
         }
-        if (model === "openai/gpt-oss-120b" && currentTier === 'free') {
-            return NextResponse.json({ error: { message: "Unauthorized model. Requires Pro or Ultra tier." } }, { status: 403 });
+        // Check Pro tier access
+        if (model === "qwen/qwen3.6-27b" && currentTier === 'free') {
+            return NextResponse.json({ error: { message: "Upgrade to Pro or Ultra to use Qwen 3.6 27B." } }, { status: 403 });
         }
         
         // Generate secure system prompt on the server
         const systemPrompt = getSystemPrompt(promptType as PromptType, promptContext);
 
-        const isDev = process.env.NODE_ENV === 'development';
-        const groqApiKey = process.env.GROQ_API_KEY;
+        // Gather all available Groq API keys for load balancing (e.g., GROQ_API_KEY, GROQ_API_KEY_1, GROQ_API_KEY_2...)
+        const groqApiKeys = Object.keys(process.env)
+            .filter(key => key.startsWith('GROQ_API_KEY'))
+            .map(key => process.env[key])
+            .filter(Boolean) as string[];
 
-        if (!groqApiKey) {
+        if (groqApiKeys.length === 0) {
             return NextResponse.json({ error: { message: "Server AI configuration missing." } }, { status: 500 });
         }
+
+        // Shuffle keys to distribute load across all requests
+        const shuffledKeys = groqApiKeys.sort(() => 0.5 - Math.random());
 
         const modelsToTry = model ? [model, ...GROQ_MODELS.filter(m => m !== model)] : GROQ_MODELS;
         const uniqueModels = [...new Set(modelsToTry)];
         let lastError: Error | null = null;
 
+        // Double Fallback Loop: Try each model. For each model, try every available key.
         for (const targetModel of uniqueModels) {
-            try {
-                const groqMessages = messages || [{ role: "user", content: prompt }];
-                const finalMessages = systemPrompt ? [{ role: "system", content: systemPrompt }, ...groqMessages] : groqMessages;
+            for (const apiKey of shuffledKeys) {
+                try {
+                    const groqMessages = messages || [{ role: "user", content: prompt }];
+                    const finalMessages = systemPrompt ? [{ role: "system", content: systemPrompt }, ...groqMessages] : groqMessages;
 
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 30000);
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-                const requestBody: any = {
-                    model: targetModel,
-                    messages: finalMessages,
-                    max_tokens: 4096,
-                    temperature: 0.1
-                };
-                
-                if (response_format) requestBody.response_format = response_format;
+                    const requestBody: any = {
+                        model: targetModel,
+                        messages: finalMessages,
+                        max_tokens: 4096,
+                        temperature: 0.1
+                    };
+                    
+                    if (response_format) requestBody.response_format = response_format;
 
-                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${groqApiKey}`
-                    },
-                    body: JSON.stringify(requestBody),
-                    signal: controller.signal
-                });
+                    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${apiKey}`
+                        },
+                        body: JSON.stringify(requestBody),
+                        signal: controller.signal
+                    });
 
-                clearTimeout(timeoutId);
-                const data = await response.json();
+                    clearTimeout(timeoutId);
+                    const data = await response.json();
 
-                if (!response.ok) throw new Error(data.error?.message || `HTTP ${response.status}`);
-                
-                const content = data.choices?.[0]?.message?.content;
-                if (!content) throw new Error("Empty response from AI");
+                    if (!response.ok) throw new Error(data.error?.message || `HTTP ${response.status}`);
+                    
+                    let content = data.choices?.[0]?.message?.content;
+                    if (!content) throw new Error("Empty response from AI");
 
-                // Success! No need to refund the question.
+                    // Strip <think> blocks (reasoning models) so TTS doesn't read the internal thought process
+                    // Using (<\/think>|$) ensures we strip it even if the model hit max tokens and didn't close the tag.
+                    content = content.replace(/<think>[\s\S]*?(<\/think>|$)/gi, '').trim();
 
+                    return NextResponse.json({ content, modelUsed: targetModel, provider: "groq" });
 
-                return NextResponse.json({ content, modelUsed: targetModel, provider: "groq" });
-
-            } catch (error: unknown) {
-                const err = error as Error;
-                lastError = err;
-                if (err.message.includes("429") || err.message.includes("quota")) continue;
+                } catch (error: any) {
+                    console.error(`[AI Fallback] Model: ${targetModel} | Key: ***${apiKey.slice(-4)} | Error:`, error.message);
+                    lastError = error;
+                    // If this key failed, the loop automatically continues to try the NEXT key in shuffledKeys.
+                }
             }
+            // If all keys failed for this model, the outer loop continues to the NEXT model.
         }
 
         // Refund the question if all models failed
@@ -176,7 +202,7 @@ export async function POST(request: Request) {
         }
 
         return NextResponse.json({
-            error: { message: "AI temporarily unavailable. Please try again later." }
+            error: { message: `AI temporarily unavailable. Error: ${lastError?.message || "Unknown error"}` }
         }, { status: 503 });
 
     } catch (error: unknown) {

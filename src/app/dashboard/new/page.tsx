@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Upload, AlertCircle, Sparkles, Loader2, Target, Gauge } from "lucide-react";
+import { ArrowLeft, Upload, AlertCircle, Sparkles, Loader2, Target, Gauge, Mic, Camera, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -42,37 +42,28 @@ const GlobeIcon = () => (
 
 const AI_MODELS = [
     {
-        id: "qwen/qwen3.6-27b",
-        name: "Qwen 3.6 27B",
-        description: "Multilingual pro",
-        logo: "/qwen.png",
-        gradient: "from-indigo-500/20 to-violet-500/20",
-        border: "group-hover:border-indigo-500/50",
-        tier: "free"
-    },
-    {
         id: "openai/gpt-oss-20b",
         name: "GPT-OSS 20B",
-        description: "Fast, efficient",
+        description: "Fast & Efficient",
         logo: "/openai-logo.png",
         gradient: "from-blue-500/20 to-cyan-500/20",
         border: "group-hover:border-blue-500/50",
         tier: "free"
     },
     {
-        id: "openai/gpt-oss-120b",
-        name: "GPT-OSS 120B",
-        description: "Max power reasoning",
-        logo: "/openai-logo.png",
-        gradient: "from-emerald-500/20 to-green-500/20",
-        border: "group-hover:border-emerald-500/50",
+        id: "qwen/qwen3.6-27b",
+        name: "Qwen 3.6 27B",
+        description: "Multilingual Pro",
+        logo: "/qwen.png",
+        gradient: "from-indigo-500/20 to-violet-500/20",
+        border: "group-hover:border-indigo-500/50",
         tier: "pro"
     },
     {
-        id: "meta-llama/llama-3-70b-instruct",
-        name: "Llama 3 70B",
-        description: "Ultra intelligence",
-        logo: "/Llama 3 70B.png",
+        id: "openai/gpt-oss-120b",
+        name: "GPT-OSS 120B",
+        description: "Ultra Intelligence",
+        logo: "/openai-logo.png",
         gradient: "from-amber-500/20 to-orange-500/20",
         border: "group-hover:border-amber-500/50",
         tier: "ultra"
@@ -221,10 +212,10 @@ export default function NewInterviewPage() {
                             </Button>
                         </Link>
                         <div>
-                            <h1 className="text-2xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400 mb-1 sm:mb-2">
+                            <h1 className="text-3xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400 mb-1 sm:mb-2 tracking-tight">
                                 Setup Interview
                             </h1>
-                            <p className="text-sm sm:text-lg text-gray-500 dark:text-gray-400">Configure your AI simulator for the perfect session.</p>
+                            <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400 font-medium tracking-wide">Configure your AI simulator for the perfect session.</p>
                         </div>
                     </div>
                 </div>
@@ -250,8 +241,8 @@ export default function NewInterviewPage() {
                                             <Image src="/Job description.png" alt="Job Description" width={56} height={56} className="object-contain dark:invert drop-shadow-[0_0_12px_rgba(16,185,129,0.3)] transition-all" />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-lg sm:text-2xl text-gray-900 dark:text-white mb-0.5 sm:mb-1">Job Description</h3>
-                                            <p className="text-sm sm:text-base text-gray-500 font-medium">Paste the target role details.</p>
+                                            <h3 className="font-semibold text-xl sm:text-2xl text-gray-900 dark:text-white mb-0.5 sm:mb-1 tracking-tight">Job Description</h3>
+                                            <p className="text-base sm:text-lg text-gray-500 font-medium">Paste the target role details.</p>
                                         </div>
                                     </div>
                                     <span className="text-[10px] sm:text-sm font-bold font-mono text-emerald-800 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl tracking-wider uppercase">REQUIRED</span>
@@ -278,8 +269,8 @@ export default function NewInterviewPage() {
                                         <Image src="/cv.png" alt="Resume CV" width={56} height={56} className="object-contain drop-shadow-[0_0_12px_rgba(16,185,129,0.3)] transition-all" />
                                     </div>
                                     <div className="flex-1">
-                                        <h3 className="font-bold text-lg sm:text-2xl text-gray-900 dark:text-white">Resume</h3>
-                                        <p className="text-sm sm:text-base text-gray-500">Add your CV for tailored context and better results.</p>
+                                        <h3 className="font-semibold text-xl sm:text-2xl text-gray-900 dark:text-white tracking-tight">Resume</h3>
+                                        <p className="text-base sm:text-lg text-gray-500 font-medium">Add your CV for tailored context and better results.</p>
                                     </div>
                                 </div>
                                 <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
@@ -323,7 +314,7 @@ export default function NewInterviewPage() {
                             className="grid grid-cols-1 sm:grid-cols-2 gap-6"
                         >
                             <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
-                                <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
+                                <label className="flex items-center gap-3 text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4 tracking-tight">
                                     <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                                         <Image src="/Interview-Logo.png" alt="Interview Type" width={28} height={28} className="object-contain dark:invert transition-all" />
                                     </div>
@@ -340,7 +331,7 @@ export default function NewInterviewPage() {
                                 </select>
                             </div>
                             <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
-                                <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
+                                <label className="flex items-center gap-3 text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4 tracking-tight">
                                     <div className="text-emerald-600 dark:text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                                         <Image src="/Multi-Language.png" alt="Language Globe" width={28} height={28} className="object-contain" />
                                     </div> 
@@ -351,7 +342,14 @@ export default function NewInterviewPage() {
                                     value={language}
                                     onChange={(e) => {
                                         const idx = SUPPORTED_LANGUAGES.findIndex(l => l.code === e.target.value);
-                                        if (idx >= 20 && userTier !== 'ultra' && !isDesktop) {
+                                        const isUltraLang = idx >= 20;
+                                        const isProLang = idx >= 2 && idx < 20;
+                                        
+                                        if (isUltraLang && userTier !== 'ultra' && !isDesktop) {
+                                            router.push("/pricing");
+                                            return;
+                                        }
+                                        if (isProLang && userTier === 'free' && !isDesktop) {
                                             router.push("/pricing");
                                             return;
                                         }
@@ -359,10 +357,16 @@ export default function NewInterviewPage() {
                                     }}
                                 >
                                     {SUPPORTED_LANGUAGES.map((lang, idx) => {
-                                        const isUltraLanguage = idx >= 20;
+                                        const isUltraLang = idx >= 20;
+                                        const isProLang = idx >= 2 && idx < 20;
+                                        
+                                        let label = lang.native;
+                                        if (isUltraLang && userTier !== 'ultra' && !isDesktop) label += ' (ULTRA)';
+                                        if (isProLang && userTier === 'free' && !isDesktop) label += ' (PRO)';
+                                        
                                         return (
                                             <option key={lang.code} value={lang.code}>
-                                                {lang.native} {isUltraLanguage && userTier !== 'ultra' && !isDesktop ? '(ULTRA)' : ''}
+                                                {label}
                                             </option>
                                         );
                                     })}
@@ -371,7 +375,7 @@ export default function NewInterviewPage() {
                             {!isDesktop && (
                                 <>
                                 <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
-                                    <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
+                                    <label className="flex items-center gap-3 text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4 tracking-tight">
                                         <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                                             <Image src="/Granular Scorecards.png" alt="Difficulty Scorecard" width={28} height={28} className="object-contain" />
                                         </div> 
@@ -394,7 +398,7 @@ export default function NewInterviewPage() {
                                 </select>
                             </div>
                             <div className="bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-white/10 rounded-[2.5rem] p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none">
-                                <label className="flex items-center gap-3 text-sm sm:text-base font-bold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4">
+                                <label className="flex items-center gap-3 text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3 sm:mb-4 tracking-tight">
                                     <div className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                                         <Image src="/question.png" alt="Questions" width={36} height={36} className="object-contain scale-110" />
                                     </div> 
@@ -445,8 +449,8 @@ export default function NewInterviewPage() {
                                     <Image src="/AI.jpg" alt="AI Model" width={48} height={48} className="w-full h-full object-cover" />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-gray-900 dark:text-white text-lg sm:text-xl">AI Model</h3>
-                                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Choose the brain behind ZEDX</p>
+                                    <h3 className="font-semibold text-gray-900 dark:text-white text-xl sm:text-2xl tracking-tight">AI Model</h3>
+                                    <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 font-medium">Choose the brain behind ZEDX</p>
                                 </div>
                             </div>
 
@@ -517,7 +521,7 @@ export default function NewInterviewPage() {
                                 className="flex-1 flex flex-col"
                             >
                                 <div className="flex items-center justify-between mb-4 px-2">
-                                    <h3 className="text-base font-semibold text-gray-500 dark:text-gray-400 flex items-center gap-3">
+                                    <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-400 flex items-center gap-3 tracking-tight">
                                         <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center">
                                             <Image src="/AI2.png" alt="AI" width={24} height={24} className="w-full h-full object-cover" />
                                         </div>

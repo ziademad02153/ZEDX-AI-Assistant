@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { interviewService, Interview } from "@/lib/interview-service";
 import { useRouter } from "next/navigation";
 import { useConfirmDialog } from "@/components/confirm-dialog";
+import { StartButton } from "@/components/start-button";
 
 export default function DashboardPage() {
     const router = useRouter();
@@ -102,12 +103,7 @@ export default function DashboardPage() {
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
                     <p className="text-gray-600 dark:text-gray-300">Welcome back! Ready for your next interview?</p>
                 </div>
-                <Link href="/dashboard/new" className="w-full sm:w-auto">
-                    <Button variant="gradient" className="w-full sm:w-auto shadow-lg shadow-green-900/20">
-                        <Plus className="mr-2 h-4 w-4" />
-                        Start New Interview
-                    </Button>
-                </Link>
+                <StartButton variant="dashboard" className="w-full sm:w-auto" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

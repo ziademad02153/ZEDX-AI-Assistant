@@ -2,15 +2,22 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Mic, MicOff, Video, AlertCircle, Loader2, X } from "lucide-react";
+import { Mic, MicOff, Video, AlertCircle, Loader2, X, Camera, CameraOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { SUPPORTED_LANGUAGES } from "@/lib/languages";
+import { supabase } from "@/lib/supabase";
 
 export default function MockInterviewPage() {
     const router = useRouter();
     const [isSetup, setIsSetup] = useState(false);
+    
+    // Hardware State - Auto enabled since permissions were tested on setup page
+    const [isMicEnabled, setIsMicEnabled] = useState(true);
+    const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+    const [isInterviewStarted, setIsInterviewStarted] = useState(false);
     
     // Context State
     const [jd, setJd] = useState("");
@@ -19,7 +26,7 @@ export default function MockInterviewPage() {
     const [interviewType, setInterviewType] = useState("Technical");
     const [questionCount, setQuestionCount] = useState(10);
     const [language, setLanguage] = useState("en-US");
-    const [model, setModel] = useState("llama-3.1-8b-instant");
+    const [model, setModel] = useState("qwen/qwen3.6-27b");
 
     // Interview State
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -36,6 +43,9 @@ export default function MockInterviewPage() {
     const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const finalTranscriptRef = useRef("");
+    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const isMounted = useRef(true);
+    const hasStartedRef = useRef(false);
 
     // Track latest state to avoid stale closures in event listeners and timeouts
     const stateRef = useRef({
@@ -62,7 +72,7 @@ export default function MockInterviewPage() {
         const _type = localStorage.getItem("interview_context_type") || "Technical";
         const _count = parseInt(localStorage.getItem("interview_context_question_count") || "10", 10);
         const _lang = localStorage.getItem("interview_context_lang") || "en-US";
-        const _model = localStorage.getItem("selected_ai_model") || "llama-3.1-8b-instant";
+        const _model = localStorage.getItem("selected_ai_model") || "qwen/qwen3.6-27b";
 
         if (!_jd || !_resume) {
             router.push("/dashboard/new");
@@ -83,39 +93,66 @@ export default function MockInterviewPage() {
     useEffect(() => {
         if (!isSetup) return;
 
+        let stream: MediaStream | null = null;
+        let audioCtx: any = null;
+        let jsNode: any = null;
+        
+        // Wait until user explicitly enables hardware to request permissions
+        if (!isMicEnabled && !isCameraEnabled) return;
+
         // 1. Setup Webcam
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-            .then(stream => {
-                if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
-                }
-                
-                // Setup Audio Context for Mic Level indicator
-                const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-                const analyser = audioContext.createAnalyser();
-                const microphone = audioContext.createMediaStreamSource(stream);
-                const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
-                
-                analyser.smoothingTimeConstant = 0.8;
-                analyser.fftSize = 1024;
-                
-                microphone.connect(analyser);
-                analyser.connect(javascriptNode);
-                javascriptNode.connect(audioContext.destination);
-                
-                javascriptNode.onaudioprocess = () => {
-                    const array = new Uint8Array(analyser.frequencyBinCount);
-                    analyser.getByteFrequencyData(array);
-                    let values = 0;
-                    const length = array.length;
-                    for (let i = 0; i < length; i++) {
-                        values += (array[i]);
+        const constraints = { 
+            video: isCameraEnabled, 
+            audio: isMicEnabled 
+        };
+
+        if (isMicEnabled || isCameraEnabled) {
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(s => {
+                    stream = s;
+                    if (videoRef.current && isCameraEnabled) {
+                        videoRef.current.srcObject = stream;
                     }
-                    const average = values / length;
-                    setAudioLevel(average);
-                };
-            })
-            .catch(err => console.error("Webcam error:", err));
+                    
+                    // Setup Audio Context for Mic Level indicator only if Mic is enabled
+                    if (isMicEnabled) {
+                        audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+                        const analyser = audioCtx.createAnalyser();
+                        const microphone = audioCtx.createMediaStreamSource(stream);
+                        jsNode = audioCtx.createScriptProcessor(2048, 1, 1);
+                        
+                        // Mute the audio so the user doesn't hear themselves (Echo bug fix)
+                        const gainNode = audioCtx.createGain();
+                        gainNode.gain.value = 0;
+                        
+                        analyser.smoothingTimeConstant = 0.8;
+                        analyser.fftSize = 1024;
+                        
+                        microphone.connect(analyser);
+                        analyser.connect(jsNode);
+                        jsNode.connect(gainNode);
+                        gainNode.connect(audioCtx.destination);
+                        
+                        jsNode.onaudioprocess = () => {
+                            const array = new Uint8Array(analyser.frequencyBinCount);
+                            analyser.getByteFrequencyData(array);
+                            let values = 0;
+                            const length = array.length;
+                            for (let i = 0; i < length; i++) {
+                                values += (array[i]);
+                            }
+                            const average = values / length;
+                            setAudioLevel(average);
+                        };
+                    }
+                })
+                .catch(err => {
+                    console.error("Hardware error:", err);
+                    alert("Permission denied or device not found.");
+                    if (isMicEnabled) setIsMicEnabled(false);
+                    if (isCameraEnabled) setIsCameraEnabled(false);
+                });
+        }
 
         // 2. Setup Speech Recognition
         const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -180,26 +217,46 @@ export default function MockInterviewPage() {
             recognitionRef.current = recognition;
         }
 
-        // Start Interview
-        generateNextQuestion(0, []);
-
         return () => {
+            isMounted.current = false;
             if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
             if (recognitionRef.current) {
                 recognitionRef.current.onend = null;
-                recognitionRef.current.stop();
+                try { recognitionRef.current.stop(); } catch (e) {}
             }
             if (audioRef.current) {
                 audioRef.current.onended = null;
                 audioRef.current.pause();
                 audioRef.current.src = "";
             }
-            if (videoRef.current && videoRef.current.srcObject) {
-                const stream = videoRef.current.srcObject as MediaStream;
+            // Stop fallback browser TTS if it's currently speaking
+            if (typeof window !== 'undefined' && window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+            if (stream) {
                 stream.getTracks().forEach(track => track.stop());
             }
+            if (videoRef.current) {
+                videoRef.current.srcObject = null;
+            }
+            // Clean up AudioContext to prevent browser limit crash
+            if (jsNode) {
+                try { jsNode.disconnect(); } catch (e) {}
+            }
+            if (audioCtx && audioCtx.state !== 'closed') {
+                try { audioCtx.close(); } catch (e) {}
+            }
         };
-    }, [isSetup]);
+    }, [isSetup, isMicEnabled, isCameraEnabled]);
+
+    // Check Start Condition
+    useEffect(() => {
+        if (isSetup && isMicEnabled && isCameraEnabled && !hasStartedRef.current) {
+            hasStartedRef.current = true;
+            setIsInterviewStarted(true);
+            generateNextQuestion(0, []);
+        }
+    }, [isSetup, isMicEnabled, isCameraEnabled]);
 
     const handleUserFinishedSpeaking = async (transcript: string) => {
         const { isListening: currentIsListening, questionsAsked: currentQuestions, currentQuestionIndex: currentIndex } = stateRef.current;
@@ -242,9 +299,37 @@ export default function MockInterviewPage() {
         let nextQuestionText = "";
 
         if (index === 0) {
-            nextQuestionText = langObj.q1;
-        } else if (index === 1) {
-            nextQuestionText = langObj.q2;
+            const prompt = `You are ZEDX. Write your name in a way that forces the text-to-speech engine to pronounce it as a single continuous word "Zedex" in the target language (e.g. write "زيدكس" in Arabic, or "Zedex" in English and other Latin languages). DO NOT write it in all caps like ZEDX or Z-E-D-X as it will be spelled out letter by letter.
+This is the very first opening question of the mock interview.
+Your task is to:
+1. Extract the candidate's first name from the Resume context below.
+2. Greet the candidate by their name.
+3. Introduce yourself as ZEDX and state that you will be conducting their mock interview today.
+4. Ask them to introduce themselves and tell you a little bit about their background and experience.
+5. You MUST generate this response STRICTLY in ${langObj.name}.
+
+Do not ask any other technical questions yet. Keep it warm, welcoming, and concise.
+Resume Context: ${resume}`;
+            
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                const token = session?.access_token;
+                const res = await fetch("/api/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", ...(token ? { "Authorization": `Bearer ${token}` } : {}) },
+                    body: JSON.stringify({ model, promptType: 'mock_interview', promptContext: { interviewType, difficulty, language }, prompt })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!isMounted.current) return;
+                if (!res.ok) throw new Error(data.error?.message || "API request failed");
+                nextQuestionText = data.content;
+            } catch (err) {
+                console.error("AI Generation Failed for Intro:", err);
+                // Fallback to hardcoded if AI fails
+                nextQuestionText = langObj.code.startsWith('ar') 
+                    ? "أهلاً بيك، أنا زيدكس. هعمل معاك الانترفيو التجريبي النهاردة. ممكن تكلمني شوية عن نفسك وخبرتك؟"
+                    : "Welcome, I am Zedex. I will be conducting your mock interview today. Could you please tell me a little bit about yourself?";
+            }
         } else {
             const previousQ = history[index - 1].q;
             const previousA = history[index - 1].a;
@@ -259,13 +344,19 @@ Either ask a smart follow-up question that probes deeper into what they just sai
 Keep it conversational and natural.
 CRITICAL RULE: DO NOT ask any of these previously asked questions again: [${askedQuestions}].
 IMPORTANT: DO NOT ask the candidate if they have any questions for you. Only ask questions that test the candidate's qualifications.
-Job Description Context: ${jd.substring(0, 500)}...
-Resume Context: ${resume.substring(0, 500)}...`;
+Job Description Context: ${jd}
+Resume Context: ${resume}`;
 
             try {
+                const { data: { session } } = await supabase.auth.getSession();
+                const token = session?.access_token;
+                
                 const res = await fetch("/api/generate", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        ...(token ? { "Authorization": `Bearer ${token}` } : {})
+                    },
                     body: JSON.stringify({
                         model: model,
                         promptType: 'mock_interview',
@@ -274,6 +365,8 @@ Resume Context: ${resume.substring(0, 500)}...`;
                     })
                 });
                 const data = await res.json().catch(() => ({}));
+                if (!isMounted.current) return;
+                
                 if (!res.ok) {
                     throw new Error(data.error?.message || "API request failed");
                 }
@@ -296,20 +389,52 @@ Resume Context: ${resume.substring(0, 500)}...`;
     };
 
     const speakText = async (text: string) => {
+        if (audioRef.current) {
+            audioRef.current.onended = null;
+            audioRef.current.pause();
+            audioRef.current.src = "";
+        }
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+
         setIsSpeaking(true);
         // We set text empty until audio starts playing for perfect sync
         setZedxText(""); 
+
+        const fallbackTTS = () => {
+            setZedxText(text);
+            const utterance = new SpeechSynthesisUtterance(text);
+            utteranceRef.current = utterance; // Prevent garbage collection
+            utterance.lang = language;
+            
+            const onEndOrError = () => {
+                setIsSpeaking(false);
+                setIsListening(true);
+                setUserTranscript("");
+                if (recognitionRef.current) {
+                    try { recognitionRef.current.start(); } catch (e) {}
+                }
+            };
+            
+            utterance.onend = onEndOrError;
+            utterance.onerror = onEndOrError;
+            window.speechSynthesis.speak(utterance);
+        };
 
         try {
             const res = await fetch("/api/tts", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text })
+                body: JSON.stringify({ text, language })
             });
 
+            if (!isMounted.current) return;
             if (!res.ok) throw new Error("TTS failed");
 
             const blob = await res.blob();
+            if (!isMounted.current) return;
+            
             const audioUrl = URL.createObjectURL(blob);
             const audio = new Audio(audioUrl);
             audioRef.current = audio;
@@ -320,6 +445,7 @@ Resume Context: ${resume.substring(0, 500)}...`;
             };
 
             audio.onended = () => {
+                URL.revokeObjectURL(audioUrl); // Fix memory leak
                 setIsSpeaking(false);
                 // Start listening to user
                 setIsListening(true);
@@ -329,22 +455,16 @@ Resume Context: ${resume.substring(0, 500)}...`;
                 }
             };
 
-            audio.play();
+            // Catch playback errors (e.g., autoplay policies or format issues)
+            audio.play().catch(err => {
+                console.error("Audio playback failed:", err);
+                URL.revokeObjectURL(audioUrl); // Fix memory leak on error
+                fallbackTTS();
+            });
 
         } catch (err) {
             console.error("TTS Error", err);
-            // Fallback to browser TTS if ElevenLabs fails
-            setZedxText(text);
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = language;
-            utterance.onend = () => {
-                setIsSpeaking(false);
-                setIsListening(true);
-                if (recognitionRef.current) {
-                    try { recognitionRef.current.start(); } catch (e) {}
-                }
-            };
-            window.speechSynthesis.speak(utterance);
+            fallbackTTS();
         }
     };
 
@@ -434,24 +554,19 @@ Resume Context: ${resume.substring(0, 500)}...`;
             {/* Bottom Section: Webcam & User Speech */}
             <div className="w-full p-6 flex items-end justify-between z-20 gap-6">
                 
-                {/* Webcam Box */}
-                <div className="relative w-48 sm:w-64 rounded-2xl overflow-hidden border border-white/10 bg-gray-900 shadow-xl flex-shrink-0 aspect-[4/3]">
-                    <video ref={videoRef} autoPlay muted playsInline className="w-full h-full object-cover transform -scale-x-100" />
-                    
-                    {/* Mic Indicator inside webcam */}
-                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between bg-black/60 backdrop-blur-md rounded-lg p-2 border border-white/10">
-                        <div className="flex items-center gap-2">
-                            {isListening ? <Mic className="w-4 h-4 text-emerald-400" /> : <MicOff className="w-4 h-4 text-red-400" />}
-                            <span className="text-xs font-medium text-gray-300">{isListening ? "Listening..." : "Muted"}</span>
-                        </div>
-                        {/* Simple audio visualizer based on audioLevel */}
-                        <div className="flex gap-1 h-3 items-end">
-                            {[1, 2, 3].map(i => (
-                                <div key={i} className="w-1 bg-emerald-500 rounded-t-sm transition-all duration-75" style={{ height: isListening ? `${Math.min(100, Math.max(20, audioLevel * (i/2))) }%` : '20%' }}></div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+                {/* Hardware Controls & Webcam Box */}
+                <div className="flex gap-4 items-center">
+                    {/* Webcam Box */}
+                    <div className="relative w-48 sm:w-64 rounded-2xl overflow-hidden border border-white/10 bg-gray-900 shadow-xl flex-shrink-0 aspect-[4/3] flex items-center justify-center">
+                        {!isCameraEnabled && (
+                            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black flex items-center justify-center flex-col gap-2 opacity-70">
+                                <CameraOff className="w-8 h-8 text-white/20" />
+                                <span className="text-xs text-white/40 font-medium">Camera Disabled</span>
+                            </div>
+                        )}
+                        <video ref={videoRef} autoPlay muted playsInline className="w-full h-full object-cover transform -scale-x-100" />
+                    </div>{/* end webcam box */}
+                </div>{/* end hardware controls wrapper */}
 
                 {/* User Transcript Bubble (Only shows when listening & speaking) */}
                 <div className="flex-1 max-w-2xl justify-self-end">

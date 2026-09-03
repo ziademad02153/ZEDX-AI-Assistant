@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
                 "Authorization": `Bearer ${groqApiKey}`
             },
             body: JSON.stringify({
-                model: model || "llama-3.1-8b-instant",
+                model: model || "qwen/qwen3.6-27b",
                 messages: finalMessages,
                 max_tokens: 4096,
                 temperature: 0.1,

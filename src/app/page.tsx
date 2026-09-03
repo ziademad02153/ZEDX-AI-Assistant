@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Check, Globe, Sparkles, ChevronDown, ArrowRight, Star, Code, HelpCircle } from "lucide-react";
 import { PlatformSection } from "@/components/platform-section";
+import { StartButton } from "@/components/start-button";
 
 export default function Home() {
   return (
@@ -36,11 +37,7 @@ export default function Home() {
             </p>
 
             <div className="flex flex-wrap items-center gap-5 w-full justify-center mb-16 px-4 relative z-50">
-              <Link href="/login" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto text-base md:text-lg px-8 py-4 md:px-10 md:py-7 rounded-full bg-gradient-to-r from-[#047857] to-[#bef264] text-white transition-all hover:scale-105 group font-bold flex items-center justify-center cursor-pointer border-none shadow-none">
-                  Start Practicing Now <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
+              <StartButton variant="landing" />
             </div>
 
             {/* Hero Visual: Realistic UI Mockup (Reverted) */}

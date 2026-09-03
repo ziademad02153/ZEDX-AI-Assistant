@@ -29,13 +29,10 @@ export async function POST(request: Request) {
         }
 
         // Define API keys FIRST
-        const API_KEYS = [
-            process.env.GROQ_STT_KEY_1,
-            process.env.GROQ_STT_KEY_2,
-            process.env.GROQ_STT_KEY_3,
-            process.env.GROQ_STT_KEY_4,
-            process.env.GROQ_STT_KEY_5,
-        ].filter(Boolean) as string[];
+        const API_KEYS = Object.keys(process.env)
+            .filter(key => key.startsWith('GROQ_STT_KEY'))
+            .map(key => process.env[key])
+            .filter(Boolean) as string[];
 
         // Use the received file directly as a Blob/File
         const audioFile = file;

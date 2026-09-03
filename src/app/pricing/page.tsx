@@ -190,7 +190,7 @@ export default function PricingPage() {
                                     <Image src="/Multi-Language.png" alt="Languages" width={32} height={32} className="object-contain opacity-90" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">20 Languages</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">20 Languages</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Multilingual voice interviews</div>
                                 </div>
                             </div>
@@ -200,7 +200,7 @@ export default function PricingPage() {
                                     <Image src="/Interview-Logo.png" alt="Scenarios" width={26} height={26} className="object-contain dark:invert opacity-80" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Technical & Behavioral</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">Technical & Behavioral</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Tailored interview scenarios</div>
                                 </div>
                             </div>
@@ -210,7 +210,7 @@ export default function PricingPage() {
                                     <Image src="/Granular Scorecards.png" alt="Analytics" width={32} height={32} className="object-contain opacity-90" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Real-Time Evaluation</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">Real-Time Evaluation</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Granular feedback & PDF reports</div>
                                 </div>
                             </div>
@@ -220,7 +220,7 @@ export default function PricingPage() {
                                     <Image src="/question.png" alt="Unlimited" width={26} height={26} className="object-contain opacity-80" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Unlimited Sessions & Questions</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">Unlimited Sessions & Questions</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Practice without any limits</div>
                                 </div>
                             </div>
@@ -230,8 +230,8 @@ export default function PricingPage() {
                                     <Image src="/AI.jpg" alt="AI Engine" width={36} height={36} className="w-full h-full object-cover scale-110 opacity-90" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">3 Premium AI Models</div>
-                                    <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Powered by Groq for instant responses</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">2 Premium Models</div>
+                                    <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">GPT-OSS 20B & Qwen 3.6 27B</div>
                                 </div>
                             </div>
                         </div>
@@ -242,7 +242,7 @@ export default function PricingPage() {
                                     whileHover={{ scale: 1.01 }}
                                     className="w-full relative overflow-hidden flex flex-col items-center justify-center gap-3 rounded-full py-5 bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
                                 >
-                                    <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
+
                                     <div className="absolute top-0 right-1/4 w-32 h-32 bg-[#a3e635]/10 blur-[50px] rounded-full"></div>
                                     <div className="flex items-center gap-3 z-10">
                                         <Image src="/zedx-logo.png" alt="ZEDX" width={28} height={28} className="object-contain" />
@@ -336,7 +336,7 @@ export default function PricingPage() {
                                     <AnimatedOrb />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Advanced Voice-to-Voice AI</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">Advanced Voice-to-Voice AI</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Zero latency, natural flowing conversations</div>
                                 </div>
                             </div>
@@ -346,7 +346,7 @@ export default function PricingPage() {
                                     <Image src="/Multi-Language.png" alt="Languages" width={32} height={32} className="object-contain opacity-90 sepia-[.3] hue-rotate-[-30deg] saturate-[2]" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">All 29+ Languages Unlocked</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">All 29+ Languages Unlocked</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Full global language access without limits</div>
                                 </div>
                             </div>
@@ -356,7 +356,7 @@ export default function PricingPage() {
                                     <Image src="/Interview-Logo.png" alt="Scenarios" width={26} height={26} className="object-contain dark:invert opacity-80" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Technical & Behavioral</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">Technical & Behavioral</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Complete tailored interview scenarios</div>
                                 </div>
                             </div>
@@ -366,7 +366,7 @@ export default function PricingPage() {
                                     <Image src="/Granular Scorecards.png" alt="Analytics" width={32} height={32} className="object-contain opacity-90 sepia-[.5] hue-rotate-[-20deg]" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Real-Time Evaluation</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">Real-Time Evaluation</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Granular feedback & PDF reports</div>
                                 </div>
                             </div>
@@ -376,7 +376,7 @@ export default function PricingPage() {
                                     <Image src="/expert.png" alt="Expert" width={32} height={32} className="object-contain opacity-90 invert sepia-[.3] hue-rotate-[-20deg]" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Expert Difficulty Level</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">Expert Difficulty Level</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">The ultimate FAANG-level challenge</div>
                                 </div>
                             </div>
@@ -386,18 +386,18 @@ export default function PricingPage() {
                                     <Image src="/question.png" alt="Unlimited" width={26} height={26} className="object-contain opacity-80 sepia-[.3] hue-rotate-[-30deg]" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Truly Unlimited Sessions</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">Truly Unlimited Sessions</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Practice without any caps or restrictions</div>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-4">
                                 <div className="w-9 h-9 shrink-0 flex items-center justify-center mt-0.5 rounded-[10px] bg-gray-800 dark:bg-black border border-gray-600 dark:border-white/10 overflow-hidden">
-                                    <Image src="/AI.jpg" alt="Llama 70B" width={36} height={36} className="w-full h-full object-cover scale-110 opacity-90 sepia-[.2] hue-rotate-[20deg]" />
+                                    <Image src="/AI.jpg" alt="AI Models" width={36} height={36} className="w-full h-full object-cover scale-110 opacity-90 sepia-[.2] hue-rotate-[20deg]" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">4 Premium Models</div>
-                                    <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Llama 70B, Qwen, GPT-OSS 120B, GPT-OSS 20B</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">3 Premium Models</div>
+                                    <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">GPT-OSS 120B, Qwen 3.6 27B, GPT-OSS 20B</div>
                                 </div>
                             </div>
 
@@ -406,7 +406,7 @@ export default function PricingPage() {
                                     <Image src="/Priority VIP Support.png" alt="VIP Support" width={32} height={32} className="object-contain opacity-90" />
                                 </div>
                                 <div>
-                                    <div className="text-[15px] font-semibold text-white tracking-tight leading-tight mb-0.5">Priority VIP Support</div>
+                                    <div className="text-[15px] font-semibold text-zinc-900 dark:text-white tracking-tight leading-tight mb-0.5">Priority VIP Support</div>
                                     <div className="text-[13px] text-gray-500 dark:text-zinc-400 font-normal leading-snug">Direct email assistance and feature requests</div>
                                 </div>
                             </div>
@@ -418,7 +418,7 @@ export default function PricingPage() {
                                     whileHover={{ scale: 1.01 }}
                                     className="w-full relative overflow-hidden flex flex-col items-center justify-center gap-3 rounded-full py-5 bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
                                 >
-                                    <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
+
                                     <div className="absolute top-0 right-1/4 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full"></div>
                                     <div className="flex items-center gap-3 z-10">
                                         <Image src="/zedx-logo.png" alt="ZEDX" width={28} height={28} className="object-contain" />

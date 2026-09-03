@@ -52,7 +52,7 @@ export function Navbar() {
 
     return (
         <nav className={cn(
-            "fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-out",
+            "fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-out print:hidden",
             scrolled
                 ? "top-4 w-[90%] max-w-[56.25rem] lg:max-w-[900px]"
                 : "top-6 sm:top-8 w-[95%] max-w-[65.625rem] lg:max-w-[1050px]"
