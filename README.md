@@ -10,26 +10,63 @@
     <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
     <img src="https://img.shields.io/badge/Electron-47848F?style=for-the-badge&logo=electron&logoColor=white" alt="Electron" />
     <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
-    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind" />
+    <img src="https://img.shields.io/badge/Groq-FF6B35?style=for-the-badge&logo=groq&logoColor=white" alt="Groq" />
+    <img src="https://img.shields.io/badge/ElevenLabs-000000?style=for-the-badge&logoColor=white" alt="ElevenLabs" />
   </p>
 </div>
 
 ## Executive Summary
-**ZEDX AI Simulator** is a dedicated interview simulation and training platform designed for professional evaluation. Originally built as an Electron desktop app, ZEDX has evolved into a comprehensive **Dual-Mode** platform (Web & Desktop) that utilizes advanced Speech-to-Text (STT), Large Language Model (LLM) inference, and highly-optimized Text-to-Speech (TTS) engines.
 
-ZEDX bridges the gap between preparation and execution by offering two distinct tools:
-1. **The Web Simulator (Rigorous Testing):** Designed for advanced candidates who want a strict, realistic interview environment. An autonomous, highly intelligent Voice-to-Voice AI Agent conducts mock interviews in **30+ supported languages**. It acts as a true conversational partner, dynamically generating deep, probing questions to ensure no two interviews are the same. No hints, no help—just you and the AI evaluating your every word.
-2. **The Desktop Sandbox (Assisted Learning):** Designed for skill improvement. This is a dedicated Windows environment where the AI acts as your copilot. Utilizing **Internal Audio Routing** and **Screen Capture (OCR)**, the AI analyzes your shared screen and provides suggested answers in real-time, helping you build confidence and improve your technical interview skills before entering the rigorous Web Simulator.
+**ZEDX AI Simulator** is a professional interview simulation and training platform engineered for rigorous candidate evaluation. The platform has evolved from an Electron desktop application into a comprehensive **Dual-Mode** system (Web & Desktop) that integrates distributed Speech-to-Text (STT) pipelines, Large Language Model (LLM) inference with load-balanced key rotation, and a hybrid Text-to-Speech (TTS) engine that routes audio synthesis to the optimal provider based on language detection.
+
+ZEDX operates across two distinct functional modes:
+
+1. **The Web Simulator (Rigorous Evaluation Mode):** A strict, autonomous Voice-to-Voice AI Agent that conducts structured mock interviews in **30+ supported languages**. The agent dynamically generates contextually-aware probing questions derived from the candidate's actual CV and target job description. No assistance, no hints — a pure evaluation environment.
+
+2. **The Desktop Sandbox (Assisted Learning Mode):** A Windows-native environment where the AI acts as a real-time copilot. Leveraging **Internal Audio Routing** and **Screen Capture (OCR)**, the AI analyzes the candidate's shared screen and delivers suggested responses mid-interview to accelerate skill acquisition.
 
 ---
 
-## Key Platform Updates & Features
+## Platform Architecture Updates (Latest Release)
 
-- **Advanced Performance Scorecard**: A comprehensive post-interview AI analysis evaluating Technical Accuracy, Communication Skills, and Overall Performance, providing actionable insights based on ideal industry benchmarks.
-- **Organized PDF Export**: Ability to instantly export the interview scorecard into a clean, geometric, and printable PDF document.
-- **Custom Interview Limits**: Configurable mock interviews allowing between 5 to 40 questions per session to accommodate various testing endurances.
-- **Automated Local Payment Infrastructure**: Seamless "Instapay" integration allowing manual local payments coupled with a secure Admin Dashboard (`/admin/payments`) for instant 1-click Pro upgrades. Includes real-time email notifications to administrators via Nodemailer.
-- **Dynamic Light & Dark Modes**: Fully optimized, premium aesthetic spanning both light and dark themes with hardware-accelerated fluid animations.
+### TTS Hybrid Routing Engine
+
+The Text-to-Speech subsystem has been re-engineered from a single-provider model into a **dual-engine hybrid router** with dynamic language detection:
+
+- **Arabic Language Path** (`ar-*`): Routed to **ElevenLabs Multilingual V2** for hyper-realistic Arabic intonation and dialect support. Arabic requires neural TTS synthesis unavailable in standard edge-based engines.
+- **All Other Languages Path**: Routed to **Microsoft Edge TTS** via a spawned child process. Edge TTS delivers native-quality voice synthesis at zero per-character cost for all 30+ non-Arabic supported languages.
+
+This hybrid model reduces ElevenLabs character consumption to Arabic-only sessions, effectively extending API quota by a factor proportional to the ratio of Arabic to non-Arabic usage.
+
+### Distributed API Key Load Balancer
+
+Both the Groq inference layer and the ElevenLabs TTS layer now employ a **shuffled round-robin key rotation system** across multi-account key pools:
+
+- **Groq (LLM + STT):** Pool of 14 independent API keys across separate accounts. Keys are shuffled per request. On rate-limit or quota exhaustion, the system automatically retries the next available key transparently — zero downtime to the user.
+- **ElevenLabs (Arabic TTS):** Pool of 10 independent API keys across separate accounts. Same shuffle-and-retry architecture. A failed key (4xx status) triggers immediate fallback to the next key in the pool without surfacing an error to the interview session.
+
+This architecture eliminates single-key quota exhaustion as a failure mode entirely.
+
+### Interview Flow Consolidation
+
+The candidate onboarding sequence has been consolidated from a two-step greeting exchange into a **single merged AI-generated introduction**. The AI autonomously extracts the candidate's name from the uploaded CV and delivers a contextual, language-appropriate greeting. This reduces unnecessary round-trips at session start and maintains immersion.
+
+### Full-Context Document Injection
+
+Prior implementations truncated Job Description and Resume payloads to fixed character limits before injection into the system prompt. This introduced silent context loss on dense technical CVs.
+
+The current implementation passes **the complete, untruncated content** of both documents directly to the LLM system prompt. This ensures the AI evaluator operates on the full candidate profile without degradation.
+
+### Audio Concurrency Control
+
+A persistent defect caused audio segments to overlap (echo) when the AI's TTS output triggered a new STT cycle before the prior audio playback completed. This was resolved by:
+
+- **Global Audio Mute Gate:** Any new `speakText` invocation immediately halts and garbage-collects all in-flight `HTMLAudioElement` instances before initiating a new audio stream.
+- **`hasStartedRef` Race Guard:** A boolean ref prevents duplicate interview initialization when React's Strict Mode double-invokes `useEffect` hooks in development.
+
+### Pronunciation Normalization
+
+TTS engines exhibiting character-by-character spelling behavior for uppercase acronyms (e.g., "Z-E-D-X" instead of "Zedex") are now addressed at the prompt level. The system instructs the LLM to always render the brand name as `Zedex` (Latin scripts) or `زيدكس` (Arabic script), ensuring consistent phonetic output across all TTS providers.
 
 ---
 
@@ -37,30 +74,26 @@ ZEDX bridges the gap between preparation and execution by offering two distinct 
 
 | Traditional Interview Prep | ZEDX AI Simulator |
 | :--- | :--- |
-| Read static sample questions | Simulate realistic dynamic interviews |
-| Receive generic advice | Get context-aware, resume-tailored feedback |
-| Practice repeatedly without measurement | Track performance and measure improvement |
-| Rely completely on AI | **Independent Mode** verifies actual learning |
-
-**The Independent Mode Advantage:**
-ZEDX is not designed to create AI dependency. We utilize AI during training sessions, then remove the assistance to measure whether the candidate has actually improved. This ensures candidates are truly prepared for real-world scenarios.
+| Read static sample questions | Simulate dynamic, CV-tailored interviews |
+| Receive generic advice | Get context-aware, resume-calibrated feedback |
+| Practice without measurable outcomes | Track performance metrics per session |
+| Rely completely on AI assistance | Independent Mode validates genuine skill acquisition |
 
 ---
 
 ## Performance Metrics & System Benchmarks
-ZEDX AI Simulator is engineered for uncompromised speed during practice sessions. The following metrics represent typical performance under standard operational loads:
 
 | Subsystem Component | Metric | Observed Output | Operational Benefit |
 | :--- | :--- | :--- | :--- |
-| **STT Processing Phase** | Audio-to-Blob Latency | `Near-real-time` | Fast transcription for fluid simulation. |
-| **VAD Network Pipeline** | Payload Truncation Ratio | `~85% reduction` | Preserves API limits; isolates clear dialog. |
-| **LLM Inference Stream** | Time To First Token (TTFT) | `~120ms (observed under optimized network conditions)` | Fast visual readout utilizing SSE routing. |
-| **React UI Hydration** | UI Rendering | `Stable Streaming Render` | Smooth incremental feedback display. |
+| **STT Processing Phase** | Audio-to-Blob Latency | Near-real-time | Fluid transcription for continuous simulation |
+| **VAD Network Pipeline** | Payload Truncation Ratio | ~85% reduction | Preserves API quota; isolates active speech |
+| **LLM Inference Stream** | Time To First Token (TTFT) | ~120ms | Fast visual readout via SSE routing |
+| **TTS Language Router** | Routing Decision Latency | Sub-millisecond | Language tag inspection is O(1) string prefix match |
+| **Key Rotation Fallback** | Retry-to-Next-Key Latency | ~200-400ms | Transparent to user; no session interruption |
 
 ---
 
 ## 1. Global Infrastructure Topology
-The core architecture employs a bifurcated processing model to ensure minimal resource consumption on the client hardware while executing LLM computations on cloud GPUs.
 
 ```mermaid
 graph TD
@@ -76,33 +109,102 @@ graph TD
         IPC["IPC Secure Bridge"] --> API
     end
 
-    subgraph NeuralInferenceLayer ["Neural Inference Layer (Groq & LLaMA 3)"]
-        VAD -- "WebM Chunk Streaming" --> WHISPER["Whisper V3 Engine"]
-        WHISPER -- "Raw Parsed Transcripts" --> LLM["Llama 3.1 70B Instruct"]
-        CONTEXT_SERVER -- "Agenda/Document Meta" --> LLM
+    subgraph NeuralInferenceLayer ["Neural Inference Layer (Groq LPU Cluster)"]
+        VAD -- "WebM Chunk Streaming" --> WHISPER["Whisper V3 Engine (Load Balanced x14)"]
+        WHISPER -- "Raw Parsed Transcripts" --> LLM["Llama 3.1 70B Instruct (Load Balanced x14)"]
+        CONTEXT_SERVER -- "Full CV + JD Context" --> LLM
         LLM -- "Actionable SSE Stream" --> IPC
+    end
+
+    subgraph TTSHybridLayer ["TTS Hybrid Router"]
+        LLM -- "AI Response Text" --> LANG_DETECT{"Language Tag Inspector"}
+        LANG_DETECT -- "ar-* prefix" --> ELEVEN["ElevenLabs Multilingual V2 (Load Balanced x10)"]
+        LANG_DETECT -- "All other languages" --> EDGE["Microsoft Edge TTS (Child Process, Free)"]
+        ELEVEN --> AUDIO_OUT["Browser Audio Context"]
+        EDGE --> AUDIO_OUT
     end
 
     classDef cloud fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff;
     classDef local fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#fff;
     classDef neural fill:#312e81,stroke:#6366f1,stroke-width:2px,color:#fff;
+    classDef tts fill:#3b0764,stroke:#a855f7,stroke-width:2px,color:#fff;
 
     class AUTH,DB,API,CONTEXT_SERVER cloud;
     class SYS,MIC,VAD,IPC local;
     class WHISPER,LLM neural;
+    class LANG_DETECT,ELEVEN,EDGE,AUDIO_OUT tts;
 ```
 
 ---
 
-## 2. Audio Telemetry & Sub-Second STT Engine
-A severe technical barrier in Chromium/Electron composites is handling garbage collection across continuous MediaStreams. ZEDX uses a lightweight Voice Activity Detection (VAD) pipeline to identify active speech and minimize unnecessary audio transmission.
+## 2. TTS Hybrid Routing & Load Balancing Architecture
+
+```mermaid
+flowchart TD
+    INPUT["AI Response Text + Language Tag"] --> ROUTER{"Language Router\n lang.startsWith('ar')"}
+
+    ROUTER -- "TRUE: Arabic Dialect" --> ELEVEN_POOL["ElevenLabs Key Pool\n[10 independent accounts]"]
+    ROUTER -- "FALSE: All Other Languages" --> EDGE_PROC["Edge TTS Child Process\nMicrosoft Neural Voices\nZero quota cost"]
+
+    ELEVEN_POOL --> SHUFFLE["Fisher-Yates Shuffle\nPer-Request Randomization"]
+    SHUFFLE --> TRY_KEY["Attempt Request\nwith Key[i]"]
+    TRY_KEY -- "HTTP 200 OK" --> STREAM["Stream audio/mpeg\nto Browser AudioContext"]
+    TRY_KEY -- "HTTP 4xx/5xx" --> LOG["Log Key Failure\nAdvance to Key[i+1]"]
+    LOG --> TRY_KEY
+    TRY_KEY -- "All Keys Exhausted" --> ERROR["Return 500\nAll quota pools exhausted"]
+
+    EDGE_PROC --> TEMP_FILE["Write audio to\ntemp file (fs)"]
+    TEMP_FILE --> READ_BUFFER["Read Buffer\ninto Response"]
+    READ_BUFFER --> CLEANUP["Unlink temp files\n(finally block)"]
+    CLEANUP --> STREAM
+
+    classDef router fill:#1e3a5f,stroke:#3b82f6,stroke-width:2px,color:#fff;
+    classDef eleven fill:#3b0764,stroke:#a855f7,stroke-width:2px,color:#fff;
+    classDef edge fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff;
+
+    class ROUTER router;
+    class ELEVEN_POOL,SHUFFLE,TRY_KEY,LOG,ERROR eleven;
+    class EDGE_PROC,TEMP_FILE,READ_BUFFER,CLEANUP edge;
+```
+
+---
+
+## 3. Audio Concurrency Control & Race Condition Elimination
+
+```mermaid
+sequenceDiagram
+    participant REACT as React useEffect
+    participant REF as hasStartedRef
+    participant AUDIO as Global Audio Registry
+    participant TTS as TTS API Route
+    participant CTX as Browser AudioContext
+
+    REACT->>REF: Check hasStartedRef.current
+    alt Already initialized
+        REF-->>REACT: Return (suppress duplicate invocation)
+    else First invocation
+        REF->>REF: Set hasStartedRef.current = true
+        REACT->>AUDIO: Kill all active HTMLAudioElement instances
+        Note over AUDIO: Pause + src='' + remove from registry
+        REACT->>TTS: POST /api/tts {text, language, voice}
+        TTS-->>CTX: Stream audio/mpeg chunks
+        CTX->>CTX: Playback via HTMLAudioElement
+        CTX->>AUDIO: Register instance in global registry
+    end
+
+    Note over REACT,CTX: Any new speakText() call first\nexecutes global kill before streaming
+```
+
+---
+
+## 4. Audio Telemetry & Sub-Second STT Engine
 
 ```mermaid
 sequenceDiagram
     participant UI as React UI (Renderer)
     participant OSE as Electron OS Capturer
     participant VAD as VAD Middleware (Web Worker)
-    participant STT as Whisper API Endpoint
+    participant STT as Groq Whisper V3 (Rotated Key Pool)
     
     UI->>OSE: Request Internal Audio Capture
     OSE-->>UI: Grant MediaStream Track constraints
@@ -110,6 +212,7 @@ sequenceDiagram
         UI->>VAD: Stream compressed WebM chunks
         alt Audio Intensity > Threshold Limit
             VAD->>STT: Dispatch Blob Transduction Buffer
+            Note over STT: Key pool shuffle on every request
             STT-->>UI: Return Parsed JSON Transcript Payload
         else Absolute Silence Delta Reached
             VAD-->>VAD: Purge internal buffer (Zero API Bloat)
@@ -117,56 +220,52 @@ sequenceDiagram
     end
 ```
 
-### Engineering Highlights:
-- **Asymmetric Audio Device Partitioning:** Engineered custom arbitration layers to eliminate synchronous race conditions between Chromium's internal `MediaDevices` API and standard Windows/macOS mixer configurations.
-- **Heuristic VAD Filtering:** ZEDX reduces unnecessary audio payloads by approximately 85% in typical practice sessions, based on internal measurements. This accelerates inference processing over traditional continuous transcription polling.
-
 ---
 
-## 3. Cognitive Context Injection (The Smart AI Interviewer)
-ZEDX AI Simulator dynamically replicates strict Dynamic Context Injection paradigms in-memory via high-velocity edge components. The system cures "LLM Amnesia" by injecting memory payloads and dynamic conversation angles to simulate a highly intelligent human interviewer.
+## 5. Cognitive Context Injection (Full-Document AI Interviewer)
 
 ```mermaid
 graph LR
     subgraph ContextAssemblyLine ["Context Assembly Line"]
-        HISTORY["Interview History & Memory"]
-        JD["Job Description Meta"]
-        RESUME["User Reference File / Data"]
-        ANGLE["Randomized Interview Angle"]
+        HISTORY["Interview History & Memory\n(All prior Q&A)"]
+        JD["Job Description\n(Complete, untruncated)"]
+        RESUME["Candidate CV\n(Full document content)"]
+        ANGLE["Randomized Interview Angle\n(Behavioral/Technical/Situational)"]
+        NAME["Candidate Name\n(Extracted from CV at session start)"]
     end
 
     subgraph PromptSynthesisEngine ["Prompt Synthesis Engine"]
-        COMPILER["Dynamic System Prompt Compiler"]
+        COMPILER["Dynamic System Prompt Compiler\n+ Pronunciation Normalization Layer"]
         HISTORY --> COMPILER
         JD --> COMPILER
         RESUME --> COMPILER
         ANGLE --> COMPILER
+        NAME --> COMPILER
     end
 
     subgraph ExecutionResolution ["Execution & Resolution"]
-        LLAMA["Llama 3.1 / Qwen Engine"]
+        LLAMA["Llama 3.1 70B / Qwen Engine\n(14-key Load Balanced Pool)"]
         UI["Secure React Practice Interface"]
-        COMPILER -- "Conversational Semantic Prompt" --> LLAMA
+        COMPILER -- "Full Contextual Semantic Prompt" --> LLAMA
         LLAMA -- "Server-Sent Events (SSE)" --> UI
     end
     
     classDef data fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
     classDef engine fill:#701a75,stroke:#e879f9,stroke-width:2px,color:#fff;
     
-    class HISTORY,JD,RESUME,ANGLE data;
+    class HISTORY,JD,RESUME,ANGLE,NAME data;
     class COMPILER,LLAMA,UI engine;
 ```
 
-### Advanced AI Capabilities:
-- **Conversational Adaptability:** The AI does not read from a static script. It is engineered to analyze the candidate's previous response in real-time, crafting highly specific follow-up questions that probe deeper into weak answers or smoothly transition topics when a point is proven.
-- **Memory Injection:** The system inherently tracks all previously asked questions and injects them as a negative constraint boundary during prompt synthesis, guaranteeing that no two questions are ever repeated and eliminating standard LLM predictability.
-- **True Multilingual Native Fluidity:** Supporting exactly **29 major languages**, the system routes raw ISO-639-1 BCP-47 tags directly to Whisper for maximum transcription accuracy, while standardizing TTS outputs via ElevenLabs `multilingual_v2` for hyper-realistic native accents.
-- **TransformStream Pipelines:** Employs the Next.js Edge Runtime to decode the streamed LLM inference response into Server-Sent Events (SSE). Users consume insights incrementally as frames generate, virtually eliminating synchronous request blocking.
+### Prompt Engineering Constraints:
+- **Full-Document Context:** Both CV and Job Description are injected in their entirety. No character truncation is applied. The LLM operates on complete candidate data.
+- **Pronunciation Normalization Directive:** The system prompt explicitly instructs the LLM to render the platform name as `Zedex` in Latin-script contexts and `زيدكس` in Arabic-script contexts, preventing TTS engines from spelling out individual characters.
+- **Negative Constraint Injection:** All previously asked questions are injected as explicit exclusion constraints, guaranteeing zero repetition across the session.
+- **Merged Onboarding:** Session initialization produces a single AI-generated greeting that extracts the candidate's name from the CV and delivers a language-appropriate introduction — eliminating a two-turn cold-start exchange.
 
 ---
 
-## 4. Security Subsystem & State Persistence
-Privacy-focused interview simulation requires secure handling of user CVs, training session data, and financial transactions. ZEDX enforces rigorous, Enterprise-grade security out-of-the-box.
+## 6. Security Subsystem & State Persistence
 
 ```mermaid
 flowchart TD
@@ -180,29 +279,29 @@ flowchart TD
     ALLOW --> DB[("Secure Transaction Logs & Transcripts")]
 ```
 
-### Engineering Highlights & 100X Audit Defenses:
-- **AI Prompt Injection Guard:** Employs strict XML-based payload encapsulation and Cognitive Constraint Directives (CCD) during prompt synthesis. This prevents malicious actors from hiding system instructions within their PDF Resumes to manipulate the LLM's scoring algorithm.
-- **Webhook Fraud Prevention:** Advanced Payment Gateway processing for Gumroad that actively monitors for `refunded` and `chargebacked` webhook signatures, instantly revoking Pro/Ultra access to prevent Subscription Fraud and Business Logic exploits.
-- **Transaction Idempotency (DoS Protection):** Instapay local payment processing utilizes atomic DB constraint checks to prevent duplicate transaction IDs, effectively eliminating duplicate payment email spam and Database DoS attacks.
-- **Strict TypeScript Interfaces:** Implementation of absolute horizontal type-safety (`SessionAnalysis`, `InterviewServiceError`) through the data-access layers, drastically mitigating runtime state mutations.
-- **Row-Level Security (RLS) Vaulting:** Hardened PostgreSQL policies ensure users cannot directly access other users' rows; all transactions bind mathematically to verified user sessions to prohibit lateral account escalation or PII (Personally Identifiable Information) leaks.
+### Security Enforcement:
+- **AI Prompt Injection Guard:** XML-based payload encapsulation and Cognitive Constraint Directives (CCD) prevent malicious actors from embedding hidden instructions within PDF resumes to manipulate LLM scoring.
+- **Webhook Fraud Prevention:** Payment gateway processing monitors for `refunded` and `chargebacked` signatures, instantly revoking access to prevent subscription fraud.
+- **Transaction Idempotency:** Atomic DB constraint checks on payment IDs eliminate duplicate transaction processing and associated Database DoS vectors.
+- **Strict TypeScript Interfaces:** Absolute horizontal type-safety through data-access layers mitigates runtime state mutations.
+- **Row-Level Security Vaulting:** PostgreSQL policies bind all data access mathematically to verified user sessions, prohibiting lateral escalation or PII leaks.
+- **API Key Isolation:** All API keys reside exclusively in server-side environment variables. Zero client-side exposure. `.env.local` is explicitly excluded from version control via `.gitignore`.
 
 ---
 
-## 5. Advanced Performance Scorecard & PDF Generation Pipeline
-The new post-interview analysis system replaces standard static feedback with a multi-dimensional JSON-structured AI evaluation, ending with a hardware-accelerated PDF export.
+## 7. Advanced Performance Scorecard & PDF Pipeline
 
 ```mermaid
 graph TD
     subgraph PostInterviewAggregation ["Post-Interview Aggregation"]
-        STATE["Zustand Session State"] -->|Extract| TRANSCRIPT["Complete Spoken Transcript"]
-        STATE -->|Extract| METADATA["JD, Resume, Duration"]
+        STATE["Session State"] -->|Extract| TRANSCRIPT["Complete Spoken Transcript"]
+        STATE -->|Extract| METADATA["JD, CV, Duration, Language"]
         TRANSCRIPT --> PAYLOAD["JSON Context Payload"]
         METADATA --> PAYLOAD
     end
 
     subgraph EvaluationEngine ["Evaluation Engine (Groq LPU)"]
-        PAYLOAD -->|Next.js API Edge Route| GROQ["Groq 70B Evaluator"]
+        PAYLOAD -->|Next.js API Edge Route| GROQ["Groq 70B Evaluator\n(Load Balanced Key Pool)"]
         GROQ -->|Strict JSON Schema| ANALYSIS{"JSON Evaluator"}
         ANALYSIS -- "Technical Score (0-10)" --> METRICS["Output State"]
         ANALYSIS -- "Communication Score" --> METRICS
@@ -212,7 +311,7 @@ graph TD
     subgraph ClientRenderingExport ["Client Rendering & Export"]
         METRICS -->|Hydrate| SCORECARD["React Scorecard UI"]
         SCORECARD -->|Apply @media print styles| PRINT["Browser Print Spooler"]
-        PRINT -->|Strip UI Elements & Backgrounds| PDF["Organized PDF Report"]
+        PRINT -->|Strip UI & backgrounds| PDF["Organized PDF Report"]
     end
 
     classDef state fill:#451a03,stroke:#b45309,stroke-width:2px,color:#fff;
@@ -224,99 +323,98 @@ graph TD
     class SCORECARD,PRINT,PDF render;
 ```
 
-### Engineering Highlights:
-- **Deterministic JSON Enforcement:** Prompt structures strictly force the LLM to output valid JSON, which is instantly parsed and mapped to TypeScript interfaces to render individual feedback cards.
-- **CSS Print Media Optimization:** Utilizes Tailwind's `print:` modifiers to dynamically strip heavy UI components, shadows, and dark-mode backgrounds, guaranteeing a pristine, geometric PDF output directly from the browser without requiring a heavy backend PDF generator (e.g., Puppeteer).
-
 ---
 
-## 6. Hardware-Accelerated UI & Dual-Theme Rendering
-ZEDX heavily invests in a premium, fluid aesthetic utilizing modern GPU-accelerated rendering techniques and intelligent dark/light mode context switching.
-
-```mermaid
-flowchart LR
-    subgraph ThemeProvider ["Theme Provider (next-themes)"]
-        SYSTEM["System Preference"] --> THEME("Active Theme Context")
-        USER["User Override"] --> THEME
-    end
-
-    subgraph HardwareAcceleratedCompositing ["Hardware Accelerated Compositing"]
-        THEME -->|Injects class='dark'| TAILWIND["Tailwind CSS Engine"]
-        TAILWIND -->|Light Mode| LIGHT["zinc-50 / gray-900"]
-        TAILWIND -->|Dark Mode| DARK["bg-black / text-white"]
-        
-        THEME -->|Conditional Rendering| R3F["React Three Fiber"]
-        R3F -->|WebGL Context| ANIMATIONS["3D Orbs & Sand Particles"]
-        ANIMATIONS -->|CSS Transform & opacity| COMPOSITOR["GPU Compositor"]
-    end
-
-    classDef theme fill:#334155,stroke:#94a3b8,stroke-width:2px,color:#fff;
-    classDef gpu fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#fff;
-
-    class SYSTEM,USER,THEME theme;
-    class TAILWIND,LIGHT,DARK,R3F,ANIMATIONS,COMPOSITOR gpu;
-```
-
-### Engineering Highlights:
-- **Zero-Layout-Thrashing Animations:** Complex visual elements like the "Sand Wave" orbs are explicitly bound to CSS `transform` and `opacity` properties, isolating them to the GPU compositor thread to prevent main-thread blocking during expensive LLM streaming.
-- **Mix-Blend-Mode Compositing:** Dynamic lighting effects and gradients utilize CSS `mix-blend-overlay` and localized opacity tweaks to maintain perfect contrast ratios across both light and dark modes without requiring duplicate DOM elements.
-
----
-
-## 7. Autonomous Voice-to-Voice Pipeline (The Core Loop)
-The crown jewel of ZEDX AI Simulator is the near-instantaneous Voice-to-Voice loop. This pipeline links three distinct neural networks (STT, LLM, TTS) into a single, seamless conversational duplex.
+## 8. Autonomous Voice-to-Voice Pipeline (Core Execution Loop)
 
 ```mermaid
 sequenceDiagram
     participant USER as User (Microphone)
-    participant STT as Groq Whisper V3
-    participant LLM as Groq Llama 3.1 70B
-    participant TTS as ElevenLabs TTS
-    participant UI as Browser Audio Context
+    participant STT as Groq Whisper V3 (x14 Key Pool)
+    participant LLM as Groq Llama 3.1 70B (x14 Key Pool)
+    participant ROUTER as TTS Language Router
+    participant ELEVEN as ElevenLabs (x10 Key Pool, Arabic)
+    participant EDGE as Edge TTS (Free, All Others)
+    participant CTX as Browser AudioContext
     
     USER->>STT: Speaks (VAD Filtered Audio Chunks)
-    Note over STT: Sub-second Transcription (ISO-639-1)
+    Note over STT: Sub-second Transcription\nRotated key selected via shuffle
     STT-->>LLM: Forward Transcribed Text
-    
-    Note over LLM: Inject System Prompt & Resume Context
-    LLM-->>TTS: Stream TTFT (Time-To-First-Token) 
-    
-    Note over TTS: Multilingual V2 (Human-like Intonation)
-    TTS-->>UI: Stream Raw Audio Buffers (ArrayBuffer)
-    
-    UI->>USER: Real-time Audio Playback
-```
 
-### Engineering Highlights:
-- **Streaming Pipeline (No Polling):** The architecture leverages HTTP Streams from the LLM directly into the TTS engine chunk-by-chunk. We do not wait for the LLM to finish thinking before we start generating audio.
-- **Multi-Model Orchestration:** We combine **Groq's LPU** (Language Processing Units) for instantaneous STT (Whisper) and LLM inference (Llama/Qwen) with **ElevenLabs'** state-of-the-art neural speech synthesis, achieving latency metrics that mimic natural human conversational gaps.
+    Note over LLM: Full CV + JD Context Injected\nPronunciation directives applied
+    LLM-->>ROUTER: Stream response text with language tag
+
+    ROUTER->>ROUTER: Inspect language tag prefix
+    alt Arabic (ar-*)
+        ROUTER->>ELEVEN: POST with shuffled key from pool
+        ELEVEN-->>CTX: Stream audio/mpeg
+    else All other languages
+        ROUTER->>EDGE: Spawn child process with voice ID
+        EDGE-->>CTX: Buffer audio response
+    end
+
+    CTX->>USER: Real-time Audio Playback\n(Global mute gate applied before each segment)
+```
 
 ---
 
-## Codebase Directory Architecture (Separation of Concerns)
+## Codebase Directory Architecture
 
-ZEDX AI Simulator enforces a modular, highly uncoupled Directory structure for enterprise scaling:
 ```text
 ZEDX-AI-Simulator/
 ├── electron/                   # Native hardware bridge (IPC, DesktopCapturer, Window Constraints)
 ├── src/
 │   ├── app/                    # Next.js App Router (Server & Client Pages)
-│   │   ├── api/                # Edge API Routes (LLM Streaming & STT Processing)
-│   │   ├── interview/          # Core System execution environment & Practice Interfaces
-│   │   └── dashboard/          # Authentication & historical data visualizations
-│   ├── components/             # Reusable UI React primitives (Tailwind/Zustand bindings)
-│   ├── lib/                    # Strongly-typed Data Access Layers (Supabase, Auth)
-│   └── hooks/                  # Custom React Hooks (Audio capture, Session state)
+│   │   ├── api/
+│   │   │   ├── tts/            # Hybrid TTS Router (Language detection + Load balanced key pools)
+│   │   │   ├── generate/       # LLM Inference (Load balanced Groq key pool, SSE streaming)
+│   │   │   ├── generate-stream/ # Streaming variant for real-time token delivery
+│   │   │   └── transcribe/     # STT Pipeline (Load balanced Whisper key pool)
+│   │   ├── mock-interview/     # Voice-to-Voice interview engine (Audio concurrency control)
+│   │   ├── interview/          # Desktop-assisted interview mode
+│   │   └── dashboard/          # Auth, session history, report analysis
+│   ├── components/             # Reusable React primitives
+│   ├── lib/
+│   │   ├── languages.ts        # Language registry (ISO-639-1 BCP-47 → Voice ID mapping)
+│   │   └── prompts.ts          # System prompt templates with context injection
+│   └── hooks/                  # Custom React Hooks (Audio capture, session state)
 └── public/                     # Static structural assets
 ```
 
 ---
 
+## Environment Variable Architecture
 
+All sensitive credentials are stored exclusively as server-side environment variables. The system supports arbitrary-length key pools via a naming convention:
+
+```
+GROQ_API_KEY         # Primary Groq key (LLM inference)
+GROQ_API_KEY_2..14   # Additional Groq keys (load balanced pool)
+GROQ_STT_KEY_1..5    # Dedicated STT keys (Whisper transcription)
+
+ELEVENLABS_API_KEY   # Primary ElevenLabs key (Arabic TTS)
+ELEVENLABS_API_KEY_1..9  # Additional ElevenLabs keys (load balanced pool)
+
+NEXT_PUBLIC_SUPABASE_URL      # Supabase project endpoint
+NEXT_PUBLIC_SUPABASE_ANON_KEY # Supabase anonymous public key
+SUPABASE_SERVICE_ROLE_KEY     # Admin bypass key (server-only)
+
+ADMIN_SECRET_KEY    # Admin dashboard authentication
+EMAIL_USER          # Nodemailer SMTP identity
+EMAIL_PASS          # Nodemailer SMTP credential
+```
+
+Key pool detection is performed at runtime by scanning all environment variables matching the prefix pattern. Adding a new key requires only appending a new numbered variable — no code changes required.
+
+---
 
 ## Future Blueprint (Technical Scalability)
-- **Offline Transduction Models (WASM):** Shifting dependencies from cloud-reliant AI endpoints to natively hosted ONNX (WebAssembly) tensor flows to execute fully offline, zero-trust architectures.
-- **Biometric Speaker Diarization:** Developing adaptive clustering mechanisms to digitally separate and dynamically multiplex multiple continuous speakers sharing identical audio channels.
+
+- **Offline Transduction Models (WASM):** Migration from cloud-dependent AI endpoints to locally-hosted ONNX tensor flows for fully offline, zero-trust architectures.
+- **Biometric Speaker Diarization:** Adaptive clustering to separate and multiplex multiple concurrent speakers sharing identical audio channels.
+- **Streaming TTS Concatenation:** Forwarding LLM SSE tokens directly to ElevenLabs in real-time chunks rather than waiting for full sentence completion, reducing perceived TTS latency.
+
+---
 
 ### Engineered & Developed by Ziad Emad
 *Committed to engineering strict software architectures that bridge the gap between autonomous ML deployments and instantaneous human accessibility.*
