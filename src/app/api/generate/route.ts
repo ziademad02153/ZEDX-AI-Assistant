@@ -126,11 +126,24 @@ export async function POST(request: Request) {
         // Generate secure system prompt on the server
         const systemPrompt = getSystemPrompt(promptType as PromptType, promptContext);
 
-        // Gather all available Groq API keys for load balancing (e.g., GROQ_API_KEY, GROQ_API_KEY_1, GROQ_API_KEY_2...)
-        const groqApiKeys = Object.keys(process.env)
-            .filter(key => key.startsWith('GROQ_API_KEY'))
-            .map(key => process.env[key])
-            .filter(Boolean) as string[];
+        // Gather all available Groq API keys for load balancing
+        const groqApiKeys = [
+            process.env.GROQ_API_KEY,
+            process.env.GROQ_API_KEY_1,
+            process.env.GROQ_API_KEY_2,
+            process.env.GROQ_API_KEY_3,
+            process.env.GROQ_API_KEY_4,
+            process.env.GROQ_API_KEY_5,
+            process.env.GROQ_API_KEY_6,
+            process.env.GROQ_API_KEY_7,
+            process.env.GROQ_API_KEY_8,
+            process.env.GROQ_API_KEY_9,
+            process.env.GROQ_API_KEY_10,
+            process.env.GROQ_API_KEY_11,
+            process.env.GROQ_API_KEY_12,
+            process.env.GROQ_API_KEY_13,
+            process.env.GROQ_API_KEY_14
+        ].filter(Boolean) as string[];
 
         if (groqApiKeys.length === 0) {
             return NextResponse.json({ error: { message: "Server AI configuration missing." } }, { status: 500 });

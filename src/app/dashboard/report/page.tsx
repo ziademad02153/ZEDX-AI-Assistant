@@ -55,12 +55,12 @@ function ScoreMiniRing({ score }: { score: number }) {
     const circumference = 2 * Math.PI * 18;
     const progress = (score / 10) * circumference;
     return (
-        <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
+        <div className="relative w-12 h-12 shrink-0">
             <svg width="48" height="48" className="absolute inset-0 -rotate-90">
                 <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="2.5" />
                 <motion.circle cx="24" cy="24" r="18" fill="none" stroke={c.stroke} strokeWidth="2.5" strokeLinecap="round" strokeDasharray={circumference} initial={{ strokeDashoffset: circumference }} whileInView={{ strokeDashoffset: circumference - progress }} viewport={{ once: true }} transition={{ duration: 1.2, ease: "easeOut" }} style={{ filter: `drop-shadow(0 0 6px ${c.glow})` }} />
             </svg>
-            <span className={cn("text-[13px] font-bold z-10", c.text)}>{score}</span>
+            <span className={cn("absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[13px] font-bold z-10", c.text)}>{score}</span>
         </div>
     );
 }

@@ -78,41 +78,22 @@ export async function POST(req: Request) {
         const langConfig = SUPPORTED_LANGUAGES.find(l => l.code === language) || SUPPORTED_LANGUAGES[0];
         const voiceName = langConfig.voice || 'en-US-ChristopherNeural';
 
-        // We must generate a unique file path to prevent concurrent request clashes
+        const { EdgeTTS } = require('node-edge-tts');
+        const tts = new EdgeTTS({ voice: voiceName, lang: language, outputFormat: 'audio-24khz-48kbitrate-mono-mp3' });
+        
         const tempFilePath = path.join(os.tmpdir(), `tts-${crypto.randomUUID()}.mp3`);
-        const scriptPath = path.join(os.tmpdir(), `tts-script-${crypto.randomUUID()}.js`);
-
-        // WORKAROUND: node-edge-tts hangs inside Next.js API routes due to stream/ws handling.
-        // We spawn a separate Node process to handle the generation safely.
-        const base64Text = Buffer.from(text).toString('base64');
-        const nodeModulesPath = path.join(process.cwd(), 'node_modules', 'node-edge-tts');
-        const script = `
-const { EdgeTTS } = require('${nodeModulesPath.replace(/\\/g, '\\\\')}');
-const tts = new EdgeTTS({ voice: '${voiceName}', lang: '${language}', outputFormat: 'audio-24khz-48kbitrate-mono-mp3' });
-tts.ttsPromise(Buffer.from('${base64Text}', 'base64').toString('utf-8'), '${tempFilePath.replace(/\\/g, '\\\\')}')
-    .then(() => process.exit(0))
-    .catch(e => { console.error(e); process.exit(1); });
-`;
-
         let audioBuffer: Buffer | null = null;
+        
         try {
-            fs.writeFileSync(scriptPath, script);
-
-            const { exec } = require('child_process');
-            const util = require('util');
-            const execAsync = util.promisify(exec);
-
-            // Added timeout to prevent hanging forever
-            await execAsync(`node "${scriptPath}"`, { cwd: process.cwd(), timeout: 15000 });
+            // Write audio to temporary file
+            await tts.ttsPromise(text, tempFilePath);
             audioBuffer = fs.readFileSync(tempFilePath);
         } catch (error: any) {
             console.error("EdgeTTS Error:", error);
             return NextResponse.json({ error: "Failed to generate audio from EdgeTTS", details: error.message }, { status: 500 });
         } finally {
-            // Clean up temporary files immediately, even on error
             try {
                 if (fs.existsSync(tempFilePath)) fs.unlinkSync(tempFilePath);
-                if (fs.existsSync(scriptPath)) fs.unlinkSync(scriptPath);
             } catch (e) {
                 console.error("Failed to delete temp files:", e);
             }
