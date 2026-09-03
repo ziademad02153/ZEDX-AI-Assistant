@@ -8,7 +8,7 @@ const rateLimitMap = new Map<string, { count: number, resetTime: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const MAX_REQUESTS = 20;
 
-// Fallback models in case the selected one fails
+// Valid models per user's dashboard
 const GROQ_MODELS = [
     "openai/gpt-oss-20b",
     "openai/gpt-oss-120b",
