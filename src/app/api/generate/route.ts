@@ -166,15 +166,8 @@ export async function POST(request: Request) {
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-                    const groqModelMap: Record<string, string> = {
-                        "openai/gpt-oss-20b": "llama-3.1-8b-instant",
-                        "openai/gpt-oss-120b": "llama-3.3-70b-versatile",
-                        "qwen/qwen3.6-27b": "mixtral-8x7b-32768"
-                    };
-                    const actualModel = groqModelMap[targetModel] || targetModel;
-
                     const requestBody: any = {
-                        model: actualModel,
+                        model: targetModel,
                         messages: finalMessages,
                         max_tokens: 4096,
                         temperature: 0.1
@@ -195,14 +188,7 @@ export async function POST(request: Request) {
                     clearTimeout(timeoutId);
                     const data = await response.json();
 
-                    if (!response.ok) {
-                        const errMsg = data.error?.message || `HTTP ${response.status}`;
-                        if (response.status === 400 || response.status === 404) {
-                            // Fatal errors (e.g. invalid model). Do not retry keys.
-                            throw new Error(`FATAL_MODEL_ERROR: ${errMsg}`);
-                        }
-                        throw new Error(errMsg);
-                    }
+                    if (!response.ok) throw new Error(data.error?.message || `HTTP ${response.status}`);
 
                     let content = data.choices?.[0]?.message?.content;
                     if (!content) throw new Error("Empty response from AI");
@@ -216,11 +202,7 @@ export async function POST(request: Request) {
                 } catch (error: any) {
                     console.error(`[AI Fallback] Model: ${targetModel} | Key: ***${apiKey.slice(-4)} | Error:`, error.message);
                     lastError = error;
-                    // If this key failed with a fatal error, break the inner loop so we don't try 15 keys for an invalid model.
-                    if (error.message.includes('FATAL_MODEL_ERROR')) {
-                        break;
-                    }
-                    // Otherwise, the loop automatically continues to try the NEXT key in shuffledKeys.
+                    // If this key failed, the loop automatically continues to try the NEXT key in shuffledKeys.
                 }
             }
             // If all keys failed for this model, the outer loop continues to the NEXT model.

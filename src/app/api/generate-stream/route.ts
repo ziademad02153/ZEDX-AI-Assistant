@@ -80,13 +80,6 @@ export async function POST(request: NextRequest) {
 
         const finalMessages = systemPrompt ? [{ role: "system", content: systemPrompt }, ...messages] : messages;
 
-        const groqModelMap: Record<string, string> = {
-            "openai/gpt-oss-20b": "llama-3.1-8b-instant",
-            "openai/gpt-oss-120b": "llama-3.3-70b-versatile",
-            "qwen/qwen3.6-27b": "mixtral-8x7b-32768"
-        };
-        const actualModel = groqModelMap[model || "qwen/qwen3.6-27b"] || (model || "qwen/qwen3.6-27b");
-
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
             headers: {
@@ -94,7 +87,7 @@ export async function POST(request: NextRequest) {
                 "Authorization": `Bearer ${groqApiKey}`
             },
             body: JSON.stringify({
-                model: actualModel,
+                model: model || "qwen/qwen3.6-27b",
                 messages: finalMessages,
                 max_tokens: 4096,
                 temperature: 0.1,
