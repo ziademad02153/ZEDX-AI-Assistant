@@ -125,32 +125,31 @@ export default function ReportPage() {
                 
                 const historyRaw = localStorage.getItem("interview_results");
                 const lang = localStorage.getItem("interview_context_lang") || "en-US";
-                const isEn = lang.startsWith('en');
                 if (historyRaw) {
                     const history = JSON.parse(historyRaw);
                     const fallback = history.map((item: any, i: number) => {
                         const ans = (item.a || "").trim();
                         const wc = ans.split(/\s+/).filter((w: string) => w.length > 0).length;
                         let score = 0; 
-                        let feedback = isEn ? "No clear answer provided." : "لم يتم تقديم إجابة واضحة.";
-                        let ideal = isEn ? "An ideal answer should be detailed, covering all aspects of the question with practical examples." : "الإجابة النموذجية يجب أن تكون مفصلة، وتغطي كل جوانب السؤال مع ذكر أمثلة عملية.";
+                        let feedback = "No clear answer provided.";
+                        let ideal = "An ideal answer should be detailed, covering all aspects of the question with practical examples.";
                         
                         if (wc === 0) { 
                             score = 0; 
-                            feedback = isEn ? "We couldn't capture any audio response." : "لم نتمكن من التقاط أي إجابة صوتية."; 
+                            feedback = "We couldn't capture any audio response."; 
                         } else if (wc > 0 && wc < 10) { 
                             score = 3; 
-                            feedback = isEn ? "Answer is too short. Please elaborate with more examples." : "الإجابة قصيرة جداً، يرجى التوضيح بأمثلة أكثر."; 
-                            ideal = isEn ? "It's highly recommended to use the STAR method to structure your situation, task, action, and result." : "يفضل استخدام أسلوب STAR لتوضيح الموقف، المهمة، الإجراء، والنتيجة."; 
+                            feedback = "Answer is too short. Please elaborate with more examples."; 
+                            ideal = "It's highly recommended to use the STAR method to structure your situation, task, action, and result."; 
                         } else if (wc >= 10 && wc < 30) { 
                             score = 5; 
-                            feedback = isEn ? "Basic answer, but requires more technical depth and detail." : "إجابة أساسية، ولكن تحتاج إلى تفاصيل وعمق تقني أكبر."; 
+                            feedback = "Basic answer, but requires more technical depth and detail."; 
                         } else if (wc >= 30) { 
                             score = 8; 
-                            feedback = isEn ? "Good and detailed answer. Try to tie your points more directly to the job requirements." : "إجابة جيدة ومفصلة. حاول ربط النقاط بمتطلبات الوظيفة بشكل مباشر أكثر."; 
+                            feedback = "Good and detailed answer. Try to tie your points more directly to the job requirements."; 
                         }
                         
-                        return { question: item.q || "—", answer: ans || (isEn ? "No answer" : "لا يوجد إجابة"), score, feedback, ideal_answer: ideal };
+                        return { question: item.q || "—", answer: ans || "No answer", score, feedback, ideal_answer: ideal };
                     });
                     setReport(fallback);
                 } else {
