@@ -1,9 +1,5 @@
 import { NextResponse } from 'next/server';
-import { EdgeTTS } from 'node-edge-tts';
-import fs from 'fs';
-import path from 'path';
-import os from 'os';
-import crypto from 'crypto';
+
 import { SUPPORTED_LANGUAGES } from '@/lib/languages';
 
 export async function POST(req: Request) {

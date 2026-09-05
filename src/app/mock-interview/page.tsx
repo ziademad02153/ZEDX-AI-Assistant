@@ -442,6 +442,7 @@ Resume Context: ${resume}`;
             } else {
                 // Non-Arabic uses Microsoft Edge TTS directly in the browser!
                 // This completely bypasses Vercel's IP bans/timeouts which were causing the 2 minute delay.
+                // @ts-ignore
                 const { EdgeTTS } = await import('@andresaya/edge-tts/dist/browser/edge-tts.esm.js');
                 const langConfig = SUPPORTED_LANGUAGES.find(l => l.code === language) || SUPPORTED_LANGUAGES[0];
                 const voiceName = langConfig.voice || 'en-US-ChristopherNeural';
