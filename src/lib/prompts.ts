@@ -127,7 +127,8 @@ The JSON must be an array of objects, where each object has:
     "feedback": "1 sentence of strict critique on what they missed or did wrong, followed by what they did well (if anything).",
     "ideal_answer": "A short example of a perfect answer"
 }
-CRITICAL REQUIREMENT: The feedback and ideal_answer MUST be written entirely in the language corresponding to the language code "${context?.language || 'en-US'}". Do not use any other language under any circumstances.`;
+CRITICAL REQUIREMENT 1: The feedback and ideal_answer MUST be written entirely in the language corresponding to the language code "${context?.language || 'en-US'}". Do not use any other language under any circumstances.
+CRITICAL REQUIREMENT 2: If the candidate's answer is extremely short, nonsensical, or completely missing (e.g. "I don't know", "no sé", a single letter, or empty string), you MUST STILL return a valid JSON array. Give them a score of 0, write strict feedback stating they failed to answer, and formulate the \`ideal_answer\` specifically to answer the \`question\` that was asked. Never refuse to generate the JSON.`;
 
         case 'report_deep_analysis':
             return `

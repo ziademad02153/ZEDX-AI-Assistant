@@ -114,6 +114,11 @@ export default function ReportPage() {
                     }
                 }
                 
+                // Ensure parsedReport is an array. If AI returned a single object, wrap it in an array.
+                if (parsedReport && !Array.isArray(parsedReport) && typeof parsedReport === 'object') {
+                    parsedReport = [parsedReport];
+                }
+                
                 setReport(parsedReport);
                 try {
                     const { interviewService } = await import("@/lib/interview-service");
