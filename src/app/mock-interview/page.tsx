@@ -423,19 +423,38 @@ Resume Context: ${resume}`;
         };
 
         try {
-            const res = await fetch("/api/tts", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text, language })
-            });
+            let audioUrl = "";
+            let blob: Blob;
 
-            if (!isMounted.current) return;
-            if (!res.ok) throw new Error("TTS failed");
+            if (language.startsWith('ar')) {
+                // Arabic goes to our Vercel API (which uses ElevenLabs)
+                const res = await fetch("/api/tts", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text, language })
+                });
 
-            const blob = await res.blob();
+                if (!isMounted.current) return;
+                if (!res.ok) throw new Error("TTS failed");
+
+                blob = await res.blob();
+                audioUrl = URL.createObjectURL(blob);
+            } else {
+                // Non-Arabic uses Microsoft Edge TTS directly in the browser!
+                // This completely bypasses Vercel's IP bans/timeouts which were causing the 2 minute delay.
+                const { EdgeTTS } = await import('@andresaya/edge-tts/dist/browser/edge-tts.esm.js');
+                const langConfig = SUPPORTED_LANGUAGES.find(l => l.code === language) || SUPPORTED_LANGUAGES[0];
+                const voiceName = langConfig.voice || 'en-US-ChristopherNeural';
+                
+                const tts = new EdgeTTS();
+                await tts.synthesize(text, voiceName);
+                const audioBuffer = tts.getAudioData();
+                blob = new Blob([audioBuffer], { type: 'audio/mpeg' });
+                audioUrl = URL.createObjectURL(blob);
+            }
+
             if (!isMounted.current) return;
             
-            const audioUrl = URL.createObjectURL(blob);
             const audio = new Audio(audioUrl);
             audioRef.current = audio;
 

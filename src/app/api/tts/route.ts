@@ -74,33 +74,9 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Failed to generate audio from ElevenLabs (All keys exhausted)' }, { status: 500 });
         }
 
-        // 2. Other Languages -> Microsoft Edge TTS (Free, Fast, High Quality)
-        const langConfig = SUPPORTED_LANGUAGES.find(l => l.code === language) || SUPPORTED_LANGUAGES[0];
-        const voiceName = langConfig.voice || 'en-US-ChristopherNeural';
-
-        const { EdgeTTS } = require('@andresaya/edge-tts');
-        const tts = new EdgeTTS({ voice: voiceName });
-        let audioBuffer: Buffer | null = null;
-        
-        try {
-            // Synthesize strictly in-memory (bypassing Vercel /tmp limits and preventing hangs)
-            await tts.synthesize(text);
-            audioBuffer = tts.toBuffer();
-        } catch (error: any) {
-            console.error("EdgeTTS Error:", error);
-            return NextResponse.json({ error: "Failed to generate audio from EdgeTTS", details: error.message }, { status: 500 });
-        }
-
-        if (!audioBuffer) {
-            return NextResponse.json({ error: "No audio generated" }, { status: 500 });
-        }
-
-        return new NextResponse(audioBuffer as any, {
-            headers: {
-                'Content-Type': 'audio/mpeg',
-                'Content-Length': audioBuffer.length.toString(),
-            },
-        });
+        // If it reaches here, it means it's a non-Arabic language that was incorrectly sent to the API
+        // Because the client now handles non-Arabic Edge TTS directly in the browser.
+        return NextResponse.json({ error: "Non-Arabic languages should be handled by the client using EdgeTTS directly." }, { status: 400 });
 
     } catch (error: any) {
         console.error('Error generating TTS:', error);
