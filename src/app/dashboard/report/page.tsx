@@ -122,39 +122,7 @@ export default function ReportPage() {
             } catch (err: any) {
                 // Log message only to prevent Next.js Error Overlay in Dev mode
                 console.warn("REPORT GENERATION ERROR:", err?.message || err);
-                
-                const historyRaw = localStorage.getItem("interview_results");
-                const lang = localStorage.getItem("interview_context_lang") || "en-US";
-                if (historyRaw) {
-                    const history = JSON.parse(historyRaw);
-                    const fallback = history.map((item: any, i: number) => {
-                        const ans = (item.a || "").trim();
-                        const wc = ans.split(/\s+/).filter((w: string) => w.length > 0).length;
-                        let score = 0; 
-                        let feedback = "No clear answer provided.";
-                        let ideal = "An ideal answer should be detailed, covering all aspects of the question with practical examples.";
-                        
-                        if (wc === 0) { 
-                            score = 0; 
-                            feedback = "We couldn't capture any audio response."; 
-                        } else if (wc > 0 && wc < 10) { 
-                            score = 3; 
-                            feedback = "Answer is too short. Please elaborate with more examples."; 
-                            ideal = "It's highly recommended to use the STAR method to structure your situation, task, action, and result."; 
-                        } else if (wc >= 10 && wc < 30) { 
-                            score = 5; 
-                            feedback = "Basic answer, but requires more technical depth and detail."; 
-                        } else if (wc >= 30) { 
-                            score = 8; 
-                            feedback = "Good and detailed answer. Try to tie your points more directly to the job requirements."; 
-                        }
-                        
-                        return { question: item.q || "—", answer: ans || "No answer", score, feedback, ideal_answer: ideal };
-                    });
-                    setReport(fallback);
-                } else {
-                    setError("Failed to generate your scorecard. The AI is currently unavailable.");
-                }
+                setError(err?.message || "Failed to generate report. The AI is temporarily unavailable or timed out.");
             } finally { setIsLoading(false); }
         };
         generateReport();
