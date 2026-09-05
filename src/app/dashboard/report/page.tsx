@@ -81,7 +81,14 @@ export default function ReportPage() {
                 const model = localStorage.getItem("selected_ai_model") || "qwen/qwen3.6-27b";
                 const prompt = `Here is the interview transcript: ${JSON.stringify(history)}`;
                 const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
-                const { data: { session } } = await supabase.auth.getSession();
+                
+                // Force refresh session to ensure the token hasn't expired during a long interview
+                let { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    const { data: refreshData } = await supabase.auth.refreshSession();
+                    if (refreshData.session) session = refreshData.session;
+                }
+                
                 const lang = localStorage.getItem("interview_context_lang") || "en-US";
                 const res = await fetch("/api/generate", {
                     method: "POST",
