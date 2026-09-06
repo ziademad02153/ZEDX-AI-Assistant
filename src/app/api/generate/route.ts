@@ -29,14 +29,16 @@ export async function POST(request: Request) {
     try {
         // 1. Authenticate Request
         const authHeader = request.headers.get('Authorization');
-        const token = authHeader?.split(' ')[1];
+        let token = authHeader?.split(' ')[1];
+        if (token === 'undefined' || token === 'null') token = undefined;
+        
         const isDev = process.env.NODE_ENV === 'development';
 
         let user: any = null;
         let profile: any = null;
 
         if (!token && !isDev) {
-            return NextResponse.json({ error: { message: "Unauthorized. Please sign in." } }, { status: 401 });
+            return NextResponse.json({ error: { message: "No valid session token provided. Please log out and log in again." } }, { status: 401 });
         }
 
         const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -170,7 +172,7 @@ export async function POST(request: Request) {
                     const requestBody: any = {
                         model: targetModel,
                         messages: finalMessages,
-                        max_tokens: 4096,
+                        max_tokens: 1000,
                         temperature: 0.1
                     };
 
