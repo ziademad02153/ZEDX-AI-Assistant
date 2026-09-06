@@ -33,29 +33,39 @@ export async function POST(request: Request) {
         if (token === 'undefined' || token === 'null') token = undefined;
         
         const isDev = process.env.NODE_ENV === 'development';
-
         let user: any = null;
         let profile: any = null;
 
-        if (!token && !isDev) {
-            return NextResponse.json({ error: { message: "No valid session token provided. Please log out and log in again." } }, { status: 401 });
+        // Try getting user via header token first
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+        let authError = null;
+
+        if (token) {
+            const supabase = createClient(supabaseUrl, supabaseAnonKey);
+            const { data } = await supabase.auth.getUser(token);
+            user = data?.user || null;
         }
 
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
-        const { data: authData, error: authError } = token ? await supabase.auth.getUser(token) : { data: { user: null }, error: new Error("No token") };
+        // Fallback to cookies if header token is missing or invalid
+        if (!user) {
+            const { createClient: createServerClient } = await import("@/lib/supabase/server");
+            const supabaseServer = await createServerClient();
+            const { data, error } = await supabaseServer.auth.getUser();
+            user = data?.user || null;
+            authError = error;
+        }
 
-        const supabaseAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+        const supabaseAdmin = createClient(supabaseUrl, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
-        if (authError || !authData.user) {
+        if (!user) {
             if (isDev) {
-                // Mock user for local development to bypass session expiration
                 user = { id: "dev-mock-user-id" };
                 profile = { tier: "pro", questions_asked: 0, subscription_expires_at: null };
             } else {
-                return NextResponse.json({ error: { message: "Invalid authentication token." } }, { status: 401 });
+                return NextResponse.json({ error: { message: "No valid session token provided. Please log out and log in again." } }, { status: 401 });
             }
         } else {
-            user = authData.user;
             // 2. Fetch User Profile
             const { data: dbProfile, error: profileError } = await supabaseAdmin
                 .from('profiles')
@@ -199,6 +209,8 @@ export async function POST(request: Request) {
                     // Strip <think> blocks (reasoning models) so TTS doesn't read the internal thought process
                     // Using (<\/think>|$) ensures we strip it even if the model hit max tokens and didn't close the tag.
                     content = content.replace(/<think>[\s\S]*?(<\/think>|$)/gi, '').trim();
+
+                    if (!content) throw new Error("Empty response from AI after stripping reasoning tokens. Token limit likely reached during thinking phase.");
 
                     return NextResponse.json({ content, modelUsed: targetModel, provider: "groq" });
 
