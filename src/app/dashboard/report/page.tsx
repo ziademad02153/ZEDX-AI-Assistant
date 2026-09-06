@@ -82,11 +82,17 @@ export default function ReportPage() {
                 const prompt = `Here is the interview transcript: ${JSON.stringify(history)}`;
                 const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
                 
-                // Force refresh session to ensure the token hasn't expired during a long interview
+                // Try to refresh session to ensure the token hasn't expired during a long interview
                 let { data: { session } } = await supabase.auth.getSession();
                 if (session) {
-                    const { data: refreshData } = await supabase.auth.refreshSession();
-                    if (refreshData.session) session = refreshData.session;
+                    try {
+                        const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+                        if (!refreshError && refreshData.session) {
+                            session = refreshData.session;
+                        }
+                    } catch (e) {
+                        console.warn("Silent refresh failed", e);
+                    }
                 }
                 
                 const lang = localStorage.getItem("interview_context_lang") || "en-US";
