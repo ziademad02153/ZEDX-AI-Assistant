@@ -8,7 +8,6 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { createBrowserClient } from "@supabase/ssr";
 
 interface ReportItem {
     question: string;
@@ -79,7 +78,7 @@ export default function ReportPage() {
                 if (!historyRaw) { router.push("/dashboard"); return; }
                 const history = JSON.parse(historyRaw);
                 const model = localStorage.getItem("selected_ai_model") || "qwen/qwen3.6-27b";
-                const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+                const { supabase } = await import("@/lib/supabase");
                 let { data: { session } } = await supabase.auth.getSession();
                 
                 // Silent refresh if available

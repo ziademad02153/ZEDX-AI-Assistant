@@ -22,9 +22,6 @@ export async function GET() {
 
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
 export async function POST(request: Request) {
     try {
         // 1. Authenticate Request
@@ -36,27 +33,23 @@ export async function POST(request: Request) {
         let user: any = null;
         let profile: any = null;
 
-        // Try getting user via header token first
+        // Use service_role key for ALL server-side auth validation.
+        // The anon key can silently fail to validate JWTs.
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        const supabaseAdmin = createClient(supabaseUrl, process.env.SUPABASE_SERVICE_ROLE_KEY!);
         let authError = null;
 
         if (token) {
-            const { data } = await supabase.auth.getUser(token);
+            const { data, error } = await supabaseAdmin.auth.getUser(token);
             user = data?.user || null;
+            if (error) {
+                console.error('[AUTH] Token validation failed:', error.message, '| Token length:', token.length);
+                authError = error;
+            }
+        } else {
+            console.error('[AUTH] No token provided in Authorization header');
+            authError = { message: 'No token in request' };
         }
-
-        // Fallback to cookies if header token is missing or invalid
-        if (!user) {
-            const { createClient: createServerClient } = await import("@/lib/supabase/server");
-            const supabaseServer = await createServerClient();
-            const { data, error } = await supabaseServer.auth.getUser();
-            user = data?.user || null;
-            authError = error;
-        }
-
-        const supabaseAdmin = createClient(supabaseUrl, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
         if (!user) {
             if (isDev) {
@@ -118,7 +111,7 @@ export async function POST(request: Request) {
                 return NextResponse.json({ error: { message: "PAYWALL_LIMIT_REACHED", code: "PAYWALL_LIMIT_REACHED" } }, { status: 403 });
             }
             // Lock the question slot BEFORE making the slow Groq API call
-            await supabase.rpc('increment_questions', { user_id: user.id });
+            await supabaseAdmin.rpc('increment_questions', { user_id: user.id });
             isQuestionLocked = true;
         }
 
