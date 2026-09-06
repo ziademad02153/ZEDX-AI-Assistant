@@ -123,7 +123,17 @@ export default function ReportPage() {
                 setReport(parsedReport);
                 try {
                     const { interviewService } = await import("@/lib/interview-service");
-                    await interviewService.saveInterview("Mock Interview Session", history.map((h: any) => `Q: ${h.q}\nA: ${h.a}`).join("\n\n"), { scorecard: parsedReport });
+                    const currentDbId = localStorage.getItem("current_db_id");
+                    const title = "Mock Interview Session";
+                    const transcript = history.map((h: any) => `Q: ${h.q}\nA: ${h.a}`).join("\n\n");
+                    const analysis = { scorecard: parsedReport };
+                    
+                    if (currentDbId) {
+                        await interviewService.updateInterview(currentDbId, { title, transcript, analysis });
+                        localStorage.removeItem("current_db_id");
+                    } else {
+                        await interviewService.saveInterview(title, transcript, analysis);
+                    }
                 } catch (e) { console.warn("Failed to save to DB"); }
             } catch (err: any) {
                 // Log message only to prevent Next.js Error Overlay in Dev mode

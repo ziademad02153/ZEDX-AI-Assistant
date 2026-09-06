@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { SUPPORTED_LANGUAGES } from "@/lib/languages";
 import { supabase } from "@/lib/supabase";
+import { interviewService } from "@/lib/interview-service";
 
 export default function MockInterviewPage() {
     const router = useRouter();
@@ -46,6 +47,7 @@ export default function MockInterviewPage() {
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const isMounted = useRef(true);
     const hasStartedRef = useRef(false);
+    const dbInterviewIdRef = useRef<string | null>(null);
 
     // Track latest state to avoid stale closures in event listeners and timeouts
     const stateRef = useRef({
@@ -273,6 +275,17 @@ export default function MockInterviewPage() {
         setQuestionsAsked(newHistory);
         setUserTranscript(""); // Clear UI
         finalTranscriptRef.current = ""; // Reset stable transcript for next question
+
+        // Auto-save progress to DB in background
+        if (dbInterviewIdRef.current) {
+            interviewService.updateInterview(dbInterviewIdRef.current, { analysis: { questions: newHistory } }).catch(console.error);
+            localStorage.setItem("current_db_id", dbInterviewIdRef.current);
+        } else {
+            interviewService.saveInterview("In-Progress Interview", "", { questions: newHistory }).then(saved => {
+                dbInterviewIdRef.current = saved.id;
+                localStorage.setItem("current_db_id", saved.id);
+            }).catch(console.error);
+        }
 
         // Generate next question
         await generateNextQuestion(currentIndex + 1, newHistory);

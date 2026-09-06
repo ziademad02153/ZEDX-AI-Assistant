@@ -11,7 +11,7 @@ export interface SessionAnalysis {
     language?: string;
     ai_responses?: string[];
     duration_minutes?: number;
-    questions?: string[];
+    questions?: any[];
     scorecard?: Record<string, unknown>;
 }
 

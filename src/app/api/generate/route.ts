@@ -3,10 +3,17 @@ import { getSystemPrompt, PromptType } from "@/lib/prompts";
 
 export const runtime = 'edge';
 
-// Simple in-memory rate limiter (20 requests per minute per user)
-const rateLimitMap = new Map<string, { count: number, resetTime: number }>();
-const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const MAX_REQUESTS = 20;
+
+// Proper Fisher-Yates shuffle to distribute keys evenly
+function shuffleArray<T>(arr: T[]): T[] {
+    const shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
 
 // Valid models per user's dashboard
 const GROQ_MODELS = [
@@ -87,24 +94,20 @@ export async function POST(request: Request) {
             }
         }
 
-        // Rate Limiter Check (Applies to all users, even Pro)
-        // Note: In Serverless (Vercel), memory Map is not shared across instances.
-        // For production, this should ideally use Redis or a Supabase 'rate_limits' table.
-        const now = Date.now();
-        const userRateData = rateLimitMap.get(user.id);
-        if (userRateData) {
-            if (now > userRateData.resetTime) {
-                rateLimitMap.set(user.id, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
-            } else if (userRateData.count >= MAX_REQUESTS) {
-                return NextResponse.json({ error: { message: "Rate limit exceeded. Please wait a minute." } }, { status: 429 });
-            } else {
-                userRateData.count += 1;
-            }
-        } else {
-            rateLimitMap.set(user.id, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+        // 4. Rate Limiter Check using Supabase (Atomic RPC for Serverless)
+        const { data: isAllowed, error: rateLimitError } = await supabaseAdmin.rpc('check_rate_limit', {
+            p_user_id: user.id,
+            p_max: MAX_REQUESTS
+        });
+        
+        if (rateLimitError) {
+            console.error('[Rate Limit Error] Fallback to allow:', rateLimitError.message);
+            // Allow if RPC fails so we don't break the app
+        } else if (isAllowed === false) {
+            return NextResponse.json({ error: { message: "Rate limit exceeded. Please wait a minute." } }, { status: 429 });
         }
 
-        // 4. Teaser Mode Limit Check & Early Lock (Fix TOCTOU Race Condition)
+        // 5. Teaser Mode Limit Check & Early Lock (Fix TOCTOU Race Condition)
         let isQuestionLocked = false;
         if (currentTier === 'free') {
             if (profile.questions_asked >= 4) {
@@ -154,16 +157,22 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: { message: "Server AI configuration missing." } }, { status: 500 });
         }
 
-        // Shuffle keys to distribute load across all requests
-        const shuffledKeys = groqApiKeys.sort(() => 0.5 - Math.random());
+        // Shuffle keys to distribute load evenly across all requests (Fix biased sort)
+        const shuffledKeys = shuffleArray(groqApiKeys);
         const modelsToTry = targetModel ? [targetModel, ...GROQ_MODELS.filter(m => m !== targetModel)] : GROQ_MODELS;
         const uniqueModels = [...new Set(modelsToTry)];
 
         // Helper function to call Groq with automatic fallback across models and keys
-        const callGroqWithFallback = async (userPrompt: string, overrideMessages?: any[]) => {
+        const callGroqWithFallback = async (userPrompt: string, overrideMessages?: any[], keyOffset: number = 0) => {
             let lastError: Error | null = null;
             for (const currentModel of uniqueModels) {
-                for (const apiKey of shuffledKeys) {
+                // Rotate keys per chunk so they don't all hit the same first key
+                const rotatedKeys = [
+                    ...shuffledKeys.slice(keyOffset % shuffledKeys.length),
+                    ...shuffledKeys.slice(0, keyOffset % shuffledKeys.length)
+                ];
+
+                for (const apiKey of rotatedKeys) {
                     try {
                         const groqMessages = overrideMessages || [{ role: "user", content: userPrompt }];
                         const finalMessages = systemPrompt ? [{ role: "system", content: systemPrompt }, ...groqMessages] : groqMessages;
@@ -171,10 +180,11 @@ export async function POST(request: Request) {
                         const controller = new AbortController();
                         const timeoutId = setTimeout(() => controller.abort(), 60000);
 
+                        // Fix max_tokens: 1000 -> 2048 for reports to prevent truncation
                         const requestBody: any = {
                             model: currentModel,
                             messages: finalMessages,
-                            max_tokens: 1000,
+                            max_tokens: promptType === "report_evaluator" ? 2048 : 1000,
                             temperature: 0.1
                         };
 
@@ -217,9 +227,10 @@ export async function POST(request: Request) {
                     chunks.push(history.slice(i, i + CHUNK_SIZE));
                 }
 
-                const chunkPromises = chunks.map(async (chunk) => {
+                const chunkPromises = chunks.map(async (chunk, index) => {
                     const chunkPrompt = `Here is the interview transcript: ${JSON.stringify(chunk)}`;
-                    const res = await callGroqWithFallback(chunkPrompt);
+                    // Pass index as offset for key rotation
+                    const res = await callGroqWithFallback(chunkPrompt, undefined, index);
                     let content = res.content;
                     
                     const jsonMatch = content.match(/\[[\s\S]*\]/);
@@ -244,10 +255,19 @@ export async function POST(request: Request) {
                     return Array.isArray(parsedChunk) ? parsedChunk : [];
                 });
 
-                const chunkResults = await Promise.all(chunkPromises);
-                const allParsedReports = chunkResults.flat();
+                // Use allSettled so if one chunk fails, the report doesn't totally fail
+                const chunkResults = await Promise.allSettled(chunkPromises);
+                const allParsedReports = chunkResults
+                    .filter((r): r is PromiseFulfilledResult<any[]> => r.status === 'fulfilled')
+                    .map(r => r.value)
+                    .flat();
 
-                return NextResponse.json({ parsedReport: allParsedReports, provider: "groq" });
+                if (allParsedReports.length === 0) {
+                    throw new Error("Failed to generate any part of the report.");
+                }
+
+                // If some failed, we can at least return the ones that succeeded
+                return NextResponse.json({ parsedReport: allParsedReports, provider: "groq", partial: allParsedReports.length < history.length });
             } else {
                 // Standard single prompt execution
                 const res = await callGroqWithFallback(prompt, messages);
