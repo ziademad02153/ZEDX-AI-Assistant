@@ -79,11 +79,16 @@ export default function ReportPage() {
                 if (!historyRaw) { router.push("/dashboard"); return; }
                 const history = JSON.parse(historyRaw);
                 const model = localStorage.getItem("selected_ai_model") || "qwen/qwen3.6-27b";
-                const prompt = `Here is the interview transcript: ${JSON.stringify(history)}`;
+                const CHUNK_SIZE = 5;
+                const chunks = [];
+                for (let i = 0; i < history.length; i += CHUNK_SIZE) {
+                    chunks.push(history.slice(i, i + CHUNK_SIZE));
+                }
+
                 const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
-                
-                // Try to refresh session to ensure the token hasn't expired during a long interview
                 let { data: { session } } = await supabase.auth.getSession();
+                
+                // Silent refresh if available
                 if (session) {
                     try {
                         const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
@@ -94,43 +99,54 @@ export default function ReportPage() {
                         console.warn("Silent refresh failed", e);
                     }
                 }
-                
+
                 const lang = localStorage.getItem("interview_context_lang") || "en-US";
-                const res = await fetch("/api/generate", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${session?.access_token}` },
-                    body: JSON.stringify({ model, promptType: "report_evaluator", promptContext: { language: lang }, prompt })
+                let allParsedReports: any[] = [];
+
+                // Fetch all chunks in parallel
+                const fetchPromises = chunks.map(async (chunk) => {
+                    const prompt = `Here is the interview transcript: ${JSON.stringify(chunk)}`;
+                    const res = await fetch("/api/generate", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${session?.access_token}` },
+                        body: JSON.stringify({ model, promptType: "report_evaluator", promptContext: { language: lang }, prompt })
+                    });
+                    if (!res.ok) {
+                        const errorText = await res.text();
+                        throw new Error(`Failed to generate report chunk: ${res.status} - ${errorText}`);
+                    }
+                    const data = await res.json();
+                    let content = data.content;
+                    const jsonMatch = content.match(/\[[\s\S]*\]/);
+                    if (jsonMatch) content = jsonMatch[0];
+                    content = content.replace(/```json/g, "").replace(/```/g, "").trim();
+                    let parsedChunk = [];
+                    try {
+                        parsedChunk = JSON.parse(content);
+                    } catch (parseError) {
+                        console.warn("Standard JSON parse failed for chunk. Attempting robust extraction...");
+                        const objectRegex = /\{(?:[^{}]|(?:\{[^{}]*\}))*\}/g;
+                        const matches = content.match(objectRegex);
+                        if (matches) {
+                            parsedChunk = matches.map((m: string) => {
+                                try { return JSON.parse(m); } catch (e) { return null; }
+                            }).filter(Boolean);
+                        }
+                    }
+                    if (parsedChunk && !Array.isArray(parsedChunk) && typeof parsedChunk === 'object') {
+                        parsedChunk = [parsedChunk];
+                    }
+                    return Array.isArray(parsedChunk) ? parsedChunk : [];
                 });
-                if (!res.ok) {
-                    const errorText = await res.text();
-                    throw new Error(`Failed to generate report: ${res.status} - ${errorText}`);
-                }
-                const data = await res.json();
-                let content = data.content;
-                const jsonMatch = content.match(/\[[\s\S]*\]/);
-                if (jsonMatch) content = jsonMatch[0];
-                content = content.replace(/```json/g, "").replace(/```/g, "").trim();
-                let parsedReport = [];
-                try {
-                    parsedReport = JSON.parse(content);
-                } catch (parseError) {
-                    console.warn("Standard JSON parse failed. Attempting robust extraction...");
-                    const objectRegex = /\{(?:[^{}]|(?:\{[^{}]*\}))*\}/g;
-                    const matches = content.match(objectRegex);
-                    if (matches) {
-                        parsedReport = matches.map((m: string) => {
-                            try { return JSON.parse(m); } catch (e) { return null; }
-                        }).filter(Boolean);
-                    }
-                    if (parsedReport.length === 0) {
-                        throw "Could not extract any valid data from AI response.";
-                    }
+
+                const chunkResults = await Promise.all(fetchPromises);
+                allParsedReports = chunkResults.flat();
+                
+                if (allParsedReports.length === 0) {
+                     throw new Error("Could not extract any valid data from AI response.");
                 }
                 
-                // Ensure parsedReport is an array. If AI returned a single object, wrap it in an array.
-                if (parsedReport && !Array.isArray(parsedReport) && typeof parsedReport === 'object') {
-                    parsedReport = [parsedReport];
-                }
+                const parsedReport = allParsedReports;
                 
                 setReport(parsedReport);
                 try {

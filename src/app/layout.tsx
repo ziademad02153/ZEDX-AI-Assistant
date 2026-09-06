@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     description: "Your real-time interview simulation and training coach.",
     images: [
       {
-        url: "/zedx-cyberpunk-banner.png",
+        url: "/backgr.png",
         width: 1200,
         height: 630,
         alt: "ZEDX AI Interview Simulator",
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ZEDX AI Interview Simulator",
     description: "Real-time AI interview simulation and verification insights.",
-    images: ["/zedx-cyberpunk-banner.png"],
+    images: ["/backgr.png"],
     creator: "@zedx_ai",
   },
   alternates: {
