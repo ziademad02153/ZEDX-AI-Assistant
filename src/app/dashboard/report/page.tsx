@@ -79,12 +79,6 @@ export default function ReportPage() {
                 if (!historyRaw) { router.push("/dashboard"); return; }
                 const history = JSON.parse(historyRaw);
                 const model = localStorage.getItem("selected_ai_model") || "qwen/qwen3.6-27b";
-                const CHUNK_SIZE = 5;
-                const chunks = [];
-                for (let i = 0; i < history.length; i += CHUNK_SIZE) {
-                    chunks.push(history.slice(i, i + CHUNK_SIZE));
-                }
-
                 const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
                 let { data: { session } } = await supabase.auth.getSession();
                 
@@ -101,52 +95,31 @@ export default function ReportPage() {
                 }
 
                 const lang = localStorage.getItem("interview_context_lang") || "en-US";
-                let allParsedReports: any[] = [];
-
-                // Fetch all chunks in parallel
-                const fetchPromises = chunks.map(async (chunk) => {
-                    const prompt = `Here is the interview transcript: ${JSON.stringify(chunk)}`;
-                    const res = await fetch("/api/generate", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${session?.access_token}` },
-                        body: JSON.stringify({ model, promptType: "report_evaluator", promptContext: { language: lang }, prompt })
-                    });
-                    if (!res.ok) {
-                        const errorText = await res.text();
-                        throw new Error(`Failed to generate report chunk: ${res.status} - ${errorText}`);
-                    }
-                    const data = await res.json();
-                    let content = data.content;
-                    const jsonMatch = content.match(/\[[\s\S]*\]/);
-                    if (jsonMatch) content = jsonMatch[0];
-                    content = content.replace(/```json/g, "").replace(/```/g, "").trim();
-                    let parsedChunk = [];
-                    try {
-                        parsedChunk = JSON.parse(content);
-                    } catch (parseError) {
-                        console.warn("Standard JSON parse failed for chunk. Attempting robust extraction...");
-                        const objectRegex = /\{(?:[^{}]|(?:\{[^{}]*\}))*\}/g;
-                        const matches = content.match(objectRegex);
-                        if (matches) {
-                            parsedChunk = matches.map((m: string) => {
-                                try { return JSON.parse(m); } catch (e) { return null; }
-                            }).filter(Boolean);
-                        }
-                    }
-                    if (parsedChunk && !Array.isArray(parsedChunk) && typeof parsedChunk === 'object') {
-                        parsedChunk = [parsedChunk];
-                    }
-                    return Array.isArray(parsedChunk) ? parsedChunk : [];
-                });
-
-                const chunkResults = await Promise.all(fetchPromises);
-                allParsedReports = chunkResults.flat();
                 
-                if (allParsedReports.length === 0) {
-                     throw new Error("Could not extract any valid data from AI response.");
+                // Send a SINGLE request to the backend with the full history. 
+                // The backend will chunk and parallelize it to prevent Supabase Auth rate limits (401 errors).
+                const res = await fetch("/api/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${session?.access_token}` },
+                    body: JSON.stringify({ 
+                        model, 
+                        promptType: "report_evaluator", 
+                        promptContext: { language: lang }, 
+                        history: history // Pass history array directly for backend chunking
+                    })
+                });
+                
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(`Failed to generate report: ${res.status} - ${errorText}`);
                 }
                 
-                const parsedReport = allParsedReports;
+                const data = await res.json();
+                let parsedReport = data.parsedReport || [];
+                
+                if (parsedReport.length === 0) {
+                     throw new Error("Could not extract any valid data from AI response.");
+                }
                 
                 setReport(parsedReport);
                 try {

@@ -63,7 +63,7 @@ export async function POST(request: Request) {
                 user = { id: "dev-mock-user-id" };
                 profile = { tier: "pro", questions_asked: 0, subscription_expires_at: null };
             } else {
-                return NextResponse.json({ error: { message: "No valid session token provided. Please log out and log in again." } }, { status: 401 });
+                return NextResponse.json({ error: { message: "No valid session token provided. Please log out and log in again.", details: authError?.message || "Unknown auth error" } }, { status: 401 });
             }
         } else {
             // 2. Fetch User Profile
@@ -163,75 +163,110 @@ export async function POST(request: Request) {
 
         // Shuffle keys to distribute load across all requests
         const shuffledKeys = groqApiKeys.sort(() => 0.5 - Math.random());
-
         const modelsToTry = targetModel ? [targetModel, ...GROQ_MODELS.filter(m => m !== targetModel)] : GROQ_MODELS;
         const uniqueModels = [...new Set(modelsToTry)];
-        let lastError: Error | null = null;
 
-        // Double Fallback Loop: Try each model. For each model, try every available key.
-        for (const targetModel of uniqueModels) {
-            for (const apiKey of shuffledKeys) {
-                try {
-                    const groqMessages = messages || [{ role: "user", content: prompt }];
-                    const finalMessages = systemPrompt ? [{ role: "system", content: systemPrompt }, ...groqMessages] : groqMessages;
+        // Helper function to call Groq with automatic fallback across models and keys
+        const callGroqWithFallback = async (userPrompt: string, overrideMessages?: any[]) => {
+            let lastError: Error | null = null;
+            for (const currentModel of uniqueModels) {
+                for (const apiKey of shuffledKeys) {
+                    try {
+                        const groqMessages = overrideMessages || [{ role: "user", content: userPrompt }];
+                        const finalMessages = systemPrompt ? [{ role: "system", content: systemPrompt }, ...groqMessages] : groqMessages;
 
-                    const controller = new AbortController();
-                    // Increased timeout to 60 seconds to allow heavy reasoning models to finish
-                    const timeoutId = setTimeout(() => controller.abort(), 60000);
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-                    const requestBody: any = {
-                        model: targetModel,
-                        messages: finalMessages,
-                        max_tokens: 1000,
-                        temperature: 0.1
-                    };
+                        const requestBody: any = {
+                            model: currentModel,
+                            messages: finalMessages,
+                            max_tokens: 1000,
+                            temperature: 0.1
+                        };
 
-                    if (response_format) requestBody.response_format = response_format;
+                        if (response_format) requestBody.response_format = response_format;
 
-                    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${apiKey}`
-                        },
-                        body: JSON.stringify(requestBody),
-                        signal: controller.signal
-                    });
+                        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+                            body: JSON.stringify(requestBody),
+                            signal: controller.signal
+                        });
 
-                    clearTimeout(timeoutId);
-                    const data = await response.json();
+                        clearTimeout(timeoutId);
+                        const data = await response.json();
 
-                    if (!response.ok) throw new Error(data.error?.message || `HTTP ${response.status}`);
+                        if (!response.ok) throw new Error(data.error?.message || `HTTP ${response.status}`);
 
-                    let content = data.choices?.[0]?.message?.content;
-                    if (!content) throw new Error("Empty response from AI");
+                        let content = data.choices?.[0]?.message?.content;
+                        if (!content) throw new Error("Empty response from AI");
 
-                    // Strip <think> blocks (reasoning models) so TTS doesn't read the internal thought process
-                    // Using (<\/think>|$) ensures we strip it even if the model hit max tokens and didn't close the tag.
-                    content = content.replace(/<think>[\s\S]*?(<\/think>|$)/gi, '').trim();
+                        content = content.replace(/<think>[\s\S]*?(<\/think>|$)/gi, '').trim();
+                        if (!content) throw new Error("Empty response after stripping reasoning.");
 
-                    if (!content) throw new Error("Empty response from AI after stripping reasoning tokens. Token limit likely reached during thinking phase.");
-
-                    return NextResponse.json({ content, modelUsed: targetModel, provider: "groq" });
-
-                } catch (error: any) {
-                    console.error(`[AI Fallback] Model: ${targetModel} | Key: ***${apiKey.slice(-4)} | Error:`, error.message);
-                    lastError = error;
-                    // If this key failed, the loop automatically continues to try the NEXT key in shuffledKeys.
+                        return { content, modelUsed: currentModel };
+                    } catch (error: any) {
+                        console.error(`[AI Fallback] Model: ${currentModel} | Key: ***${apiKey.slice(-4)} | Error:`, error.message);
+                        lastError = error;
+                    }
                 }
             }
-            // If all keys failed for this model, the outer loop continues to the NEXT model.
-        }
+            throw lastError || new Error("All Groq models and keys exhausted.");
+        };
 
-        // Refund the question if all models failed
-        if (isQuestionLocked) {
-            // Decrement by 1 since we failed to generate
-            await supabaseAdmin.from('profiles').update({ questions_asked: Math.max(0, profile.questions_asked) }).eq('id', user.id);
-        }
+        try {
+            if (promptType === "report_evaluator" && body.history) {
+                const history = body.history;
+                const CHUNK_SIZE = 5;
+                const chunks = [];
+                for (let i = 0; i < history.length; i += CHUNK_SIZE) {
+                    chunks.push(history.slice(i, i + CHUNK_SIZE));
+                }
 
-        return NextResponse.json({
-            error: { message: `AI temporarily unavailable. Error: ${lastError?.message || "Unknown error"}` }
-        }, { status: 503 });
+                const chunkPromises = chunks.map(async (chunk) => {
+                    const chunkPrompt = `Here is the interview transcript: ${JSON.stringify(chunk)}`;
+                    const res = await callGroqWithFallback(chunkPrompt);
+                    let content = res.content;
+                    
+                    const jsonMatch = content.match(/\[[\s\S]*\]/);
+                    if (jsonMatch) content = jsonMatch[0];
+                    content = content.replace(/```json/g, "").replace(/```/g, "").trim();
+                    
+                    let parsedChunk = [];
+                    try {
+                        parsedChunk = JSON.parse(content);
+                    } catch (parseError) {
+                        const objectRegex = /\{(?:[^{}]|(?:\{[^{}]*\}))*\}/g;
+                        const matches = content.match(objectRegex);
+                        if (matches) {
+                            parsedChunk = matches.map((m: string) => {
+                                try { return JSON.parse(m); } catch (e) { return null; }
+                            }).filter(Boolean);
+                        }
+                    }
+                    if (parsedChunk && !Array.isArray(parsedChunk) && typeof parsedChunk === 'object') {
+                        parsedChunk = [parsedChunk];
+                    }
+                    return Array.isArray(parsedChunk) ? parsedChunk : [];
+                });
+
+                const chunkResults = await Promise.all(chunkPromises);
+                const allParsedReports = chunkResults.flat();
+
+                return NextResponse.json({ parsedReport: allParsedReports, provider: "groq" });
+            } else {
+                // Standard single prompt execution
+                const res = await callGroqWithFallback(prompt, messages);
+                return NextResponse.json({ content: res.content, modelUsed: res.modelUsed, provider: "groq" });
+            }
+        } catch (error: any) {
+            // Refund the question if generation failed
+            if (isQuestionLocked) {
+                await supabaseAdmin.from('profiles').update({ questions_asked: Math.max(0, profile.questions_asked) }).eq('id', user.id);
+            }
+            return NextResponse.json({ error: { message: error.message || "Failed to generate AI response after fallbacks." } }, { status: 500 });
+        }
 
     } catch (error: unknown) {
         const err = error as Error;
