@@ -39,10 +39,10 @@ export async function POST(request: Request) {
         // Try getting user via header token first
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
         const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
         let authError = null;
 
         if (token) {
-            const supabase = createClient(supabaseUrl, supabaseAnonKey);
             const { data } = await supabase.auth.getUser(token);
             user = data?.user || null;
         }
